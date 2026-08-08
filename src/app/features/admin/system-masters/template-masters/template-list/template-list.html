@@ -1,0 +1,66 @@
+<div nz-row [nzGutter]="[16, 16]" class="process-page">
+  <!-- ================= HEADER ================= -->
+  <div nz-col nzSpan="24" class="divider-with-action" style="display: flex; justify-content: space-between; align-items: center;">
+    <nz-divider nzOrientation="left" [nzText]="headerTemplate" style="flex: 1; margin: 0;">
+      <ng-template #headerTemplate>
+        <span class="divider-title" style="font-size: 18px; font-weight: 600;">Email Template List</span>
+      </ng-template>
+    </nz-divider>
+    @if (hasAddPermission) {
+      <button nz-button nzType="primary" (click)="navigateToAdd()">
+        <nz-icon nzType="plus"></nz-icon> Add Template
+      </button>
+    }
+  </div>
+
+  <!-- ================= GRID ================= -->
+  <div nz-col nzSpan="24">
+    <nz-card>
+      <div class="table-wrapper">
+        <ui-grid
+          [title]=""
+          ref_name="Template List"
+          [autoColumns]="true"
+          [dataSource]="templateGridDataSource"
+          [autoLoad]="true"
+          [reloadOn]="templateGridReload$"
+          [pageSize]="10"
+          [pageSizeOptions]="[10, 20, 50]"
+          [serverSide]="false"
+          [selectable]="false"
+          [actions]="[
+            {
+              key: 'edit',
+              icon: 'edit',
+              tooltip: 'Edit',
+              showIf: this.hasEditPermission,
+            },
+            {
+              key: 'view',
+              icon: 'eye',
+              tooltip: 'View Preview',
+            },
+          ]"
+          (action)="onAction($event)"
+          [hildeColumn]="['template_id', 'body_html', 'required_template_fields_obj', 'required_template_fields', 'smtp_config_id']"
+        ></ui-grid>
+      </div>
+    </nz-card>
+  </div>
+</div>
+
+<!-- ================= HTML PREVIEW MODAL ================= -->
+<nz-modal
+  [(nzVisible)]="isPreviewVisible"
+  [nzTitle]="'Template Preview: ' + previewEventCode"
+  [nzFooter]="null"
+  (nzOnCancel)="closePreview()"
+  [nzWidth]="800"
+  nzCentered
+>
+  <ng-container *nzModalContent>
+    <div class="template-preview-container" style="background: #ffffff; padding: 20px; border-radius: 4px; max-height: 60vh; overflow-y: auto; border: 1px solid #f0f0f0;">
+      <div [innerHTML]="previewBodyHtml"></div>
+    </div>
+  </ng-container>
+</nz-modal>

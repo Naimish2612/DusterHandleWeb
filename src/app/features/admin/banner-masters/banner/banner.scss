@@ -1,0 +1,60 @@
+@use '../../../../../assets/styles/common' as *;
+@use '../../../../../assets/styles/responsive' as *;
+
+//div {
+  // background-color: $info-500;
+  // border: 1px solid $info-700;
+//}
+
+.switch-label {
+  margin-left: 8px;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.process-page {
+  padding: $spacing-6; // 24px
+}
+
+nz-card {
+  border-radius: $border-radius-lg;
+  background-color: $neutral-100;
+}
+
+nz-form-item {
+  margin-bottom: $spacing-4; // 16px vertical rhythm
+}
+
+.form-actions {
+  display: flex;
+  gap: $spacing-4;
+}
+
+.action-cell {
+  display: flex;
+  gap: $spacing-2; // 8px
+  white-space: nowrap;
+}
+
+.table-wrapper {
+  width: 100%;
+  overflow-x: auto; // KEY FIX
+  overflow-y: hidden;
+}
+
+.image-preview-container {
+  text-align: center;
+  padding: $spacing-2;
+
+  img {
+    max-width: 100%;
+    max-height: 500px;
+    object-fit: contain;
+    border-radius: $border-radius-lg;
+  }
+}
+
+::ng-deep .image-upload-section ui-grid .ant-table-pagination,
+::ng-deep .image-upload-section ui-grid nz-pagination {
+    display: none !important;
+}

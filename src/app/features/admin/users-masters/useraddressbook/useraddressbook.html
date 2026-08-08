@@ -1,0 +1,100 @@
+<div nz-row [nzGutter]="[16, 16]" class="process-page">
+  <!-- ================= FORM CARD ================= -->
+  <div nz-col nzSpan="24">
+    <nz-card nzTitle="User Address Book">
+      <form nz-form [formGroup]="form" nzLayout="vertical">
+        <div nz-row [nzGutter]="[16, 16]">
+          <!-- User Type -->
+          <div nz-col [nzXs]="24" [nzLg]="6">
+            <nz-form-item>
+              <nz-form-label nzRequired>User Type</nz-form-label>
+              <nz-form-control>
+                <nz-select
+                  nzPlaceHolder="Select Type"
+                  formControlName="user_type"
+                  (ngModelChange)="onUserTypeChange($event)"
+                >
+                  <nz-option nzValue="ADMIN" nzLabel="ADMIN"></nz-option>
+                  <nz-option nzValue="CUSTOMER" nzLabel="CUSTOMER"></nz-option>
+                  <nz-option nzValue="ALL" nzLabel="ALL"></nz-option>
+                </nz-select>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+          <!-- UserFilter Name -->
+          <div nz-col [nzXs]="24" [nzLg]="6">
+            <nz-form-item>
+              <nz-form-label nzRequired>User List</nz-form-label>
+              <nz-form-control nzErrorTip="Please select a user">
+                <nz-select
+                  formControlName="user_code"
+                  nzShowSearch
+                  nzAllowClear
+                  nzPlaceHolder="Select User"
+                  (ngModelChange)="onUserChange($event)"
+                >
+                  @for (user of userList; track $index) {
+                    <nz-option [nzValue]="user.id" [nzLabel]="user.value"></nz-option>
+                  }
+                </nz-select>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+          <!-- ACTIONS -->
+          <div nz-col nzSpan="24" class="form-actions">
+            <button
+              nz-button
+              nzType="primary"
+              htmlType="submit"
+              [disabled]="!form.valid"
+              (click)="submit()"
+            >
+              <nz-icon nzType="filter"></nz-icon> Filter
+            </button>
+          </div>
+        </div>
+      </form>
+    </nz-card>
+  </div>
+</div>
+<!-- ================= ADDRESS DISPLAY ================= -->
+<nz-divider nzOrientation="left" nzText="Address List"></nz-divider>
+<div nz-row [nzGutter]="[16, 16]" style="padding: 24px">
+  @for (addr of addressList; track addr.address_book_id) {
+    <div nz-col [nzXs]="24" [nzSm]="12" [nzLg]="8">
+      <nz-card [nzTitle]="addr.full_name" [nzExtra]="extraTemplate">
+        <p><strong>Address  :</strong></p>
+        <p>{{ addr.address_line1 }}</p>
+        @if (addr.address_line2) {
+          <p>{{ addr.address_line2 }}</p>
+        }
+        <p>{{ addr.city }}, {{ addr.state }} - {{ addr.pin_code }}</p>
+        <p>{{ addr.country }}</p>
+
+        <div style="margin-top: 10px">
+          @if (addr.is_default_shipping) {
+            <nz-tag nzColor="blue">Default Shipping</nz-tag>
+          }
+          @if (addr.is_default_billing) {
+            <nz-tag nzColor="green">Default Billing</nz-tag>
+          }
+        </div>
+      </nz-card>
+
+      <ng-template #extraTemplate>
+        <i nz-icon nzType="environment" nzTheme="outline" style="color: #1890ff"></i>
+      </ng-template>
+    </div>
+  } @empty {
+    @if (addressList.length === 0) {
+      <div nz-col nzSpan="24">
+        <nz-card>
+          <nz-empty
+            nzNotFoundImage="simple"
+            nzNotFoundContent="No addresses found for this user."
+          ></nz-empty>
+        </nz-card>
+      </div>
+    }
+  }
+</div>

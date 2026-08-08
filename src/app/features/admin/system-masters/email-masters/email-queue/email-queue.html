@@ -1,0 +1,64 @@
+<div nz-row [nzGutter]="[16, 16]" class="process-page">
+  <!-- ================= HEADER ================= -->
+  <div nz-col nzSpan="24" class="divider-with-action">
+    <nz-divider nzOrientation="left" [nzText]="requiredTemplate">
+      <ng-template #requiredTemplate>
+        <span class="divider-title">Email Queue</span>
+      </ng-template>
+    </nz-divider>
+    <button
+      nz-button
+      nzType="default"
+      nzShape="circle"
+      class="filter-trigger-btn"
+      nz-tooltip
+      nzTooltipTitle="Refresh"
+      (click)="refresh()"
+    >
+      <nz-icon nzType="reload" nzTheme="outline"></nz-icon>
+    </button>
+  </div>
+
+  <!-- ================= FILTER SECTION ================= -->
+  <div nz-col nzSpan="24">
+    <nz-card>
+      <div nz-row [nzGutter]="[16, 16]" nzAlign="middle">
+        <div nz-col [nzXs]="24" [nzSm]="12" [nzMd]="8" [nzLg]="6">
+          <nz-form-item style="margin-bottom: 0;">
+            <nz-form-label [nzNoColon]="true">Status Filter</nz-form-label>
+            <nz-form-control>
+              <nz-select [(ngModel)]="selectedStatus" (ngModelChange)="onStatusChange($event)" style="width: 100%;">
+                <nz-option nzValue="Pending" nzLabel="Pending"></nz-option>
+                <nz-option nzValue="Processing" nzLabel="Processing"></nz-option>
+                <nz-option nzValue="Sent" nzLabel="Sent"></nz-option>
+                <nz-option nzValue="Failed" nzLabel="Failed"></nz-option>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+    </nz-card>
+  </div>
+
+  <!-- ================= GRID ================= -->
+  <div nz-col nzSpan="24">
+    <nz-card>
+      <div class="table-wrapper">
+        <ui-grid
+          [title]=""
+          ref_name="Email Queue"
+          [autoColumns]="true"
+          [dataSource]="emailQueueDataSource"
+          [autoLoad]="true"
+          [reloadOn]="emailQueueReload$"
+          [pageSize]="10"
+          [pageSizeOptions]="[10, 20, 50]"
+          [serverSide]="false"
+          [selectable]="false"
+          (action)="onAction($event)"
+          [hildeColumn]="['queue_id', 'payload_json', 'payload_json_obj' ,'actions']"
+        ></ui-grid>
+      </div>
+    </nz-card>
+  </div>
+</div>

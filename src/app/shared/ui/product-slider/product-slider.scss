@@ -1,0 +1,517 @@
+// @import '../../../../assets/styles/common.scss';
+@use '../../../../assets/styles/common' as *;
+@use '../../../../assets/styles/responsive' as *;
+
+// =========================================================================
+// PRODUCT SLIDER SECTION + PRODUCT CARD (Slider variant)
+// =========================================================================
+
+.product-slider {
+  padding: $spacing-18 0;
+  background: $neutral-0;
+
+  &--alt {
+    background: $neutral-50;
+  }
+
+  &__inner {
+    @include make-container($container-xxl);
+  }
+
+  &__header {
+    @include flex-between;
+    align-items: flex-end;
+    margin-bottom: $spacing-10;
+    gap: $spacing-4;
+    flex-wrap: wrap;
+  }
+
+  &__view-all {
+    display: inline-flex;
+    align-items: center;
+    gap: $spacing-1-5;
+    font-size: $font-size-sm;
+    font-weight: $font-weight-bold;
+    color: $primary-500;
+    text-decoration: none;
+    padding: $spacing-2 $spacing-4;
+    border: $border-width-thin solid $primary-500;
+    border-radius: $border-radius-full;
+    white-space: nowrap;
+    transition: all $transition-fast;
+    flex-shrink: 0;
+
+    span[nz-icon] {
+      transition: transform $transition-fast;
+    }
+
+    &:hover {
+      background: $primary-500;
+      color: $neutral-0;
+
+      span[nz-icon] {
+        transform: translateX(3px);
+      }
+    }
+  }
+
+  // ── Horizontal scroll track ────────────────────────────────────────
+  &__track {
+    display: flex;
+    gap: $spacing-5;
+    overflow-x: auto;
+    padding-bottom: $spacing-3;
+    // scroll-snap-type: x mandatory;
+    white-space: nowrap;
+    @include hide-scrollbar;
+
+    @include mobile {
+      gap: $spacing-3-5;
+    }
+
+    // ── Skeleton track — no scroll, just a flex row ──────────────────
+    &--skeleton {
+      overflow-x: hidden; // no scroll while loading
+      cursor: default;
+      pointer-events: none;
+    }
+  }
+
+  // ── Error / Empty State ──────────────────────────────────────────────
+  &__error {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: $spacing-3;
+    padding: $spacing-16 $spacing-6;
+    border-radius: $border-radius-xl;
+    background: $neutral-50;
+    border: $border-width-thin solid $neutral-200;
+
+    &-icon {
+      font-size: $icon-size-2xl;
+      color: $neutral-300;
+    }
+
+    &-msg {
+      font-size: $font-size-sm;
+      font-weight: $font-weight-medium;
+      color: $neutral-500;
+      margin: 0;
+      text-align: center;
+    }
+  }
+}
+
+// ── Section heading block ────────────────────────────────────────────────
+.section-head {
+  .section-tag {
+    display: inline-block;
+    font-size: $font-size-xs;
+    font-weight: $font-weight-bold;
+    letter-spacing: $letter-spacing-widest;
+    text-transform: uppercase;
+    color: $primary-500;
+    background: $primary-50;
+    padding: $spacing-1-5 $spacing-3;
+    border-radius: $border-radius-full;
+    margin-bottom: $spacing-3;
+  }
+
+  .section-title {
+    font-family: $font-heading;
+    font-size: $font-size-4xl;
+    font-weight: $font-weight-bold;
+    color: $neutral-800;
+    line-height: $line-height-heading;
+    margin: 0 0 $spacing-3;
+    letter-spacing: $letter-spacing-tight;
+
+    em {
+      font-style: italic;
+      color: $primary-500;
+    }
+
+    @include mobile {
+      font-size: $font-size-3xl;
+    }
+  }
+
+  .section-sub {
+    font-size: $font-size-base;
+    color: $neutral-500;
+    max-width: 520px;
+    line-height: $line-height-relaxed;
+    margin: 0;
+  }
+}
+
+// =========================================================================
+// PRODUCT CARD — Slider variant
+// =========================================================================
+
+.product-card {
+  display: flex;
+  flex-direction: column;
+  flex: 0 0 260px;
+  width: 260px;
+  scroll-snap-align: start;
+  border-radius: $border-radius-xl;
+  background: $card-bg;
+  border: $border-width-thin solid $neutral-200;
+  overflow: hidden;
+  cursor: pointer;
+  @include card-base;
+  @include card-hover;
+
+  @include mobile {
+    flex: 0 0 210px;
+    width: 210px;
+  }
+
+  // ── Skeleton card variant ──────────────────────────────────────────
+  &--skeleton {
+    cursor: default;
+    pointer-events: none;
+    border: $border-width-thin solid $neutral-100;
+    background: $neutral-0;
+    box-shadow: none;
+
+    // Keep hover transforms disabled
+    &:hover {
+      transform: none;
+      box-shadow: none;
+    }
+  }
+
+  // ── Image ────────────────────────────────────────────────────────
+  &__image-wrap {
+    position: relative;
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+    background: $neutral-100;
+
+    // ── Skeleton image wrap ──────────────────────────────────────
+    &--skeleton {
+      background: $neutral-100;
+      @include flex-center;
+
+      // nz-skeleton-element fills the wrap
+      ::ng-deep nz-skeleton-element,
+      ::ng-deep .ant-skeleton-element {
+        width: 100%;
+        height: 100%;
+        display: block;
+      }
+
+      ::ng-deep .ant-skeleton-image {
+        width: 100% !important;
+        height: 100% !important;
+        border-radius: 0 !important;
+        background: linear-gradient(90deg,
+            $neutral-100 25%,
+            $neutral-200 37%,
+            $neutral-100 63%);
+        background-size: 400% 100%;
+        animation: sliderSkeletonWave 1.4s ease infinite;
+      }
+
+      // Hide the image icon inside nz-skeleton-element[nzType=image]
+      ::ng-deep .ant-skeleton-image-svg {
+        display: none;
+      }
+    }
+  }
+
+  &__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform $transition-slow;
+
+    .product-card:hover & {
+      transform: scale(1.06);
+    }
+  }
+
+  // ── Skeleton info area ───────────────────────────────────────────
+  &__skeleton-image {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+
+  // ── Badges ──────────────────────────────────────────────────────
+  &__badges {
+    position: absolute;
+    top: $spacing-2-5;
+    left: $spacing-2-5;
+    z-index: $z-index-float;
+
+    display: flex;
+    flex-direction: column; // ✅ Stack vertically
+    gap: 4px;
+    align-items: flex-start;
+  }
+
+  &__badge {
+    position: absolute;
+    top: $spacing-2-5;
+    z-index: $z-index-float;
+
+    font-size: $font-size-xs;
+    font-weight: $font-weight-extrabold;
+    letter-spacing: $letter-spacing-wide;
+    padding: $spacing-0-5 $spacing-2;
+    border-radius: $border-radius-base;
+    line-height: 1.4;
+    white-space: nowrap;
+
+    // ── TOP SALE → Top Left ──────────────────────────────
+    &--sale {
+      left: $spacing-2-5;
+      background: $error-500;
+      color: $neutral-0;
+    }
+
+    // ── NEW → Top Right ──────────────────────────────────
+    &--new {
+      right: $spacing-2-5;
+      background: $success-500;
+      color: $neutral-0;
+    }
+
+    // ── HOT → Top Left (stacks below SALE if both) ───────
+    &--hot {
+      left: $spacing-2-5;
+      top: calc(#{$spacing-2-5} + 28px); // ✅ Stack below sale
+      background: $warning-600;
+      color: $neutral-0;
+    }
+  }
+
+  &__discount {
+    position: absolute;
+    top: $spacing-2-5;
+    right: $spacing-2-5;
+    background: $warning-50;
+    color: $warning-700;
+    font-size: $font-size-xs;
+    font-weight: $font-weight-extrabold;
+    padding: $spacing-0-5 $spacing-2;
+    border-radius: $border-radius-base;
+    z-index: $z-index-float;
+  }
+
+  // ── Wishlist ─────────────────────────────────────────────────────
+  &__wishlist {
+    position: absolute;
+    bottom: $spacing-2-5;
+    right: $spacing-2-5;
+    z-index: 3;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.92);
+    border: none;
+    cursor: pointer;
+    @include flex-center;
+    font-size: $icon-size-base;
+    color: $neutral-300;
+    box-shadow: $shadow-sm;
+    transition: all $transition-fast;
+
+    &:hover {
+      transform: scale(1.15);
+      color: $error-500;
+    }
+
+    &--active {
+      color: $error-500; // or: red / #ef4444
+      background: rgba(255, 255, 255, 1);
+
+      .anticon {
+        color: $error-500;
+      }
+
+      &:hover {
+        transform: scale(1.2);
+      }
+    }
+  }
+
+  // ── Quick view overlay ────────────────────────────────────────────
+  &__overlay {
+    @include absolute-fill;
+    background: rgba(0, 21, 41, 0.45);
+    @include flex-center;
+    opacity: 0;
+    transition: opacity $transition-fast;
+
+    .product-card:hover & {
+      opacity: 1;
+    }
+  }
+
+  &__view-btn {
+    display: flex;
+    align-items: center;
+    gap: $spacing-1-5;
+    background: $neutral-0;
+    color: $neutral-800;
+    font-size: $font-size-xs;
+    font-weight: $font-weight-bold;
+    padding: $spacing-2 $spacing-4;
+    border-radius: $border-radius-full;
+    text-decoration: none;
+    transition: transform $transition-fast;
+
+    &:hover {
+      transform: scale(1.04);
+    }
+  }
+
+  // ── Info ─────────────────────────────────────────────────────────
+  &__info {
+    padding: $spacing-3-5 $spacing-4 $spacing-4;
+    display: flex;  
+    flex-direction: column;  
+    flex: 1;  
+
+    // ── nz-skeleton inside info ──────────────────────────────────
+    ::ng-deep .ant-skeleton-title {
+      border-radius: $border-radius-base !important;
+      background: linear-gradient(90deg,
+          $neutral-100 25%,
+          $neutral-200 37%,
+          $neutral-100 63%) !important;
+      background-size: 400% 100% !important;
+      animation: sliderSkeletonWave 1.4s ease infinite !important;
+    }
+
+    ::ng-deep .ant-skeleton-paragraph li {
+      border-radius: $border-radius-base !important;
+      background: linear-gradient(90deg,
+          $neutral-100 25%,
+          $neutral-200 37%,
+          $neutral-100 63%) !important;
+      background-size: 400% 100% !important;
+      animation: sliderSkeletonWave 1.4s ease infinite !important;
+    }
+  }
+
+  &__name {
+    font-size: $font-size-sm;
+    font-weight: $font-weight-semibold;
+    color: $neutral-800;
+    margin: 0 0 $spacing-2;
+    @include line-clamp(2);
+    line-height: $line-height-snug;
+  }
+
+  &__rating {
+    display: flex;
+    align-items: center;
+    gap: $spacing-1;
+    margin-bottom: $spacing-2-5;
+
+    .ant-rate {
+      font-size: $font-size-xs !important;
+    }
+  }
+
+  &__review-count {
+    font-size: $font-size-xs;
+    color: $neutral-400;
+    font-weight: $font-weight-medium;
+  }
+
+  &__pricing {
+    display: flex;
+    align-items: center;
+    gap: $spacing-2;
+    margin-bottom: $spacing-3;
+    flex-wrap: wrap;
+  }
+
+  &__discount-inline {
+    font-size: 12px;
+    font-weight: 700;
+    color: #d48806;
+    background: #fff1f0;
+    padding: 2px 6px;
+    border-radius: 4px;
+  }
+
+  &__price {
+    font-size: $font-size-lg;
+    font-weight: $font-weight-extrabold;
+    color: $neutral-800;
+    font-family: $font-heading;
+  }
+
+  &__original {
+    font-size: $font-size-xs;
+    color: $neutral-400;
+    text-decoration: line-through;
+    font-weight: $font-weight-medium;
+  }
+
+  // ── Cart button ───────────────────────────────────────────────────
+  &__cart-btn {
+    margin-top: auto;
+    width: 100%;
+    padding: $spacing-2-5;
+    border-radius: $border-radius-lg;
+    background: $primary-50;
+    color: $primary-700;
+    border: $border-width-thin solid $primary-400;
+    font-size: $font-size-xs;
+    font-weight: $font-weight-bold;
+    cursor: pointer;
+    @include flex-center;
+    gap: $spacing-1-5;
+    transition: all $transition-fast;
+
+    span[nz-icon] {
+      font-size: $icon-size-sm;
+    }
+
+    &:hover {
+      background: $primary-500;
+      color: $neutral-0;
+      border-color: $primary-500;
+      box-shadow: $shadow-md;
+    }
+
+    &--loading {
+      opacity: 0.7;
+      cursor: wait;
+      pointer-events: none;
+    }
+
+    &--disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      background: $neutral-100;
+      color: $neutral-400;
+      border-color: $neutral-200;
+      pointer-events: none;
+    }
+  }
+}
+
+// =========================================================================
+// SKELETON WAVE ANIMATION
+// =========================================================================
+
+@keyframes sliderSkeletonWave {
+  0% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0% 50%;
+  }
+}

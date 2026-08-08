@@ -1,0 +1,364 @@
+@use '../../../../assets/styles/common' as *;
+@use '../../../../assets/styles/responsive' as *;
+
+
+:host {
+  display: block;
+}
+
+.auth-form {
+  width: 100%;
+  max-width: 440px;
+  animation: fade-in-up 0.5s ease-out;
+
+  @include mobile {
+    max-width: 100%;
+  }
+
+  // ─── Header ───────────────────────────
+  &__header {
+    margin-bottom: $spacing-6;
+  }
+
+  &__title {
+    font-family: $font-secondary;
+    font-size: $font-size-2xl;
+    font-weight: $font-weight-bold;
+    color: $neutral-900;
+    margin: 0 0 $spacing-2;
+
+    @include mobile {
+      font-size: $font-size-xl;
+    }
+  }
+
+  &__subtitle {
+    font-size: $font-size-base;
+    color: $color-text-secondary;
+    margin: 0;
+    line-height: $line-height-relaxed;
+
+    @include mobile {
+      font-size: $font-size-sm;
+    }
+  }
+
+  // ─── Social (same as login) ───────────
+  &__social {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: $spacing-4;
+    margin-bottom: $spacing-5;
+
+    @include mobile {
+      gap: $spacing-3;
+    }
+  }
+
+  &__social-header {
+    font-size: $font-size-xs;
+    font-weight: $font-weight-semibold;
+    letter-spacing: $letter-spacing-wide;
+    text-transform: uppercase;
+    color: $color-text-tertiary;
+    white-space: nowrap;
+  }
+
+  &__social-actions {
+    display: flex;
+    align-items: center;
+    gap: $spacing-2;
+  }
+
+  &__social-btn {
+    @include flex-center;
+    width: 42px;
+    height: 42px;
+    border: 1.5px solid $neutral-200;
+    border-radius: $border-radius-full;
+    background: $neutral-0;
+    color: $neutral-800;
+    cursor: pointer;
+    transition: all $transition-fast;
+
+    &:hover {
+      border-color: $neutral-400;
+      background: $neutral-50;
+      box-shadow: $shadow-sm;
+      transform: translateY(-1px);
+    }
+    &:active {
+      transform: translateY(0);
+      box-shadow: none;
+    }
+    &--google:hover {
+      border-color: #4285f4;
+      background: rgba(66, 133, 244, 0.04);
+    }
+    &--linkedin:hover {
+      border-color: #0a66c2;
+      background: rgba(10, 102, 194, 0.04);
+    }
+  }
+
+  &__social-icon {
+    flex-shrink: 0;
+  }
+
+  // ─── Divider ──────────────────────────
+  &__divider {
+    display: flex;
+    align-items: center;
+    gap: $spacing-3;
+    margin-bottom: $spacing-5;
+    &-line {
+      flex: 1;
+      height: 1px;
+      background: $color-border-light;
+    }
+    &-text {
+      font-size: $font-size-xs;
+      color: $color-text-tertiary;
+      white-space: nowrap;
+      text-transform: uppercase;
+      letter-spacing: $letter-spacing-wide;
+    }
+  }
+
+  // ─── Form Controls ────────────────────
+  ::ng-deep {
+    .ant-form-item {
+      margin-bottom: $spacing-4;
+    }
+
+    .ant-form-item-label {
+      padding-bottom: $spacing-1 !important;
+      label {
+        font-size: $font-size-sm;
+        font-weight: $font-weight-medium;
+        color: $neutral-800;
+        height: auto;
+        &.ant-form-item-required::before {
+          display: none !important;
+        }
+        &.ant-form-item-required::after {
+          content: '*';
+          display: inline-block;
+          margin-left: 4px;
+          color: $error-500;
+          font-size: $font-size-sm;
+        }
+      }
+    }
+
+    .ant-input-affix-wrapper {
+      border-radius: $border-radius-xl !important;
+      border-color: $neutral-200;
+      padding: 0 $spacing-2;
+      height: 38px;
+      transition: all $transition-fast;
+
+      &:hover {
+        border-color: $primary-400;
+      }
+      &-focused,
+      &:focus {
+        border-color: $primary-500 !important;
+        box-shadow: 0 0 0 3px rgba($primary-500, 0.1) !important;
+      }
+      .ant-input {
+        height: 36px;
+        font-size: $font-size-sm;
+        &::placeholder {
+          color: $color-text-placeholder;
+        }
+      }
+      .ant-input-prefix {
+        color: $neutral-400;
+        margin-right: $spacing-2;
+      }
+    }
+
+    .ant-select-selector {
+      border-radius: $border-radius-xl !important;
+      height: 38px !important;
+      padding: 0 $spacing-2 !important;
+      border-color: $neutral-200 !important;
+
+      .ant-select-selection-placeholder,
+      .ant-select-selection-item {
+        line-height: 36px !important;
+        font-size: $font-size-sm;
+      }
+    }
+
+    .ant-select-focused .ant-select-selector {
+      border-color: $primary-500 !important;
+      box-shadow: 0 0 0 3px rgba($primary-500, 0.1) !important;
+    }
+
+    .ant-form-item-has-error .ant-input-affix-wrapper {
+      border-color: $error-500 !important;
+    }
+
+    .ant-form-item-explain-error {
+      font-size: $font-size-xs;
+      margin-top: $spacing-1;
+    }
+  }
+
+  &__password-toggle {
+    cursor: pointer;
+    color: $neutral-400;
+    font-size: $icon-size-base;
+    padding: $spacing-1;
+    transition: color $transition-fast;
+    &:hover {
+      color: $primary-500;
+    }
+  }
+
+  &__label-hint {
+    color: $neutral-400;
+    font-size: $font-size-xs;
+    margin-left: $spacing-1;
+    cursor: help;
+  }
+
+  // ─── Password Strength ────────────────
+  &__pw-strength {
+    display: flex;
+    align-items: center;
+    gap: $spacing-2;
+    margin-top: $spacing-1;
+
+    ::ng-deep .ant-progress {
+      flex: 1;
+      .ant-progress-inner {
+        height: 4px !important;
+      }
+    }
+
+    &-label {
+      font-size: $font-size-xs;
+      font-weight: $font-weight-semibold;
+      flex-shrink: 0;
+      min-width: 50px;
+      text-align: right;
+    }
+  }
+
+  // ─── Terms ────────────────────────────
+  &__terms-item {
+    ::ng-deep .ant-form-item {
+      margin-bottom: $spacing-5;
+    }
+  }
+
+  &__terms-text {
+    font-size: $font-size-sm;
+    color: $color-text-secondary;
+  }
+
+  &__link-inline {
+    color: $primary-500;
+    font-weight: $font-weight-medium;
+    cursor: pointer;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  // ─── Submit ───────────────────────────
+  &__submit {
+    height: 52px !important;
+    font-size: $font-size-base !important;
+    font-weight: $font-weight-semibold !important;
+    box-shadow: 0 4px 12px rgba($primary-500, 0.25);
+    background: $primary-500 !important;
+    border-color: $primary-500 !important;
+
+    margin-bottom: $spacing-5;
+    transition: all $transition-fast;
+
+    &:hover:not(:disabled) {
+      background: $primary-600 !important;
+      border-color: $primary-600 !important;
+      box-shadow: 0 6px 20px rgba(0, 156, 222, 0.4) !important;
+      transform: translateY(-1px);
+    }
+
+    &:active:not(:disabled) {
+      transform: translateY(0);
+      box-shadow: 0 2px 8px rgba(0, 156, 222, 0.2) !important;
+    }
+  }
+
+  // ─── Footer ───────────────────────────
+  &__footer-text {
+    text-align: center;
+    font-size: $font-size-sm;
+    color: $color-text-secondary;
+  }
+
+  &__link {
+    color: $primary-500;
+    font-weight: $font-weight-semibold;
+    text-decoration: none;
+    @include inline-flex-center;
+    gap: $spacing-1;
+    transition: color $transition-fast;
+
+    &:hover {
+      color: $primary-700;
+    }
+    span[nz-icon] {
+      font-size: $font-size-xs;
+      transition: transform $transition-fast;
+    }
+    &:hover span[nz-icon] {
+      transform: translateX(3px);
+    }
+  }
+
+  // ── Password rules ────────────────────────────────────────────────────
+  .cp-rules {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: $spacing-1-5 $spacing-4;
+
+    @include mobile-sm {
+      grid-template-columns: 1fr;
+    }
+
+    &__item {
+      display: flex;
+      align-items: center;
+      gap: $spacing-1-5;
+      font-size: $font-size-xs;
+      color: $neutral-400;
+      transition: color $transition-fast;
+
+      span[nz-icon] {
+        font-size: $icon-size-sm;
+        color: $error-400;
+        flex-shrink: 0;
+        transition: color $transition-fast;
+      }
+
+      &--met {
+        color: $success-600;
+
+        span[nz-icon] {
+          color: $success-500;
+        }
+      }
+    }
+  }
+}

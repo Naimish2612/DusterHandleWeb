@@ -1,0 +1,909 @@
+@use '../../../../assets/styles/common' as *;
+@use '../../../../assets/styles/responsive' as *;
+
+
+// =========================================================================
+// CONTACT PAGE
+// =========================================================================
+
+// ── Shared section label ───────────────────────────────────────────────
+.section-label {
+  display: inline-flex;
+  align-items: center;
+  gap: $spacing-1-5;
+  font-size: $font-size-xs;
+  font-weight: $font-weight-bold;
+  letter-spacing: $letter-spacing-widest;
+  text-transform: uppercase;
+  color: $primary-500;
+  background: $primary-50;
+  padding: $spacing-1-5 $spacing-3;
+  border-radius: $border-radius-full;
+  margin-bottom: $spacing-4;
+
+  span[nz-icon] {
+    font-size: $icon-size-sm;
+  }
+}
+
+// =========================================================================
+// HERO  (stats textbox removed)
+// =========================================================================
+
+.contact-hero {
+  position: relative;
+  background: linear-gradient(145deg, $primary-900 0%, $primary-800 50%, $primary-700 100%);
+  padding: $spacing-20 0;
+  overflow: hidden;
+
+  @include mobile {
+    padding: $spacing-14 0 $spacing-12;
+  }
+
+  &__bg-pattern {
+    background-image: radial-gradient(rgba(255, 255, 255, 0.06) 1px,
+        transparent 1px);
+    background-size: 28px 28px;
+    pointer-events: none;
+    @include absolute-fill;
+  }
+
+  &__container {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    @include make-container($container-xl);
+  }
+
+  &__label {
+    display: inline-flex;
+    align-items: center;
+    gap: $spacing-2;
+    font-size: $font-size-xs;
+    font-weight: $font-weight-bold;
+    letter-spacing: $letter-spacing-widest;
+    text-transform: uppercase;
+    color: $primary-300;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: $border-radius-full;
+    padding: $spacing-1-5 $spacing-4;
+    margin-bottom: $spacing-6;
+
+    span[nz-icon] {
+      font-size: $icon-size-base;
+    }
+  }
+
+  &__title {
+    font-family: $font-heading;
+    font-size: $font-size-5xl;
+    font-weight: $font-weight-extrabold;
+    line-height: $line-height-tight;
+    color: $neutral-0;
+    letter-spacing: $letter-spacing-tight;
+    margin: 0 0 $spacing-6;
+
+    @include tablet {
+      font-size: $font-size-4xl;
+    }
+
+    @include mobile {
+      font-size: $font-size-3xl;
+    }
+  }
+
+  &__title-accent {
+    color: $primary-300;
+  }
+
+  &__sub {
+    font-size: $font-size-lg;
+    color: rgba(255, 255, 255, 0.7);
+    line-height: $line-height-relaxed;
+    max-width: 560px;
+    margin: 0 auto;
+
+    @include mobile {
+      font-size: $font-size-base;
+    }
+  }
+}
+
+// =========================================================================
+// CONTACT INFORMATION STRIP  (matches reference image)
+// =========================================================================
+
+.contact-info-strip {
+  // background: $primary-500;
+  padding: $spacing-8 0;
+  background: linear-gradient(25deg, #003D58 0%, #005A80 50%, #0077A8 100%);
+
+  &__blank-strip {
+    height: 1px;
+  }
+
+   &__bg-pattern {
+    background-image: radial-gradient(rgba(255, 255, 255, 0.06) 1px,
+        transparent 1px);
+    background-size: 28px 28px;
+    pointer-events: none;
+    @include absolute-fill;
+  }
+
+  &__container {
+    @include make-container($container-xl);
+  }
+
+  &__grid {
+    display: grid;
+    grid-template-columns: auto 1.6fr 1fr 1fr;
+    align-items: center;
+    gap: $spacing-6;
+
+    @include tablet {
+      grid-template-columns: 1fr 1fr;
+      gap: $spacing-8;
+    }
+
+    @include mobile {
+      grid-template-columns: 1fr;
+      gap: $spacing-6;
+    }
+  }
+
+  &__label {
+    padding-right: $spacing-6;
+    border-right: 1px solid rgba(255, 255, 255, 0.3);
+
+    h2 {
+      color: $neutral-0;
+      font-family: $font-heading;
+      font-size: $font-size-2xl;
+      font-weight: $font-weight-bold;
+      margin: 0;
+      line-height: 1.2;
+
+      @include mobile {
+        font-size: $font-size-xl;
+      }
+    }
+
+    @include tablet {
+      grid-column: 1 / -1;
+      border-right: none;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+      padding-right: 0;
+      padding-bottom: $spacing-4;
+      text-align: center;
+
+      h2 br {
+        display: none;
+      }
+    }
+
+    @include mobile {
+      text-align: center;
+    }
+  }
+
+  &__item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: $spacing-2;
+    color: $neutral-0;
+  }
+
+  &__icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: $icon-size-lg;
+    color: $neutral-0;
+
+    span[nz-icon] {
+      font-size: $icon-size-lg;
+    }
+  }
+
+  &__text {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-1;
+    font-size: $font-size-sm;
+    line-height: $line-height-relaxed;
+    color: $neutral-0;
+
+    strong {
+      font-weight: $font-weight-bold;
+      font-size: $font-size-base;
+      letter-spacing: $letter-spacing-wide;
+    }
+
+    span {
+      color: rgba(255, 255, 255, 0.95);
+      font-size: $font-size-sm;
+    }
+  }
+}
+
+// =========================================================================
+// CONTACT CARDS
+// =========================================================================
+
+.contact-cards-section {
+  background: $neutral-0;
+  padding: $spacing-16 0;
+  position: relative;
+  z-index: 2;
+
+  @include mobile {
+    padding: $spacing-10 0;
+  }
+
+  &__container {
+    @include make-container($container-xl);
+  }
+}
+
+.contact-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: $spacing-5;
+
+  @include tablet {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @include mobile {
+    grid-template-columns: repeat(2, 1fr);
+    gap: $spacing-3;
+  }
+
+  @include mobile-sm {
+    grid-template-columns: 1fr;
+  }
+}
+
+.contact-info-card {
+  background: $neutral-0;
+  border: 1px solid $neutral-200;
+  border-radius: $border-radius-xl;
+  padding: $spacing-6;
+  text-align: center;
+  box-shadow: $shadow-sm;
+  transition: box-shadow $transition-base, transform $transition-base,
+    border-color $transition-base;
+
+  &:hover {
+    box-shadow: $shadow-lg;
+    transform: translateY(-3px);
+    border-color: $primary-200;
+  }
+
+  &__icon-wrap {
+    width: $avatar-size-xl;
+    height: $avatar-size-xl;
+    border-radius: $border-radius-xl;
+    background: $primary-50;
+    margin: 0 auto $spacing-4;
+    font-size: $icon-size-2xl;
+    color: $primary-500;
+    transition: background $transition-base;
+    @include flex-center;
+
+    .contact-info-card:hover & {
+      background: $primary-100;
+    }
+  }
+
+  &__title {
+    font-family: $font-heading;
+    font-size: $font-size-base;
+    font-weight: $font-weight-semibold;
+    color: $neutral-800;
+    margin: 0 0 $spacing-1;
+  }
+
+  &__sub {
+    font-size: $font-size-xs;
+    color: $neutral-400;
+    margin: 0 0 $spacing-3;
+    line-height: $line-height-normal;
+  }
+
+  &__value {
+    font-size: $font-size-sm;
+    color: $neutral-600;
+    font-weight: $font-weight-medium;
+    line-height: $line-height-snug;
+
+    &--link {
+      color: $primary-500;
+      text-decoration: none;
+      font-weight: $font-weight-semibold;
+      transition: color $transition-fast;
+
+      &:hover {
+        color: $primary-700;
+      }
+    }
+  }
+}
+
+// =========================================================================
+// MAIN SECTION — Form + Right Panel
+// =========================================================================
+
+.contact-main-section {
+  background: $neutral-100;
+  padding: $spacing-16 0;
+
+  @include mobile {
+    padding: $spacing-10 0;
+  }
+
+  &__container {
+    @include make-container($container-xl);
+  }
+
+  &__grid {
+    display: grid;
+    grid-template-columns: 1fr 420px;
+    gap: $spacing-8;
+    align-items: start;
+
+    @include tablet {
+      grid-template-columns: 1fr;
+      gap: $spacing-6;
+    }
+
+    @include mobile {
+      grid-template-columns: 1fr;
+      gap: $spacing-6;
+    }
+  }
+}
+
+// ── Form Panel ─────────────────────────────────────────────────────────
+.contact-form-panel {
+  background: $neutral-0;
+  border-radius: $border-radius-2xl;
+  padding: $spacing-10;
+  box-shadow: $shadow-base;
+  border: 1px solid $neutral-200;
+
+  @include mobile {
+    padding: $spacing-6;
+    border-radius: $border-radius-xl;
+  }
+
+  &__header {
+    margin-bottom: $spacing-8;
+  }
+
+  &__title {
+    font-family: $font-heading;
+    font-size: $font-size-2xl;
+    font-weight: $font-weight-bold;
+    color: $neutral-800;
+    margin: 0 0 $spacing-2;
+    line-height: $line-height-heading;
+  }
+
+  &__desc {
+    font-size: $font-size-sm;
+    color: $neutral-500;
+    line-height: $line-height-relaxed;
+    margin: 0;
+  }
+}
+
+.contact-form {
+  &__row-2col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0 $spacing-5;
+
+    @include mobile {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .ant-form-item-label>label {
+    font-size: $font-size-sm;
+    font-weight: $font-weight-semibold;
+    color: $neutral-700;
+  }
+
+  .ant-input,
+  .ant-input-affix-wrapper,
+  .ant-input-group-addon,
+  .ant-select-selector {
+    border-radius: $border-radius-lg !important;
+  }
+
+  textarea.ant-input {
+    border-radius: $border-radius-lg !important;
+  }
+
+  &__submit-item {
+    margin-top: $spacing-2;
+    margin-bottom: 0;
+  }
+
+  &__submit-btn {
+    height: $btn-height-xl !important;
+    font-size: $font-size-base !important;
+    font-weight: $font-weight-bold !important;
+    border-radius: $border-radius-lg !important;
+    padding: 0 $spacing-10 !important;
+    background: $primary-500 !important;
+    border-color: $primary-500 !important;
+    box-shadow: 0 $spacing-1 $spacing-5 rgba(0, 156, 222, 0.3) !important;
+    transition: all $transition-base !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: $spacing-2 !important;
+
+    &:hover:not(:disabled) {
+      background: $primary-600 !important;
+      border-color: $primary-600 !important;
+      transform: translateY(-1px);
+      box-shadow: 0 $spacing-2 $spacing-7 rgba(0, 156, 222, 0.4) !important;
+    }
+  }
+
+  &__note {
+    display: flex;
+    align-items: center;
+    gap: $spacing-1-5;
+    font-size: $font-size-xs;
+    color: $neutral-400;
+    margin: $spacing-1-5 0 0;
+    margin-left: $spacing-12 !important;
+
+    span[nz-icon] {
+      color: $success-500;
+      font-size: $icon-size-sm;
+    }
+  }
+}
+
+// ── Right Panel ────────────────────────────────────────────────────────
+.contact-right-panel {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-5;
+}
+
+// ── Map (Head Office with corrected iframe) ────────────────────────────
+.contact-map {
+  position: relative;
+  border-radius: $border-radius-xl;
+  overflow: hidden;
+  border: 1px solid $neutral-200;
+  background: $neutral-0;
+  height: 320px;
+  box-shadow: $shadow-sm;
+
+  &__iframe {
+    display: block;
+    width: 100%;
+    height: 100%;
+    border: 0;
+  }
+
+  &__overlay {
+    position: absolute;
+    left: $spacing-4;
+    right: $spacing-4;
+    bottom: $spacing-4;
+    background: rgba(255, 255, 255, 0.97);
+    backdrop-filter: blur(8px);
+    border-radius: $border-radius-lg;
+    padding: $spacing-4;
+    box-shadow: $shadow-md;
+    border: 1px solid $neutral-200;
+  }
+
+  &__overlay-header {
+    display: flex;
+    align-items: center;
+    gap: $spacing-2;
+    margin-bottom: $spacing-2;
+
+    span[nz-icon] {
+      color: $primary-500;
+      font-size: $icon-size-base;
+    }
+
+    strong {
+      font-size: $font-size-sm;
+      font-weight: $font-weight-bold;
+      color: $neutral-800;
+      letter-spacing: $letter-spacing-wide;
+    }
+  }
+
+  &__overlay p {
+    font-size: $font-size-xs;
+    color: $neutral-600;
+    line-height: $line-height-relaxed;
+    margin: 0 0 $spacing-3;
+  }
+
+  &__link {
+    display: inline-flex;
+    align-items: center;
+    gap: $spacing-1-5;
+    font-size: $font-size-xs;
+    font-weight: $font-weight-semibold;
+    color: $primary-500;
+    text-decoration: none;
+    padding: $spacing-1-5 $spacing-3;
+    border: 1.5px solid $primary-400;
+    border-radius: $border-radius-full;
+    transition: background $transition-fast, color $transition-fast;
+
+    &:hover {
+      background: $primary-500;
+      color: $neutral-0;
+    }
+
+    span[nz-icon] {
+      font-size: $icon-size-sm;
+    }
+  }
+}
+
+// ── Office Hours Card ─────────────────────────────────────────────────
+.contact-hours-card {
+  background: $neutral-0;
+  border: 1px solid $neutral-200;
+  border-radius: $border-radius-xl;
+  padding: $spacing-6;
+  box-shadow: $shadow-sm;
+
+  &__title {
+    display: flex;
+    align-items: center;
+    gap: $spacing-2;
+    font-size: $font-size-sm;
+    font-weight: $font-weight-bold;
+    color: $neutral-800;
+    margin: 0 0 $spacing-4;
+
+    span[nz-icon] {
+      color: $primary-500;
+      font-size: $icon-size-lg;
+    }
+  }
+}
+
+.contact-hours-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-2-5;
+
+  li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: $spacing-2-5 0;
+    border-bottom: 1px solid $neutral-100;
+    font-size: $font-size-sm;
+
+    &:last-child {
+      border-bottom: none;
+    }
+
+    span {
+      color: $neutral-500;
+    }
+
+    strong {
+      font-weight: $font-weight-semibold;
+      color: $neutral-700;
+    }
+  }
+
+  &__highlight {
+    background: $primary-50;
+    border-radius: $border-radius-base;
+    padding: $spacing-2-5 $spacing-3 !important;
+    border: none !important;
+    margin: 0 -#{$spacing-3};
+
+    span {
+      color: $primary-600 !important;
+      font-weight: $font-weight-medium;
+    }
+
+    strong {
+      color: $primary-700 !important;
+    }
+  }
+}
+
+// ── Social Card ───────────────────────────────────────────────────────
+.contact-social-card {
+  background: $neutral-0;
+  border: 1px solid $neutral-200;
+  border-radius: $border-radius-xl;
+  padding: $spacing-6;
+  box-shadow: $shadow-sm;
+
+  &__title {
+    font-size: $font-size-sm;
+    font-weight: $font-weight-bold;
+    color: $neutral-800;
+    margin: 0 0 $spacing-4;
+  }
+}
+
+.contact-social-row {
+  display: flex;
+  gap: $spacing-3;
+  flex-wrap: wrap;
+}
+
+.contact-social-btn {
+  width: 42px;
+  height: 42px;
+  border-radius: $border-radius-lg;
+  border: 1.5px solid $neutral-200;
+  background: $neutral-0;
+  font-size: $icon-size-lg;
+  color: $neutral-500;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background $transition-fast, color $transition-fast,
+    border-color $transition-fast, transform $transition-base;
+  @include flex-center;
+
+  &:hover {
+    background: $primary-50;
+    color: $primary-500;
+    border-color: $primary-300;
+    transform: translateY(-2px);
+  }
+}
+
+// =========================================================================
+// FAQ SECTION
+// =========================================================================
+
+.faq-section {
+  background: $neutral-0;
+  padding: $spacing-20 0;
+
+  @include mobile {
+    padding: $spacing-12 0;
+  }
+
+  &__container {
+    @include make-container($container-xl);
+  }
+
+  &__header {
+    text-align: center;
+    max-width: 560px;
+    margin: 0 auto $spacing-12;
+  }
+
+  &__title {
+    font-family: $font-heading;
+    font-size: $font-size-4xl;
+    font-weight: $font-weight-bold;
+    color: $neutral-800;
+    line-height: $line-height-heading;
+    letter-spacing: $letter-spacing-tight;
+    margin: 0 0 $spacing-4;
+
+    @include mobile {
+      font-size: $font-size-3xl;
+    }
+  }
+
+  &__sub {
+    font-size: $font-size-base;
+    color: $neutral-500;
+    line-height: $line-height-relaxed;
+    margin: 0;
+  }
+}
+
+.faq-grid {
+  max-width: 860px;
+  margin: 0 auto $spacing-12;
+}
+
+.faq-collapse {
+  background: transparent !important;
+
+  .ant-collapse-item {
+    margin-bottom: $spacing-3 !important;
+    border: 1.5px solid $neutral-200 !important;
+    border-radius: $border-radius-xl !important;
+    overflow: hidden;
+    background: $neutral-0 !important;
+    transition: border-color $transition-fast, box-shadow $transition-base;
+
+    &:hover {
+      border-color: $primary-300 !important;
+      box-shadow: $shadow-sm;
+    }
+
+    &.ant-collapse-item-active {
+      border-color: $primary-400 !important;
+      box-shadow: $shadow-base;
+    }
+  }
+
+  .ant-collapse-header {
+    padding: $spacing-5 $spacing-6 !important;
+    background: $neutral-0 !important;
+  }
+
+  .ant-collapse-content {
+    border-top: 1px solid $neutral-100 !important;
+    background: $neutral-50 !important;
+  }
+
+  .ant-collapse-content-box {
+    padding: $spacing-5 $spacing-6 !important;
+  }
+}
+
+.faq-panel {
+  &__header {
+    display: flex;
+    align-items: center;
+    gap: $spacing-4;
+  }
+
+  &__index {
+    flex-shrink: 0;
+    width: 32px;
+    height: 32px;
+    border-radius: $border-radius-lg;
+    background: $primary-50;
+    @include flex-center;
+    font-size: $font-size-xs;
+    font-weight: $font-weight-extrabold;
+    color: $primary-600;
+    letter-spacing: $letter-spacing-wider;
+    font-family: $font-heading;
+  }
+
+  &__question {
+    font-size: $font-size-base;
+    font-weight: $font-weight-semibold;
+    color: $neutral-700;
+    line-height: $line-height-snug;
+  }
+
+  &__answer {
+    padding: 0 0 0 $spacing-14;
+
+    p {
+      font-size: $font-size-sm;
+      color: $neutral-600;
+      line-height: $line-height-relaxed;
+      margin: 0;
+    }
+  }
+}
+
+// ── Still need help CTA ───────────────────────────────────────────────
+.faq-cta {
+  max-width: 860px;
+  margin: 0 auto;
+}
+
+.faq-cta__inner {
+  display: flex;
+  align-items: center;
+  gap: $spacing-6;
+  background: linear-gradient(135deg, $primary-900 0%, $primary-700 100%);
+  border-radius: $border-radius-2xl;
+  padding: $spacing-8 $spacing-10;
+  flex-wrap: wrap;
+
+  @include mobile {
+    flex-direction: column;
+    text-align: center;
+    padding: $spacing-6;
+    gap: $spacing-4;
+  }
+}
+
+.faq-cta__icon {
+  font-size: $icon-size-3xl;
+  color: $primary-300;
+  flex-shrink: 0;
+
+  @include mobile {
+    font-size: $icon-size-2xl;
+  }
+}
+
+.faq-cta__inner>div {
+  flex: 1;
+
+  h4 {
+    font-size: $font-size-xl;
+    font-weight: $font-weight-bold;
+    color: $neutral-0;
+    margin: 0 0 $spacing-1;
+  }
+
+  p {
+    font-size: $font-size-sm;
+    color: rgba(255, 255, 255, 0.65);
+    margin: 0;
+  }
+}
+
+.faq-cta__actions {
+  display: flex;
+  gap: $spacing-3;
+  flex-shrink: 0;
+
+  @include mobile {
+    width: 100%;
+  }
+}
+
+.faq-cta__btn {
+  display: inline-flex;
+  align-items: center;
+  gap: $spacing-2;
+  padding: $spacing-3 $spacing-5;
+  border-radius: $border-radius-lg;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-semibold;
+  text-decoration: none;
+  transition: all $transition-fast;
+  white-space: nowrap;
+
+  span[nz-icon] {
+    font-size: $icon-size-base;
+  }
+
+  &--ghost {
+    border: 1.5px solid rgba(255, 255, 255, 0.35);
+    color: $neutral-0;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.12);
+      border-color: rgba(255, 255, 255, 0.6);
+    }
+  }
+
+  &--primary {
+    background: $primary-500;
+    color: $neutral-0;
+    border: 1.5px solid $primary-500;
+    box-shadow: 0 $spacing-1 $spacing-4 rgba(0, 156, 222, 0.4);
+
+    &:hover {
+      background: $primary-400;
+      border-color: $primary-400;
+    }
+  }
+
+  @include mobile {
+    flex: 1;
+    justify-content: center;
+  }
+}

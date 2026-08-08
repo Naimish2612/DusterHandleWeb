@@ -1,0 +1,23 @@
+@use '../../../../../assets/styles/common' as *;
+
+// =========================================================================
+// PUBLIC LAYOUT SHELL
+// =========================================================================
+
+
+.pub-layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  font-family: $font-primary;
+  background: $color-bg-body;
+
+  &__main {
+    flex: 1;
+    padding-top: $header-height;
+
+    // @include mobile {
+    //   padding-top: $header-height-mobile;
+    // }
+  }
+}

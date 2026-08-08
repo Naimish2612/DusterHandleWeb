@@ -1,0 +1,54 @@
+<app-banner></app-banner>
+
+<app-product-slider sectionTag="Best Sellers" sectionTitle="Top <em>Selling</em> Products"
+  sectionSub="Handpicked favourites loved by thousands of happy customers."
+  [products]="topSellingProducts()"></app-product-slider>
+
+<!-- Value props strip -->
+<section class="value-strip">
+  <div class="value-strip__inner">
+    <div class="value-prop">
+      <span class="value-prop__icon">
+        <span nz-icon nzType="rocket" nzTheme="twotone" [nzTwotoneColor]="'#ff4d4f'"></span>
+      </span>
+      <div class="value-prop__text">
+        <strong>Free Shipping</strong>
+        <span>On orders above ₹20,000</span>
+      </div>
+    </div>
+
+    <div class="value-prop">
+      <span class="value-prop__icon">
+        <span nz-icon nzType="check-circle" nzTheme="twotone" [nzTwotoneColor]="'#1890ff'"></span>
+      </span>
+      <div class="value-prop__text">
+        <strong>Easy Returns</strong>
+        <span>30-day return policy*</span>
+      </div>
+    </div>
+
+    <div class="value-prop">
+      <span class="value-prop__icon">
+        <span nz-icon nzType="lock" nzTheme="twotone" [nzTwotoneColor]="'#faad14'"></span>
+      </span>
+      <div class="value-prop__text">
+        <strong>Secure Payments</strong>
+        <span>100% protected checkout</span>
+      </div>
+    </div>
+
+    <div class="value-prop">
+      <span class="value-prop__icon">
+        <span nz-icon nzType="customer-service" nzTheme="twotone" [nzTwotoneColor]="'#722ed1'"></span>
+      </span>
+      <div class="value-prop__text">
+        <strong>24/7 Support</strong>
+        <span>Always here for you</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+  <app-product-slider sectionTag="Just Launched" sectionTitle="New <em>Arrivals</em>"
+  sectionSub="Fresh drops be the first to shop our latest collection." [products]="newArrivals()"
+  [isDark]="false"></app-product-slider>

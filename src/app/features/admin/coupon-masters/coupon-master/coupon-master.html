@@ -1,0 +1,311 @@
+<div nz-row [nzGutter]="[16, 16]" class="process-page">
+  <!-- ================= FORM CARD ================= -->
+  <div nz-col nzSpan="24">
+    @if (editCoupon) {
+      <div style="margin-bottom: 20px">
+        <button nz-button nzType="link" (click)="goBack()">
+          <nz-icon nzType="arrow-left"></nz-icon> Back to List
+        </button>
+      </div>
+    }
+    <nz-card nzTitle="Coupon Master">
+      <form nz-form [formGroup]="form" nzLayout="vertical">
+        <div nz-row [nzGutter]="[16, 8]">
+
+          <!-- ── ROW 1: Coupon Name | Coupon Category | Coupon Code | Discount Type ── -->
+
+          <!-- Coupon Name -->
+          <div nz-col [nzXs]="24" [nzSm]="12" [nzMd]="12" [nzLg]="6">
+            <nz-form-item>
+              <nz-form-label nzRequired>Coupon Name</nz-form-label>
+              <nz-form-control nzErrorTip="Please enter coupon name (min 3 characters)">
+                <input
+                  nz-input
+                  formControlName="coupon_name"
+                  placeholder="Enter Coupon Name"
+                  type="text"
+                />
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+
+          <!-- Coupon Category (Dropdown) -->
+          <div nz-col [nzXs]="24" [nzSm]="12" [nzMd]="12" [nzLg]="6">
+            <nz-form-item>
+              <nz-form-label
+                nzTooltipTitle="Select the Coupon category associated with this sub category"
+                nzRequired
+              >Coupon Category</nz-form-label>
+              <nz-form-control nzErrorTip="Please select a coupon category">
+                <nz-select
+                  formControlName="coupon_category_id"
+                  nzShowSearch
+                  nzAllowClear
+                  nzPlaceHolder="Select Coupon Category"
+                >
+                  @for (category of couponCategoryList; track category.id) {
+                    <nz-option [nzValue]="category.id" [nzLabel]="category.value"></nz-option>
+                  }
+                </nz-select>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+
+          <!-- Coupon Code -->
+          <div nz-col [nzXs]="24" [nzSm]="12" [nzMd]="12" [nzLg]="6">
+            <nz-form-item>
+              <nz-form-label
+                nzRequired
+                nzTooltipTitle="Please enter coupon code CAPITAL LETTERS (min 5 characters, max 10 characters) without spaces"
+              >Coupon Code</nz-form-label>
+              <nz-form-control>
+                <nz-input-group nzSearch [nzAddOnAfter]="suffixButton">
+                  <input
+                    nz-input
+                    formControlName="coupon_code"
+                    placeholder="Enter Coupon Code"
+                    type="text"
+                  />
+                </nz-input-group>
+                <ng-template #suffixButton>
+                  @if (!editCoupon) {
+                    <button
+                      nz-button
+                      nzType="primary"
+                      nzSearch
+                      [nzLoading]="isGeneratingCode"
+                      (click)="generateCouponCode()"
+                      [disabled]="editCoupon"
+                    >
+                      Generate Code
+                    </button>
+                  }
+                </ng-template>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+
+          <!-- Discount Type -->
+          <div nz-col [nzXs]="24" [nzSm]="12" [nzMd]="12" [nzLg]="6">
+            <nz-form-item>
+              <nz-form-label nzRequired>Discount Type</nz-form-label>
+              <nz-form-control>
+                <nz-select
+                  nzPlaceHolder="Select Discount Type"
+                  formControlName="discount_type"
+                  (ngModelChange)="discountTypeSelection()"
+                >
+                  <nz-option nzValue="Percentage" nzLabel="Percentage"></nz-option>
+                  <nz-option nzValue="Value" nzLabel="Value"></nz-option>
+                </nz-select>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+
+          <!-- Discount Value -->
+          <div nz-col [nzXs]="24" [nzSm]="12" [nzMd]="8" [nzLg]="6">
+            <nz-form-item>
+              <nz-form-label>Discount Value</nz-form-label>
+              <nz-form-control>
+                <nz-input-number
+                  nzPlaceHolder="10"
+                  style="width: 100%"
+                  formControlName="discount_value"
+                  [nzMin]="1"
+                  [nzMax]="form.get('discount_type')?.value === 'Percentage' ? 100 : 10000"
+                />
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+
+          <!-- Start Date -->
+          <div nz-col [nzXs]="24" [nzSm]="12" [nzMd]="8" [nzLg]="9">
+            <nz-form-item>
+              <nz-form-label nzRequired>Start Date</nz-form-label>
+              <nz-form-control>
+                <nz-date-picker
+                  style="width: 100%"
+                  formControlName="start_date"
+                  [nzFormat]="'yyyy-MM-dd HH:mm:ss'"
+                  nzShowTime
+                >
+                </nz-date-picker>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+
+          <!-- End Date -->
+          <div nz-col [nzXs]="24" [nzSm]="12" [nzMd]="8" [nzLg]="9">
+            <nz-form-item>
+              <nz-form-label nzRequired>End Date</nz-form-label>
+              <nz-form-control nzHasFeedback [nzErrorTip]="dateErrorTpl">
+                <nz-date-picker
+                  style="width: 100%"
+                  formControlName="end_date"
+                  [nzFormat]="'yyyy-MM-dd HH:mm:ss'"
+                  nzShowTime
+                >
+                </nz-date-picker>
+                <ng-template #dateErrorTpl>
+                  @if (form.hasError('dateOrder')) {
+                    <span>End date must be after start date!</span>
+                  }
+                </ng-template>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+
+          <!-- Max Usage Total -->
+          <div nz-col [nzXs]="24" [nzSm]="12" [nzMd]="12" [nzLg]="6">
+            <nz-form-item>
+              <nz-form-label>Max Usages Total</nz-form-label>
+              <nz-form-control>
+                <nz-input-number
+                  nzPlaceHolder="10"
+                  style="width: 100%"
+                  formControlName="max_usages_total"
+                  nzMin="0"
+                  nzMax="10000"
+                />
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+
+          <!-- Max Usage Per User -->
+          <div nz-col [nzXs]="24" [nzSm]="12" [nzMd]="12" [nzLg]="6">
+            <nz-form-item>
+              <nz-form-label>Max Usages Per User</nz-form-label>
+              <nz-form-control>
+                <nz-input-number
+                  nzPlaceHolder="10"
+                  style="width: 100%"
+                  formControlName="max_usages_per_user"
+                  nzMin="0"
+                  nzMax="10000"
+                />
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+
+          <!-- Minimum Order Amount -->
+          <div nz-col [nzXs]="24" [nzSm]="12" [nzMd]="12" [nzLg]="6">
+            <nz-form-item>
+              <nz-form-label nzRequired>Minimum Order Amount</nz-form-label>
+              <nz-form-control>
+                <nz-input-number
+                  nzPlaceHolder="1000"
+                  style="width: 100%"
+                  formControlName="minimum_order_amount"
+                  [nzMin]="1"
+                  [nzMax]="10000"
+                  [nzStep]="0.01"
+                  [nzPrecision]="2"
+                />
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+
+          <!-- Max Discount Amount -->
+          <div nz-col [nzXs]="24" [nzSm]="12" [nzMd]="12" [nzLg]="6">
+            <nz-form-item>
+              <nz-form-label nzRequired>Max Discount Amount</nz-form-label>
+              <nz-form-control>
+                <nz-input-number
+                  nzPlaceHolder="50"
+                  style="width: 100%"
+                  formControlName="max_discount_amount"
+                  [nzMin]="1"
+                  [nzStep]="0.01"
+                  [nzPrecision]="2"
+                />
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+
+          <!-- Status -->
+          <div nz-col [nzXs]="24" [nzSm]="12" [nzMd]="8" [nzLg]="8">
+            <nz-form-item>
+              <nz-form-label>IsActive</nz-form-label>
+              <nz-form-control>
+                <div class="switch-wrapper">
+                  <nz-switch formControlName="is_active"></nz-switch>
+                  <span class="switch-label">
+                    {{ form.get('is_active')?.value ? 'Active' : 'Inactive' }}
+                  </span>
+                </div>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+
+          <!-- Delete Status -->
+          <div nz-col [nzXs]="24" [nzSm]="12" [nzMd]="8" [nzLg]="8">
+            <nz-form-item>
+              <nz-form-label>IsDeleted</nz-form-label>
+              <nz-form-control>
+                <div class="switch-wrapper">
+                  <nz-switch formControlName="is_deleted"></nz-switch>
+                  <span class="switch-label">
+                    {{ form.get('is_deleted')?.value ? 'Deleted' : 'Not Deleted' }}
+                  </span>
+                </div>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+
+          <!-- Multiple Time Use -->
+          <div nz-col [nzXs]="24" [nzSm]="12" [nzMd]="8" [nzLg]="8">
+            <nz-form-item>
+              <nz-form-label>Multiple Time Use</nz-form-label>
+              <nz-form-control>
+                <div class="switch-wrapper">
+                  <nz-switch formControlName="multiple_time_use"></nz-switch>
+                  <span class="switch-label">
+                    {{ form.get('multiple_time_use')?.value ? 'Yes' : 'No' }}
+                  </span>
+                </div>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+          <!-- Description -->
+          <div nz-col [nzXs]="24">
+            <nz-form-item>
+              <nz-form-label nzRequired>Description</nz-form-label>
+              <nz-form-control nzErrorTip="Please enter description">
+                <textarea
+                  nz-input
+                  formControlName="coupon_description"
+                  [nzAutosize]="{ minRows: 2, maxRows: 4 }"
+                  placeholder="Enter description"
+                ></textarea>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+
+          <!-- ACTIONS -->
+          <div nz-col nzSpan="24" class="form-actions">
+            @if (showAddButton && hasAddPermission) {
+              <button
+                nz-button
+                nzType="primary"
+                htmlType="submit"
+                [disabled]="!form.valid"
+                (click)="submit()"
+              >
+                <nz-icon nzType="save"></nz-icon> Save
+              </button>
+            }
+            <!-- *ngIf="showAddButton && hasAddPermission" -->
+            @if (showEditButton && hasEditPermission) {
+              <button nz-button nzType="primary" [disabled]="!form.valid" (click)="couponUpdate()">
+                <nz-icon nzType="edit"></nz-icon> Update
+              </button>
+            }
+            <button nz-button nzType="default" type="button" (click)="reset()">
+              <nz-icon nzType="reload"></nz-icon> Reset
+            </button>
+          </div>
+        </div>
+      </form>
+    </nz-card>
+  </div>
+</div>

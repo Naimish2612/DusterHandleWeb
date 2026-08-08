@@ -1,0 +1,333 @@
+<div class="import-page-container">
+    <!-- Page Header -->
+    <div class="import-header">
+        <button nz-button nzType="link" [routerLink]="backUrl" class="back-link-btn">
+            <i nz-icon nzType="arrow-left"></i> {{ backText }}
+        </button>
+        <button nz-button nzType="default" (click)="openStatusDrawer()" class="import-history-btn">
+            <i nz-icon nzType="history"></i> Import History & Status
+        </button>
+    </div>
+
+    <!-- Steps Progress -->
+    <div class="steps-progress-wrapper">
+        <nz-steps [nzCurrent]="currentStep" nzType="navigation" nzSize="small">
+            <nz-step nzTitle="Configure Fields" nzDescription="Select template schema"></nz-step>
+            <nz-step nzTitle="Verify & Import" nzDescription="Preview parsed records"></nz-step>
+        </nz-steps>
+    </div>
+
+    <!-- Wizard Content Panels -->
+    <div class="wizard-panel">
+
+        <!-- STEP 1: FIELD SELECTION & SAMPLE TEMPLATE -->
+        @if (currentStep === 0) {
+        <nz-card [nzBordered]="false" class="premium-card">
+            <div class="step-desc-alert">
+                <nz-alert nzType="info" nzShowIcon [nzMessage]="alertTitle" [nzDescription]="alertDesc">
+                    <ng-template #alertTitle>
+                        <span class="alert-title-custom">Configure Columns for Import Template</span>
+                    </ng-template>
+                    <ng-template #alertDesc>
+                        <div class="alert-desc-container">
+                            <p>Follow these steps to configure your template sheet:</p>
+                            <ul>
+                                <li>Fields marked as <nz-tag nzColor="error" class="alert-tag">Required</nz-tag> are mandatory and locked on the right.</li>
+                                <li>Fields marked as <nz-tag nzColor="blue" class="alert-tag">Optional</nz-tag> can be transferred from left to right to include them.</li>
+                                @if (maxRecordsAllowed > 0) {
+                                <li>Maximum records allowed per import: <nz-tag nzColor="warning" class="alert-tag warning-tag">{{ maxRecordsAllowed }}</nz-tag> records.</li>
+                                }
+                                <li>Once you are satisfied with your layout, download the template sheet using the <b>Download Sample Excel</b> button.</li>
+                            </ul>
+                        </div>
+                    </ng-template>
+                </nz-alert>
+            </div>
+
+            <!-- Transfer Container -->
+            <div class="transfer-wrapper">
+                <nz-spin [nzSpinning]="loadingFields">
+                    <nz-transfer [nzDataSource]="list" [nzTitles]="['Available Optional Fields', 'Columns to Import']"
+                        [nzRender]="renderItem" [nzShowSearch]="true">
+                        <ng-template #renderItem let-item>
+                            <div class="field-item-custom"
+                                [ngClass]="item.isRequired ? 'required-item' : 'optional-item'">
+                                <div class="field-item-left">
+                                    <span class="field-name" [ngClass]="{ 'required-field': item.isRequired }">
+                                        {{ item.title }}
+                                    </span>
+                                </div>
+                                <div class="field-item-right">
+                                    @if (item.isRequired) {
+                                    <nz-tag nzColor="error" class="tag-status premium-tag red-tag">Required</nz-tag>
+                                    } @else {
+                                    <nz-tag nzColor="blue" class="tag-status premium-tag blue-tag">Optional</nz-tag>
+                                    }
+                                </div>
+                            </div>
+                        </ng-template>
+                    </nz-transfer>
+                </nz-spin>
+            </div>
+
+            <nz-divider></nz-divider>
+
+            <!-- Step 1 Footer Actions -->
+            <div class="form-actions">
+                <button nz-button nzType="default" (click)="downloadSample()" [disabled]="loadingFields">
+                    <nz-icon nzType="download"></nz-icon> Download Sample Excel
+                </button>
+
+                <button nz-button nzType="primary" (click)="goToNextStep()" [disabled]="loadingFields"
+                    class="btn-align-right">
+                    Next Step <nz-icon nzType="right"></nz-icon>
+                </button>
+            </div>
+        </nz-card>
+        }
+
+        <!-- STEP 2: FILE UPLOAD, PREVIEW & VALIDATION -->
+        @if (currentStep === 1) {
+        <nz-card [nzBordered]="false" class="premium-card">
+
+            <!-- Drag & Drop Uploader -->
+            @if (previewData.length === 0) {
+            <div class="uploader-container">
+                @if (maxRecordsAllowed > 0) {
+                <div class="uploader-limit-wrapper">
+                    <nz-tag nzColor="warning" class="limit-tag">
+                        <i nz-icon nzType="info-circle"></i> Maximum Allowed Records: {{ maxRecordsAllowed }}
+                    </nz-tag>
+                </div>
+                }
+                <nz-upload nzType="drag" [nzMultiple]="false" [nzLimit]="1" [nzFileList]="fileList"
+                    [nzBeforeUpload]="handleFileUpload" nzAccept=".xlsx, .xls" class="drag-uploader">
+                    <p class="ant-upload-drag-icon">
+                        <i nz-icon nzType="cloud-upload"></i>
+                    </p>
+                    <p class="ant-upload-text">Click or drag your filled Excel file to this area to import</p>
+                    <p class="ant-upload-hint">Only Microsoft Excel sheets (.xlsx, .xls) are supported.</p>
+                </nz-upload>
+            </div>
+            }
+
+            <!-- Preview & Validation Results -->
+            @if (previewData.length > 0) {
+            <div class="preview-results-container">
+                <!-- Summary Banners -->
+                <div class="summary-alert-wrapper">
+                    @if (maxRecordsAllowed > 0 && previewData.length > maxRecordsAllowed) {
+                    <nz-alert nzType="error" nzShowIcon nzMessage="Upload Limit Exceeded"
+                        [nzDescription]="'You can import a maximum of ' + maxRecordsAllowed + ' records at a time. The uploaded file contains ' + previewData.length + ' records.'"></nz-alert>
+                    } @else if (invalidPreviewData.length === 0) {
+                    <nz-alert nzType="success" nzShowIcon nzMessage="Validation Passed"
+                        nzDescription="All records are valid and ready to be imported into the database."></nz-alert>
+                    } @else {
+                    <nz-alert nzType="error" nzShowIcon nzMessage="Validation Failed"
+                        nzDescription="Errors found in your uploaded sheet. Please check the rows highlighted in red. You can only proceed with the import if all rows are valid."></nz-alert>
+                    }
+                </div>
+
+                <!-- Preview Data Grid -->
+                <div class="app-table-container preview-grid">
+                    <nz-table #previewTable [nzData]="filteredPreviewData" nzSize="small" [nzBordered]="true"
+                        [nzFrontPagination]="false" [nzShowPagination]="false" class="premium-table">
+                        <thead>
+                            <tr>
+                                <th nzWidth="60px" class="text-center">Row</th>
+                                <th nzWidth="90px" class="text-center">Status</th>
+                                @for (col of previewColumns; track col.key) {
+                                <th [ngClass]="{ 'col-required': col.isRequired, 'col-optional': !col.isRequired }">
+                                    {{ col.title }}
+                                </th>
+                                }
+                                <th nz-tooltip nzTooltipTitle="Hover over red error tags or individual invalid cells below to view validation errors.">Validation Errors</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @for (row of previewTable.data; track row.rowNumber) {
+                            <tr [ngClass]="{ 'row-invalid': !row.isValid, 'row-valid': row.isValid }">
+                                <td class="text-center">{{ row.rowNumber }}</td>
+                                <td class="text-center">
+                                    @if (row.isValid) {
+                                    <nz-tag nzColor="success">Valid</nz-tag>
+                                    } @else {
+                                    <nz-tag nzColor="error">Invalid</nz-tag>
+                                    }
+                                </td>
+                                @for (col of previewColumns; track col.key) {
+                                <td [ngClass]="{ 'col-required': col.isRequired, 'col-optional': !col.isRequired, 'cell-invalid': !!getCellError(row, col.key) }">
+                                    @if (getCellError(row, col.key)) {
+                                    <span nz-tooltip [nzTooltipTitle]="getCellError(row, col.key)" nzTooltipColor="red" class="cell-error-wrapper">
+                                        {{ row[col.key] || '—' }}
+                                    </span>
+                                    } @else {
+                                    {{ row[col.key] }}
+                                    }
+                                </td>
+                                }
+                                <td class="error-cell text-center">
+                                    @if (row.isValid) {
+                                    <span class="status-ready">
+                                        <nz-icon nzType="check-circle" nzTheme="fill"></nz-icon> Ready to Import
+                                    </span>
+                                    } @else {
+                                    <span nz-tooltip [nzTooltipTitle]="errorTemplate" nzTooltipColor="red" class="status-error">
+                                        <nz-icon nzType="close-circle" nzTheme="fill"></nz-icon>
+                                        {{ row.errors.length }} Error(s)
+                                    </span>
+                                    <ng-template #errorTemplate>
+                                        <div class="tooltip-errors">
+                                            @for (err of row.errors; track err) {
+                                                <div class="tooltip-error-item">
+                                                    <nz-icon nzType="close-circle" nzTheme="fill" class="error-icon"></nz-icon>
+                                                    <span>{{ err }}</span>
+                                                </div>
+                                            }
+                                        </div>
+                                    </ng-template>
+                                    }
+                                </td>
+                            </tr>
+                            }
+                        </tbody>
+                    </nz-table>
+                </div>
+            </div>
+            }
+
+            <nz-divider></nz-divider>
+
+            <!-- Step 2 Footer Actions -->
+            <div class="form-actions">
+                <button nz-button nzType="default" (click)="goToPreviousStep()" [disabled]="importingRecords">
+                    <nz-icon nzType="left"></nz-icon> Back to Step 1
+                </button>
+
+                @if (invalidPreviewData.length > 0 || (maxRecordsAllowed > 0 && previewData.length > maxRecordsAllowed)) {
+                <button nz-button nzType="default" nzDanger (click)="resetUploader()" class="btn-align-right">
+                    <nz-icon nzType="upload"></nz-icon> Upload Another File
+                </button>
+                } @else {
+                <button nz-button nzType="default" (click)="resetUploader()" class="btn-align-right">
+                    <nz-icon nzType="upload"></nz-icon> Upload Another File
+                </button>
+                <button nz-button nzType="primary" (click)="submitImport()" [nzLoading]="importingRecords"
+                    [disabled]="previewData.length === 0">
+                    <nz-icon nzType="check"></nz-icon> Confirm Import
+                </button>
+                }
+            </div>
+        </nz-card>
+        }
+    </div>
+
+    <!-- Import History Drawer -->
+    <nz-drawer
+      [nzVisible]="drawerVisible"
+      nzPlacement="right"
+      nzTitle="Import History & Job Status"
+      [nzWidth]="650"
+      (nzOnClose)="closeStatusDrawer()"
+    >
+      <ng-container *nzDrawerContent>
+        <div class="drawer-header-row">
+          <span class="drawer-subtitle">Track your uploaded file queues and status.</span>
+          <button nz-button nzType="default" nzShape="circle" (click)="fetchJobs()" [nzLoading]="loadingJobs" nz-tooltip nzTooltipTitle="Refresh job status list">
+            <i nz-icon nzType="reload"></i>
+          </button>
+        </div>
+
+        <nz-spin [nzSpinning]="loadingJobs">
+          <nz-collapse nzAccordion>
+            @for (status of statusKeys; track status) {
+              <nz-collapse-panel
+                [nzHeader]="panelHeader"
+                [nzActive]="false"
+              >
+                <ng-template #panelHeader>
+                  <div class="panel-header-wrapper">
+                    <span class="panel-header-title">{{ formatStatusLabel(status) }}</span>
+                    <nz-badge [nzCount]="getJobsByStatus(status).length" [nzStyle]="{ backgroundColor: getBadgeColor(status) }"></nz-badge>
+                  </div>
+                </ng-template>
+                @if (getJobsByStatus(status).length > 0) {
+                  <div class="jobs-list-container">
+                    @for (job of getJobsByStatus(status); track (job.job_id || job.id)) {
+                      <nz-card nzSize="small" class="job-card" [nzHoverable]="true">
+                        <div class="job-card-header">
+                          <div>
+                            <span class="job-process-label">Process Name</span>
+                            <span class="job-process-name">{{ job.entity_type || job.process_name }}</span>
+                          </div>
+                          <div>
+                            @if (job.status === 'CompletedWithErrors') {
+                              <nz-tag nzColor="warning" class="status-tag">Completed With Errors</nz-tag>
+                            } @else if (job.status === 'Completed') {
+                              <nz-tag nzColor="success" class="status-tag">Completed</nz-tag>
+                            } @else if (job.status === 'Failed') {
+                              <nz-tag nzColor="error" class="status-tag">Failed</nz-tag>
+                            } @else if (job.status === 'Processing') {
+                              <nz-tag nzColor="processing" class="status-tag">Processing</nz-tag>
+                            } @else {
+                              <nz-tag nzColor="default" class="status-tag">{{ job.status }}</nz-tag>
+                            }
+                          </div>
+                        </div>
+
+                        <!-- Statistics Grid -->
+                        <div class="stats-grid">
+                          <div class="stats-col">
+                            <div class="stats-label">Total Rows</div>
+                            <div class="stats-val">{{ job.total_rows ?? job.totalRecords ?? 0 }}</div>
+                          </div>
+                          <div class="stats-col border-left">
+                            <div class="stats-label">Processed</div>
+                            <div class="stats-val">{{ job.processed_rows ?? job.processedRecords ?? 0 }}</div>
+                          </div>
+                          <div class="stats-col border-left">
+                            <div class="stats-label label-success">Success</div>
+                            <div class="stats-val val-success">{{ job.success_count ?? job.successRecords ?? 0 }}</div>
+                          </div>
+                          <div class="stats-col border-left">
+                            <div class="stats-label label-danger">Failed</div>
+                            <div class="stats-val val-danger">{{ job.failed_count ?? job.failedRecords ?? 0 }}</div>
+                          </div>
+                        </div>
+
+                        @if (job.status === 'Failed' && (job.error_file_path || job.error_message || job.errorMessage)) {
+                          <div class="job-error-details">
+                            <span nz-icon nzType="close-circle" nzTheme="fill" class="error-icon"></span>
+                            <b>Error Details:</b> {{ job.error_file_path || job.error_message || job.errorMessage }}
+                          </div>
+                        }
+
+                        <div class="job-card-footer">
+                          <span class="job-time-wrapper">
+                            <i nz-icon nzType="clock-circle"></i>
+                            {{ (job.created_at || job.createdAt) ? ((job.created_at || job.createdAt) | date:'medium') : '—' }}
+                          </span>
+                          <div class="job-actions-wrapper">
+                            @if (job.error_file_path && job.status === 'CompletedWithErrors') {
+                              <a nz-button nzType="link" nzSize="small" nzDanger [href]="getDownloadUrl(job.error_file_path)" target="_blank" class="download-errors-btn">
+                                <i nz-icon nzType="download"></i> Download Errors
+                              </a>
+                            }
+                          </div>
+                        </div>
+                      </nz-card>
+                    }
+                  </div>
+                } @else {
+                  <div class="no-jobs-container">
+                    <i nz-icon nzType="inbox" class="no-jobs-icon"></i>
+                    <p>No jobs in this status.</p>
+                  </div>
+                }
+              </nz-collapse-panel>
+            }
+          </nz-collapse>
+        </nz-spin>
+      </ng-container>
+    </nz-drawer>
+</div>

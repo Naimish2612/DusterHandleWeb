@@ -1,0 +1,422 @@
+@use '../../../../../assets/styles/common' as *;
+@use '../../../../../assets/styles/responsive' as *;
+
+/* ================= PAGE LAYOUT ================= */
+.process-page {
+  padding: $spacing-6;
+}
+
+.back-button-wrapper {
+  margin-bottom: $spacing-5;
+}
+
+nz-card {
+  border-radius: $border-radius-lg;
+  background-color: $neutral-100;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+
+  ::ng-deep .ant-card-head {
+    border-bottom: 2px solid #f0f0f0;
+    font-weight: 600;
+  }
+}
+
+nz-form-item {
+  margin-bottom: $spacing-3;
+}
+
+/* ================= FORM SECTIONS ================= */
+.form-section {
+  background: #ffffff;
+  border: 1px solid #f0f0f0;
+  border-radius: $border-radius-lg;
+  padding: $spacing-4 $spacing-5 $spacing-3;
+  margin-bottom: $spacing-5;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+
+  &:hover {
+    border-color: #e0e7ff;
+    box-shadow: 0 2px 8px rgba(24, 144, 255, 0.06);
+  }
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  color: #1f2937;
+  margin-bottom: $spacing-4;
+  padding-bottom: $spacing-2;
+  border-bottom: 1px dashed #e5e7eb;
+
+  nz-icon {
+    color: #1890ff;
+    font-size: 16px;
+  }
+}
+
+/* ================= INPUT HELPERS ================= */
+.full-width-input {
+  width: 100%;
+}
+
+.price-input-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  .price-input {
+    flex: 1;
+  }
+
+  .simulator-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 32px;
+    height: 32px;
+    padding: 0;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+
+    &:hover {
+      border-color: #1890ff;
+      color: #1890ff;
+      transform: translateY(-1px);
+    }
+  }
+}
+
+/* ================= SWITCH GROUP ================= */
+.switch-group {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 12px;
+  background: #fafafa;
+  border: 1px solid #f0f0f0;
+  border-radius: 6px;
+  min-height: 36px;
+
+  .switch-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 12px;
+    background: #ffffff;
+    border: 1px solid #e8e8e8;
+    border-radius: 20px;
+    transition: all 0.25s ease;
+
+    &:hover {
+      border-color: #1890ff;
+      box-shadow: 0 2px 6px rgba(24, 144, 255, 0.15);
+    }
+
+    .switch-label {
+      font-size: 13px;
+      font-weight: 500;
+      color: #262626;
+      white-space: nowrap;
+      user-select: none;
+      margin-left: 0;
+    }
+  }
+}
+
+/* ================= FORM ACTIONS ================= */
+.form-actions {
+  display: flex;
+  gap: $spacing-4;
+  justify-content: flex-end;
+  padding-top: $spacing-4;
+  margin-top: $spacing-4;
+  border-top: 1px solid #f0f0f0;
+
+  button {
+    min-width: 110px;
+    border-radius: 6px;
+  }
+}
+
+.simulator-actions {
+  justify-content: flex-end;
+  border-top: none;
+  padding-top: 0;
+  margin-top: $spacing-3;
+}
+
+/* ================= ACTION/TABLE WRAPPERS ================= */
+.action-cell {
+  display: flex;
+  gap: $spacing-2;
+  white-space: nowrap;
+}
+
+.table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  border-radius: $border-radius-lg;
+}
+
+/* ================= ATTRIBUTES SECTION ================= */
+::ng-deep .attributes-section ui-grid .ant-table-pagination,
+::ng-deep .attributes-section ui-grid nz-pagination {
+  display: none !important;
+}
+
+.attributes-section {
+  ::ng-deep .ant-divider-inner-text {
+    font-weight: 600;
+    color: #1f2937;
+  }
+}
+
+.attribute-table-wrapper {
+  max-height: 200px !important;
+  overflow-y: auto !important;
+  overflow-x: hidden;
+  border: 1px solid #f0f0f0;
+  border-radius: $border-radius-lg;
+  padding: 4px;
+  margin-top: $spacing-3;
+  background-color: #fafafa;
+
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 10px;
+  }
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+}
+
+/* ================= IMAGE UPLOAD SECTION ================= */
+::ng-deep .image-upload-section ui-grid .ant-table-pagination,
+::ng-deep .image-upload-section ui-grid nz-pagination {
+  display: none !important;
+}
+
+.image-upload-section {
+  margin-top: $spacing-4;
+
+  ::ng-deep .ant-divider-inner-text {
+    font-weight: 600;
+    color: #1f2937;
+  }
+}
+
+.image-upload-section > nz-form-label {
+  display: block;
+  margin-bottom: $spacing-3;
+  font-weight: 600;
+}
+
+.image-upload-section ::ng-deep .anticon-eye {
+  color: $success-400;
+}
+
+.image-upload-form {
+  padding: $spacing-4 $spacing-5;
+  margin-bottom: $spacing-4;
+  border: 1px dashed #d9d9d9;
+  border-radius: $border-radius-lg;
+  background: #fafafa;
+  transition: border-color 0.25s ease, background 0.25s ease;
+
+  &:hover {
+    border-color: #1890ff;
+    background: #f0f7ff;
+  }
+}
+
+.upload-controls {
+  display: flex;
+  align-items: center;
+  gap: $spacing-4;
+  flex-wrap: wrap;
+}
+
+.upload-controls nz-form-item {
+  margin-bottom: 0;
+}
+
+.image-count-badge {
+  display: flex;
+  align-items: center;
+  gap: $spacing-2;
+}
+
+.image-table-wrapper {
+  border: 1px solid #f0f0f0;
+  border-radius: $border-radius-lg;
+  overflow: hidden;
+  background-color: $neutral-100;
+  margin-top: $spacing-3;
+}
+
+.image-table-wrapper ::ng-deep .ant-table-body {
+  max-height: 162px !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+}
+
+.image-table-wrapper ::ng-deep .ant-table-thead > tr > th {
+  font-weight: 600;
+  white-space: nowrap;
+  background: #fafafa;
+}
+
+.image-table-wrapper ::ng-deep .ant-table-header {
+  overflow: hidden !important;
+  scrollbar-width: none;
+}
+
+.image-table-wrapper ::ng-deep .ant-table-header::-webkit-scrollbar {
+  height: 0 !important;
+  width: 0 !important;
+}
+
+.image-table-wrapper ::ng-deep .ant-table-tbody > tr > td {
+  vertical-align: middle;
+  word-break: break-word;
+}
+
+.image-table-wrapper ::ng-deep .ant-table-body::-webkit-scrollbar {
+  width: 6px;
+}
+
+.image-table-wrapper ::ng-deep .ant-table-body::-webkit-scrollbar-thumb {
+  background: #d9d9d9;
+  border-radius: 999px;
+}
+
+.image-table-wrapper ::ng-deep .ant-table-body::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.image-thumbnail {
+  width: 40px;
+  height: 40px;
+  object-fit: cover;
+  border-radius: 4px;
+  border: 1px solid #d9d9d9;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+
+  &:hover {
+    transform: scale(1.05);
+  }
+}
+
+.image-name {
+  display: inline-block;
+  max-width: 250px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Actions */
+.image-actions {
+  display: flex;
+  gap: $spacing-3;
+  align-items: center;
+}
+
+.image-actions a {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: #1890ff;
+  cursor: pointer;
+  transition: color 0.2s;
+
+  &:hover {
+    color: #40a9ff;
+  }
+}
+
+.image-actions .delete-link {
+  color: #ff4d4f;
+
+  &:hover {
+    color: #ff7875;
+  }
+}
+
+/* Preview Modal */
+.image-preview-container {
+  text-align: center;
+  padding: $spacing-2;
+
+  img {
+    max-width: 100%;
+    max-height: 500px;
+    object-fit: contain;
+    border-radius: $border-radius-lg;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+}
+
+/* ================= LEGACY (kept for backward compatibility) ================= */
+.switch-label {
+  margin-left: 8px;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+/* ================= MOBILE ================= */
+@include mobile {
+  .process-page {
+    padding: $spacing-3;
+  }
+
+  .form-section {
+    padding: $spacing-3;
+  }
+
+  .section-header {
+    font-size: 14px;
+  }
+
+  .switch-group {
+    flex-direction: column;
+    align-items: stretch;
+
+    .switch-item {
+      width: 100%;
+      justify-content: space-between;
+    }
+  }
+
+  .upload-controls {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .image-name {
+    max-width: 120px;
+  }
+
+  .image-actions {
+    flex-direction: column;
+    gap: $spacing-1;
+  }
+
+  .form-actions {
+    flex-direction: column-reverse;
+
+    button {
+      width: 100%;
+    }
+  }
+}

@@ -1,0 +1,70 @@
+// @import '../../../../assets/styles/common.scss';
+@use '../../../../assets/styles/common' as *;
+@use '../../../../assets/styles/responsive' as *;
+
+
+// =========================================================================
+// HOME PAGE
+// =========================================================================
+
+// ── Value strip (between the two product sliders) ──────────────────────
+.value-strip {
+  background: $public-footer-bg; // #001529 — available in _common.scss
+  padding: $spacing-10 0;
+
+  &__inner {
+    @include make-container($container-xxl);
+    @include grid-responsive(1, 2, 4, null, $spacing-6);
+  }
+}
+
+.value-prop {
+  display: flex;
+  align-items: center;
+  gap: $spacing-5;
+
+  &__icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+
+    // ng-zorro two-tone icon
+    span[nz-icon] {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 38px;
+      line-height: 1;
+      transition: transform $transition-base;
+
+      svg {
+        display: block;
+        width: 1em;
+        height: 1em;
+      }
+    }
+  }
+
+  &:hover &__icon span[nz-icon] {
+    transform: scale(1.1) rotate(-5deg);
+  }
+
+  &__text {
+    display: flex;
+    flex-direction: column;
+  }
+
+  strong {
+    display: block;
+    font-size: $font-size-base;
+    font-weight: $font-weight-bold;
+    color: $neutral-0;
+    margin-bottom: $spacing-0-5;
+  }
+
+  span:not([nz-icon]):not(.value-prop__icon) {
+    font-size: $font-size-xs;
+    color: rgba(255, 255, 255, 0.55);
+  }
+}

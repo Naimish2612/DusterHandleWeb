@@ -1,0 +1,481 @@
+<div nz-row [nzGutter]="[16, 16]" class="process-page">
+  <!-- ================= FORM CARD ================= -->
+  <div nz-col nzSpan="24">
+    @if (editProduct) {
+    <div class="back-button-wrapper">
+      <button nz-button nzType="link" (click)="goBack()">
+        <nz-icon nzType="arrow-left"></nz-icon> Back to List
+      </button>
+    </div>
+    }
+    <nz-card nzTitle="Product">
+      <form nz-form [formGroup]="form" nzLayout="vertical">
+        <!-- ================= SECTION: BASIC INFORMATION ================= -->
+        <div class="form-section">
+          <div class="section-header">
+            <nz-icon nzType="info-circle" nzTheme="outline"></nz-icon>
+            <span>Basic Information</span>
+          </div>
+
+          <div nz-row [nzGutter]="[16, 8]">
+            <!-- Product Category -->
+            <div nz-col [nzXs]="24" [nzSm]="12" [nzMd]="8" [nzLg]="6">
+              <nz-form-item>
+                <nz-form-label nzRequired>Product Category</nz-form-label>
+                <nz-form-control nzErrorTip="Please select a product category">
+                  <nz-select formControlName="category_id" nzShowSearch nzAllowClear
+                    nzPlaceHolder="Select Product Category" (ngModelChange)="onCategoryChange($event)">
+                    @for (category of categoryList; track category.id) {
+                    <nz-option [nzValue]="category.id" [nzLabel]="category.value"></nz-option>
+                    }
+                  </nz-select>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+
+            <!-- Product Sub Category -->
+            <div nz-col [nzXs]="24" [nzSm]="12" [nzMd]="8" [nzLg]="6">
+              <nz-form-item>
+                <nz-form-label nzRequired>Product Sub Category</nz-form-label>
+                <nz-form-control nzErrorTip="Please select a product sub category">
+                  <nz-select formControlName="sub_category_id" nzShowSearch nzAllowClear
+                    nzPlaceHolder="Select Product Sub Category">
+                    @for (subCategory of subCategoryList; track subCategory.id) {
+                    <nz-option [nzValue]="subCategory.id" [nzLabel]="subCategory.value"></nz-option>
+                    }
+                  </nz-select>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+
+            <!-- Manufacturer -->
+            <div nz-col [nzXs]="24" [nzSm]="12" [nzMd]="8" [nzLg]="6">
+              <nz-form-item>
+                <nz-form-label nzRequired>Manufacturer</nz-form-label>
+                <nz-form-control nzErrorTip="Please select a manufacturer">
+                  <nz-select formControlName="manufacturer_id" nzShowSearch nzAllowClear
+                    nzPlaceHolder="Select Manufacturer">
+                    @for (manufacturer of manufacturerList; track manufacturer.id) {
+                    <nz-option [nzValue]="manufacturer.id" [nzLabel]="manufacturer.value"></nz-option>
+                    }
+                  </nz-select>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+
+            <!-- Product Name -->
+            <div nz-col [nzXs]="24" [nzSm]="12" [nzMd]="8" [nzLg]="6">
+              <nz-form-item>
+                <nz-form-label nzRequired>Product Name</nz-form-label>
+                <nz-form-control nzErrorTip="Please enter product name (min 3 characters)">
+                  <input nz-input formControlName="name" placeholder="Enter Product Name" type="text" />
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+
+            <!-- SKU -->
+            <div nz-col [nzXs]="24" [nzSm]="12" [nzMd]="8" [nzLg]="6">
+              <nz-form-item>
+                <nz-form-label nzRequired>SKU</nz-form-label>
+                <nz-form-control nzErrorTip="Please enter a valid SKU">
+                  <input nz-input formControlName="sku" placeholder="Enter SKU" type="text" />
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+
+            <!-- Slug -->
+            <div nz-col [nzXs]="24" [nzSm]="12" [nzMd]="8" [nzLg]="6">
+              <nz-form-item>
+                <nz-form-label nzRequired>Slug</nz-form-label>
+                <nz-form-control nzErrorTip="Please enter a valid slug">
+                  <input nz-input formControlName="slug" placeholder="Enter Slug" type="text" />
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+
+            <!-- SAP SKU Code -->
+            <div nz-col [nzXs]="24" [nzSm]="12" [nzMd]="8" [nzLg]="6">
+              <nz-form-item>
+                <nz-form-label>SAP SKU Code</nz-form-label>
+                <nz-form-control nzErrorTip="Please enter a valid SAP SKU code">
+                  <input nz-input formControlName="sap_sku_code" placeholder="Enter SAP SKU Code" type="text" />
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+          </div>
+        </div>
+
+        <!-- ================= SECTION: PRICING & TAX ================= -->
+        <div class="form-section">
+          <div class="section-header">
+            <nz-icon nzType="dollar" nzTheme="outline"></nz-icon>
+            <span>Pricing & Tax</span>
+          </div>
+
+          <div nz-row [nzGutter]="[16, 8]">
+            <!-- Base Price -->
+            <div nz-col [nzXs]="24" [nzSm]="12" [nzMd]="8" [nzLg]="6">
+              <nz-form-item>
+                <nz-form-label nzRequired
+                  nzTooltipTitle="Base price of the product excluding taxes. Use the simulator to preview tax calculations.">Base
+                  Price</nz-form-label>
+                <nz-form-control nzErrorTip="Please enter a valid base price">
+                  <div class="price-input-wrapper">
+                    <nz-input-number formControlName="base_price" [nzMin]="1" [nzStep]="1" [nzPrecision]="2"
+                      nzPlaceHolder="Enter Base Price" class="price-input"></nz-input-number>
+                    <button nz-button nzType="default" (click)="openSimulatorModal()" title="Tax Simulator"
+                      type="button" class="simulator-btn">
+                      <nz-icon nzType="calculator"></nz-icon>
+                    </button>
+                  </div>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+
+            <!-- Actual Price -->
+            <div nz-col [nzXs]="24" [nzSm]="12" [nzMd]="8" [nzLg]="6">
+              <nz-form-item>
+                <nz-form-label nzRequired>Actual Price</nz-form-label>
+                <nz-form-control nzErrorTip="Please enter a valid actual price">
+                  <nz-input-number formControlName="actual_price" [nzMin]="1" [nzStep]="1" [nzPrecision]="2"
+                    nzPlaceHolder="Enter Actual Price" class="full-width-input"></nz-input-number>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+
+            <!-- Tax Class -->
+            <div nz-col [nzXs]="24" [nzSm]="12" [nzMd]="8" [nzLg]="6">
+              <nz-form-item>
+                <nz-form-label nzRequired>Tax Class</nz-form-label>
+                <nz-form-control nzErrorTip="Please select a tax class">
+                  <nz-select formControlName="tax_class_id" nzShowSearch nzAllowClear nzPlaceHolder="Select Tax Class">
+                    @for (item of classDropdownList; track item.id) {
+                    <nz-option [nzValue]="item.id" [nzLabel]="item.value"></nz-option>
+                    }
+                  </nz-select>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+          </div>
+        </div>
+
+        <!-- ================= SECTION: INVENTORY & STATUS ================= -->
+        <div class="form-section">
+          <div class="section-header">
+            <nz-icon nzType="appstore" nzTheme="outline"></nz-icon>
+            <span>Inventory & Status</span>
+          </div>
+
+          <div nz-row [nzGutter]="[16, 8]">
+            <!-- Stock Quantity -->
+            <div nz-col [nzXs]="24" [nzSm]="12" [nzMd]="8" [nzLg]="6">
+              <nz-form-item>
+                <nz-form-label nzRequired>Stock Quantity</nz-form-label>
+                <nz-form-control nzErrorTip="Please enter a valid stock quantity">
+                  <nz-input-number formControlName="stock_quantity" [nzMin]="0" [nzStep]="1"
+                    nzPlaceHolder="Enter Stock Quantity" class="full-width-input"></nz-input-number>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+
+            <!-- Estimated Delivery Days -->
+            <div nz-col [nzXs]="24" [nzSm]="12" [nzMd]="8" [nzLg]="6">
+              <nz-form-item>
+                <nz-form-label nzRequired>Estimated Delivery Days</nz-form-label>
+                <nz-form-control>
+                  <nz-input-number nzPlaceHolder="Enter Delivery Days" class="full-width-input"
+                    formControlName="estimated_delivery_days" nzMin="1" nzMax="45" />
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+
+            <!-- Toggle Switches Group -->
+            <div nz-col [nzXs]="24" [nzMd]="24" [nzLg]="12">
+              <nz-form-item>
+                <nz-form-label>Product Status</nz-form-label>
+                <nz-form-control>
+                  <div class="switch-group">
+                    <div class="switch-item">
+                      <nz-switch formControlName="is_active"></nz-switch>
+                      <span class="switch-label">Is Active</span>
+                    </div>
+                    <div class="switch-item">
+                      <nz-switch formControlName="in_stock"></nz-switch>
+                      <span class="switch-label">In Stock</span>
+                    </div>
+                    <div class="switch-item">
+                      <nz-switch formControlName="is_new_arrival"></nz-switch>
+                      <span class="switch-label">New Arrival</span>
+                    </div>
+                    <div class="switch-item">
+                      <nz-switch formControlName="is_top_selling"></nz-switch>
+                      <span class="switch-label">Top Selling</span>
+                    </div>
+                  </div>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+
+            <!-- Description -->
+            <div nz-col nzSpan="24">
+              <nz-form-item>
+                <nz-form-label>Description</nz-form-label>
+                <nz-form-control nzErrorTip="Please enter a description">
+                  <textarea nz-input formControlName="description" placeholder="Enter Product Description"
+                    [nzAutosize]="{ minRows: 2, maxRows: 6 }"></textarea>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+          </div>
+        </div>
+
+        <div nz-row [nzGutter]="[16, 16]">
+          <!-- Attributes -->
+          <div nz-col [nzXs]="24" [nzLg]="24" class="attributes-section">
+            <nz-divider nzOrientation="left" [nzText]="requiredTemplate">
+              <ng-template #requiredTemplate>
+                <nz-form-label nzRequired></nz-form-label>
+                <span>Attributes (Min 1 required)</span>
+              </ng-template>
+            </nz-divider>
+            <form nz-form [formGroup]="validateForm" (ngSubmit)="submitForm()">
+              <div class="table-wrapper">
+                <nz-table #basicTable [nzData]="['']" [nzShowPagination]="false" nzBordered [nzScroll]="{ x: '600px' }">
+                  <thead>
+                    <tr>
+                      <th nzWidth="40%">
+                        <nz-form-label nzTooltipTitle="Specification key, e.g., color, size, material">
+                          Specification
+                        </nz-form-label>
+                      </th>
+                      <th nzWidth="50%">
+                        <nz-form-label
+                          nzTooltipTitle="mutiple values can be added using commas, e.g., red, blue, green">
+                          Description
+                        </nz-form-label>
+                      </th>
+                      <th nzWidth="10%">Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <nz-form-item nz-row>
+                          <nz-form-control [nzErrorTip]="keyError">
+                            <input nz-input formControlName="key" placeholder="Specification" />
+                            <ng-template #keyError let-control>
+                              @if (control.hasError('required')) {
+                              Please input key
+                              }
+                              @if (control.hasError('pattern')) {
+                              Letters/underscores only
+                              }
+                            </ng-template>
+                          </nz-form-control>
+                        </nz-form-item>
+                      </td>
+
+                      <td>
+                        <nz-form-item nz-row>
+                          <nz-form-control nzErrorTip="Please input value">
+                            <input nz-input formControlName="value" placeholder="Description" />
+                          </nz-form-control>
+                        </nz-form-item>
+                      </td>
+
+                      <td nzAlign="center">
+                        <button nz-button nzType="primary" [disabled]="!validateForm.valid">
+                          <span nz-icon nzType="plus"></span>
+                        </button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </nz-table>
+              </div>
+            </form>
+
+            <!-- Grid remains below -->
+            <div class="attribute-table-wrapper" [hidden]="listOfData.length === 0">
+              <ui-grid [title]="" [autoColumns]="true" [dataSource]="attributeGridDataSource" [autoLoad]="true"
+                [reloadOn]="attributeReload$" [serverSide]="false" [selectable]="false" [actions]="[
+                  { key: 'edit', icon: 'edit', tooltip: 'Edit' },
+                  { key: 'delete', icon: 'delete', tooltip: 'Delete', danger: true },
+                ]" (action)="onAction($event)" [hildeColumn]="[]"></ui-grid>
+            </div>
+          </div>
+
+          <!-- ================= IMAGE UPLOAD SECTION ================= -->
+          @if (!editProduct) {
+          <div nz-col [nzXs]="24" [nzLg]="24" class="image-upload-section">
+            <nz-divider nzOrientation="left" [nzText]="requiredTemplate1">
+              <ng-template #requiredTemplate1>
+                <nz-form-label nzRequired></nz-form-label>
+                <span>Product Images (Min 3, Max 10)</span>
+              </ng-template>
+            </nz-divider>
+
+            <div class="image-upload-form">
+              <div class="upload-controls">
+                <nz-form-item>
+                  <nz-form-control>
+                    <input type="file" accept="image/png, image/jpeg, image/webp" multiple #fileInput
+                      (change)="onFilesSelected($event)" style="display: none" />
+                    <button nz-button nzType="dashed" type="button" (click)="fileInput.click()"
+                      [disabled]="imageList.length >= 10">
+                      <nz-icon nzType="upload"></nz-icon>
+                      Select Image
+                    </button>
+                  </nz-form-control>
+                </nz-form-item>
+
+                <span class="image-count-badge">
+                  <nz-tag [nzColor]="imageList.length >= 3 ? 'green' : 'red'">
+                    {{ imageList.length }} / 10 images
+                  </nz-tag>
+                  @if (imageList.length < 3) { <nz-tag nzColor="orange">Minimum 3 required</nz-tag>
+                    }
+                </span>
+              </div>
+            </div>
+
+            <div class="image-table-wrapper" [hidden]="imageList.length === 0">
+              <ui-grid [title]="''" [autoColumns]="true" [dataSource]="imageGridDataSource" [reloadOn]="imageReload$"
+                [actions]="[
+                    { key: 'view', icon: 'eye', tooltip: 'View' },
+                    { key: 'delete', icon: 'delete', tooltip: 'Delete', danger: true },
+                  ]" (action)="onImageAction($event)" [hildeColumn]="['file', 'preview', 'uid']">
+                <ng-template #columnTemplate let-data let-column="column">
+                  @if (column === 'id') {
+                  <span style="font-weight: bold">{{ data.id }}</span>
+                  }
+
+                  @if (column === 'name') {
+                  <div style="display: flex; align-items: center">
+                    <img [src]="data.preview" style="
+                            width: 30px;
+                            height: 30px;
+                            object-fit: cover;
+                            margin-right: 8px;
+                            border-radius: 4px;
+                          " />
+                    <span>{{ data.name }}</span>
+                  </div>
+                  }
+                </ng-template>
+              </ui-grid>
+            </div>
+          </div>
+
+          <!-- Image Preview Modal -->
+          <nz-modal [(nzVisible)]="isImagePreviewVisible" [nzTitle]="previewImageName" [nzFooter]="null"
+            (nzOnCancel)="closeImagePreview()" [nzWidth]="720" nzCentered>
+            <ng-container *nzModalContent>
+              <div class="image-preview-container">
+                <img [src]="previewImageUrl" [alt]="previewImageName" />
+              </div>
+            </ng-container>
+          </nz-modal>
+          }
+          <!-- ACTIONS -->
+          @if (editProduct) {
+          <div nz-col nzSpan="24" class="form-actions">
+            @if (hasAddPermission) {
+            <button nz-button nzType="primary" htmlType="submit" [disabled]="!form.valid || listOfData.length === 0"
+              (click)="update()">
+              <nz-icon nzType="save"></nz-icon> Update
+            </button>
+            }
+            <button nz-button nzType="default" type="button" (click)="reset()">
+              <nz-icon nzType="reload"></nz-icon> Reset
+            </button>
+          </div>
+          } @else {
+          <div nz-col nzSpan="24" class="form-actions">
+            @if (hasAddPermission) {
+            <button nz-button nzType="primary" htmlType="submit"
+              [disabled]="!form.valid || listOfData.length === 0 || imageList.length < 3" (click)="submit()">
+              <nz-icon nzType="save"></nz-icon> Save
+            </button>
+            }
+            <button nz-button nzType="default" type="button" (click)="reset()">
+              <nz-icon nzType="reload"></nz-icon> Reset
+            </button>
+          </div>
+          }
+        </div>
+      </form>
+    </nz-card>
+  </div>
+
+  <!-- Simulator Modal -->
+  <nz-modal [nzVisible]="showSimulatorModal" nzTitle="Tax Simulator" [nzFooter]="null" [nzWidth]="1000"
+    (nzOnCancel)="closeSimulatorModal()">
+    <div *nzModalContent>
+      @if (simulatorForm) {
+      <form nz-form [formGroup]="simulatorForm">
+        <div nz-row [nzGutter]="[12, 12]">
+          <div nz-col [nzXs]="24" [nzSm]="12">
+            <nz-form-item>
+              <nz-form-label nzRequired>Entered Price</nz-form-label>
+              <nz-form-control nzErrorTip="Please enter price">
+                <nz-input-number formControlName="entered_price" nzPlaceHolder="Enter price" [nzMin]="0"
+                  style="width: 100%"></nz-input-number>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+
+          <div nz-col [nzXs]="24" [nzSm]="12">
+            <nz-form-item>
+              <nz-form-label nzRequired>Tax Class</nz-form-label>
+              <nz-form-control nzErrorTip="Please select a tax class">
+                <nz-select formControlName="tax_class_id" nzPlaceHolder="Select Tax Class">
+                  @for (item of classDropdownList; track item.id) {
+                  <nz-option [nzValue]="item.id" [nzLabel]="item.value"></nz-option>
+                  }
+                </nz-select>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+
+          <div nz-col [nzXs]="24" [nzSm]="12">
+            <nz-form-item>
+              <nz-form-label>Transaction Type</nz-form-label>
+              <nz-form-control>
+                <nz-select formControlName="transaction_type">
+                  @for (item of transactionTypeOptions; track item.value) {
+                  <nz-option [nzValue]="item.value" [nzLabel]="item.label"></nz-option>
+                  }
+                </nz-select>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+
+          <div nz-col [nzXs]="24" [nzSm]="12">
+            <nz-form-item>
+              <nz-form-label>Is Inclusive</nz-form-label>
+              <nz-form-control>
+                <nz-switch formControlName="is_inclusive"></nz-switch>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+
+          <div nz-col nzSpan="24" class="form-actions simulator-actions">
+            <button nz-button nzType="primary" type="button" (click)="calculateTax()" [nzLoading]="simulatorLoading">
+              <nz-icon nzType="calculator"></nz-icon> Calculate
+            </button>
+            <button nz-button nzType="default" type="button" (click)="closeSimulatorModal()">
+              Close
+            </button>
+          </div>
+        </div>
+      </form>
+      }
+      <nz-divider></nz-divider>
+      @if (simulatorResults) {
+      <div class="simulator-output">
+        <tax-simulator-result [data]="simulatorResults" [close]="closeSimulatorModal.bind(this)"></tax-simulator-result>
+      </div>
+      }
+    </div>
+  </nz-modal>
+</div>

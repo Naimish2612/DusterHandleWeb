@@ -1,0 +1,42 @@
+<div class="process-page">
+  <nz-card nzTitle="Permission Action Mapping - {{ permissionCode }}">
+    <div class="action-toolbar">
+    <nz-input-group class="action-search" nzPrefixIcon="search">
+      <input
+        class="action-search"
+        nz-input
+        placeholder="Search actions"
+        [(ngModel)]="searchValue"
+      />
+    </nz-input-group>
+</div>
+<nz-divider></nz-divider>
+    <div class="action-tree">
+      <nz-spin [nzSpinning]="loading">
+        <nz-tree
+          #tree
+          nzCheckable
+          nzBlockNode
+          [nzData]="treeData"
+          [nzSearchValue]="searchValue"
+          [(nzCheckedKeys)]="checkedKeys"          
+          [(nzExpandedKeys)]="expandedKeys"
+          (nzCheckboxChange)="onTreeCheck($event)"
+        ></nz-tree>
+
+        <!-- (nzCheckedKeysChange)="onCheckedKeysChange($event)" -->
+      </nz-spin>
+    </div>
+    <nz-divider></nz-divider>
+
+    <div class="form-actions">
+      <button nz-button nzType="primary" (click)="save()">
+        <i nz-icon nzType="save"></i> Save
+      </button>
+      <button nz-button nzType="default" class="ml-2" (click)="cancel()">
+        <i nz-icon nzType="arrow-left"></i>
+        Back
+      </button>
+    </div>
+  </nz-card>
+</div>

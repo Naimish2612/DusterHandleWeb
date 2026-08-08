@@ -1,0 +1,22 @@
+<nz-layout class="main-layout">
+  <!-- Sidebar & Header Component -->
+  <app-sidebar
+    (toggleSidebar)="onSidebarToggle($event)"
+  ></app-sidebar>
+
+  <!-- Main Content Area -->
+  <nz-layout
+    class="main-content-layout"
+    [class.sidebar-hidden]="isSidebarCollapsed()"
+  >
+    <!-- Content -->
+    <nz-content class="main-content">
+      <div class="content-wrapper">
+        <router-outlet></router-outlet>
+      </div>
+    </nz-content>
+
+    <!-- Footer Component -->
+    <app-footer></app-footer>
+  </nz-layout>
+</nz-layout>

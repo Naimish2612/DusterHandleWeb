@@ -1,0 +1,72 @@
+@use '../../../../../../assets/styles/responsive' as *;
+@use '../../../../../../assets/styles/common' as *;
+//div {
+// background-color: $info-500;
+// border: 1px solid $info-700;
+//}
+
+.switch-label {
+  margin-left: 8px;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.process-page {
+  padding: $spacing-6; // 24px
+}
+
+nz-card {
+  border-radius: $border-radius-lg;
+  background-color: $neutral-100;
+}
+
+nz-form-item {
+  margin-bottom: $spacing-4; // 16px vertical rhythm
+}
+
+.form-actions {
+  display: flex;
+  gap: $spacing-4;
+}
+
+.action-cell {
+  display: flex;
+  gap: $spacing-2; // 8px
+  white-space: nowrap;
+}
+
+.table-wrapper {
+  width: 100%;
+  overflow-x: auto; // KEY FIX
+  overflow-y: hidden;
+}
+.divider-with-action {
+  position: relative;
+  display: flex;
+  align-items: center;
+  margin-bottom: 16px;
+
+  nz-divider {
+    margin: 0;
+
+    ::ng-deep {
+      .ant-divider-inner-text {
+        padding: 0;
+      }
+    }
+  }
+
+  .divider-title {
+    padding: 8px 16px;
+    font-weight: bold;
+    display: inline-block;
+  }
+}
+
+.divider-with-action {
+  ::ng-deep {
+    .ant-divider-horizontal.ant-divider-with-text-left::after {
+      width: 82% !important;
+    }
+  }
+}

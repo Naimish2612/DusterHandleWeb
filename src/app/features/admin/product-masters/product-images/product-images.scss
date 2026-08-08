@@ -1,0 +1,247 @@
+@use '../../../../../assets/styles/common' as *;
+@use '../../../../../assets/styles/responsive' as *;
+
+.switch-label {
+  margin-left: 8px;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.process-page {
+  padding: $spacing-6; // 24px
+}
+
+/* Minimal Product Details Metadata Layout Override */
+.process-page nz-descriptions {
+  display: block;
+  margin-bottom: $spacing-2 ;
+}
+
+::ng-deep .process-page .ant-descriptions-item {
+  padding-bottom: 0 !important;
+}
+
+::ng-deep .process-page .ant-descriptions-item-label {
+  color: #8c8c8c;
+  // font-size: 13px;
+  font-weight: 400;
+}
+
+::ng-deep .process-page .ant-descriptions-item-content {
+  color: $neutral-900;
+  font-size: 14px;
+  font-weight: 500;
+  padding-left: $spacing-1;
+}
+
+/* Format Product SKU value field differently */
+::ng-deep .process-page .ant-descriptions-item:last-child .ant-descriptions-item-content {
+  color: $neutral-900;
+}
+
+nz-card {
+  border-radius: $border-radius-lg;
+  background-color: $neutral-100;
+}
+
+nz-form-item {
+  margin-bottom: $spacing-4; // 16px vertical rhythm
+}
+
+.form-actions {
+  display: flex;
+  gap: $spacing-4;
+}
+
+.action-cell {
+  display: flex;
+  gap: $spacing-2; // 8px
+  white-space: nowrap;
+}
+
+.table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+.image-upload-section {
+  margin-top: $spacing-4;
+}
+
+.image-upload-section > nz-form-label {
+  display: block;
+  margin-bottom: $spacing-3;
+  font-weight: 600;
+}
+
+::ng-deep .image-upload-section ui-grid .ant-table-pagination,
+::ng-deep .image-upload-section ui-grid nz-pagination {
+    display: none !important;
+}
+.image-upload-section ::ng-deep .anticon-eye {
+  color: $success-400;
+}
+
+.image-upload-form {
+  padding: $spacing-4;
+  margin-bottom: $spacing-4;
+  border: 1px solid #f0f0f0;
+  border-radius: $border-radius-lg;
+  background: #fafafa;
+}
+
+.upload-controls {
+  display: flex;
+  align-items: center;
+  gap: $spacing-4;
+  flex-wrap: wrap;
+}
+
+.upload-controls nz-form-item {
+  margin-bottom: 0;
+}
+
+.image-count-badge {
+  display: flex;
+  align-items: center;
+  gap: $spacing-2;
+}
+
+.image-table-wrapper {
+  border: 1px solid #f0f0f0;
+  border-radius: $border-radius-lg;
+  overflow: hidden;
+  background-color: $neutral-100;
+}
+
+.image-table-wrapper ::ng-deep .ant-table-body {
+  max-height: 162px !important; // ~ 3 rows
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+}
+
+.image-table-wrapper ::ng-deep .ant-table-thead > tr > th {
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.image-table-wrapper ::ng-deep .ant-table-header {
+  overflow: hidden !important;
+  scrollbar-width: none;
+}
+
+.image-table-wrapper ::ng-deep .ant-table-header::-webkit-scrollbar {
+  height: 0 !important;
+  width: 0 !important;
+}
+
+.image-table-wrapper ::ng-deep .ant-table-tbody > tr > td {
+  vertical-align: middle;
+  word-break: break-word;
+}
+
+.image-table-wrapper ::ng-deep .ant-table-body::-webkit-scrollbar {
+  width: 6px;
+}
+
+.image-table-wrapper ::ng-deep .ant-table-body::-webkit-scrollbar-thumb {
+  background: #d9d9d9;
+  border-radius: 999px;
+}
+
+.image-table-wrapper ::ng-deep .ant-table-body::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.image-thumbnail {
+  width: 40px;
+  height: 40px;
+  object-fit: cover;
+  border-radius: 4px;
+  border: 1px solid #d9d9d9;
+  cursor: pointer;
+}
+
+.image-name {
+  display: inline-block;
+  max-width: 250px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Actions */
+.image-actions {
+  display: flex;
+  gap: $spacing-3;
+  align-items: center;
+}
+
+.image-actions a {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: #1890ff;
+  cursor: pointer;
+  transition: color 0.2s;
+
+  &:hover {
+    color: #40a9ff;
+  }
+}
+
+.image-actions .delete-link {
+  color: #ff4d4f;
+
+  &:hover {
+    color: #ff7875;
+  }
+}
+
+/* Preview Modal */
+.image-preview-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+
+  .skeleton-wrapper {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    
+    /* Override native fixed bounding metrics of Ant skeleton layouts */
+    ::ng-deep .ant-skeleton-element,
+    ::ng-deep .ant-skeleton-element .ant-skeleton-image {
+      width: 100% !important;
+      height: 400px !important;
+      border-radius: $border-radius-lg;
+    }
+  }
+
+  img {
+    max-width: 100%;
+    max-height: 500px;
+    object-fit: contain;
+    border-radius: $border-radius-lg;
+  }
+}
+
+
+/* Mobile */
+@include mobile {
+  .upload-controls {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .image-name {
+    max-width: 120px;
+  }
+
+  .image-actions {
+    flex-direction: column;
+    gap: $spacing-1;
+  }
+}

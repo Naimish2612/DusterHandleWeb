@@ -1,0 +1,144 @@
+<div nz-row [nzGutter]="[16, 16]" class="process-page">
+  <!-- ================= FORM CARD ================= -->
+  <div nz-col nzSpan="24">
+    <nz-card nzTitle="Import Process Configuration">
+      <form nz-form [formGroup]="form" nzLayout="vertical">
+        <div nz-row [nzGutter]="[16, 16]">
+          <!-- Import Name -->
+          <div nz-col [nzXs]="24" [nzLg]="8">
+            <nz-form-item>
+              <nz-form-label nzRequired>Process Name</nz-form-label>
+              <nz-form-control
+                nzErrorTip="Please enter process name (min 3 characters)"
+              >
+                <input
+                  nz-input
+                  formControlName="process_name"
+                  placeholder="Enter Process Name (e.g. USER_IMPORT)"
+                  type="text"
+                  (keydown.tab)="formatProcessName()"
+                />
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+
+          <!-- Max Records Allowed -->
+          <div nz-col [nzXs]="24" [nzLg]="8">
+            <nz-form-item>
+              <nz-form-label>Max Records Allowed</nz-form-label>
+              <nz-form-control nzErrorTip="Please enter a valid number of records">
+                <input
+                  nz-input
+                  formControlName="max_records_allowed"
+                  placeholder="e.g. 1000"
+                  type="number"
+                />
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+
+          <!-- Is Active toggle -->
+          <div nz-col [nzXs]="24" [nzLg]="8">
+            <nz-form-item>
+              <nz-form-label>Is Active</nz-form-label>
+              <nz-form-control>
+                <nz-switch formControlName="is_active"></nz-switch>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+
+          <!-- Required Fields (Tags Select) -->
+          <div nz-col [nzXs]="24" [nzLg]="12">
+            <nz-form-item>
+              <nz-form-label nzRequired nzTooltipTitle="On enter you can enter fields">Required Fields (Tags)</nz-form-label>
+              <nz-form-control
+                nzHelp="Type field name and press Enter to add as tag"
+                nzErrorTip="Please add at least one required field"
+              >
+                <nz-select nzMode="tags" formControlName="required_fields" nzPlaceHolder="e.g. email, user_name">
+                </nz-select>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+
+          <!-- Non Required Fields (Tags Select) -->
+          <div nz-col [nzXs]="24" [nzLg]="12">
+            <nz-form-item>
+              <nz-form-label nzTooltipTitle="On enter you can enter fields">Non Required Fields (Tags)</nz-form-label>
+              <nz-form-control nzHelp="Type field name and press Enter to add as tag">
+                <nz-select nzMode="tags" formControlName="non_required_fields" nzPlaceHolder="e.g. first_name, mobile_no">
+                </nz-select>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+
+          <!-- ACTIONS -->
+          <div nz-col nzSpan="24" class="form-actions">
+            @if(showAddButton && hasAddPermission){
+              <button
+                nz-button
+                nzType="primary"
+                htmlType="submit"
+                (click)="submit()"
+              >
+                <nz-icon nzType="save"></nz-icon> Save
+              </button>
+            }
+            @if(showUpdateButton && hasEditPermission){
+              <button
+                nz-button
+                nzType="primary"
+                (click)="importUpdate()"
+              >
+                <nz-icon nzType="edit"></nz-icon> Update
+              </button>
+            }
+            <button nz-button nzType="default" type="button" (click)="reset()">
+              <nz-icon nzType="reload"></nz-icon> Reset
+            </button>
+          </div>
+        </div>
+      </form>
+    </nz-card>
+  </div>
+
+  <!-- ================= GRID ================= -->
+  <nz-divider nzOrientation="left" nzText="Import Process Configurations"></nz-divider>
+  <div nz-col nzSpan="24">
+    <nz-card>
+      <div class="table-wrapper">
+        <ui-grid
+          [title]=""
+          ref_name="Import Process List"
+          [autoColumns]="true"
+          [dataSource]="importGridDataSource"
+          [autoLoad]="true"
+          [reloadOn]="importGridReload$"
+          [pageSize]="10"
+          [pageSizeOptions]="[10, 20, 50]"
+          [serverSide]="false"
+          [selectable]="false"
+          selectionMode="multiple"
+          [actions]="[
+            {
+              key: 'edit',
+              icon: 'edit',
+              tooltip: 'Edit',
+              showIf: this.hasEditPermission
+            },
+            {
+              key: 'delete',
+              icon: 'delete',
+              tooltip: 'Delete',
+              danger: true,
+              showIf: this.hasEditPermission
+            }
+          ]"
+          (selectionChange)="selectionChanged($event)"
+          (action)="onAction($event)"
+          [hildeColumn]="['import_id', 'is_delete']"
+        ></ui-grid>
+      </div>
+    </nz-card>
+  </div>
+</div>

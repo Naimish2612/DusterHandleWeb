@@ -1,0 +1,446 @@
+<!-- =====================================================================
+     PRODUCT LISTING PAGE — Sidebar + Grid + Pagination
+     ===================================================================== -->
+<div class="products-page">
+
+  <!-- ── Banner ──────────────────────────────────────────────────────── -->
+  <div class="products-page__banner">
+    <div class="products-page__banner-inner">
+      <div>
+        <span class="products-page__breadcrumb">
+          Home / <strong>Products</strong>
+        </span>
+        <h1 class="products-page__title">All Products</h1>
+        <p class="products-page__desc">
+          Showing {{ displayProducts.length }} of {{ allProducts.length }} products
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div class="products-page__layout">
+
+    <!-- ════════════════════════════════════════════════════════════════
+         SIDEBAR
+    ════════════════════════════════════════════════════════════════ -->
+    <aside class="products-sidebar">
+
+      <!-- Header -->
+      <div class="products-sidebar__header">
+        <h3>Filters</h3>
+        @if (activeFilterCount > 0) {
+        <button class="products-sidebar__clear" (click)="clearFilters()">
+          Clear all ({{ activeFilterCount }})
+        </button>
+        }
+      </div>
+
+      <!-- Price Range -->
+      <div class="filter-section">
+        <h4 class="filter-section__title">
+          <!-- <span nz-icon nzType="dollar-circle" nzTheme="outline"></span> -->
+          <span
+            style="color: #009CDE;border: 1px solid; border-radius: 50%; padding: 2px; display: inline-flex; width: 16px; height: 16px; align-items: center; justify-content: center; font-size: 10px;">
+            ₹
+          </span>
+          Price Range
+        </h4>
+        <nz-slider [(ngModel)]="priceRange" nzRange [nzMin]="0" [nzMax]="1500000" [nzStep]="100"></nz-slider>
+        <div class="filter-price-range">
+          <span>₹{{ priceRange[0].toLocaleString('en-IN') }}</span>
+          <span>₹{{ priceRange[1].toLocaleString('en-IN') }}</span>
+        </div>
+      </div>
+
+      <!-- Dynamic Filter Sections -->
+      @if (loadingFilters) {
+
+      <!-- Skeleton while loading -->
+      @for (s of [1, 2, 3]; track s) {
+      <div class="filter-section">
+        <nz-skeleton [nzActive]="true" [nzTitle]="{ width: '60%' }"
+          [nzParagraph]="{ rows: 4, width: ['80%','70%','90%','65%'] }"></nz-skeleton>
+      </div>
+      }
+
+      } @else if (errorFilters) {
+
+      <!-- Filter Error State -->
+      <div class="filter-section filter-section--error">
+        <p class="filter-error-msg">
+          <span nz-icon nzType="warning" nzTheme="outline"></span>
+          Failed to load filters.
+        </p>
+        <button nz-button nzSize="small" nzType="link" (click)="retryFilters()">
+          <span nz-icon nzType="reload" nzTheme="outline"></span>
+          Retry
+        </button>
+      </div>
+
+      } @else if (filterSections.length === 0) {
+
+      <!-- Empty Filters -->
+      <div class="filter-section">
+        <p style="color:#94A3B8; font-size:13px; text-align:center;">
+          No filters available
+        </p>
+      </div>
+
+      } @else {
+
+      <!-- Filter Sections -->
+      @for (section of filterSections; track section.key) {
+      <div class="filter-section">
+
+        <h4 class="filter-section__title">
+          <span nz-icon nzType="filter" nzTheme="outline"></span>
+          {{ section.label }}
+        </h4>
+
+        @if (section.loading) {
+        <!-- Loading skeleton for subcategory -->
+        <nz-skeleton [nzActive]="true" [nzTitle]="false" [nzParagraph]="{ rows: 3 }"></nz-skeleton>
+        } @else {
+        <div class="filter-section__options">
+
+          @for (opt of section.options; track opt.value) {
+          <label class="filter-option" [class.filter-option--active]="isSelected(section.key, opt.value)">
+            <input type="checkbox" class="filter-option__check" [checked]="isSelected(section.key, opt.value)"
+              (change)="toggleFilter(section.key, opt.value)" />
+            <span class="filter-option__label">{{ opt.label }}</span>
+            @if (opt.count > 0) {
+            <span class="filter-option__count">{{ opt.count }}</span>
+            }
+          </label>
+          }
+
+          @if (section.options.length === 0) {
+          <p style="color:#94A3B8; font-size:12px; padding:4px 0;">
+            No options available
+          </p>
+          }
+
+        </div>
+        }
+
+      </div>
+      }
+
+      }
+
+    </aside>
+
+    <!-- ════════════════════════════════════════════════════════════════
+         MAIN CONTENT
+    ════════════════════════════════════════════════════════════════ -->
+    <div class="products-main">
+
+      <!-- Toolbar -->
+      <div class="products-toolbar">
+        <button class="products-toolbar__filter-btn" (click)="mobileFilterOpen.set(true)">
+          <span nz-icon nzType="filter" nzTheme="outline"></span>
+          Filters
+          @if (activeFilterCount > 0) {
+          <nz-badge [nzCount]="activeFilterCount" nzSize="small"></nz-badge>
+          }
+        </button>
+
+        <span class="products-toolbar__count">
+          {{ displayProducts.length }} of {{ allProducts.length }} products
+        </span>
+
+        <div class="products-toolbar__sort">
+          <span class="products-toolbar__sort-label">
+            <span nz-icon nzType="sort-ascending" nzTheme="outline"></span>
+            Sort:
+          </span>
+          <nz-select [(ngModel)]="selectedSort" [nzOptions]="sortOptions" nzBorderless style="min-width:180px"
+            (ngModelChange)="onSortChange()"></nz-select>
+        </div>
+      </div>
+
+      <!-- Active Filter Tags -->
+      @if (activeFilterCount > 0) {
+      <div class="active-filters">
+
+        @for (brand of selectedBrands; track brand) {
+        <nz-tag nzMode="closeable" (nzOnClose)="removeBrand(brand)">
+          <span nz-icon nzType="shop" nzTheme="outline"></span>
+          {{ getFilterLabel('brand', brand) }}
+        </nz-tag>
+        }
+
+        @for (category of selectedCategories; track category) {
+        <nz-tag nzMode="closeable" nzColor="blue" (nzOnClose)="removeCategory(category)">
+          <span nz-icon nzType="appstore" nzTheme="outline"></span>
+          {{ getFilterLabel('category', category) }}
+        </nz-tag>
+        }
+
+        @for (subcategory of selectedSubCategories; track subcategory) {
+        <nz-tag nzMode="closeable" nzColor="purple" (nzOnClose)="removeSubCategory(subcategory)">
+          <span nz-icon nzType="tag" nzTheme="outline"></span>
+          {{ getFilterLabel('subCategory', subcategory) }}
+        </nz-tag>
+        }
+
+      </div>
+      }
+
+      <!-- ── Loading State ─────────────────────────────────────────── -->
+      @if (loadingProducts) {
+      <div class="products-grid">
+        @for (s of [1,2,3,4,5,6,7,8,9,10,11,12]; track s) {
+        <div class="pg-card pg-card--skeleton">
+          <nz-skeleton [nzActive]="true" [nzAvatar]="{ size: 'large', shape: 'square' }" [nzTitle]="false"
+            [nzParagraph]="{ rows: 3 }"></nz-skeleton>
+        </div>
+        }
+      </div>
+      }
+
+      <!-- ── Error State ────────────────────────────────────────────── -->
+      @else if (errorProducts) {
+      <div class="products-error">
+        <nz-empty nzNotFoundImage="simple" [nzNotFoundContent]="errorProducts">
+          <button nz-button nzType="primary" (click)="retryProducts()">
+            <span nz-icon nzType="reload" nzTheme="outline"></span>
+            Try Again
+          </button>
+        </nz-empty>
+      </div>
+      }
+
+      <!-- ── Empty after Filters ────────────────────────────────────── -->
+      @else if (displayProducts.length === 0 && allProducts.length > 0) {
+      <div class="products-error">
+        <nz-empty nzNotFoundImage="simple" nzDescription="No products match your filters">
+          <button nz-button nzType="default" (click)="clearFilters()">
+            <span nz-icon nzType="clear" nzTheme="outline"></span>
+            Clear Filters
+          </button>
+        </nz-empty>
+      </div>
+      }
+
+      <!-- ── Empty State (no products from API) ────────────────────── -->
+      @else if (allProducts.length === 0) {
+      <div class="products-error">
+        <nz-empty nzNotFoundImage="simple" nzDescription="No products found"></nz-empty>
+      </div>
+      }
+
+      <!-- ── Product Grid ───────────────────────────────────────────── -->
+      @else {
+      <div class="products-grid">
+
+        @for (product of paginatedProducts; track product.id) {
+        <div class="pg-card">
+
+          <!-- Image Wrap -->
+          <div class="pg-card__image-wrap">
+
+            <img [src]="getImage(product)" [alt]="product.name" class="pg-card__image" loading="lazy"
+              (error)="onImageError($event)" />
+
+            <!-- Image Nav (only if multiple images) -->
+            @if (product.images.length > 1) {
+            <button class="pg-card__img-nav pg-card__img-nav--prev" (click)="prevImage(product, $event)">
+              <span nz-icon nzType="left" nzTheme="outline"></span>
+            </button>
+            <button class="pg-card__img-nav pg-card__img-nav--next" (click)="nextImage(product, $event)">
+              <span nz-icon nzType="right" nzTheme="outline"></span>
+            </button>
+            <div class="pg-card__img-dots">
+              @for (img of product.images; track $index; let i = $index) {
+              <span class="pg-card__img-dot"
+                [class.pg-card__img-dot--active]="(currentImageIndex[product.id] ?? 0) === i"></span>
+              }
+            </div>
+            }
+
+            <!-- Badge -->
+            @if (product.badge) {
+            <span class="pg-card__badge pg-card__badge--{{ product.badgeType }}">
+              {{ product.badge }}
+            </span>
+            }
+
+            <!-- Discount -->
+            @if (discount(product)) {
+            <span class="pg-card__discount">
+              {{ discount(product) }}% OFF
+            </span>
+            }
+
+            <!-- Out of Stock -->
+            @if (!product.in_stock) {
+            <div class="pg-card__out-of-stock">Out of Stock</div>
+            }
+
+            <!-- Wishlist -->
+            <!-- <button class="pg-card__wishlist" aria-label="Add to Wishlist">
+              <span nz-icon nzType="heart" nzTheme="outline"></span>
+            </button> -->
+            @if (isLoggedIn()) {
+            <button class="pg-card__wishlist" aria-label="Add to Wishlist" (click)="toggleWishlist(product, $event)"
+              [class.pg-card__wishlist--active]="wishlistIds().has(product.id)">
+              <span nz-icon nzType="heart" [nzTheme]="wishlistIds().has(product.id) ? 'fill' : 'outline'"></span>
+            </button>
+            }
+            <!-- View Details Overlay -->
+            <div class="pg-card__overlay">
+              <a [routerLink]="['/product-detail', product.slug || product.id]" class="pg-card__view-link">
+                <span nz-icon nzType="eye" nzTheme="outline"></span>
+                View Details
+              </a>
+            </div>
+
+          </div>
+
+          <!-- Card Body -->
+          <div class="pg-card__body">
+
+            <span class="pg-card__category">
+              {{ product.category || product.subCategory || 'General' }}
+            </span>
+
+            <h3 class="pg-card__name">{{ product.name }}</h3>
+
+            <!-- Rating -->
+            <div class="pg-card__rating">
+              <nz-rate [ngModel]="product.rating" nzDisabled nzAllowHalf></nz-rate>
+              <span class="pg-card__review-count">
+                {{ product.total_review }}
+              </span>
+            </div>
+
+            <!-- Price -->
+            <div class="pg-card__pricing">
+              <span class="pg-card__price">
+                {{ formatPrice(product.price) }}
+              </span>
+              @if (product.actual_price) {
+              <span class="pg-card__original">
+                {{ formatPrice(product.actual_price) }}
+              </span>
+              }
+            </div>
+
+            <!-- Add to Cart -->
+            <button class="pg-card__cart-btn" [disabled]="!product.in_stock"
+              (click)="onAddToCart(product); $event.stopPropagation()">
+              <span nz-icon nzType="shopping-cart" nzTheme="outline"></span>
+              {{ product.in_stock ? 'Add to Cart' : 'Notify Me' }}
+            </button>
+
+          </div>
+
+        </div>
+        }
+
+      </div>
+
+      <!-- Pagination -->
+      <div class="products-pagination">
+        <nz-pagination [(nzPageIndex)]="currentPage" [nzTotal]="displayProducts.length" [nzPageSize]="pageSize"
+          nzShowQuickJumper (nzPageIndexChange)="onPageChange($event)"></nz-pagination>
+      </div>
+      }
+
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════════════
+     MOBILE FILTER DRAWER
+════════════════════════════════════════════════════════════════════════ -->
+<nz-drawer [nzVisible]="mobileFilterOpen()" nzTitle="Filter Products" nzPlacement="left" [nzWidth]="320"
+  (nzOnClose)="mobileFilterOpen.set(false)" nzClosable>
+  <ng-container *nzDrawerContent>
+    <div class="mobile-filter-drawer">
+
+      <!-- Price Range -->
+      <div class="filter-section">
+        <h4 class="filter-section__title">
+          <!-- <span nz-icon nzType="dollar-circle" nzTheme="outline"></span> -->
+          <span
+            style="color: #009CDE;border: 1px solid; border-radius: 50%; padding: 2px; display: inline-flex; width: 16px; height: 16px; align-items: center; justify-content: center; font-size: 10px;">
+            ₹
+          </span>
+          Price Range
+        </h4>
+        <nz-slider [(ngModel)]="priceRange" nzRange [nzMin]="0" [nzMax]="1500000" [nzStep]="100"></nz-slider>
+        <div class="filter-price-range">
+          <span>₹{{ priceRange[0].toLocaleString('en-IN') }}</span>
+          <span>₹{{ priceRange[1].toLocaleString('en-IN') }}</span>
+        </div>
+      </div>
+
+      <!-- Dynamic Filter Sections -->
+      @if (loadingFilters) {
+      <nz-skeleton [nzActive]="true" [nzParagraph]="{ rows: 8 }"></nz-skeleton>
+      } @else if (errorFilters) {
+      <div style="text-align:center; padding:16px 0;">
+        <p style="color:#EF4444; margin-bottom:8px;">
+          <span nz-icon nzType="warning" nzTheme="outline"></span>
+          Failed to load filters
+        </p>
+        <button nz-button nzSize="small" (click)="retryFilters()">
+          <span nz-icon nzType="reload" nzTheme="outline"></span>
+          Retry
+        </button>
+      </div>
+      } @else {
+
+      @for (section of filterSections; track section.key) {
+      <div class="filter-section">
+
+        <h4 class="filter-section__title">{{ section.label }}</h4>
+
+        @if (section.loading) {
+        <nz-skeleton [nzActive]="true" [nzTitle]="false" [nzParagraph]="{ rows: 3 }"></nz-skeleton>
+        } @else {
+        <div class="filter-section__options">
+          @for (opt of section.options; track opt.value) {
+          <label class="filter-option" [class.filter-option--active]="isSelected(section.key, opt.value)">
+            <input type="checkbox" class="filter-option__check" [name]="section.key" [value]="opt.value"
+              [checked]="isSelected(section.key, opt.value)" (change)="toggleFilter(section.key, opt.value)" />
+            <span class="filter-option__label">{{ opt.label }}</span>
+            @if (opt.count > 0) {
+            <span class="filter-option__count">{{ opt.count }}</span>
+            }
+          </label>
+          }
+
+          @if (section.options.length === 0) {
+          <p style="color:#94A3B8; font-size:12px; padding:4px 0;">
+            No options available
+          </p>
+          }
+        </div>
+        }
+
+      </div>
+      }
+      }
+
+      <!-- Apply Button -->
+      <button nz-button nzType="primary" nzBlock (click)="mobileFilterOpen.set(false)" style="margin-top:24px">
+        Apply Filters
+        @if (activeFilterCount > 0) {
+        ({{ activeFilterCount }})
+        }
+      </button>
+
+      <!-- Clear Button -->
+      @if (activeFilterCount > 0) {
+      <button nz-button nzBlock nzDanger (click)="clearFilters()" style="margin-top:8px">
+        <span nz-icon nzType="delete" nzTheme="outline"></span>
+        Clear All Filters
+      </button>
+      }
+
+    </div>
+  </ng-container>
+</nz-drawer>

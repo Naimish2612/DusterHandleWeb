@@ -1,0 +1,317 @@
+<!-- steps/payment-step/payment-step.component.html -->
+<div class="payment-step">
+  <div class="payment-step__layout">
+    <!-- ══════════════════════════════════════════════
+         LEFT — PAYMENT METHOD SELECTION
+    ══════════════════════════════════════════════ -->
+    <div class="payment-step__methods-col">
+      <div class="payment-step__col-head">
+        <div class="payment-step__col-icon">
+          <span nz-icon nzType="credit-card" nzTheme="outline"></span>
+        </div>
+        <div>
+          <h3 class="payment-step__col-title">Payment Method</h3>
+          <p class="payment-step__col-sub">Select how you'd like to pay for your order</p>
+        </div>
+      </div>
+
+      <!-- Payment Options -->
+      <div class="payment-options">
+        @for (option of paymentOptions; track option.method) {
+        <div class="payment-option" [class.payment-option--selected]="selectedMethod() === option.method"
+          [class.payment-option--disabled]="!option.available" (click)="selectMethod(option)">
+          <!-- Icon -->
+          <div class="payment-option__icon" [class.payment-option__icon--selected]="selectedMethod() === option.method"
+            [class.payment-option__icon--disabled]="!option.available">
+            <span nz-icon [nzType]="option.icon" nzTheme="outline"></span>
+          </div>
+
+          <!-- Info -->
+          <div class="payment-option__info">
+            <div class="payment-option__name-row">
+              <span class="payment-option__name">{{ option.label }}</span>
+              @if (!option.available) {
+              <nz-tag nzColor="default" class="payment-option__soon-tag"> Coming Soon </nz-tag>
+              }
+              @if (option.available && selectedMethod() === option.method) {
+              <nz-tag nzColor="success">Selected</nz-tag>
+              }
+            </div>
+            <p class="payment-option__desc">{{ option.description }}</p>
+          </div>
+
+          <!-- Check -->
+          @if (selectedMethod() === option.method) {
+          <div class="payment-option__check">
+            <span nz-icon nzType="check-circle" nzTheme="fill"></span>
+          </div>
+          }
+        </div>
+        <!-- /.payment-option -->
+        }
+      </div>
+      <!-- /.payment-options -->
+
+      <!-- ── Info Alert ──────────────────────────── -->
+      <nz-alert nzType="info" nzShowIcon nzMessage="Order Payment Information" [nzDescription]="infoDesc"
+        class="payment-step__info-alert">
+      </nz-alert>
+
+      <ng-template #infoDesc>
+        <p class="payment-step__alert-text">
+          After placing your order, it will be available under
+          <strong>Payment Pending</strong> status. Don't worry your order is confirmed and saved.
+          Our admin and store team will review it and contact you with payment and delivery details
+          shortly.
+        </p>
+      </ng-template>
+    </div>
+    <!-- /.payment-step__methods-col -->
+
+    <!-- ══════════════════════════════════════════════
+         RIGHT — ORDER REVIEW
+    ══════════════════════════════════════════════ -->
+    <div class="payment-step__review-col">
+      <div class="order-review">
+        <h4 class="order-review__title">
+          <span nz-icon nzType="file-done" nzTheme="outline"></span>
+          Order Review
+        </h4>
+
+        <!-- Cart Summary -->
+        <div class="order-review__block">
+          <p class="order-review__block-label">
+            <span nz-icon nzType="shopping-cart" nzTheme="outline"></span>
+            Cart Summary
+          </p>
+
+          <nz-descriptions nzBordered [nzColumn]="1" nzSize="small" class="order-review__desc">
+            <nz-descriptions-item nzTitle="Items">
+              {{ cart()?.items?.length }} product(s)
+            </nz-descriptions-item>
+
+            <nz-descriptions-item nzTitle="Subtotal">
+              ₹{{ cart()?.sub_total | number: '1.2-2' }}
+            </nz-descriptions-item>
+
+            <!-- ✅ NEW: Total Tax -->
+            @if (totalTaxAmount() > 0) {
+            <nz-descriptions-item nzTitle="Total Tax">
+              <span class="order-review__tax">
+                ₹{{ totalTaxAmount() | number: '1.2-2' }}
+              </span>
+            </nz-descriptions-item>
+            }
+
+            <!-- ✅ UPDATED: Delivery Charge from API -->
+            <nz-descriptions-item nzTitle="Delivery Charge">
+
+              <!-- Loading state -->
+              @if (!deliveryCost()) {
+              <nz-skeleton [nzActive]="true" [nzTitle]="{ width: '90px' }" [nzParagraph]="false" [nzAvatar]="false">
+              </nz-skeleton>
+              }
+
+              <!-- Free shipping -->
+              @else if ((deliveryCost()?.final_total ?? 0) === 0) {
+              <span class="order-review__free">
+                <span nz-icon nzType="check-circle" nzTheme="fill"></span>
+                FREE
+              </span>
+              }
+
+              <!-- Paid shipping — amount + info icon with tooltip -->
+              @else {
+              <span class="order-review__shipping-total order-review__shipping-total--tip" nz-tooltip
+                nzTooltipPlacement="right" [nzTooltipTitle]="deliveryBreakdownTpl">
+
+                ₹{{ deliveryCost()!.final_total | number: '1.2-2' }}
+                <span nz-icon nzType="info-circle" nzTheme="outline" class="order-review__shipping-info-icon"></span>
+
+              </span>
+              }
+
+            </nz-descriptions-item>
+
+            <!-- ── Tooltip Template ───────────────────────────────────────────── -->
+            <ng-template #deliveryBreakdownTpl>
+              <div class="delivery-tip">
+
+                <p class="delivery-tip__title">Delivery Charge Breakdown</p>
+
+                <div class="delivery-tip__row">
+                  <span class="delivery-tip__label">Base Fee</span>
+                  <span class="delivery-tip__value">
+                    ₹{{ deliveryCost()!.base_fee | number: '1.2-2' }}
+                  </span>
+                </div>
+
+                <div class="delivery-tip__row">
+                  <span class="delivery-tip__label">{{ deliveryCost()!.tax_type }}</span>
+                  <span class="delivery-tip__value delivery-tip__value--tax">
+                    + ₹{{ deliveryCost()!.tax_amount | number: '1.2-2' }}
+                  </span>
+                </div>
+
+                @if (deliveryCost()!.discount_amount > 0) {
+                <div class="delivery-tip__row">
+                  <span class="delivery-tip__label">Discount</span>
+                  <span class="delivery-tip__value delivery-tip__value--discount">
+                    − ₹{{ deliveryCost()!.discount_amount | number: '1.2-2' }}
+                  </span>
+                </div>
+                }
+
+                <div class="delivery-tip__divider"></div>
+
+                <div class="delivery-tip__row delivery-tip__row--total">
+                  <span class="delivery-tip__label">Total</span>
+                  <span class="delivery-tip__value delivery-tip__value--total">
+                    ₹{{ deliveryCost()!.final_total | number: '1.2-2' }}
+                  </span>
+                </div>
+
+              </div>
+            </ng-template>
+
+            <!-- ✅ Coupon Discount Row WITH TOOLTIP -->
+            @if (totalCouponDiscount() > 0) {
+            <nz-descriptions-item nzTitle="Coupon Discount">
+              <span class="order-review__coupon-discount order-review__coupon-discount--tip" nz-tooltip
+                nzTooltipPlacement="right" [nzTooltipTitle]="couponBreakdownTpl">
+                - ₹{{ totalCouponDiscount() | number: '1.2-2' }}
+                <span nz-icon nzType="info-circle" nzTheme="outline" class="order-review__coupon-info-icon"></span>
+              </span>
+            </nz-descriptions-item>
+            }
+
+            <!-- ── Coupon Tooltip Template ───────────────────────────── -->
+            <ng-template #couponBreakdownTpl>
+              <div class="coupon-tip">
+
+                <p class="coupon-tip__title">
+                  <span nz-icon nzType="gift" nzTheme="outline"></span>
+                  Applied Coupons ({{ appliedCoupons().length }})
+                </p>
+
+                @for (coupon of appliedCoupons(); track coupon.coupon_code) {
+                <div class="coupon-tip__row">
+                  <span class="coupon-tip__label">
+                    <span nz-icon nzType="tag" nzTheme="outline"></span>
+                    {{ coupon.coupon_code }}
+                  </span>
+                  <span class="coupon-tip__value coupon-tip__value--discount">
+                    − ₹{{ coupon.discount_applied | number: '1.2-2' }}
+                  </span>
+                </div>
+                }
+
+                <div class="coupon-tip__divider"></div>
+
+                <div class="coupon-tip__row coupon-tip__row--total">
+                  <span class="coupon-tip__label">Total Savings</span>
+                  <span class="coupon-tip__value coupon-tip__value--total">
+                    ₹{{ totalCouponDiscount() | number: '1.2-2' }}
+                  </span>
+                </div>
+
+              </div>
+            </ng-template>
+
+            <!-- Total -->
+            <nz-descriptions-item nzTitle="Total">
+              <div class="order-review__total-wrap">
+                <!-- Strike original if coupon applied -->
+                @if (totalCouponDiscount() > 0) {
+                <span class="order-review__original-total">
+                  ₹{{ cart()?.net_amount | number: '1.2-2' }}
+                </span>
+                }
+                <strong class="order-review__total">
+                  ₹{{ grandTotalAfterCoupons() | number: '1.2-2' }}
+                </strong>
+              </div>
+            </nz-descriptions-item>
+          </nz-descriptions>
+        </div>
+
+        <!-- ❌ REMOVED: Applied Coupons Block (now displayed inside tooltip) -->
+
+        <nz-divider></nz-divider>
+
+        <!-- Shipping Address -->
+        <div class="order-review__block">
+          <p class="order-review__block-label">
+            <span nz-icon nzType="car" nzTheme="outline"></span>
+            Ship To
+          </p>
+          @if (shippingAddress()) {
+          <div class="order-review__addr-box">
+            <p class="order-review__addr-name">
+              {{ shippingAddress()?.full_name }}
+            </p>
+            <p class="order-review__addr-text">
+              {{ formatAddress(shippingAddress()!) }}
+            </p>
+          </div>
+          }
+        </div>
+
+        <!-- Billing Address -->
+        <div class="order-review__block">
+          <p class="order-review__block-label">
+            <span nz-icon nzType="credit-card" nzTheme="outline"></span>
+            Bill To
+          </p>
+          @if (billingAddress()) {
+          <div class="order-review__addr-box">
+            <p class="order-review__addr-name">
+              {{ billingAddress()?.full_name }}
+            </p>
+            <p class="order-review__addr-text">
+              {{ formatAddress(billingAddress()!) }}
+            </p>
+          </div>
+          }
+        </div>
+
+        <!-- Payment Method Badge -->
+        @if (selectedMethod()) {
+        <div class="order-review__block">
+          <p class="order-review__block-label">
+            <span nz-icon nzType="credit-card" nzTheme="outline"></span>
+            Payment
+          </p>
+          <nz-tag nzColor="blue" class="order-review__payment-tag">
+            {{ selectedMethod() }}
+          </nz-tag>
+        </div>
+        }
+
+        <nz-divider></nz-divider>
+
+        <!-- Nav Buttons -->
+        <div class="order-review__nav">
+          <button nz-button nzType="default" nzSize="large" (click)="onBack()" [disabled]="isPlacingOrder()">
+            <span nz-icon nzType="left" nzTheme="outline"></span>
+            Back
+          </button>
+
+          <button nz-button nzType="primary" nzSize="large" [disabled]="!canPlaceOrder()" [nzLoading]="isPlacingOrder()"
+            (click)="onPlaceOrder()" class="order-review__place-btn">
+            <span nz-icon nzType="check-circle" nzTheme="outline" *ngIf="!isPlacingOrder()"> </span>
+            Place Order
+          </button>
+        </div>
+
+        <p class="order-review__secure-note">
+          <span nz-icon nzType="safety-certificate" nzTheme="outline"></span>
+          Your data is safe and encrypted
+        </p>
+      </div>
+      <!-- /.order-review -->
+    </div>
+    <!-- /.payment-step__review-col -->
+  </div>
+  <!-- /.payment-step__layout -->
+</div>

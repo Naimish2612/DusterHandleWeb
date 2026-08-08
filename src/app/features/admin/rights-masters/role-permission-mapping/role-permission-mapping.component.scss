@@ -1,0 +1,21 @@
+@use '../../../../../assets/styles/common' as *;
+@use '../../../../../assets/styles/responsive' as *;
+
+
+.process-page {
+  padding: $spacing-6; // 24px
+}
+nz-card {
+  border-radius: $border-radius-lg;
+  background-color: $neutral-100;
+}
+
+nz-form-item {
+  margin-bottom: $spacing-4; // 16px vertical rhythm
+}
+
+.form-actions {
+  display: flex;
+  gap: $spacing-4;
+}
+

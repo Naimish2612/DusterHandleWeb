@@ -1,0 +1,14 @@
+<nz-footer class="main-footer">
+    <div class="footer-content">
+      <div class="footer-left">
+        <span>© {{ currentYear }} {{ companyInfo.name }}. All rights reserved.</span>
+        <span class="version">v{{ companyInfo.version }}</span>
+      </div>
+      <div class="footer-right">
+        <ng-container *ngFor="let link of footerLinks; let last = last">
+          <a [href]="link.url">{{ link.label }}</a>
+          <span class="separator" *ngIf="!last">•</span>
+        </ng-container>
+      </div>
+    </div>
+  </nz-footer>

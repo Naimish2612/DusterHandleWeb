@@ -1,0 +1,16 @@
+/* You can add global styles to this file, and also import other style files */
+@import "@kolkov/angular-editor/themes/default.scss";
+
+.cdk-overlay-container {
+  z-index: 2000 !important;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+/* Offset for sticky header - adjust 80px to your header height */
+#top-selling,
+#new-arrivals {
+  scroll-margin-top: 100px;
+}

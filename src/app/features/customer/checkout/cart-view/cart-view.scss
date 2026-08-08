@@ -1,0 +1,863 @@
+// steps/cart-view/cart-view.component.scss
+@use '../../../../../assets/styles/common' as *;
+@use '../../../../../assets/styles/responsive' as *;
+
+.cart-view {
+  &__empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: $spacing-5;
+    min-height: 400px;
+    justify-content: center;
+  }
+
+  // ── Two-column layout ────────────────────────────────
+  &__layout {
+    display: grid;
+    grid-template-columns: 1fr 360px;
+    gap: $spacing-6;
+    align-items: flex-start;
+
+    @include tablet-down {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  // ── Section Header ───────────────────────────────────
+  &__section-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: $spacing-4;
+  }
+
+  &__section-title {
+    display: flex;
+    align-items: center;
+    gap: $spacing-2;
+    font-size: $font-size-lg;
+    font-weight: $font-weight-semibold;
+    color: $color-text-primary;
+    margin: 0;
+
+    span[nz-icon] {
+      color: $primary-500;
+    }
+  }
+
+  &__item-count {
+    font-size: $font-size-sm;
+    color: $color-text-tertiary;
+    background: $neutral-100;
+    border-radius: $border-radius-full;
+    padding: $spacing-0-5 $spacing-3;
+    font-weight: $font-weight-medium;
+  }
+
+  &__items-col {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-4;
+  }
+
+  &__summary-col {
+    position: sticky;
+    top: 120px; // below sticky header
+  }
+}
+
+// ══════════════════════════════════════════════════════
+//  CART ITEM CARD
+// ══════════════════════════════════════════════════════
+.cart-item {
+  background: $neutral-0;
+  border: 1px solid $color-border-light;
+  border-radius: $border-radius-xl;
+  overflow: hidden;
+  transition:
+    opacity $transition-base,
+    border-color $transition-base,
+    box-shadow $transition-base;
+
+  &:hover {
+    border-color: $primary-200;
+    box-shadow: $shadow-md;
+  }
+
+  &--removing {
+    opacity: 0.35;
+    pointer-events: none;
+    transform: scale(0.98);
+  }
+
+  // ── Product Info Row ─────────────────────────────────
+  &__info {
+    display: flex;
+    align-items: center;
+    gap: $spacing-4;
+    padding: $spacing-4 $spacing-5;
+    background: $primary-50;
+    border-bottom: 1px solid $primary-100;
+
+    @include mobile {
+      padding: $spacing-3 $spacing-4;
+    }
+  }
+
+  &__product-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: $border-radius-lg;
+    background: $primary-100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: $primary-600;
+    font-size: $icon-size-xl;
+    flex-shrink: 0;
+  }
+
+  &__meta {
+    flex: 1;
+    min-width: 0;
+  }
+
+  &__name {
+    font-size: $font-size-base;
+    font-weight: $font-weight-semibold;
+    color: $color-text-primary;
+    margin: 0 0 $spacing-1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &__sku {
+    display: flex;
+    align-items: center;
+    gap: $spacing-1;
+    font-size: $font-size-xs;
+    color: $color-text-tertiary;
+    font-family: $font-monospace;
+    margin: 0;
+  }
+
+  // ── Descriptions ─────────────────────────────────────
+  &__desc-wrap {
+    padding: $spacing-4 $spacing-5;
+
+    @include mobile {
+      padding: $spacing-3 $spacing-4;
+    }
+  }
+
+  &__descriptions {
+    ::ng-deep {
+      .ant-descriptions-item-label {
+        font-size: $font-size-xs;
+        font-weight: $font-weight-semibold;
+        color: $color-text-secondary;
+        background: $neutral-50;
+        white-space: nowrap;
+      }
+
+      .ant-descriptions-item-content {
+        font-size: $font-size-sm;
+        color: $color-text-primary;
+      }
+    }
+  }
+
+  &__price {
+    font-weight: $font-weight-semibold;
+    color: $color-text-primary;
+  }
+
+  &__qty-wrap {
+    display: flex;
+    align-items: center;
+    gap: $spacing-2;
+  }
+
+  &__qty-input {
+    width: 80px !important;
+  }
+
+  &__tax {
+    color: #fa8c16;
+    font-weight: $font-weight-medium;
+  }
+
+  &__discount {
+    color: $success-600;
+    font-weight: $font-weight-semibold;
+  }
+
+  &__na {
+    color: $color-text-tertiary;
+  }
+
+  &__total {
+    font-size: $font-size-base;
+    font-weight: $font-weight-bold;
+    color: $primary-600;
+  }
+
+  // ── Actions ──────────────────────────────────────────
+  &__actions {
+    display: flex;
+    justify-content: flex-end;
+    padding: $spacing-2 $spacing-5 $spacing-3;
+    border-top: 1px solid $color-border-light;
+
+    @include mobile {
+      padding: $spacing-2 $spacing-4;
+    }
+  }
+
+  &__remove-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: $spacing-1;
+    font-size: $font-size-sm;
+  }
+}
+
+// ══════════════════════════════════════════════════════
+//  ORDER SUMMARY CARD
+// ══════════════════════════════════════════════════════
+.order-summary {
+  background: $neutral-0;
+  border: 1px solid $color-border-light;
+  border-radius: $border-radius-xl;
+  padding: $spacing-5;
+  box-shadow: $shadow-sm;
+
+  &__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: $spacing-4;
+  }
+
+  &__title {
+    display: flex;
+    align-items: center;
+    gap: $spacing-2;
+    font-size: $font-size-base;
+    font-weight: $font-weight-semibold;
+    color: $color-text-primary;
+    margin: 0;
+
+    span[nz-icon] {
+      color: $primary-500;
+    }
+  }
+
+  &__descriptions {
+    margin-bottom: $spacing-4;
+
+    ::ng-deep {
+      .ant-descriptions-item-label {
+        font-size: $font-size-xs;
+        font-weight: $font-weight-semibold;
+        color: $color-text-secondary;
+        background: $neutral-50;
+      }
+      .ant-descriptions-item-content {
+        font-size: $font-size-sm;
+      }
+    }
+  }
+
+  &__cart-id {
+    font-size: $font-size-xs;
+    font-family: $font-monospace;
+    color: $color-text-secondary;
+  }
+
+  &__value {
+    font-weight: $font-weight-semibold;
+    color: $color-text-primary;
+  }
+
+  &__tax {
+    color: #fa8c16;
+    font-weight: $font-weight-semibold;
+  }
+
+  &__free {
+    color: $success-600;
+    font-weight: $font-weight-bold;
+    font-size: $font-size-xs;
+    letter-spacing: $letter-spacing-wider;
+  }
+
+  &__na {
+    color: $color-text-tertiary;
+  }
+
+  // ── Shipping — tooltip trigger ─────────────────────────────────────────────
+  &__shipping-total {
+    font-size: $font-size-sm;
+    font-weight: $font-weight-bold;
+    color: $neutral-800;
+
+    &--tip {
+      display: inline-flex;
+      align-items: center;
+      gap: $spacing-1;
+      cursor: pointer;
+      transition: color $transition-fast;
+
+      &:hover {
+        color: $primary-500;
+
+        .order-summary__shipping-info-icon {
+          color: $primary-500;
+        }
+      }
+    }
+  }
+
+  &__shipping-info-icon {
+    font-size: $font-size-sm;
+    color: $neutral-400;
+    transition: color $transition-fast;
+  }
+
+  // ── Coupon Link ────────────────────────────────────────────────────────────
+  &__coupon-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    color: $primary-500;
+    font-size: $font-size-sm;
+    font-weight: $font-weight-semibold;
+    cursor: pointer;
+    transition: color $transition-fast;
+    text-decoration: none;
+
+    &:hover {
+      color: $primary-700;
+      text-decoration: underline;
+    }
+
+    span[nz-icon] {
+      font-size: 14px;
+    }
+  }
+
+  // ── ✅ Coupon Discount ──────────────────────────────
+  &__discount {
+    color: #389e0d;
+    font-weight: $font-weight-bold;
+    font-size: $font-size-sm;
+  }
+
+  // ── ✅ Applied Coupon Tags ──────────────────────────
+  &__applied-coupons {
+    margin-bottom: $spacing-4;
+    padding: $spacing-3;
+    background: #f6ffed;
+    border: 1px solid #b7eb8f;
+    border-radius: $border-radius-lg;
+  }
+
+  &__applied-label {
+    display: flex;
+    align-items: center;
+    gap: $spacing-1;
+    font-size: $font-size-xs;
+    font-weight: $font-weight-semibold;
+    color: #389e0d;
+    margin-bottom: $spacing-2;
+
+    span[nz-icon] {
+      font-size: 13px;
+    }
+  }
+
+  &__coupon-tags {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-2;
+  }
+
+  &__coupon-tag {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: $neutral-0;
+    border: 1px dashed #b7eb8f;
+    border-radius: $border-radius-lg;
+    padding: 6px $spacing-2;
+    gap: $spacing-2;
+  }
+
+  &__coupon-tag-info {
+    display: flex;
+    align-items: center;
+    gap: $spacing-2;
+    flex: 1;
+    min-width: 0;
+  }
+
+  &__coupon-tag-code {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: $font-size-xs;
+    font-weight: $font-weight-bold;
+    color: #389e0d;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+
+    span[nz-icon] {
+      font-size: 12px;
+    }
+  }
+
+  &__coupon-tag-amount {
+    font-size: $font-size-xs;
+    font-weight: $font-weight-bold;
+    color: #389e0d;
+    white-space: nowrap;
+  }
+
+  &__coupon-remove {
+    color: #ff4d4f !important;
+    padding: 0 !important;
+    height: auto !important;
+    border: none !important;  
+    background: transparent !important;  
+    box-shadow: none !important;  
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+
+    &:hover {
+      opacity: 0.8;
+    }
+  }
+
+  // ── ✅ Grand Total ──────────────────────────────────
+  &__grand-total {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: $primary-50;
+    border: 1px solid $primary-100;
+    border-radius: $border-radius-lg;
+    padding: $spacing-4;
+    margin-bottom: $spacing-4;
+    gap: $spacing-2;
+  }
+
+  &__grand-label {
+    font-size: $font-size-base;
+    font-weight: $font-weight-semibold;
+    color: $color-text-primary;
+  }
+
+  &__grand-values {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 2px;
+  }
+
+  &__grand-original {
+    font-size: $font-size-sm;
+    color: $color-text-tertiary;
+    text-decoration: line-through;
+    font-weight: $font-weight-medium;
+  }
+
+  &__grand-value {
+    font-size: $font-size-2xl;
+    font-weight: $font-weight-bold;
+    color: $primary-600;
+    line-height: 1;
+  }
+
+  &__proceed-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: $spacing-2;
+    height: $btn-height-lg;
+    font-size: $font-size-base;
+    font-weight: $font-weight-semibold;
+    background-color: $primary-500;
+  }
+
+  &__secure-note {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: $spacing-1-5;
+    font-size: $font-size-xs;
+    color: $color-text-tertiary;
+    margin: $spacing-3 0 0;
+
+    span[nz-icon] {
+      color: $success-500;
+    }
+  }
+}
+
+// ══════════════════════════════════════════════════════
+// COUPON MODAL STYLES
+// ══════════════════════════════════════════════════════
+.coupon-modal {
+
+  // ── Header ─────────────────────────────────────────
+  &__header {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  &__header-icon {
+    font-size: 24px;
+    color: $primary-500;
+    margin-top: 2px;
+  }
+
+  &__header-title {
+    font-size: $font-size-base;
+    font-weight: $font-weight-bold;
+    color: $color-text-primary;
+    line-height: 1.3;
+  }
+
+  &__header-sub {
+    font-size: $font-size-xs;
+    color: $color-text-tertiary;
+    margin-top: 2px;
+  }
+
+  // ── Body ───────────────────────────────────────────
+  &__body {
+    padding: 4px 0;
+  }
+
+  // ── Input Section ───────────────────────────────────
+  &__input-section {
+    margin-bottom: $spacing-3;
+  }
+
+  &__label {
+    display: block;
+    font-size: $font-size-sm;
+    font-weight: $font-weight-semibold;
+    color: $color-text-primary;
+    margin-bottom: $spacing-2;
+  }
+
+  &__input-row {
+    display: flex;
+    gap: $spacing-2;
+    align-items: center;
+  }
+
+  &__input {
+    flex: 1;
+    font-size: $font-size-sm;
+    font-weight: $font-weight-semibold;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    height: 40px;
+
+    &::placeholder {
+      font-weight: 400;            // ✅ Fixed: was $font-weight-regular
+      letter-spacing: 0;
+      text-transform: none;
+    }
+  }
+
+  &__apply-btn {
+    height: 40px;
+    min-width: 88px;
+    font-weight: $font-weight-semibold;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  &__warning {
+    margin-top: 6px;               // ✅ Fixed: was $spacing-1-5
+    font-size: $font-size-xs;
+    color: #fa8c16;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  &__hint {
+    margin-top: 6px;               // ✅ Fixed: was $spacing-1-5
+    font-size: $font-size-xs;
+    color: $color-text-tertiary;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  // ── Alert ───────────────────────────────────────────
+  &__alert {
+    margin-top: $spacing-3;
+    border-radius: $border-radius-lg;
+  }
+
+  // ── Applied List ────────────────────────────────────
+  &__applied-list {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-2;
+    margin-top: $spacing-1;
+  }
+
+  &__applied-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #f6ffed;
+    border: 1px solid #b7eb8f;
+    border-radius: $border-radius-lg;
+    padding: $spacing-3;
+    gap: $spacing-2;
+  }
+
+  &__applied-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+
+  &__applied-code {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: $font-size-sm;
+    font-weight: $font-weight-bold;
+    color: #389e0d;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+
+    span[nz-icon] {
+      font-size: 13px;
+    }
+  }
+
+  &__applied-discount {
+    font-size: $font-size-xs;
+    color: $color-text-primary;
+
+    strong {
+      color: #389e0d;
+      font-size: $font-size-sm;
+    }
+  }
+
+  &__remove-btn {
+    color: #ff4d4f !important;
+    font-size: $font-size-xs;
+    font-weight: $font-weight-semibold;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    flex-shrink: 0;
+  }
+
+  // ── Empty State ─────────────────────────────────────
+  &__empty {
+    text-align: center;
+    padding: $spacing-6 0 $spacing-3;
+    color: $color-text-tertiary;
+
+    p {
+      margin: $spacing-2 0 $spacing-1;
+      font-size: $font-size-sm;
+      font-weight: $font-weight-medium;
+    }
+
+    small {
+      font-size: $font-size-xs;
+    }
+  }
+
+  &__empty-icon {
+    font-size: 40px;
+    color: $neutral-300;
+    display: block;
+  }
+
+  // ── Footer ──────────────────────────────────────────
+  &__footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: $spacing-3;
+    width: 100%;
+  }
+
+  &__total-saving {
+    display: flex;
+    align-items: center;
+    gap: $spacing-1;
+    font-size: $font-size-sm;
+    color: #389e0d;
+    font-weight: $font-weight-medium;
+
+    span[nz-icon] {
+      font-size: 16px;
+    }
+
+    strong {
+      font-weight: $font-weight-bold;
+    }
+  }
+}
+
+// ══════════════════════════════════════════════════════════════════════════════
+// DELIVERY BREAKDOWN TOOLTIP
+// Rendered outside component DOM — must use ::ng-deep
+// ══════════════════════════════════════════════════════════════════════════════
+
+::ng-deep .ant-tooltip {
+  .ant-tooltip-inner {
+    background-color: $primary-50;
+    border: 1px solid $primary-100;
+    border-radius: 10px;
+    padding: 12px 14px;
+    box-shadow: 0 8px 24px $primary-100;
+    min-width: 220px;
+  }
+
+  .ant-tooltip-arrow-content,
+  .ant-tooltip-arrow::before {
+    background-color: $primary-50;
+  }
+}
+
+::ng-deep .delivery-tip {
+  min-width: 200px;
+
+  &__title {
+    font-size: 10px;
+    font-weight: 700;
+    color: $neutral-1000;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin: 0 0 10px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  &__row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 24px;
+    padding: 4px 0;
+
+    &--total {
+      margin-top: 4px;
+      padding-top: 8px;
+    }
+  }
+
+  &__divider {
+    height: 1px;
+    background: rgba(255, 255, 255, 0.1);
+    margin: 6px 0;
+  }
+
+  &__label {
+    font-size: 12px;
+    color: $neutral-1000;
+    white-space: nowrap;
+  }
+
+  &__value {
+    font-size: 12px;
+    font-weight: 600;
+    color: $neutral-1000;
+    white-space: nowrap;
+
+    &--tax {
+      color: $warning-700; // warm orange — tax
+    }
+
+    &--discount {
+      color: $success-600; // green — discount
+    }
+
+    &--total {
+      font-size: 13px;
+      font-weight: 700;
+      color: $neutral-1000;
+    }
+  }
+}
+
+// ── Shared: order-review classes used inside cart-view template ───────────────
+// (delivery charge tooltip trigger reuses .order-review__ classes)
+.order-review {
+
+  &__free {
+    display: inline-flex;
+    align-items: center;
+    gap: $spacing-1;
+    color: $success-600;
+    font-weight: $font-weight-bold;
+    font-size: $font-size-xs;
+    letter-spacing: $letter-spacing-wider;
+  }
+
+  &__shipping-total {
+    font-size: $font-size-sm;
+    font-weight: $font-weight-bold;
+    color: $neutral-800;
+
+    &--tip {
+      display: inline-flex;
+      align-items: center;
+      gap: $spacing-1;
+      cursor: pointer;
+      transition: color $transition-fast;
+
+      &:hover {
+        color: $primary-500;
+
+        .order-review__shipping-info-icon {
+          color: $primary-500;
+        }
+      }
+    }
+  }
+
+  &__shipping-info-icon {
+    font-size: $font-size-sm;
+    color: $neutral-400;
+    transition: color $transition-fast;
+  }
+}
+
+::ng-deep .tooltip-dark-text {
+  .ant-tooltip-inner {
+    color: #000000 !important; // ✅ Black text
+    background-color: #ffffff; // White background
+    border: 1px solid #e0e0e0; // Subtle border
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  }
+
+  .ant-tooltip-arrow-content {
+    background-color: #ffffff; // Match arrow to bg
+    border: 1px solid #e0e0e0;
+  }
+}

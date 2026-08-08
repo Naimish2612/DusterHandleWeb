@@ -1,0 +1,514 @@
+<!-- =====================================================================
+     ADDRESS BOOK — Add / Edit form (top) + Address cards (bottom)
+     ===================================================================== -->
+<div class="ab-page">
+
+  <!-- ══════════════════════════════════════════════════════════════════
+       PAGE BANNER
+       ══════════════════════════════════════════════════════════════════ -->
+  <div class="ab-page__banner">
+    <div class="ab-page__banner-inner">
+      <div class="ab-page__banner-content">
+        <div class="ab-page__banner-icon">
+          <span nz-icon nzType="environment" nzTheme="outline"></span>
+        </div>
+        <div>
+          <h1 class="ab-page__title">Address Book</h1>
+          <p class="ab-page__subtitle">
+            Manage your delivery and billing addresses for faster checkout
+          </p>
+        </div>
+      </div>
+      <div class="ab-page__banner-stats">
+        <div class="ab-stat">
+          <span nz-icon nzType="home"></span>
+          <div>
+            <strong>{{ totalCount() }}</strong>
+            <span>Saved Address{{ totalCount() !== 1 ? 'es' : '' }}</span>
+          </div>
+        </div>
+        <div class="ab-stat">
+          <span nz-icon nzType="car"></span>
+          <div>
+            <strong>{{ shippingAddress() ? shippingAddress()!.city : 'None' }}</strong>
+            <span>Default Shipping</span>
+          </div>
+        </div>
+        <div class="ab-stat">
+          <span nz-icon nzType="credit-card" nzTheme="outline"></span>
+          <div>
+            <strong>{{ billingAddress() ? billingAddress()!.city : 'None' }}</strong>
+            <span>Default Billing</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ab-page__body">
+
+    <!-- ══════════════════════════════════════════════════════════════
+         SECTION 1 — ADD / EDIT FORM
+         ══════════════════════════════════════════════════════════════ -->
+    <section class="ab-form-section" id="address-form-section">
+
+      <!-- Collapsed: "Add New Address" trigger button -->
+      @if (!showForm()) {
+      <div class="ab-form-trigger">
+        <div class="ab-form-trigger__left">
+          <div class="ab-form-trigger__icon">
+            <span nz-icon nzType="plus-circle"></span>
+          </div>
+          <div>
+            <h3 class="ab-form-trigger__title">Add a New Address</h3>
+            <p class="ab-form-trigger__desc">
+              You can save up to 10 addresses for fast checkout
+            </p>
+          </div>
+        </div>
+        <button nz-button nzType="primary" nzSize="large" (click)="openAddForm()" class="ab-form-trigger__btn">
+          <span nz-icon nzType="plus"></span>
+          Add New Address
+        </button>
+      </div>
+      }
+
+      <!-- Expanded: full form card -->
+      @if (showForm()) {
+      <div class="ab-form-card">
+
+        <!-- Form header -->
+        <div class="ab-form-card__header">
+          <div class="ab-form-card__header-left">
+            <div class="ab-form-card__header-icon" [class.ab-form-card__header-icon--edit]="isEditMode()">
+              <span nz-icon [nzType]="isEditMode() ? 'edit' : 'plus'"></span>
+            </div>
+            <div>
+              <h2 class="ab-form-card__title">
+                {{ isEditMode() ? 'Edit Address' : 'Add New Address' }}
+              </h2>
+              <p class="ab-form-card__subtitle">
+                {{ isEditMode()
+                ? 'Update the details for this saved address'
+                : 'Fill in your complete address for accurate delivery'
+                }}
+              </p>
+            </div>
+          </div>
+          <button nz-button nzType="text" (click)="cancelForm()" class="ab-form-card__close" aria-label="Close form">
+            <span nz-icon nzType="close"></span>
+          </button>
+        </div>
+
+        <!-- Progress stepper (visual guide) -->
+        <div class="ab-form-card__stepper">
+          <nz-steps [nzCurrent]="1" nzSize="small" nzProgressDot>
+            <nz-step nzTitle="Contact Info"></nz-step>
+            <nz-step nzTitle="Address Details"></nz-step>
+            <nz-step nzTitle="Set as Default"></nz-step>
+          </nz-steps>
+        </div>
+
+        <!-- Form body -->
+        <form nz-form nzLayout="vertical" [formGroup]="addressForm" (ngSubmit)="submitForm()" class="ab-form"
+          autocomplete="off">
+
+          <!-- ── Row: Full Name + Mobile ── -->
+          <div class="ab-form__row">
+            <nz-form-item>
+              <nz-form-label nzRequired nzFor="full_name">
+                Full Name
+                <span class="ab-form__label-hint">as on ID</span>
+              </nz-form-label>
+              <nz-form-control nzHasFeedback [nzErrorTip]="fullNameErr">
+                <nz-input-group [nzPrefix]="pfxUser">
+                  <input nz-input id="full_name" formControlName="full_name" placeholder="e.g. Arjun Patel"
+                    autocomplete="name" />
+                </nz-input-group>
+                <ng-template #pfxUser>
+                  <span nz-icon nzType="user"></span>
+                </ng-template>
+                <ng-template #fullNameErr>
+                  @if (addressForm.get('full_name')?.hasError('required')) {
+                  Full name is required
+                  } @else {
+                  Minimum 3 characters required
+                  }
+                </ng-template>
+              </nz-form-control>
+            </nz-form-item>
+
+            <nz-form-item>
+              <nz-form-label nzRequired nzFor="mobile_number">
+                Mobile Number
+                <span class="ab-form__label-hint">10-digit Indian number</span>
+              </nz-form-label>
+              <nz-form-control nzHasFeedback [nzErrorTip]="mobileErr">
+                <nz-input-group [nzPrefix]="pfxPhone" nzAddOnBefore="+91">
+                  <input nz-input id="mobile_number" formControlName="mobile_number" placeholder="98765 43210"
+                    type="tel" maxlength="10" autocomplete="tel" />
+                </nz-input-group>
+                <ng-template #pfxPhone>
+                  <span nz-icon nzType="phone"></span>
+                </ng-template>
+                <ng-template #mobileErr>
+                  @if (addressForm.get('mobile_number')?.hasError('required')) {
+                  Mobile number is required
+                  } @else {
+                  Enter a valid 10-digit mobile number starting with 0–9
+                  }
+                </ng-template>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+
+          <!-- ── Address Line 1 ── -->
+          <nz-form-item>
+            <nz-form-label nzRequired nzFor="address_line1">
+              Address Line 1
+              <span class="ab-form__label-hint">house / flat / building name & number</span>
+            </nz-form-label>
+            <nz-form-control nzHasFeedback [nzErrorTip]="addr1Err">
+              <nz-input-group [nzPrefix]="pfxHome">
+                <input nz-input id="address_line1" formControlName="address_line1"
+                  placeholder="e.g. A-203, Sunrise Apartments, MG Road" autocomplete="address-line1" />
+              </nz-input-group>
+              <ng-template #pfxHome>
+                <span nz-icon nzType="home"></span>
+              </ng-template>
+              <ng-template #addr1Err>
+                @if (addressForm.get('address_line1')?.hasError('required')) {
+                Address is required
+                } @else {
+                Minimum 10 characters required for a complete address
+                }
+              </ng-template>
+            </nz-form-control>
+          </nz-form-item>
+
+          <!-- ── Address Line 2 (optional) ── -->
+          <nz-form-item>
+            <nz-form-label nzFor="address_line2">
+              Address Line 2
+              <span class="ab-form__label-hint optional">optional</span>
+            </nz-form-label>
+            <nz-form-control>
+              <nz-input-group [nzPrefix]="pfxMap">
+                <input nz-input id="address_line2" formControlName="address_line2"
+                  placeholder="e.g. Near Central Mall, Landmark" autocomplete="address-line2" />
+              </nz-input-group>
+              <ng-template #pfxMap>
+                <span nz-icon nzType="environment" nzTheme="outline"></span>
+              </ng-template>
+            </nz-form-control>
+          </nz-form-item>
+
+          <!-- ── Row: City + PIN Code ── -->
+          <div class="ab-form__row">
+            <nz-form-item>
+              <nz-form-label nzRequired nzFor="city">City</nz-form-label>
+              <nz-form-control nzHasFeedback [nzErrorTip]="'City is required'">
+                <nz-input-group [nzPrefix]="pfxCity">
+                  <input nz-input id="city" formControlName="city" placeholder="e.g. Ahmedabad"
+                    autocomplete="address-level2" />
+                </nz-input-group>
+                <ng-template #pfxCity>
+                  <span nz-icon nzType="bank"></span>
+                </ng-template>
+              </nz-form-control>
+            </nz-form-item>
+
+            <nz-form-item>
+              <nz-form-label nzRequired nzFor="pin_code">PIN Code</nz-form-label>
+              <nz-form-control nzHasFeedback [nzErrorTip]="pinErr">
+                <nz-input-group [nzPrefix]="pfxPin">
+                  <input nz-input id="pin_code" formControlName="pin_code" placeholder="e.g. 380059" maxlength="6"
+                    autocomplete="postal-code" />
+                </nz-input-group>
+                <ng-template #pfxPin>
+                  <span nz-icon nzType="number"></span>
+                </ng-template>
+                <ng-template #pinErr>
+                  @if (addressForm.get('pin_code')?.hasError('required')) {
+                  PIN code is required
+                  } @else {
+                  Enter a valid 6-digit PIN code
+                  }
+                </ng-template>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+
+          <!-- ── Row: State + Country ── -->
+          <div class="ab-form__row">
+            <nz-form-item>
+              <nz-form-label nzRequired nzFor="state">State</nz-form-label>
+              <nz-form-control [nzErrorTip]="'Please select a state'">
+                <nz-select id="state" formControlName="state" nzPlaceHolder="Select state" nzSize="large" nzShowSearch>
+                  @for (s of indianStates; track s) {
+                  <nz-option [nzValue]="s" [nzLabel]="s"></nz-option>
+                  }
+                </nz-select>
+              </nz-form-control>
+            </nz-form-item>
+
+            <nz-form-item>
+              <nz-form-label nzRequired nzFor="country">Country</nz-form-label>
+              <nz-form-control [nzErrorTip]="'Please select a country'">
+                <nz-select id="country" formControlName="country" nzPlaceHolder="Select country" nzSize="large">
+                  @for (c of countries; track c) {
+                  <nz-option [nzValue]="c" [nzLabel]="c"></nz-option>
+                  }
+                </nz-select>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+
+          <!-- ── Default address options ── -->
+          <div class="ab-form__defaults-section">
+            <h4 class="ab-form__defaults-title">
+              <span nz-icon nzType="star"></span>
+              Set as Default Address
+            </h4>
+            <p class="ab-form__defaults-desc">
+              Choose which address type to pre-select during checkout.
+            </p>
+
+            <div class="ab-form__defaults-row">
+              <!-- Default Shipping -->
+              <label class="ab-default-option"
+                [class.ab-default-option--active]="addressForm.get('is_default_shipping')?.value">
+                <input type="checkbox" formControlName="is_default_shipping" class="ab-default-option__input" />
+                <div class="ab-default-option__inner">
+                  <div class="ab-default-option__icon-wrap ab-default-option__icon-wrap--shipping">
+                    <span nz-icon nzType="car"></span>
+                  </div>
+                  <div class="ab-default-option__text">
+                    <span class="ab-default-option__label">Default Shipping</span>
+                    <span class="ab-default-option__hint">Pre-selected for order delivery</span>
+                  </div>
+                  <div class="ab-default-option__check">
+                    @if (addressForm.get('is_default_shipping')?.value) {
+                    <span nz-icon nzType="check-circle"></span>
+                    } @else {
+                    <span nz-icon nzType="check-circle" nzTheme="outline"></span>
+                    }
+                  </div>
+                </div>
+              </label>
+
+              <!-- Default Billing -->
+              <label class="ab-default-option"
+                [class.ab-default-option--active]="addressForm.get('is_default_billing')?.value">
+                <input type="checkbox" formControlName="is_default_billing" class="ab-default-option__input" />
+                <div class="ab-default-option__inner">
+                  <div class="ab-default-option__icon-wrap ab-default-option__icon-wrap--billing">
+                    <span nz-icon nzType="credit-card" nzTheme="outline"></span>
+                  </div>
+                  <div class="ab-default-option__text">
+                    <span class="ab-default-option__label">Default Billing</span>
+                    <span class="ab-default-option__hint">Pre-selected for invoices & payments</span>
+                  </div>
+                  <div class="ab-default-option__check">
+                    @if (addressForm.get('is_default_billing')?.value) {
+                    <span nz-icon nzType="check-circle"></span>
+                    } @else {
+                    <span nz-icon nzType="check-circle" nzTheme="outline"></span>
+                    }
+                  </div>
+                </div>
+              </label>
+            </div>
+          </div>
+
+          <!-- ── Form actions ── -->
+          <div class="ab-form__actions">
+            <button nz-button nzType="default" nzSize="large" type="button" (click)="cancelForm()"
+              [disabled]="isSaving()">
+              <span nz-icon nzType="close"></span>
+              Cancel
+            </button>
+            <button nz-button nzType="primary" nzSize="large" type="submit" [nzLoading]="isSaving()"
+              class="ab-form__submit-btn">
+              <span nz-icon [nzType]="isEditMode() ? 'save' : 'plus-circle'"></span>
+              {{ isEditMode() ? 'Update Address' : 'Save Address' }}
+            </button>
+          </div>
+
+        </form>
+      </div>
+      }
+    </section>
+
+    <nz-divider [nzText]="dividerLabel" nzOrientation="left">
+      <ng-template #dividerLabel>
+        <span class="ab-divider-label">
+          <span nz-icon nzType="unordered-list"></span>
+          Saved Addresses
+          @if (!isLoading()) {
+          <span class="ab-divider-label__count">{{ totalCount() }}</span>
+          }
+        </span>
+      </ng-template>
+    </nz-divider>
+
+    <!-- ══════════════════════════════════════════════════════════════
+         SECTION 2 — SAVED ADDRESS CARDS
+         ══════════════════════════════════════════════════════════════ -->
+    <section class="ab-list-section">
+
+      <!-- Loading skeleton -->
+      @if (isLoading()) {
+      <div class="ab-skeleton-grid">
+        @for (i of [1, 2, 3]; track i) {
+        <div class="ab-skeleton-card">
+          <nz-skeleton [nzActive]="true" [nzAvatar]="{ size: 'large', shape: 'square' }"
+            [nzParagraph]="{ rows: 4 }"></nz-skeleton>
+        </div>
+        }
+      </div>
+      }
+
+      <!-- Empty state -->
+      @if (!isLoading() && addresses().length === 0) {
+      <div class="ab-empty">
+        <div class="ab-empty__icon-wrap">
+          <span nz-icon nzType="environment" nzTheme="outline"></span>
+        </div>
+        <h3 class="ab-empty__title">No addresses saved yet</h3>
+        <p class="ab-empty__desc">
+          Add your first delivery address to get started with faster checkout.
+        </p>
+        <button nz-button nzType="primary" nzSize="large" (click)="openAddForm()" class="ab-empty__cta">
+          <span nz-icon nzType="plus"></span>
+          Add Your First Address
+        </button>
+      </div>
+      }
+
+      <!-- Address card grid -->
+      @if (!isLoading() && addresses().length > 0) {
+      <div class="ab-card-grid">
+        @for (address of addresses(); track trackByAddress($index, address); let i = $index) {
+        <div class="ab-address-card" [class.ab-address-card--shipping]="address.is_default_shipping"
+          [class.ab-address-card--billing]="address.is_default_billing && !address.is_default_shipping"
+          [class.ab-address-card--both]="address.is_default_shipping && address.is_default_billing"
+          [class.ab-address-card--deleting]="isDeleting(address.address_book_id)">
+
+          <!-- ── Card top strip (default indicators) ─────────── -->
+          @if (address.is_default_shipping || address.is_default_billing) {
+          <div class="ab-address-card__top-strip">
+            @if (address.is_default_shipping) {
+            <span class="ab-tag ab-tag--shipping">
+              <span nz-icon nzType="car"></span>
+              Default Shipping
+            </span>
+            }
+            @if (address.is_default_billing) {
+            <span class="ab-tag ab-tag--billing">
+              <span nz-icon nzType="credit-card" nzTheme="outline"></span>
+              Default Billing
+            </span>
+            }
+          </div>
+          }
+
+          <!-- ── Card header: avatar + contact ──────────────── -->
+          <div class="ab-address-card__header">
+            <div class="ab-address-card__avatar" [style.background]="getAvatarColor(i)">
+              {{ getInitials(address.full_name) }}
+            </div>
+            <div class="ab-address-card__contact">
+              <h4 class="ab-address-card__name">{{ address.full_name }}</h4>
+              <span class="ab-address-card__phone">
+                <span nz-icon nzType="phone"></span>
+                +91 {{ address.mobile_number }}
+              </span>
+            </div>
+          </div>
+
+          <!-- ── Address body ────────────────────────────────── -->
+          <div class="ab-address-card__body">
+            <div class="ab-address-card__address-lines">
+              <span nz-icon nzType="environment" nzTheme="outline" class="ab-address-card__map-icon"></span>
+              <div class="ab-address-card__lines">
+                <p>{{ address.address_line1 }}</p>
+                @if (address.address_line2) {
+                <p>{{ address.address_line2 }}</p>
+                }
+                <p>
+                  {{ address.city }}, {{ address.state }} – {{ address.pin_code }}
+                </p>
+                <p class="ab-address-card__country">
+                  <span nz-icon nzType="global"></span>
+                  {{ address.country }}
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- ── Default tag toggles ─────────────────────────── -->
+          <div class="ab-address-card__defaults">
+            @if (!address.is_default_shipping) {
+            <button nz-button nzType="text" nzSize="small" [nzLoading]="isSettingShipping(address.address_book_id)"
+              (click)="setDefaultShipping(address)"
+              class="ab-address-card__set-default-btn ab-address-card__set-default-btn--shipping" nz-tooltip
+              nzTooltipTitle="Set as default shipping address">
+              <span nz-icon nzType="car"></span>
+              Set Shipping
+            </button>
+            }
+            @if (!address.is_default_billing) {
+            <button nz-button nzType="text" nzSize="small" [nzLoading]="isSettingBilling(address.address_book_id)"
+              (click)="setDefaultBilling(address)"
+              class="ab-address-card__set-default-btn ab-address-card__set-default-btn--billing" nz-tooltip
+              nzTooltipTitle="Set as default billing address">
+              <span nz-icon nzType="credit-card" nzTheme="outline"></span>
+              Set Billing
+            </button>
+            }
+          </div>
+
+          <!-- ── Card actions ────────────────────────────────── -->
+          <div class="ab-address-card__actions">
+            <button nz-button nzType="default" nzSize="small" (click)="openEditForm(address)"
+              class="ab-address-card__edit-btn">
+              <span nz-icon nzType="edit"></span>
+              Edit
+            </button>
+            @if (canRemoveAddress(address)) {
+            <button nz-button nzType="text" nzDanger nzSize="small" nz-popconfirm
+              nzPopconfirmTitle="Remove this address?" nzOkText="Yes, remove" nzCancelText="Cancel"
+              nzPopconfirmPlacement="top" (nzOnConfirm)="deleteAddress(address)"
+              [nzLoading]="isDeleting(address.address_book_id)" class="ab-address-card__delete-btn">
+              <span nz-icon nzType="delete"></span>
+              Remove
+            </button>
+            }
+            @else {
+            <!-- ✅ Show locked indicator with tooltip explaining why -->
+            <span class="ab-address-card__locked-badge" nz-tooltip [nzTooltipTitle]="getRemoveBlockedReason(address)"
+              nzTooltipOverlayClassName="tooltip-dark-text" nzTooltipPlacement="top">
+              <span nz-icon nzType="lock" nzTheme="outline"></span>
+              Locked
+            </span>
+            }
+          </div>
+
+        </div>
+        }
+
+        <!-- ── Add another tile ── -->
+        @if (!showForm()) {
+        <button class="ab-add-tile" (click)="openAddForm()">
+          <span nz-icon nzType="plus-circle" class="ab-add-tile__icon"></span>
+          <span class="ab-add-tile__label">Add New Address</span>
+        </button>
+        }
+      </div>
+      }
+
+    </section>
+
+  </div>
+</div>

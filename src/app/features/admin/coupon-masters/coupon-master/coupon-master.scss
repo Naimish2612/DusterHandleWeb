@@ -1,0 +1,129 @@
+@use '../../../../../assets/styles/common' as *;
+@use '../../../../../assets/styles/responsive' as *;
+
+// =========================================================================
+// PROCESS PAGE — form container
+// =========================================================================
+.process-page {
+  padding: $spacing-6; // 24px
+}
+
+nz-card {
+  border-radius: $border-radius-lg;
+  background-color: $neutral-100;
+
+  ::ng-deep .ant-card-head-title {
+    font-weight: 600;
+    font-size: 16px;
+    color: $neutral-800;
+  }
+
+  ::ng-deep .ant-card-body {
+    padding: $spacing-6 $spacing-5;
+  }
+}
+
+// =========================================================================
+// FORM ITEMS — consistent vertical rhythm
+// =========================================================================
+nz-form-item {
+  margin-bottom: $spacing-4;   // 16px between rows
+
+  ::ng-deep .ant-form-item-label {
+    padding-bottom: 4px !important;
+
+    > label {
+      font-size: 13px;
+      font-weight: 500;
+      color: $neutral-700;
+      height: auto;
+      line-height: 1.4;
+      white-space: nowrap;         // ✅ prevent labels wrapping to 2 lines
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  }
+
+  ::ng-deep .ant-form-item-control-input {
+    min-height: 36px;
+  }
+}
+
+// =========================================================================
+// INPUT / SELECT / DATE-PICKER / NUMBER — unified height
+// =========================================================================
+::ng-deep {
+  .ant-input,
+  .ant-select-selector,
+  .ant-picker,
+  .ant-input-number,
+  .ant-input-number-input {
+    height: 36px !important;
+    border-radius: $border-radius-base !important;
+  }
+
+  .ant-select-selection-item,
+  .ant-select-selection-placeholder {
+    line-height: 34px !important;
+  }
+
+  // Number input full-width
+  .ant-input-number {
+    width: 100% !important;
+  }
+
+  // Textarea auto height
+  textarea.ant-input {
+    height: auto !important;
+    min-height: 60px;
+  }
+}
+
+// =========================================================================
+// SWITCH — inline wrapper (switch + label on same line)
+// =========================================================================
+.switch-wrapper {
+  display: flex;
+  align-items: center;
+  gap: $spacing-2;
+  min-height: 36px;             // ✅ match input height for row alignment
+}
+
+.switch-label {
+  font-weight: 500;
+  font-size: 14px;
+  color: $neutral-700;
+  white-space: nowrap;
+}
+
+// =========================================================================
+// FORM ACTIONS
+// =========================================================================
+.form-actions {
+  display: flex;
+  gap: $spacing-3;
+  flex-wrap: wrap;
+  margin-top: $spacing-4;
+  padding-top: $spacing-4;
+  border-top: 1px solid $neutral-200;
+
+  button {
+    min-width: 100px;
+  }
+}
+
+// =========================================================================
+// LEGACY / TABLE (kept as-is)
+// =========================================================================
+.action-cell {
+  display: flex;
+  gap: $spacing-2; // 8px
+  white-space: nowrap;
+}
+
+.table-wrapper {
+  width: 100%;
+  overflow-x: auto; // KEY FIX
+  overflow-y: hidden;
+}
+

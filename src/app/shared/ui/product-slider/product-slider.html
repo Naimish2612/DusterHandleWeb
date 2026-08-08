@@ -1,0 +1,159 @@
+<!-- =====================================================================
+     PRODUCT SLIDER — Horizontal scrollable product row
+     ===================================================================== -->
+<section class="product-slider" [class.product-slider--alt]="isDark">
+    <div class="product-slider__inner">
+
+        <!-- Section header -->
+        <div class="product-slider__header">
+            <div class="section-head">
+                <span class="section-tag">{{ sectionTag }}</span>
+                <h2 class="section-title" [innerHTML]="sectionTitle"></h2>
+                <p class="section-sub">{{ sectionSub }}</p>
+            </div>
+            <a routerLink="/products" class="product-slider__view-all">
+                View All
+                <span nz-icon nzType="arrow-right" nzTheme="outline"></span>
+            </a>
+        </div>
+
+        <!-- ── LOADING STATE ────────────────────────────────────────────── -->
+        @if (Sliderloading) {
+        <div class="product-slider__track product-slider__track--skeleton">
+            @for (s of skeletonItems; track s) {
+            <div class="product-card product-card--skeleton">
+                <div class="product-card__image-wrap product-card__image-wrap--skeleton">
+                    <nz-skeleton-element nzType="image" [nzActive]="true" class="product-card__skeleton-image">
+                    </nz-skeleton-element>
+                </div>
+                <div class="product-card__info">
+                    <nz-skeleton [nzActive]="true" [nzTitle]="{ width: '80%' }"
+                        [nzParagraph]="{ rows: 3, width: ['60%', '90%', '50%'] }" [nzAvatar]="false">
+                    </nz-skeleton>
+                </div>
+            </div>
+            }
+        </div>
+        }
+
+        <!-- ── ERROR STATE ───────────────────────────────────────────────── -->
+        @else if (hasError) {
+        <div class="product-slider__error">
+            <span nz-icon nzType="warning" nzTheme="outline" class="product-slider__error-icon"></span>
+            <p class="product-slider__error-msg">
+                Failed to load products
+            </p>
+            <button nz-button nzType="primary" nzSize="small" (click)="onRetry()">
+                <span nz-icon nzType="reload" nzTheme="outline"></span>
+                Retry
+            </button>
+        </div>
+        }
+
+        <!-- ── EMPTY STATE ───────────────────────────────────────────────── -->
+        @else if (products.length === 0) {
+        <div class="product-slider__error">
+            <span nz-icon nzType="inbox" nzTheme="outline" class="product-slider__error-icon"></span>
+            <p class="product-slider__error-msg">No products available</p>
+        </div>
+        }
+
+        <!-- ── LOADED STATE ──────────────────────────────────────────────── -->
+        @else {
+        <div class="product-slider__track" #track (mouseenter)="pauseScroll()" (mouseleave)="resumeScroll()">
+            @for (product of allProducts; track $index)
+            {
+            <div class="product-card">
+
+                <!-- Image -->
+                <div class="product-card__image-wrap">
+                    <img [src]="product.image" [alt]="product.name" class="product-card__image" loading="lazy"
+                        (error)="onImageError($event)" />
+
+                    @if (product.badges && product.badges.length > 0) {
+                    @for (badge of product.badges; track badge.type) {
+                    <span class="product-card__badge product-card__badge--{{ badge.type }}">
+                        {{ badge.label }}
+                    </span>
+                    }
+                    }
+
+
+                    @if (isLoggedIn()) {
+                    <button class="product-card__wishlist"
+                        [class.product-card__wishlist--active]="wishlistIds().has(product.id)"
+                        (click)="toggleWishlist(product, $event)"
+                        [attr.aria-label]="wishlistIds().has(product.id) ? 'Remove from wishlist' : 'Add to wishlist'">
+                        <span nz-icon nzType="heart"
+                            [nzTheme]="wishlistIds().has(product.id) ? 'fill' : 'outline'"></span>
+                    </button>
+                    }
+                    <div class="product-card__overlay">
+                        <a [routerLink]="['/product-detail', product.slug || product.id]"
+                            class="product-card__view-btn">
+                            <span nz-icon nzType="eye" nzTheme="outline"></span>
+                            Quick View
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Info -->
+                <div class="product-card__info">
+                    <h3 class="product-card__name">{{ product.name }}</h3>
+
+                    <div class="product-card__rating">
+                        <nz-rate [ngModel]="product.rating" nzDisabled nzAllowHalf [nzCount]="5"></nz-rate>
+                        <span class="product-card__review-count">({{ product.total_review }})</span>
+                    </div>
+
+                    <div class="product-card__pricing">
+                        <span class="product-card__price">
+                            {{ formatPrice(product.price) }}
+                        </span>
+
+                        @if (product.actual_price) {
+                        <span class="product-card__original">
+                            {{ formatPrice(product.actual_price) }}
+                        </span>
+
+                        @if (discount(product) > 0) {
+                        <span class="product-card__discount-inline">
+                            {{ discount(product) }}% OFF
+                        </span>
+                        }
+                        }
+                    </div>
+
+                    <!-- <button class="product-card__cart-btn" (click)="addToCart(product, $event)">
+                        <span nz-icon nzType="shopping-cart" nzTheme="outline"></span>
+                        Add to Cart
+                    </button> -->
+
+                    <!-- Add to Cart button - Updated -->
+                    <button class="product-card__cart-btn" (click)="addToCart(product, $event)"
+                        [disabled]="isAddingToCart(product.id) || !product.in_stock"
+                        [class.product-card__cart-btn--loading]="isAddingToCart(product.id)"
+                        [class.product-card__cart-btn--disabled]="!product.in_stock">
+                        @if (isAddingToCart(product.id))
+                        {
+                        <span nz-icon nzType="loading" nzTheme="outline"></span>
+                        Adding...
+                        }
+                        @else if (!product.in_stock) {
+                        <span nz-icon nzType="close-circle" nzTheme="outline"></span>
+                        Out of Stock
+                        }
+                        @else {
+                        <span nz-icon nzType="shopping-cart" nzTheme="outline"></span>
+                        Add to Cart
+                        }
+                    </button>
+                </div>
+
+            </div>
+            }
+        </div>
+        }
+
+    </div>
+</section>

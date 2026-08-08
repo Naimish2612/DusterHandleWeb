@@ -1,0 +1,1157 @@
+@use 'common' as *;
+
+/* =====================================================================
+   RESPONSIVE LOGIC, VARIABLES, AND MIXINS
+   ===================================================================== */
+
+/* =====================================================================
+   4. BREAKPOINTS
+   ===================================================================== */
+
+$breakpoint-xs: 480px;
+$breakpoint-sm: 576px;
+$breakpoint-md: 768px;
+$breakpoint-lg: 992px;
+$breakpoint-xl: 1200px;
+$breakpoint-xxl: 1600px;
+
+$breakpoints: (
+  xs: $breakpoint-xs,
+  sm: $breakpoint-sm,
+  md: $breakpoint-md,
+  lg: $breakpoint-lg,
+  xl: $breakpoint-xl,
+  xxl: $breakpoint-xxl,
+);
+
+/* =====================================================================
+   5. CONTAINER WIDTHS
+   ===================================================================== */
+
+$container-sm: 540px;
+$container-md: 720px;
+$container-lg: 960px;
+$container-xl: 1140px;
+$container-xxl: 1320px;
+$container-fluid: 100%;
+$container-narrow: 680px;
+$container-wide: 1440px;
+
+$container-max-widths: (
+  sm: $container-sm,
+  md: $container-md,
+  lg: $container-lg,
+  xl: $container-xl,
+  xxl: $container-xxl,
+);
+
+/* =====================================================================
+   6. GRID SYSTEM
+   ===================================================================== */
+
+$grid-columns: 12;
+$grid-gutter-width: 24px;
+$grid-gutter-mobile: 16px;
+$grid-gutter-sm: 12px;
+$grid-gutter-lg: 32px;
+
+/* =====================================================================
+   RESPONSIVE FUNCTIONS
+   ===================================================================== */
+
+/// Get breakpoint value from map
+@function bp($key) {
+  @if map-has-key($breakpoints, $key) {
+    @return map-get($breakpoints, $key);
+  }
+  @warn "Unknown breakpoint: `#{$key}`.";
+  @return null;
+}
+
+/* =====================================================================
+   MIXINS — RESPONSIVE BREAKPOINTS
+   ===================================================================== */
+
+/// Mobile-first: min-width (sm and up, md and up, etc.)
+@mixin respond-to($breakpoint) {
+  @if $breakpoint == xs {
+    @media (max-width: #{$breakpoint-xs - 1}) {
+      @content;
+    }
+  } @else if $breakpoint == sm {
+    @media (min-width: $breakpoint-sm) {
+      @content;
+    }
+  } @else if $breakpoint == md {
+    @media (min-width: $breakpoint-md) {
+      @content;
+    }
+  } @else if $breakpoint == lg {
+    @media (min-width: $breakpoint-lg) {
+      @content;
+    }
+  } @else if $breakpoint == xl {
+    @media (min-width: $breakpoint-xl) {
+      @content;
+    }
+  } @else if $breakpoint == xxl {
+    @media (min-width: $breakpoint-xxl) {
+      @content;
+    }
+  }
+}
+
+/// Desktop-first: max-width (below md, below lg, etc.)
+@mixin respond-below($breakpoint) {
+  @if $breakpoint == sm {
+    @media (max-width: #{$breakpoint-sm - 0.02px}) { @content; }
+  } @else if $breakpoint == md {
+    @media (max-width: #{$breakpoint-md - 0.02px}) { @content; }
+  } @else if $breakpoint == lg {
+    @media (max-width: #{$breakpoint-lg - 0.02px}) { @content; }
+  } @else if $breakpoint == xl {
+    @media (max-width: #{$breakpoint-xl - 0.02px}) { @content; }
+  } @else if $breakpoint == xxl {
+    @media (max-width: #{$breakpoint-xxl - 0.02px}) { @content; }
+  }
+}
+
+/// Between two breakpoints
+@mixin respond-between($lower, $upper) {
+  @media (min-width: map-get($breakpoints, $lower)) and (max-width: #{map-get($breakpoints, $upper) - 0.02px}) {
+    @content;
+  }
+}
+
+// ─── Named Device Shortcuts ────────────────────────────────
+
+/// Phones only (< 768px)
+@mixin mobile {
+  @media (max-width: #{$breakpoint-md - 0.02px}) { @content; }
+}
+
+/// Small phones only (< 480px)
+@mixin mobile-sm {
+  @media (max-width: #{$breakpoint-xs - 0.02px}) { @content; }
+}
+
+/// Tablets only (768px – 991px)
+@mixin tablet {
+  @media (min-width: $breakpoint-md) and (max-width: #{$breakpoint-lg - 0.02px}) { @content; }
+}
+
+/// Tablet and up (>= 768px)
+@mixin tablet-up {
+  @media (min-width: $breakpoint-md) { @content; }
+}
+
+/// Tablet and below (< 992px)
+@mixin tablet-down {
+  @media (max-width: #{$breakpoint-lg - 0.02px}) { @content; }
+}
+
+/// Desktop and up (>= 992px)
+@mixin desktop {
+  @media (min-width: $breakpoint-lg) { @content; }
+}
+
+/// Large desktop (>= 1200px)
+@mixin desktop-lg {
+  @media (min-width: $breakpoint-xl) { @content; }
+}
+
+/// Extra-large (>= 1600px)
+@mixin desktop-xl {
+  @media (min-width: $breakpoint-xxl) { @content; }
+}
+
+/// Landscape orientation
+@mixin landscape {
+  @media (orientation: landscape) { @content; }
+}
+
+/// Portrait orientation
+@mixin portrait {
+  @media (orientation: portrait) { @content; }
+}
+
+/// Touch devices (coarse pointer)
+@mixin touch-device {
+  @media (hover: none) and (pointer: coarse) { @content; }
+}
+
+/// Non-touch / hover-capable devices
+@mixin hover-device {
+  @media (hover: hover) and (pointer: fine) { @content; }
+}
+
+/// Retina / high-DPI screens
+@mixin retina {
+  @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) { @content; }
+}
+
+/// Prefers reduced motion
+@mixin prefers-reduced-motion {
+  @media (prefers-reduced-motion: reduce) { @content; }
+}
+
+/// Prefers dark color scheme
+@mixin prefers-dark {
+  @media (prefers-color-scheme: dark) { @content; }
+}
+
+/// Prefers high contrast
+@mixin prefers-contrast {
+  @media (prefers-contrast: high) { @content; }
+}
+
+/// Print media
+@mixin print {
+  @media print { @content; }
+}
+
+/* =====================================================================
+   MIXINS — LAYOUT & CONTAINER
+   ===================================================================== */
+
+/// Responsive container with auto max-widths
+@mixin make-container($max-width: $container-xl) {
+  width: 100%;
+  max-width: $max-width;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: $spacing-4;
+  padding-right: $spacing-4;
+
+  @include respond-to(md) {
+    padding-left: $spacing-6;
+    padding-right: $spacing-6;
+  }
+}
+
+/// Full-width container with padding
+@mixin make-container-fluid {
+  width: 100%;
+  padding-left: $content-padding-mobile;
+  padding-right: $content-padding-mobile;
+
+  @include tablet-up {
+    padding-left: $content-padding-tablet;
+    padding-right: $content-padding-tablet;
+  }
+
+  @include desktop {
+    padding-left: $content-padding;
+    padding-right: $content-padding;
+  }
+}
+
+/// Responsive content padding (used in layout content areas)
+@mixin content-padding {
+  padding: $content-padding-mobile;
+
+  @include tablet-up {
+    padding: $content-padding-tablet;
+  }
+
+  @include desktop {
+    padding: $content-padding;
+  }
+}
+
+/// Responsive card padding
+@mixin card-padding {
+  padding: $card-padding-mobile;
+
+  @include tablet-up {
+    padding: $card-padding;
+  }
+}
+
+/* =====================================================================
+   MIXINS — FLEXBOX
+   ===================================================================== */
+
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin flex-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+@mixin flex-around {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+
+@mixin flex-evenly {
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+}
+
+@mixin flex-start {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+@mixin flex-end {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+@mixin flex-column {
+  display: flex;
+  flex-direction: column;
+}
+
+@mixin flex-column-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin flex-column-between {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+@mixin flex-wrap {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+@mixin inline-flex-center {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/// Flex gap with fallback for older browsers
+@mixin flex-gap($gap) {
+  gap: $gap;
+
+  // Fallback: if gap not supported in flex
+  @supports not (gap: $gap) {
+    margin: calc(-#{$gap} / 2);
+    > * {
+      margin: calc(#{$gap} / 2);
+    }
+  }
+}
+
+/* =====================================================================
+   MIXINS — CSS GRID
+   ===================================================================== */
+
+/// Basic grid
+@mixin grid($columns: $grid-columns, $gap: $grid-gutter-width) {
+  display: grid;
+  grid-template-columns: repeat($columns, 1fr);
+  gap: $gap;
+}
+
+/// Auto-fill responsive grid (cards, tiles)
+@mixin grid-auto-fill($min-width: 280px, $gap: $grid-gutter-width) {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax($min-width, 1fr));
+  gap: $gap;
+}
+
+/// Auto-fit responsive grid
+@mixin grid-auto-fit($min-width: 280px, $gap: $grid-gutter-width) {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax($min-width, 1fr));
+  gap: $gap;
+}
+
+/// Responsive grid that changes columns per breakpoint
+@mixin grid-responsive(
+  $cols-mobile: 1,
+  $cols-tablet: 2,
+  $cols-desktop: 3,
+  $cols-lg-desktop: null,
+  $gap: $grid-gutter-width
+) {
+  display: grid;
+  grid-template-columns: repeat($cols-mobile, 1fr);
+  gap: $grid-gutter-mobile;
+
+  @include tablet-up {
+    grid-template-columns: repeat($cols-tablet, 1fr);
+    gap: $gap;
+  }
+
+  @include desktop {
+    grid-template-columns: repeat($cols-desktop, 1fr);
+  }
+
+  @if $cols-lg-desktop {
+    @include desktop-lg {
+      grid-template-columns: repeat($cols-lg-desktop, 1fr);
+    }
+  }
+}
+
+/* =====================================================================
+   MIXINS — TYPOGRAPHY
+   ===================================================================== */
+
+/// Heading style
+@mixin heading($size, $weight: $font-weight-semibold, $color: $color-text-primary) {
+  font-family: $font-heading;
+  font-size: $size;
+  font-weight: $weight;
+  line-height: $line-height-heading;
+  color: $color;
+  margin: 0;
+}
+
+/// Responsive heading (auto-scales down on mobile)
+@mixin heading-responsive(
+  $desktop-size,
+  $tablet-size: null,
+  $mobile-size: null,
+  $weight: $font-weight-semibold
+) {
+  @include heading($desktop-size, $weight);
+
+  @if $tablet-size {
+    @include tablet {
+      font-size: $tablet-size;
+    }
+  }
+
+  @if $mobile-size {
+    @include mobile {
+      font-size: $mobile-size;
+    }
+  } @else {
+    @include mobile {
+      font-size: $desktop-size * 0.7;
+    }
+  }
+}
+
+/// Body text
+@mixin body-text($size: $font-size-base, $color: $color-text-secondary) {
+  font-family: $font-primary;
+  font-size: $size;
+  font-weight: $font-weight-normal;
+  line-height: $line-height-normal;
+  color: $color;
+}
+
+/// Text truncate (single line)
+@mixin text-truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/// Line clamp (multi-line truncate)
+@mixin line-clamp($lines: 2) {
+  display: -webkit-box;
+  -webkit-line-clamp: $lines;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/// Word break
+@mixin text-break {
+  word-wrap: break-word;
+  word-break: break-word;
+  overflow-wrap: break-word;
+  hyphens: auto;
+}
+
+/* =====================================================================
+   MIXINS — COMPONENTS
+   ===================================================================== */
+
+/// Card base
+@mixin card-base {
+  background: $card-bg;
+  border-radius: $card-border-radius;
+  box-shadow: $card-shadow;
+  @include card-padding;
+  transition: box-shadow $transition-base, transform $transition-base;
+}
+
+/// Card with hover effect
+@mixin card-hover {
+  &:hover {
+    box-shadow: $card-shadow-hover;
+    transform: translateY(-2px);
+  }
+}
+
+/// Card interactive (clickable)
+@mixin card-interactive {
+  @include card-base;
+  @include card-hover;
+  cursor: pointer;
+
+  &:active {
+    transform: translateY(0);
+    box-shadow: $card-shadow;
+  }
+}
+
+/// Glass / Frosted effect
+@mixin glass-effect($blur: 10px, $bg-opacity: 0.8) {
+  background: rgba(255, 255, 255, $bg-opacity);
+  backdrop-filter: blur($blur);
+  -webkit-backdrop-filter: blur($blur);
+}
+
+/// Gradient overlay on element
+@mixin gradient-overlay($direction: to bottom, $from: transparent, $to: rgba(0,0,0,0.6)) {
+  position: relative;
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient($direction, $from, $to);
+    border-radius: inherit;
+    pointer-events: none;
+  }
+}
+
+/* =====================================================================
+   MIXINS — SCROLLBAR
+   ===================================================================== */
+
+@mixin custom-scrollbar(
+  $width: $scrollbar-width,
+  $track: $scrollbar-track-bg,
+  $thumb: $scrollbar-thumb-bg,
+  $thumb-hover: $scrollbar-thumb-hover-bg
+) {
+  // Webkit (Chrome, Safari, Edge)
+  &::-webkit-scrollbar {
+    width: $width;
+    height: $width;
+  }
+  &::-webkit-scrollbar-track {
+    background: $track;
+    border-radius: $scrollbar-thumb-radius;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: $thumb;
+    border-radius: $scrollbar-thumb-radius;
+    &:hover {
+      background: $thumb-hover;
+    }
+  }
+  // Firefox
+  scrollbar-width: thin;
+  scrollbar-color: $thumb $track;
+}
+
+/// Hide scrollbar but keep functionality
+@mixin hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* =====================================================================
+   MIXINS — POSITIONING
+   ===================================================================== */
+
+/// Absolute fill parent
+@mixin absolute-fill {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+
+/// Fixed fill viewport
+@mixin fixed-fill {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+
+/// Absolute center
+@mixin absolute-center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/// Absolute center horizontally
+@mixin absolute-center-x {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+/// Absolute center vertically
+@mixin absolute-center-y {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+/// Sticky top
+@mixin sticky-top($top: 0, $z: $z-index-sticky) {
+  position: sticky;
+  top: $top;
+  z-index: $z;
+}
+
+/* =====================================================================
+   MIXINS — VISUAL EFFECTS
+   ===================================================================== */
+
+/// Hover lift (translateY + shadow)
+@mixin hover-lift($distance: -4px, $shadow: $shadow-lg) {
+  transition: transform $transition-base, box-shadow $transition-base;
+
+  @include hover-device {
+    &:hover {
+      transform: translateY($distance);
+      box-shadow: $shadow;
+    }
+  }
+}
+
+/// Focus ring for accessibility
+@mixin focus-ring($color: $primary-500, $offset: 2px, $width: 2px) {
+  &:focus-visible {
+    outline: $width solid $color;
+    outline-offset: $offset;
+    border-radius: $border-radius-sm;
+  }
+}
+
+/// Overlay layer
+@mixin overlay($color: #000, $opacity: 0.5) {
+  position: absolute;
+  inset: 0;
+  background: rgba($color, $opacity);
+  pointer-events: none;
+}
+
+/// Aspect ratio (with fallback for old browsers)
+@mixin aspect-ratio($width, $height) {
+  aspect-ratio: #{$width} / #{$height};
+
+  @supports not (aspect-ratio: 1) {
+    &::before {
+      content: '';
+      display: block;
+      padding-top: percentage($height / $width);
+    }
+  }
+}
+
+/// Circle element
+@mixin circle($size) {
+  width: $size;
+  height: $size;
+  border-radius: 50%;
+}
+
+/// Square element
+@mixin square($size) {
+  width: $size;
+  height: $size;
+}
+
+/// Size shorthand
+@mixin size($width, $height: $width) {
+  width: $width;
+  height: $height;
+}
+
+/* =====================================================================
+   MIXINS — RESPONSIVE TABLE
+   ===================================================================== */
+
+/// Make table scroll horizontally on small screens
+@mixin table-responsive {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  @include custom-scrollbar;
+}
+
+/// Transform table to card list on mobile
+@mixin table-card-mobile {
+  @include mobile {
+    thead { display: none; }
+
+    tbody tr {
+      display: block;
+      margin-bottom: $spacing-3;
+      border: $border-width-thin solid $color-border-light;
+      border-radius: $border-radius-lg;
+      padding: $spacing-3;
+      background: $card-bg;
+      box-shadow: $shadow-xs;
+
+      td {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: $spacing-2 0;
+        border-bottom: $border-width-thin solid $color-border-light;
+
+        &:last-child { border-bottom: none; }
+
+        &::before {
+          content: attr(data-label);
+          font-weight: $font-weight-semibold;
+          color: $color-text-primary;
+          flex-shrink: 0;
+          width: 40%;
+          margin-right: $spacing-3;
+        }
+      }
+    }
+  }
+}
+
+/* =====================================================================
+   MIXINS — FORM HELPERS
+   ===================================================================== */
+
+/// Form row that stacks on mobile
+@mixin form-row($gap: $spacing-4) {
+  display: flex;
+  gap: $gap;
+
+  @include mobile {
+    flex-direction: column;
+    gap: 0;
+  }
+
+  > * {
+    flex: 1;
+    min-width: 0;
+  }
+}
+
+/// Form actions row (submit/cancel buttons)
+@mixin form-actions($justify: flex-end) {
+  display: flex;
+  justify-content: $justify;
+  gap: $spacing-3;
+  margin-top: $spacing-6;
+  padding-top: $spacing-6;
+  border-top: $border-width-thin solid $color-divider;
+
+  @include mobile {
+    flex-direction: column-reverse;
+    gap: $spacing-2;
+
+    button, [nz-button], a[nz-button] {
+      width: 100%;
+    }
+  }
+}
+
+/// Sticky form footer
+@mixin form-actions-sticky {
+  @include form-actions;
+  position: sticky;
+  bottom: 0;
+  background: $card-bg;
+  z-index: $z-index-float;
+  padding: $spacing-4 $spacing-6;
+  margin: 0 (-$spacing-6);
+  width: calc(100% + #{$spacing-6 * 2});
+  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.08);
+  border-top: $border-width-thin solid $color-border-base;
+
+  @include mobile {
+    padding: $spacing-3 $spacing-4;
+    margin: 0 (-$spacing-4);
+    width: calc(100% + #{$spacing-4 * 2});
+  }
+}
+
+/* =====================================================================
+   MIXINS — ANIMATIONS
+   ===================================================================== */
+
+/// Skeleton loading shimmer
+@mixin skeleton($height: 14px, $width: 100%, $radius: $border-radius-sm) {
+  background: linear-gradient(
+    90deg,
+    $neutral-200 25%,
+    $neutral-100 50%,
+    $neutral-200 75%
+  );
+  background-size: 200% 100%;
+  animation: skeleton-shimmer 1.5s ease-in-out infinite;
+  border-radius: $radius;
+  height: $height;
+  width: $width;
+}
+
+/// Fade-in animation
+@mixin animate-fade-in($duration: $duration-base) {
+  animation: fade-in $duration ease-out forwards;
+}
+
+/// Fade-in-up animation
+@mixin animate-fade-in-up($duration: $duration-base, $distance: 20px) {
+  animation: fade-in-up $duration ease-out forwards;
+}
+
+/// Scale-in animation
+@mixin animate-scale-in($duration: $duration-base) {
+  animation: scale-in $duration ease-out forwards;
+}
+
+/// Slide-in from left
+@mixin animate-slide-in-left($duration: $duration-base) {
+  animation: slide-in-left $duration ease-out forwards;
+}
+
+/// Slide-in from right
+@mixin animate-slide-in-right($duration: $duration-base) {
+  animation: slide-in-right $duration ease-out forwards;
+}
+
+/// Pulse glow
+@mixin animate-pulse($duration: 2s) {
+  animation: pulse $duration ease-in-out infinite;
+}
+
+/// Spin (for loaders)
+@mixin animate-spin($duration: 1s) {
+  animation: spin $duration linear infinite;
+}
+
+/* =====================================================================
+   MIXINS — ACCESSIBILITY
+   ===================================================================== */
+
+/// Visually hidden (screen-reader only)
+@mixin sr-only {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
+/// Minimum touch target (44x44 for WCAG)
+@mixin touch-target($size: 44px) {
+  min-width: $size;
+  min-height: $size;
+}
+
+/// Safe area insets (for notch devices)
+@mixin safe-area-top {
+  padding-top: env(safe-area-inset-top);
+}
+
+@mixin safe-area-bottom {
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+@mixin safe-area-x {
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
+}
+
+/* =====================================================================
+   MIXINS — PRINT
+   ===================================================================== */
+
+/// Hide element when printing
+@mixin no-print {
+  @include print {
+    display: none !important;
+  }
+}
+
+/// Force page break before element
+@mixin page-break-before {
+  @include print {
+    page-break-before: always;
+    break-before: page;
+  }
+}
+
+/// Avoid breaking inside element
+@mixin page-break-avoid {
+  @include print {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+}
+
+/* =====================================================================
+   MIXINS — NG-ZORRO COMPONENT HELPERS
+   ===================================================================== */
+
+/// Make nz-modal responsive (full-width on mobile)
+@mixin nz-modal-responsive($desktop-width: $modal-width-base) {
+  width: $desktop-width;
+
+  @include mobile {
+    width: calc(100vw - 32px) !important;
+    max-width: calc(100vw - 32px) !important;
+    margin: $spacing-4 auto !important;
+    top: $spacing-4 !important;
+  }
+}
+
+/// Make nz-drawer full-width on mobile
+@mixin nz-drawer-responsive($desktop-width: $drawer-width-base) {
+  .ant-drawer-content-wrapper {
+    width: $desktop-width !important;
+
+    @include mobile {
+      width: 100% !important;
+      max-width: 100vw !important;
+    }
+  }
+}
+
+/// Make horizontal nz-form stack vertically on mobile
+@mixin nz-form-responsive {
+  @include mobile {
+    .ant-form-item-label {
+      text-align: left;
+      flex: none;
+      width: 100%;
+      padding-bottom: $spacing-1;
+    }
+
+    .ant-form-item-control {
+      flex: none;
+      width: 100%;
+    }
+
+    .ant-col {
+      flex: 0 0 100%;
+      max-width: 100%;
+    }
+  }
+}
+
+/// Simplify nz-pagination on mobile (hide page numbers)
+@mixin nz-pagination-responsive {
+  @include mobile {
+    .ant-pagination-item,
+    .ant-pagination-jump-prev,
+    .ant-pagination-jump-next {
+      display: none !important;
+    }
+
+    .ant-pagination-item-active,
+    .ant-pagination-prev,
+    .ant-pagination-next {
+      display: inline-flex !important;
+    }
+
+    .ant-pagination-options {
+      display: none !important;
+    }
+  }
+}
+
+/// Make nz-steps vertical on mobile
+@mixin nz-steps-responsive {
+  @include mobile {
+    &.ant-steps-horizontal:not(.ant-steps-label-vertical) {
+      flex-direction: column;
+
+      .ant-steps-item {
+        padding-left: 0;
+        flex: none;
+      }
+    }
+  }
+}
+
+/// Responsive nz-table wrapper
+@mixin nz-table-responsive($min-width: 600px) {
+  .ant-table-wrapper {
+    @include table-responsive;
+  }
+  .ant-table {
+    min-width: $min-width;
+  }
+}
+
+/// Override nz-card responsive padding
+@mixin nz-card-responsive {
+  .ant-card-body {
+    @include card-padding;
+  }
+  .ant-card-head {
+    padding: 0 $card-padding-mobile;
+
+    @include tablet-up {
+      padding: 0 $card-padding;
+    }
+  }
+}
+
+/* =====================================================================
+   MIXINS — UTILITY GENERATORS
+   ===================================================================== */
+
+/// Generate responsive hide/show classes
+/// Usage in main styles:  @include generate-visibility-classes;
+@mixin generate-visibility-classes {
+  .hide-mobile  { @include mobile  { display: none !important; } }
+  .show-mobile  { @include desktop { display: none !important; } }
+  .hide-tablet  { @include tablet  { display: none !important; } }
+  .hide-desktop { @include desktop { display: none !important; } }
+  .show-desktop { @include mobile  { display: none !important; } }
+  .hide-print   { @include print   { display: none !important; } }
+}
+
+/// Generate spacing utility classes
+/// Usage:  @include generate-spacing-utils;
+/// Creates: .mt-4 { margin-top: 16px }, .px-6 { ... } etc.
+@mixin generate-spacing-utils {
+  @each $key, $value in $spacings {
+    .m-#{$key}  { margin: $value !important; }
+    .mt-#{$key} { margin-top: $value !important; }
+    .mr-#{$key} { margin-right: $value !important; }
+    .mb-#{$key} { margin-bottom: $value !important; }
+    .ml-#{$key} { margin-left: $value !important; }
+    .mx-#{$key} { margin-left: $value !important; margin-right: $value !important; }
+    .my-#{$key} { margin-top: $value !important; margin-bottom: $value !important; }
+
+    .p-#{$key}  { padding: $value !important; }
+    .pt-#{$key} { padding-top: $value !important; }
+    .pr-#{$key} { padding-right: $value !important; }
+    .pb-#{$key} { padding-bottom: $value !important; }
+    .pl-#{$key} { padding-left: $value !important; }
+    .px-#{$key} { padding-left: $value !important; padding-right: $value !important; }
+    .py-#{$key} { padding-top: $value !important; padding-bottom: $value !important; }
+
+    .gap-#{$key} { gap: $value !important; }
+  }
+
+  .m-auto  { margin: auto !important; }
+  .mx-auto { margin-left: auto !important; margin-right: auto !important; }
+  .my-auto { margin-top: auto !important; margin-bottom: auto !important; }
+  .mt-auto { margin-top: auto !important; }
+  .ml-auto { margin-left: auto !important; }
+  .mr-auto { margin-right: auto !important; }
+  .mb-auto { margin-bottom: auto !important; }
+}
+
+/* =====================================================================
+   KEYFRAME DEFINITIONS
+   (Include once in your main styles.scss via @include define-keyframes)
+   ===================================================================== */
+
+@mixin define-keyframes {
+  @keyframes fade-in {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+
+  @keyframes fade-in-up {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes fade-in-down {
+    from { opacity: 0; transform: translateY(-20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes fade-in-left {
+    from { opacity: 0; transform: translateX(-20px); }
+    to   { opacity: 1; transform: translateX(0); }
+  }
+
+  @keyframes fade-in-right {
+    from { opacity: 0; transform: translateX(20px); }
+    to   { opacity: 1; transform: translateX(0); }
+  }
+
+  @keyframes scale-in {
+    from { opacity: 0; transform: scale(0.9); }
+    to   { opacity: 1; transform: scale(1); }
+  }
+
+  @keyframes slide-in-left {
+    from { transform: translateX(-100%); }
+    to   { transform: translateX(0); }
+  }
+
+  @keyframes slide-in-right {
+    from { transform: translateX(100%); }
+    to   { transform: translateX(0); }
+  }
+
+  @keyframes slide-in-up {
+    from { transform: translateY(100%); }
+    to   { transform: translateY(0); }
+  }
+
+  @keyframes slide-in-down {
+    from { transform: translateY(-100%); }
+    to   { transform: translateY(0); }
+  }
+
+  @keyframes spin {
+    from { transform: rotate(0deg); }
+    to   { transform: rotate(360deg); }
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50%      { opacity: 0.5; }
+  }
+
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50%      { transform: translateY(-10px); }
+  }
+
+  @keyframes skeleton-shimmer {
+    0%   { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+  }
+
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    10%, 30%, 50%, 70%, 90% { transform: translateX(-4px); }
+    20%, 40%, 60%, 80% { transform: translateX(4px); }
+  }
+
+  @keyframes ripple {
+    0% { transform: scale(0); opacity: 0.5; }
+    100% { transform: scale(4); opacity: 0; }
+  }
+}

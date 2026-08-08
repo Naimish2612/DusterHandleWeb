@@ -1,0 +1,305 @@
+// @import '../../../../assets/styles/common.scss';
+@use '../../../../assets/styles/common' as *;
+@use '../../../../assets/styles/responsive' as *;
+
+
+// =========================================================================
+// SITE FOOTER — Public Layout
+// =========================================================================
+
+.site-footer {
+
+  // ── Wave separator ───────────────────────────────────────────────
+  &__wave {
+    line-height: 0;
+    background: $neutral-0 !important;
+
+    svg {
+      width: 100%;
+      display: block;
+    }
+  }
+
+  &__body {
+    background: $public-footer-bg;
+    padding: $spacing-16 0 $spacing-12;
+
+    @include mobile {
+      padding: $spacing-10 0 $spacing-8;
+    }
+  }
+
+  &__inner {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: $spacing-12;
+    @include make-container($container-xxl);
+
+    @include tablet {
+      grid-template-columns: 1fr 1fr;
+      gap: $spacing-8;
+    }
+
+    @include mobile {
+      grid-template-columns: 1fr;
+      gap: $spacing-8;
+    }
+  }
+
+  &__col {
+    &--brand {
+      @include tablet {
+        grid-column: 1 / -1;
+      }
+    }
+  }
+
+  &__col-title {
+    display: flex;
+    align-items: center;
+    gap: $spacing-2;
+    font-size: $font-size-xs;
+    font-weight: $font-weight-bold;
+    letter-spacing: $letter-spacing-widest;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.45);
+    margin: 0 0 $spacing-5;
+
+    span[nz-icon] {
+      font-size: $icon-size-sm;
+    }
+  }
+
+  &__about-text {
+    font-size: $font-size-sm;
+    color: $public-footer-text;
+    line-height: $line-height-relaxed;
+    margin: $spacing-4 0 $spacing-6;
+    max-width: 340px;
+  }
+
+  // ── Copyright ────────────────────────────────────────────────────
+  &__copyright {
+    background: $public-footer-bg;
+    //border-top: $border-width-thin solid rgba(255, 255, 255, 0.08);
+    padding: $spacing-4 0;
+  }
+
+  &__copyright-inner {
+    gap: $spacing-4;
+    flex-wrap: wrap;
+    @include make-container($container-xxl);
+    @include flex-between;
+    p {
+      font-size: $font-size-xs;
+      color: rgba(255, 255, 255, 0.4);
+      margin: 0;
+    }
+  }
+
+  &__payment-icons {
+    display: flex;
+    gap: $spacing-2;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+}
+
+// ── Footer logo ────────────────────────────────────────────────────────
+.footer-logo {
+  display: inline-flex;
+  align-items: center;
+  gap: $spacing-2;
+  text-decoration: none;
+
+  &__mark {
+    width: 38px;
+    height: 38px;
+    border-radius: $border-radius-lg;
+    background: linear-gradient(135deg, $primary-500, $primary-700);
+    @include flex-center;
+    font-size: $icon-size-lg;
+    color: $neutral-0;
+    flex-shrink: 0;
+  }
+
+  &__text {
+    font-family: $font-heading;
+    font-size: $font-size-xl;
+    font-weight: $font-weight-bold;
+    color: $neutral-0;
+    letter-spacing: $letter-spacing-tight;
+  }
+
+  &__accent {
+    color: $primary-300;
+  }
+}
+
+// ── Footer links ───────────────────────────────────────────────────────
+.footer-links {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-1;
+
+  &__item {
+    display: flex;
+    align-items: center;
+    gap: $spacing-1-5;
+    font-size: $font-size-sm;
+    color: $public-footer-text;
+    text-decoration: none;
+    padding: $spacing-1-5 0;
+    transition: color $transition-fast, gap $transition-fast;
+
+    span[nz-icon] {
+      font-size: $icon-size-xs;
+      opacity: 0.5;
+      transition: opacity $transition-fast, transform $transition-fast;
+      flex-shrink: 0;
+    }
+
+    &:hover {
+      color: $primary-300;
+      gap: $spacing-2-5;
+
+      span[nz-icon] {
+        opacity: 1;
+        transform: translateX(2px);
+      }
+    }
+  }
+}
+
+// ── Trust badges ───────────────────────────────────────────────────────
+.footer-trust {
+  margin-top: $spacing-6;
+  display: flex;
+  flex-wrap: wrap;
+  gap: $spacing-2;
+
+  &__badge {
+    display: flex;
+    align-items: center;
+    gap: $spacing-1-5;
+    background: rgba(255, 255, 255, 0.07);
+    border: $border-width-thin solid rgba(255, 255, 255, 0.1);
+    border-radius: $border-radius-lg;
+    padding: $spacing-1-5 $spacing-2-5;
+    font-size: $font-size-xs;
+    color: rgba(255, 255, 255, 0.6);
+    font-weight: $font-weight-semibold;
+
+    span[nz-icon] {
+      color: $primary-300;
+      font-size: $icon-size-sm;
+    }
+  }
+}
+
+// ── Newsletter ─────────────────────────────────────────────────────────
+.footer-newsletter {
+  &__label {
+    font-size: $font-size-xs;
+    color: rgba(255, 255, 255, 0.5);
+    margin: 0 0 $spacing-2;
+  }
+
+  &__form {
+    display: flex;
+    gap: $spacing-2;
+    max-width: 320px;
+  }
+
+  &__input.ant-input {
+    background: rgba(255, 255, 255, 0.08) !important;
+    border-color: rgba(255, 255, 255, 0.15) !important;
+    color: $neutral-0 !important;
+    border-radius: $border-radius-lg !important;
+
+    &::placeholder {
+      color: rgba(255, 255, 255, 0.35) !important;
+    }
+
+    &:focus {
+      border-color: $primary-500 !important;
+    }
+  }
+
+  &__btn {
+    border-radius: $border-radius-lg !important;
+    background: $primary-500 !important;
+    border-color: $primary-500 !important;
+    flex-shrink: 0;
+    box-shadow: 0 4px 12px rgba(0, 156, 222, 0.35) !important;
+
+    &:hover {
+      background: $primary-600 !important;
+    }
+  }
+}
+
+// ── Social links ───────────────────────────────────────────────────────
+.footer-social {
+  display: flex;
+  gap: $spacing-2-5;
+  margin-bottom: $spacing-6;
+
+  &__link {
+    width: 40px;
+    height: 40px;
+    border-radius: $border-radius-lg;
+    background: rgba(255, 255, 255, 0.08);
+    border: $border-width-thin solid rgba(255, 255, 255, 0.1);
+    @include flex-center;
+    font-size: $icon-size-lg;
+    color: rgba(255, 255, 255, 0.65);
+    text-decoration: none;
+    transition: background $transition-fast, color $transition-fast,
+      border-color $transition-fast, transform $transition-base;
+
+    &:hover {
+      background: $primary-500;
+      color: $neutral-0;
+      border-color: $primary-500;
+      transform: translateY(-3px);
+    }
+  }
+}
+
+// ── Contact info ───────────────────────────────────────────────────────
+.footer-contact {
+  @include flex-column;
+  gap: $spacing-3;
+
+  &__item {
+    display: flex;
+    align-items: flex-start;
+    gap: $spacing-2;
+    font-size: $font-size-xs;
+    color: $public-footer-text;
+    line-height: $line-height-relaxed;
+
+    span[nz-icon] {
+      color: $primary-300;
+      font-size: $icon-size-sm;
+      margin-top: 2px;
+      flex-shrink: 0;
+    }
+  }
+}
+
+// ── Payment icons ──────────────────────────────────────────────────────
+.payment-icon {
+  background: rgba(255, 255, 255, 0.08);
+  border: $border-width-thin solid rgba(255, 255, 255, 0.12);
+  color: rgba(255, 255, 255, 0.5);
+  font-size: $font-size-xs;
+  font-weight: $font-weight-bold;
+  padding: $spacing-0-5 $spacing-2;
+  border-radius: $border-radius-sm;
+  letter-spacing: $letter-spacing-wide;
+}

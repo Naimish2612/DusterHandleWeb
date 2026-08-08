@@ -1,0 +1,273 @@
+<div nz-row [nzGutter]="[16, 16]" class="process-page">
+  <!-- ================= FORM CARD ================= -->
+  <div nz-col nzSpan="24">
+    @if(showEditButton){
+    <div style="margin-bottom: 20px;">
+      <button nz-button nzType="link" (click)="goBack()">
+        <nz-icon nzType="arrow-left"></nz-icon> Back to List
+      </button>
+    </div>
+    }
+    <nz-card nzTitle="Delivery Policy" [nzExtra]="extraTemplate">
+      <form nz-form [formGroup]="form" nzLayout="vertical">
+        <div nz-row [nzGutter]="[16, 16]">
+          <!-- Policy Name -->
+          <div nz-col [nzXs]="24" [nzLg]="6">
+            <nz-form-item>
+              <nz-form-label nzRequired>Policy Name</nz-form-label>
+              <nz-form-control nzErrorTip="Please enter policy name (min 3 characters)">
+                <input nz-input formControlName="policy_name" placeholder="Enter Policy Name" type="text" />
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+
+          <!-- Calculation Type -->
+          <div nz-col [nzXs]="24" [nzLg]="6">
+            <nz-form-item>
+              <nz-form-label nzRequired>Calculation Type</nz-form-label>
+              <nz-form-control nzErrorTip="Please select a calculation type">
+                <nz-select formControlName="calculation_type" nzPlaceHolder="Select Calculation Type">
+                  <nz-option *ngFor="let item of calculationTypeOptions" [nzValue]="item.value"
+                    [nzLabel]="item.label"></nz-option>
+                </nz-select>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+
+          <!-- Effective From -->
+          <div nz-col [nzXs]="24" [nzLg]="6">
+            <nz-form-item>
+              <nz-form-label nzRequired>Effective From</nz-form-label>
+              <nz-form-control nzErrorTip="Please select effective from date and time">
+                <nz-date-picker formControlName="effective_from" nzFormat="yyyy-MM-dd HH:mm:ss"
+                  nzPlaceHolder="Select Effective From" nzShowTime style="width: 100%"></nz-date-picker>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+
+          <!-- Effective To -->
+          <div nz-col [nzXs]="24" [nzLg]="6">
+            <nz-form-item>
+              <nz-form-label>Effective To</nz-form-label>
+              <nz-form-control>
+                <nz-date-picker formControlName="effective_to" nzFormat="yyyy-MM-dd HH:mm:ss"
+                  nzPlaceHolder="Select Effective To (Optional)" nzShowTime style="width: 100%"></nz-date-picker>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+
+          <!-- Min Charge -->
+          <div nz-col [nzXs]="24" [nzLg]="6">
+            <nz-form-item>
+              <nz-form-label nzRequired>Min Charge</nz-form-label>
+              <nz-form-control nzErrorTip="Please enter minimum charge (min 1)">
+                <nz-input-number formControlName="min_charge" [nzMin]="1" [nzStep]="1"
+                  nzPlaceHolder="Enter Minimum Charge" style="width: 100%"></nz-input-number>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+
+          <!-- Max Charge -->
+          <div nz-col [nzXs]="24" [nzLg]="6">
+            <nz-form-item>
+              <nz-form-label nzRequired>Max Charge</nz-form-label>
+              <nz-form-control [nzErrorTip]="maxChargeErrorTpl">
+                <nz-input-number formControlName="max_charge" [nzMin]="(form.get('min_charge')?.value) + 1" [nzStep]="1"
+                  nzPlaceHolder="Enter Maximum Charge" style="width: 100%"></nz-input-number>
+                <ng-template #maxChargeErrorTpl let-control>
+                  @if (control.hasError('required') || control.hasError('min')) {
+                  Please enter maximum charge (min 1)
+                  }
+                  @if (control.hasError('maxLessThanMin')) {
+                  Max Charge must be greater than Min Charge
+                  }
+                </ng-template>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+
+          <!-- Tax Percentage -->
+          <div nz-col [nzXs]="24" [nzLg]="6">
+            <nz-form-item>
+              <nz-form-label nzRequired>Tax Percentage</nz-form-label>
+              <nz-form-control [nzErrorTip]="taxPercentageErrorTpl">
+                <nz-input-number formControlName="tax_percentage" [nzMin]="1" [nzMax]="100" [nzStep]="0.1"
+                  nzPlaceHolder="Enter Tax Percentage" style="width: 100%"></nz-input-number>
+                <ng-template #taxPercentageErrorTpl let-control>
+                  @if (control.hasError('required') || control.hasError('min')) {
+                  Please enter tax percentage (min 1)
+                  }
+                  @if (control.hasError('max')) {
+                  Tax percentage cannot be more than 100%
+                  }
+                </ng-template>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+
+          <!-- Status -->
+          <div nz-col [nzXs]="24" [nzLg]="6">
+            <nz-form-item>
+              <nz-form-label>IsActive</nz-form-label>
+              <nz-form-control>
+                <nz-switch formControlName="is_active"></nz-switch>
+                <span class="switch-label">
+                  {{ form.get("is_active")?.value ? "Active" : "Inactive" }}
+                </span>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+
+          <!-- ACTIONS -->
+          <div nz-col nzSpan="24" class="form-actions">
+            @if (showAddButton) {
+            <button nz-button nzType="primary" htmlType="submit" [disabled]="!form.valid" (click)="submit()">
+              <nz-icon nzType="save"></nz-icon> Save
+            </button>
+            }
+            @if (showEditButton && hasEditPermission) {
+            <button nz-button nzType="primary" [disabled]="!form.valid" (click)="deliveryPolicyUpdate()">
+              <nz-icon nzType="edit"></nz-icon> Update
+            </button>
+            }
+            <button nz-button nzType="default" type="button" (click)="reset()">
+              <nz-icon nzType="reload"></nz-icon> Reset
+            </button>
+          </div>
+        </div>
+      </form>
+    </nz-card>
+  </div>
+
+  <!-- ================= SLAB CONFIGURATION MODAL ================= -->
+  <nz-modal [nzVisible]="showSlabModal" nzTitle="Configure Delivery Slabs" [nzFooter]="null" [nzWidth]="1000"
+    [nzClosable]="false">
+    <div *nzModalContent>
+      <div style="margin-bottom: 16px;">
+        <p>Set up range slabs for the newly created delivery policy. The next range start is automatically calculated
+          based on the previous range end.</p>
+      </div>
+
+      <!-- Slabs Table -->
+      <nz-table #slabsTable [nzData]="slabsList" [nzFrontPagination]="false" [nzShowPagination]="false" nzSize="middle">
+        <thead>
+          <tr>
+            <th>Range Start</th>
+            <th>Range End</th>
+            <th>Slab Percentage (%)</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (item of slabsList; track item.range_start; let idx = $index) {
+          <tr>
+            <td>{{ item.range_start }}</td>
+            <td>{{ item.range_end }}</td>
+            <td>{{ item.percentage }}%</td>
+            <td>
+              <button nz-button nzType="text" nzDanger (click)="removeSlabRow(idx)">
+                <span nz-icon nzType="delete"></span> Delete
+              </button>
+            </td>
+          </tr>
+          }
+          <!-- Input row for adding new slab -->
+          <tr class="input-row">
+            <td>
+              <input nz-input [value]="newSlabRangeStart" readonly disabled style="background-color: #f5f5f5;" />
+            </td>
+            <td>
+              <nz-input-number [(ngModel)]="newSlabRangeEnd" [nzMin]="newSlabRangeStart + 1" [nzStep]="1"
+                nzPlaceHolder="Enter Range End" style="width: 100%"></nz-input-number>
+            </td>
+            <td>
+              <nz-input-number [(ngModel)]="newSlabPercentage" [nzMin]="0" [nzMax]="100" [nzStep]="0.1"
+                nzPlaceHolder="Enter Percentage" style="width: 100%"></nz-input-number>
+            </td>
+            <td>
+              <button nz-button nzType="primary" (click)="addSlabRow()">
+                <span nz-icon nzType="plus"></span> Add
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </nz-table>
+
+      <!-- Modal Actions -->
+      <div class="form-actions" style="margin-top: 24px; justify-content: flex-end;">
+        <button nz-button nzType="primary" (click)="submitSlabs()" [disabled]="slabsList.length === 0">
+          <span nz-icon nzType="save"></span> Save Slabs
+        </button>
+      </div>
+    </div>
+  </nz-modal>
+
+  <!-- ================= SIMULATOR MODAL ================= -->
+  <nz-modal
+    [nzVisible]="showSimulatorModal"
+    nzTitle="Delivery Cost Simulator"
+    [nzFooter]="null"
+    [nzWidth]="800"
+    (nzOnCancel)="closeSimulatorModal()"
+  >
+    <div *nzModalContent>
+      @if (simulatorForm) {
+        <form nz-form [formGroup]="simulatorForm" nzLayout="vertical">
+          <div nz-row [nzGutter]="[16, 16]">
+            <!-- Order Amount Input & Action Button -->
+            <div nz-col nzSpan="24">
+              <nz-form-item>
+                <nz-form-label nzRequired>Order Amount (INR)</nz-form-label>
+                <nz-form-control nzErrorTip="Please enter a valid order amount">
+                  <div style="display: flex; align-items: center; gap: 8px;">
+                    <nz-input-number
+                      formControlName="order_amount"
+                      nzPlaceHolder="Enter Order Amount to Simulate"
+                      [nzMin]="0"
+                      style="flex: 1;"
+                    ></nz-input-number>
+                    <button
+                      nz-button
+                      nzType="primary"
+                      type="button"
+                      (click)="calculateDeliveryCost()"
+                      [nzLoading]="simulatorLoading"
+                      [disabled]="!simulatorForm.valid"
+                      style="display: flex; align-items: center; justify-content: center; height: 32px; gap: 4px;"
+                    >
+                      <nz-icon nzType="calculator"></nz-icon> Simulate Cost
+                    </button>
+                  </div>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+          </div>
+        </form>
+      }
+
+      @if (simulatorResults) {
+        <nz-divider></nz-divider>
+        <div class="simulator-output">
+          <delivery-policy-simulator-result
+            [data]="simulatorResults"
+            [close]="closeSimulatorModal.bind(this)"
+          ></delivery-policy-simulator-result>
+        </div>
+      }
+    </div>
+  </nz-modal>
+
+  <!-- Simulator Icon Template -->
+  <ng-template #extraTemplate>
+    <button
+      nz-button
+      nzType="default"
+      (click)="openSimulatorModal()"
+      title="Delivery Cost Simulator"
+      type="button"
+      style="display: flex; align-items: center; justify-content: center; width: 32px; height: 32px; padding: 0;"
+    >
+      <nz-icon nzType="calculator"></nz-icon>
+    </button>
+  </ng-template>
+</div>

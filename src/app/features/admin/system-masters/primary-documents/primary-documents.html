@@ -1,0 +1,129 @@
+<div nz-row [nzGutter]="[16, 16]" class="process-page">
+  <!-- ================= FORM CARD ================= -->
+  <div nz-col nzSpan="24">
+    <nz-card [nzTitle]="showUpdateButton ? 'Update Primary Document' : 'Add Primary Document'">
+      <form nz-form [formGroup]="form" nzLayout="vertical">
+        <div nz-row [nzGutter]="[16, 16]">
+          <!-- Document Name -->
+          <div nz-col [nzXs]="24" [nzLg]="18">
+            <nz-form-item>
+              <nz-form-label nzRequired>Document Name</nz-form-label>
+              <nz-form-control
+                nzErrorTip="Please enter document name (min 3 characters, max 150)"
+              >
+                <input
+                  nz-input
+                  formControlName="document_name"
+                  placeholder="Enter Document Name"
+                  type="text"
+                  (keydown.tab)="formatDocumentName()"
+                />
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+
+          <!-- Is Active status -->
+          <div nz-col [nzXs]="24" [nzLg]="6">
+            <nz-form-item>
+              <nz-form-label>Is Active</nz-form-label>
+              <nz-form-control>
+                <nz-switch formControlName="is_active"></nz-switch>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+
+          <!-- Body HTML (Rich Text Editor) -->
+          <div nz-col [nzXs]="24">
+            <nz-form-item>
+              <nz-form-label nzRequired>Body HTML</nz-form-label>
+              <nz-form-control nzErrorTip="Please enter body HTML content">
+                <angular-editor formControlName="body_html" [config]="editorConfig"></angular-editor>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+
+          <!-- ACTIONS -->
+          <div nz-col nzSpan="24" class="form-actions" style="margin-top: 20px">
+            @if(showAddButton && hasAddPermission){
+              <button
+                nz-button
+                nzType="primary"
+                [disabled]="!form.valid"
+                (click)="submit()"
+              >
+                <nz-icon nzType="save"></nz-icon> Save
+              </button>
+            }
+            @if(showUpdateButton && hasEditPermission){
+              <button
+                nz-button
+                nzType="primary"
+                [disabled]="!form.valid"
+                (click)="update()"
+              >
+                <nz-icon nzType="edit"></nz-icon> Update
+              </button>
+            }
+            <button nz-button nzType="default" type="button" (click)="reset()">
+              <nz-icon nzType="reload"></nz-icon> Reset
+            </button>
+          </div>
+        </div>
+      </form>
+    </nz-card>
+  </div>
+
+  <!-- ================= GRID ================= -->
+  <nz-divider nzOrientation="left" nzText="Primary Document List"></nz-divider>
+  <div nz-col nzSpan="24">
+    <nz-card>
+      <div class="table-wrapper">
+        <ui-grid
+          [title]=""
+          ref_name="Primary Document List"
+          [autoColumns]="true"
+          [dataSource]="gridDataSource"
+          [autoLoad]="true"
+          [reloadOn]="gridReload$"
+          [pageSize]="10"
+          [pageSizeOptions]="[10, 20, 50]"
+          [serverSide]="false"
+          [selectable]="false"
+          selectionMode="multiple"
+          [actions]="[
+            {
+              key: 'edit',
+              icon: 'edit',
+              tooltip: 'Edit',
+              showIf: this.hasEditPermission
+            },
+            {
+              key: 'preview',
+              icon: 'eye',
+              tooltip: 'Preview'
+            }
+          ]"
+          (selectionChange)="selectionChanged($event)"
+          (action)="onAction($event)"
+          [hildeColumn]="['document_id', 'body_html']"
+        ></ui-grid>
+      </div>
+    </nz-card>
+  </div>
+</div>
+
+<!-- ================= HTML PREVIEW MODAL ================= -->
+<nz-modal
+  [(nzVisible)]="isPreviewVisible"
+  [nzTitle]="'Document Preview: ' + previewDocName"
+  [nzFooter]="null"
+  (nzOnCancel)="closePreview()"
+  [nzWidth]="800"
+  nzCentered
+>
+  <ng-container *nzModalContent>
+    <div class="template-preview-container" style="background: #ffffff; padding: 20px; border-radius: 4px; max-height: 60vh; overflow-y: auto; border: 1px solid #f0f0f0;">
+      <div [innerHTML]="previewBodyHtml"></div>
+    </div>
+  </ng-container>
+</nz-modal>

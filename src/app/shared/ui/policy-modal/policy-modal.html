@@ -1,0 +1,62 @@
+<!-- src/app/shared/components/policy-modal/policy-modal.component.html -->
+
+<div class="policy-overlay" *ngIf="isVisible" (click)="onOverlayClick($event)" role="dialog" aria-modal="true"
+    [attr.aria-label]="displayTitle">
+    <div class="policy-modal" (click)="stopPropagation($event)">
+
+        <!-- ─── MODAL HEADER ─── -->
+        <div class="policy-modal__header">
+            <div class="policy-modal__title-wrap">
+                <span class="policy-modal__icon">{{ meta.icon }}</span>
+                <h2 class="policy-modal__title">{{ displayTitle }}</h2>
+            </div>
+
+            <button class="policy-modal__close" (click)="onClose()" aria-label="Close modal" type="button">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="18" y1="6" x2="6" y2="18" />
+                    <line x1="6" y1="6" x2="18" y2="18" />
+                </svg>
+            </button>
+        </div>
+
+        <!-- ─── DIVIDER ─── -->
+        <div class="policy-modal__divider"></div>
+
+        <!-- ─── MODAL BODY ─── -->
+        <div class="policy-modal__body">
+
+            <!-- Loading State -->
+            <div class="policy-modal__loading" *ngIf="isLoading">
+                <div class="spinner">
+                    <div class="spinner__ring"></div>
+                </div>
+                <p class="policy-modal__loading-text">Loading content...</p>
+            </div>
+
+            <!-- Error State -->
+            <div class="policy-modal__error" *ngIf="hasError && !isLoading">
+                <div class="policy-modal__error-icon"><span nz-icon nzType="warning" nzTheme="outline"></span></div>
+                <p class="policy-modal__error-msg">{{ errorMessage }}</p>
+                <button class="policy-modal__retry-btn" (click)="fetchPolicy(policyKey)" type="button">
+                    Try Again
+                </button>
+            </div>
+
+            <!-- Content — supports HTML from API -->
+            <div class="policy-modal__content" *ngIf="policyData && !isLoading && !hasError"
+                [innerHTML]="policyData"></div>
+
+        </div>
+
+        <!-- ─── MODAL FOOTER ─── -->
+        <div class="policy-modal__footer" *ngIf="!isLoading && !hasError">
+            <p class="policy-modal__footer-note">
+                By using our services, you acknowledge that you have read and understood this document.
+            </p>
+            <button class="policy-modal__accept-btn" (click)="onClose()" type="button">
+                I Understand
+            </button>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,227 @@
+<div class="chat-page-container">
+  <!-- Header Card: Ticket Info and Admin Actions -->
+  @if (ticket) {
+    <nz-card class="ticket-header-card">
+      <div class="header-main-row">
+        <div class="left-section">
+          <button nz-button nzType="default" (click)="goBack()" class="back-btn">
+            <nz-icon nzType="arrow-left"></nz-icon> Back
+          </button>
+          <span class="ticket-title">Ticket #{{ ticket.ticket_no }}</span>
+          <nz-tag [nzColor]="getStatusColor(ticket.status)" class="status-tag">
+            {{ ticket.status }}
+          </nz-tag>
+          @if (ticket.priority) {
+            <nz-tag nzColor="red" class="priority-tag"> {{ ticket.priority }} Priority </nz-tag>
+          }
+        </div>
+
+        @if (ticket.status !== 'Closed') {
+          <div class="right-section">
+            @if (hasUpdatePermission) {
+              <nz-select
+                [ngModel]="ticket.status"
+                (ngModelChange)="updateStatus($event)"
+                nzPlaceHolder="Change Status"
+                [nzLoading]="isStatusUpdating"
+                style="width: 180px"
+              >
+                <nz-option nzValue="Open" nzLabel="Open" nzDisabled></nz-option>
+                <nz-option nzValue="In Progress" nzLabel="In Progress" nzDisabled></nz-option>
+                <nz-option nzValue="Resolved" nzLabel="Resolve Ticket"></nz-option>
+                <nz-option nzValue="Closed" nzLabel="Close Ticket"></nz-option>
+              </nz-select>
+            }
+          </div>
+        }
+      </div>
+
+      <nz-divider class="header-divider"></nz-divider>
+
+      <div class="ticket-meta-grid">
+        <div class="meta-item">
+          <span class="meta-label">Customer:</span>
+          <span class="meta-value">{{ ticket.user_name || ticket.user_id || 'N/A' }}</span>
+        </div>
+        @if (ticket.email_id) {
+          <div class="meta-item">
+            <span class="meta-label">Email:</span>
+            <span class="meta-value">{{ ticket.email_id }}</span>
+          </div>
+        }
+        @if (ticket.mobile_no) {
+          <div class="meta-item">
+            <span class="meta-label">Mobile:</span>
+            <span class="meta-value">{{ ticket.mobile_no }}</span>
+          </div>
+        }
+        @if (ticket.product_name) {
+          <div class="meta-item">
+            <span class="meta-label">Product:</span>
+            <span class="meta-value">{{ ticket.product_name }}</span>
+          </div>
+        }
+        @if (ticket.order_no) {
+          <div class="meta-item">
+            <span class="meta-label">Order:</span>
+            <span class="meta-value">{{ ticket.order_no }}</span>
+          </div>
+        }
+      </div>
+    </nz-card>
+  }
+
+  <!-- Chat Log Area -->
+  <div class="chat-log-wrapper">
+    @if (!isLoading) {
+      <div class="messages-container">
+        @for (msg of messages; track msg.message_id) {
+          <div
+            class="message-row"
+            [ngClass]="{
+              'customer': msg.sender_type === 'Customer',
+              'agent': msg.sender_type === 'Support_Agent',
+              'system': msg.sender_type === 'System_Bot'
+            }"
+          >
+            <!-- System Message -->
+            @if (msg.sender_type === 'System_Bot') {
+              <div class="system-message-bubble">
+                <nz-icon nzType="info-circle" nzTheme="outline" class="system-icon"></nz-icon>
+                <span>{{ msg.message_text }}</span>
+              </div>
+            }
+
+            <!-- Chat Bubble (Customer & Agent) -->
+            @if (msg.sender_type !== 'System_Bot') {
+              <div class="bubble-wrapper">
+                <div class="sender-name">
+                  {{
+                    msg.sender_type === 'Customer'
+                      ? ticket.user_name || 'Customer'
+                      : 'Support Agent (You)'
+                  }}
+                  @if (msg.created_at) {
+                    <span class="message-time"> • {{ msg.created_at | date: 'shortTime' }}</span>
+                  }
+                </div>
+                <div class="bubble-content">
+                  <p class="message-text">{{ msg.message_text }}</p>
+
+                  <!-- Attachment Previews inside Message -->
+                  @if (msg.upload_attachments.length) {
+                    <div class="attachments-gallery">
+                      @for (url of msg.upload_attachments; track $index) {
+                        <div class="attachment-item">
+                          <a [href]="url" target="_blank" class="attachment-link">
+                            <img [src]="url" alt="Attachment" class="attachment-img" />
+                            <div class="attachment-overlay">
+                              <nz-icon nzType="eye" nzTheme="outline"></nz-icon>
+                            </div>
+                          </a>
+                        </div>
+                      }
+                    </div>
+                  }
+                </div>
+              </div>
+            }
+          </div>
+        }
+
+        @if (messages.length === 0) {
+          <div class="empty-thread-state">
+            <nz-icon nzType="message" nzTheme="outline" class="empty-icon"></nz-icon>
+            <p>No messages in this support ticket yet.</p>
+          </div>
+        }
+      </div>
+    }
+  </div>
+
+  <!-- Reply Input Footer -->
+  @if (ticket && ticket.status !== 'Closed' && ticket.status !== 'Resolved') {
+    <div class="chat-footer-card">
+      <!-- Selected Files Preview Chips -->
+      @if (selectedFiles.length > 0) {
+        <div class="selected-files-bar">
+          @for (file of selectedFiles; track file.name; let idx = $index) {
+            <div class="file-chip">
+              <nz-icon nzType="file-image" class="file-icon"></nz-icon>
+              <span class="file-name">{{ file.name }}</span>
+              <button
+                nz-button
+                nzType="text"
+                nzShape="circle"
+                class="remove-file-btn"
+                (click)="removeSelectedFile(idx)"
+              >
+                <nz-icon nzType="close"></nz-icon>
+              </button>
+            </div>
+          }
+        </div>
+      }
+
+      <!-- Message input controls -->
+      @if (hasEditPermission) {
+        <div class="footer-input-row">
+          <button
+            nz-button
+            nzType="default"
+            class="attach-btn"
+            (click)="fileInput.click()"
+            [disabled]="isSending"
+          >
+            <nz-icon nzType="paper-clip"></nz-icon>
+          </button>
+          <input
+            #fileInput
+            type="file"
+            multiple
+            accept="image/*"
+            style="display: none"
+            (change)="onFileSelected($event)"
+          />
+
+          <textarea
+            nz-input
+            [(ngModel)]="replyText"
+            placeholder="Type a response..."
+            [nzAutosize]="{ minRows: 1, maxRows: 4 }"
+            (keydown.enter)="$event.preventDefault(); sendReply()"
+            [disabled]="isSending"
+            class="reply-textarea"
+          ></textarea>
+
+          <button
+            nz-button
+            nzType="primary"
+            class="send-btn"
+            (click)="sendReply()"
+            [nzLoading]="isSending"
+            [disabled]="!replyText.trim() && selectedFiles.length === 0"
+          >
+            <nz-icon nzType="send" nzTheme="outline"></nz-icon> Send
+          </button>
+        </div>
+      } @else {
+        <div class="closed-ticket-warning">
+          <nz-icon nzType="lock" nzTheme="outline" class="lock-icon"></nz-icon>
+          <span
+            >Your account does not have the required permissions to send messages in this
+            channel.</span
+          >
+        </div>
+      }
+    </div>
+  }
+
+  <!-- Closed Ticket Warning -->
+  @if (ticket && ticket.status === 'Closed') {
+    <div class="closed-ticket-warning">
+      <nz-icon nzType="lock" nzTheme="outline" class="lock-icon"></nz-icon>
+      <span>This support ticket has been closed. You cannot send replies to this thread.</span>
+    </div>
+  }
+</div>

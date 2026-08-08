@@ -1,0 +1,262 @@
+<!-- =====================================================================
+     ADMIN PROFILE PAGE
+     ===================================================================== -->
+<div class="profile-page">
+  <!-- ── Page header ──────────────────────────────────────────────── -->
+  <div class="profile-page__banner">
+    <div class="profile-page__banner-inner">
+      <h1 class="profile-page__title">
+        <span nz-icon nzType="user"></span>
+        Admin Profile
+      </h1>
+      <p class="profile-page__subtitle">Manage your personal information and security settings</p>
+    </div>
+  </div>
+
+  <div class="profile-page__body">
+    <!-- ── Left: User card ──────────────────────────────────────── -->
+    <aside class="profile-sidebar">
+      @if (isLoading()) {
+      <nz-skeleton [nzActive]="true" [nzAvatar]="true" [nzParagraph]="{ rows: 4 }"></nz-skeleton>
+      }
+
+      @if (!isLoading() && user(); as u) {
+      <!-- Avatar + name -->
+      <div class="profile-sidebar__avatar-area">
+        <div class="profile-sidebar__avatar-wrap">
+          <!-- Show image if profilePhotoUrl exists, otherwise show initials -->
+          @if (u.profilePhotoUrl) {
+          <nz-avatar [nzSrc]="u.profilePhotoUrl" [nzSize]="96" class="profile-sidebar__avatar"></nz-avatar>
+          } @else {
+          <nz-avatar [nzText]="userInitials" [nzSize]="96" class="profile-sidebar__avatar"></nz-avatar>
+          }
+
+          <!-- Loading overlay while uploading -->
+          @if (isUploadingPic()) {
+          <div class="profile-sidebar__avatar-loading">
+            <span nz-icon nzType="loading"></span>
+          </div>
+          }
+
+          <!-- Camera button to trigger file input -->
+          <button class="profile-sidebar__avatar-edit" aria-label="Change photo" (click)="fileInput.click()"
+            [disabled]="isUploadingPic()">
+            <span nz-icon nzType="camera"></span>
+          </button>
+
+          <!-- Hidden file input -->
+          <input #fileInput type="file" accept="image/jpeg,image/jpg,image/png,image/webp"
+            (change)="onAvatarChange($event)" style="display: none" />
+        </div>
+
+        <h3 class="profile-sidebar__name">{{ u.fullName }}</h3>
+        <p class="profile-sidebar__email">{{ u.email }}</p>
+
+        <!-- Remove pic button (only shows when pic exists) -->
+        @if (u.profilePhotoUrl) {
+        <button nz-button nzType="link" nzDanger nzSize="small" (click)="removeProfilePic()"
+          [disabled]="isUploadingPic()">
+          <span nz-icon nzType="delete"></span>
+          Remove Photo
+        </button>
+        }
+
+        <span class="profile-sidebar__member-since">
+          <span nz-icon nzType="calendar"></span>
+          Member since {{ memberSince }}
+        </span>
+      </div>
+      
+      <nz-divider></nz-divider>
+
+      <!-- Verification status -->
+      <div class="profile-sidebar__verifications">
+        <h4 class="profile-sidebar__section-label">Verification Status</h4>
+
+        <div class="verify-row">
+          <div class="verify-row__icon verify-row__icon--email">
+            <span nz-icon nzType="mail"></span>
+          </div>
+          <div class="verify-row__info">
+            <span class="verify-row__label">Email Address</span>
+            <span class="verify-row__value">{{ u.email }}</span>
+          </div>
+          <nz-tag [nzColor]="u.emailVerify ? 'green' : 'orange'" class="verify-row__tag">
+            <span nz-icon [nzType]="u.emailVerify ? 'check-circle' : 'close-circle'"></span>
+            {{ u.emailVerify ? 'Verified' : 'Not Verified' }}
+          </nz-tag>
+        </div>
+
+        <div class="verify-row">
+          <div class="verify-row__icon verify-row__icon--phone">
+            <span nz-icon nzType="phone"></span>
+          </div>
+          <div class="verify-row__info">
+            <span class="verify-row__label">Mobile Number</span>
+            <span class="verify-row__value">{{ u.mobileNo }}</span>
+          </div>
+          <nz-tag [nzColor]="u.phoneVerify ? 'green' : 'orange'" class="verify-row__tag">
+            <span nz-icon [nzType]="u.phoneVerify ? 'check-circle' : 'close-circle'"></span>
+            {{ u.phoneVerify ? 'Verified' : 'Not Verified' }}
+          </nz-tag>
+        </div>
+      </div>
+      }
+    </aside>
+
+    <!-- ── Right: Tabs ───────────────────────────────────────────── -->
+    <div class="profile-content">
+      <nz-tabs nzSize="large" [nzAnimated]="false" class="profile-tabs">
+        <!-- ════ Tab 1: Personal Info ════ -->
+        <nz-tab [nzTitle]="tabTitle1">
+          <ng-template #tabTitle1>
+            <span nz-icon nzType="idcard" class="ml-5"></span>
+            Personal Info
+          </ng-template>
+
+          <div class="profile-tab-pane">
+            @if (isLoading()) {
+            <nz-skeleton [nzActive]="true" [nzParagraph]="{ rows: 8 }"></nz-skeleton>
+            }
+
+            @if (!isLoading()) {
+            <div class="form-section-header">
+              <h3>Personal Information</h3>
+              <p>Update your name, gender and date of birth.</p>
+            </div>
+
+            <form nz-form nzLayout="vertical" [formGroup]="profileForm" (ngSubmit)="saveProfile()" class="profile-form">
+              <!-- Row: Full name & Email -->
+              <div class="profile-form__row">
+                <nz-form-item>
+                  <nz-form-label nzRequired nzFor="full_name">Full Name</nz-form-label>
+                  <nz-form-control nzHasFeedback [nzErrorTip]="fnErr">
+                    <nz-input-group [nzPrefix]="pfxUser">
+                      <input nz-input id="full_name" formControlName="full_name" placeholder="Name" />
+                    </nz-input-group>
+                    <ng-template #pfxUser><span nz-icon nzType="user"></span></ng-template>
+                    <ng-template #fnErr>
+                      @if (profileForm.get('full_name')?.hasError('required')) {
+                      Full name is required
+                      } @else {
+                      Minimum 2 characters
+                      }
+                    </ng-template>
+                  </nz-form-control>
+                </nz-form-item>
+
+                <!-- Email (editable) -->
+                <nz-form-item>
+                  <nz-form-label nzFor="email_id">Email Address</nz-form-label>
+                  <nz-form-control [nzWarningTip]="user()?.emailVerify ? undefined : emailWarnTpl">
+                    <nz-input-group [nzPrefix]="pfxMail" [nzSuffix]="sfxEmailAction">
+                      <input nz-input id="email" formControlName="email_id" type="email" />
+                    </nz-input-group>
+                    <ng-template #pfxMail><span nz-icon nzType="mail"></span></ng-template>
+                    <ng-template #sfxEmailAction>
+                      @if (user()?.emailVerify) {
+                        <span nz-icon nzType="check-circle" style="color: #52c41a" nz-tooltip
+                          nzTooltipTitle="Email is verified"></span>
+                      } @else {
+                        <span nz-icon nzType="exclamation-circle" style="color: #fa8c16; cursor: pointer" nz-tooltip
+                          nzTooltipTitle="Email not verified. Click to verify." (click)="openVerificationModal()"></span>
+                      }
+                    </ng-template>
+                    <ng-template #emailWarnTpl>
+                      Email is not verified. <a (click)="openVerificationModal()" style="font-weight: 600; color: #fa8c16;">Click here to verify</a>
+                    </ng-template>
+                  </nz-form-control>
+                </nz-form-item>
+              </div>
+
+              <!-- mobile_no -->
+              <nz-form-item>
+                <nz-form-label nzFor="mobile_no">Mobile Number</nz-form-label>
+                <nz-form-control nzWarningTip="Contact support to change your registered mobile number.">
+                  <nz-input-group [nzPrefix]="pfxPhone" [nzSuffix]="sfxPhoneLocked">
+                    <input nz-input id="mobile_no" formControlName="mobile_no" type="tel" />
+                  </nz-input-group>
+                  <ng-template #pfxPhone><span nz-icon nzType="phone"></span></ng-template>
+                  <ng-template #sfxPhoneLocked>
+                    <span nz-icon nzType="lock" style="color: #52c41a" nz-tooltip
+                      nzTooltipTitle="Mobile number cannot be changed"></span>
+                  </ng-template>
+                </nz-form-control>
+              </nz-form-item>
+
+              <!-- Row: Gender + DOB -->
+              <div class="profile-form__row">
+                <nz-form-item>
+                  <nz-form-label nzFor="gender">Gender</nz-form-label>
+                  <nz-form-control>
+                    <nz-select formControlName="gender" nzPlaceHolder="Select gender" nzSize="large">
+                      @for (g of genderOptions; track g.value) {
+                      <nz-option [nzValue]="g.value" [nzLabel]="g.label"></nz-option>
+                      }
+                    </nz-select>
+                  </nz-form-control>
+                </nz-form-item>
+
+                <nz-form-item>
+                  <nz-form-label nzFor="birthdate">Date of Birth</nz-form-label>
+                  <nz-form-control>
+                    <nz-date-picker id="birthdate" formControlName="birthdate" nzFormat="dd/MM/yyyy"
+                      nzPlaceHolder="DD/MM/YYYY" nzSize="large" style="width: 100%"></nz-date-picker>
+                  </nz-form-control>
+                </nz-form-item>
+              </div>
+
+              <!-- Save button -->
+              <div class="profile-form__actions">
+                <button nz-button nzType="primary" nzSize="large" type="submit" [nzLoading]="isSaving()"
+                  [disabled]="isFormUnchanged() || profileForm.invalid" class="profile-form__save-btn">
+                  <span nz-icon nzType="save"></span>
+                  Save Changes
+                </button>
+              </div>
+            </form>
+            }
+          </div>
+        </nz-tab>
+      </nz-tabs>
+    </div>
+  </div>
+</div>
+
+<!-- OTP Verification Modal -->
+<nz-modal
+  [(nzVisible)]="isOtpModalVisible"
+  nzTitle="Verify Email Address"
+  (nzOnCancel)="closeOtpModal()"
+  (nzOnOk)="submitOtp()"
+  [nzOkLoading]="isVerifyingOtp"
+  [nzOkDisabled]="otpCode.length !== 6"
+  nzWidth="400px"
+>
+  <div *nzModalContent style="text-align: center; padding: 12px 0;">
+    <span nz-icon nzType="mail" style="font-size: 48px; color: #fa8c16; margin-bottom: 16px; display: inline-block;"></span>
+    <h3 style="margin-bottom: 8px; font-weight: 600;">Enter Verification Code</h3>
+    <p style="color: #64748b; font-size: 14px; margin-bottom: 24px;">
+      We have sent a 6-digit OTP code to <br/>
+      <strong>{{ profileForm.get('email_id')?.value }}</strong>
+    </p>
+    
+    <div style="margin-bottom: 24px;">
+      <input
+        nz-input
+        nzSize="large"
+        placeholder="••••••"
+        [(ngModel)]="otpCode"
+        [maxlength]="6"
+        style="text-align: center; letter-spacing: 12px; font-size: 24px; font-weight: 700; max-width: 240px; border-radius: 8px;"
+      />
+    </div>
+    
+    <p style="font-size: 13px; color: #94a3b8; margin: 0;">
+      Didn't receive the email? 
+      <button nz-button nzType="link" nzSize="small" [disabled]="isSendingOtp" (click)="sendOtp()" style="padding: 0; font-weight: 500;">
+        Resend OTP
+      </button>
+    </p>
+  </div>
+</nz-modal>

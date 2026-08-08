@@ -1,0 +1,1031 @@
+// =========================================================================
+// ADDRESS BOOK — Component Styles
+// Uses ONLY variables and mixins from _common.scss
+// =========================================================================
+
+// =========================================================================
+// PAGE WRAPPER
+// =========================================================================
+
+@use '../../../../assets/styles/common' as *;
+@use '../../../../assets/styles/responsive' as *;
+
+.ab-page {
+  background: $color-bg-body;
+  min-height: 100vh;
+  font-family: $font-primary;
+
+  // ── Banner ──────────────────────────────────────────────────────
+  &__banner {
+    background: linear-gradient(135deg, $primary-900 0%, $primary-700 55%, $primary-500 100%);
+    padding: $spacing-10 0 $spacing-14;
+
+    @include mobile {
+      padding: $spacing-8 0 $spacing-12;
+    }
+  }
+
+  &__banner-inner {
+    @include make-container($container-xxl);
+    @include flex-between;
+    flex-wrap: wrap;
+    gap: $spacing-6;
+    align-items: flex-end;
+  }
+
+  &__banner-content {
+    display: flex;
+    align-items: flex-start;
+    gap: $spacing-4;
+  }
+
+  &__banner-icon {
+    width: $avatar-size-xl;
+    height: $avatar-size-xl;
+    border-radius: $border-radius-xl;
+    background: rgba(255, 255, 255, 0.15);
+    border: $border-width-thin solid rgba(255, 255, 255, 0.25);
+    @include flex-center;
+    font-size: $icon-size-2xl;
+    color: $neutral-0;
+    flex-shrink: 0;
+  }
+
+  &__title {
+    font-family: $font-heading;
+    font-size: $font-size-3xl;
+    font-weight: $font-weight-bold;
+    color: $neutral-0;
+    margin: 0 0 $spacing-2;
+    letter-spacing: $letter-spacing-tight;
+
+    @include mobile {
+      font-size: $font-size-2xl;
+    }
+  }
+
+  &__subtitle {
+    font-size: $font-size-sm;
+    color: rgba(255, 255, 255, 0.65);
+    margin: 0;
+    line-height: $line-height-normal;
+  }
+
+  &__banner-stats {
+    display: flex;
+    gap: $spacing-5;
+    flex-wrap: wrap;
+
+    @include mobile {
+      gap: $spacing-3;
+    }
+  }
+
+  &__body {
+    @include make-container($container-xxl);
+    padding-top: $spacing-12 !important;
+    padding-bottom: $spacing-16;
+    margin-top: -$spacing-8;
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-6;
+  }
+}
+
+// ── Banner stat item ──────────────────────────────────────────────────
+.ab-stat {
+  display: flex;
+  align-items: center;
+  gap: $spacing-3;
+  background: rgba(255, 255, 255, 0.12);
+  border: $border-width-thin solid rgba(255, 255, 255, 0.2);
+  border-radius: $border-radius-xl;
+  padding: $spacing-3 $spacing-5;
+
+  span[nz-icon] {
+    font-size: $icon-size-xl;
+    color: rgba(255, 255, 255, 0.8);
+    flex-shrink: 0;
+  }
+
+  div {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-0-5;
+  }
+
+  strong {
+    font-size: $font-size-base;
+    font-weight: $font-weight-bold;
+    color: $neutral-0;
+    line-height: $line-height-none;
+  }
+
+  span:last-child {
+    font-size: $font-size-xs;
+    color: rgba(255, 255, 255, 0.6);
+    font-weight: $font-weight-medium;
+  }
+}
+
+// =========================================================================
+// DIVIDER
+// =========================================================================
+
+.ab-divider-label {
+  display: flex;
+  align-items: center;
+  gap: $spacing-2;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-bold;
+  color: $neutral-600;
+
+  span[nz-icon] {
+    color: $primary-500;
+    font-size: $icon-size-base;
+  }
+
+  &__count {
+    background: $primary-500;
+    color: $neutral-0;
+    font-size: $font-size-xs;
+    font-weight: $font-weight-bold;
+    padding: $spacing-0-5 $spacing-2;
+    border-radius: $border-radius-full;
+    min-width: 22px;
+    text-align: center;
+    line-height: $line-height-normal;
+  }
+}
+
+// ── Collapsed trigger button ──────────────────────────────────────────
+.ab-form-trigger {
+  @include flex-between;
+  gap: $spacing-4;
+  flex-wrap: wrap;
+  background: $card-bg;
+  border: $border-width-base dashed $primary-300;
+  border-radius: $border-radius-2xl;
+  padding: $spacing-6 $spacing-8;
+  cursor: pointer;
+  transition: background $transition-fast, border-color $transition-fast,
+    box-shadow $transition-base;
+
+  &:hover {
+    background: $primary-50;
+    border-color: $primary-500;
+    box-shadow: $shadow-md;
+  }
+
+  &__left {
+    display: flex;
+    align-items: center;
+    gap: $spacing-4;
+  }
+
+  &__icon {
+    width: $avatar-size-lg;
+    height: $avatar-size-lg;
+    border-radius: $border-radius-xl;
+    background: $primary-50;
+    border: $border-width-thin solid $primary-200;
+    @include flex-center;
+    font-size: $icon-size-2xl;
+    color: $primary-500;
+    flex-shrink: 0;
+    transition: background $transition-fast;
+
+    .ab-form-trigger:hover & {
+      background: $primary-100;
+    }
+  }
+
+  &__title {
+    font-family: $font-heading;
+    font-size: $font-size-lg;
+    font-weight: $font-weight-bold;
+    color: $neutral-800;
+    margin: 0 0 $spacing-1;
+  }
+
+  &__desc {
+    font-size: $font-size-sm;
+    color: $neutral-500;
+    margin: 0;
+  }
+
+  &__btn {
+    height: $btn-height-lg !important;
+    font-weight: $font-weight-bold !important;
+    border-radius: $border-radius-lg !important;
+    background: $primary-500 !important;
+    border-color: $primary-500 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: $spacing-2 !important;
+    box-shadow: 0 4px 12px rgba(0, 156, 222, 0.3) !important;
+    flex-shrink: 0;
+    transition: all $transition-fast !important;
+
+    &:hover {
+      background: $primary-600 !important;
+      border-color: $primary-600 !important;
+      transform: translateY(-1px);
+    }
+  }
+
+  @include mobile {
+    padding: $spacing-5;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+// ── Expanded form card ────────────────────────────────────────────────
+.ab-form-card {
+  background: $card-bg;
+  border-radius: $border-radius-2xl;
+  border: $border-width-thin solid $neutral-200;
+  box-shadow: $shadow-base;
+  overflow: hidden;
+  animation: formSlideDown $duration-base $ease-out both;
+
+  &__header {
+    @include flex-between;
+    padding: $spacing-6 $spacing-8;
+    background: $neutral-50;
+    border-bottom: $border-width-thin solid $neutral-200;
+    gap: $spacing-4;
+
+    @include mobile {
+      padding: $spacing-5;
+    }
+  }
+
+  &__header-left {
+    display: flex;
+    align-items: flex-start;
+    gap: $spacing-4;
+    flex: 1;
+    min-width: 0;
+  }
+
+  &__header-icon {
+    width: $avatar-size-lg;
+    height: $avatar-size-lg;
+    border-radius: $border-radius-xl;
+    background: linear-gradient(135deg, $primary-500 0%, $primary-700 100%);
+    @include flex-center;
+    font-size: $icon-size-xl;
+    color: $neutral-0;
+    flex-shrink: 0;
+    box-shadow: 0 4px 12px rgba(0, 156, 222, 0.3);
+
+    &--edit {
+      background: linear-gradient(135deg, $warning-600 0%, $warning-800 100%);
+      box-shadow: 0 4px 12px rgba(249, 168, 37, 0.3);
+    }
+  }
+
+  &__title {
+    font-family: $font-heading;
+    font-size: $font-size-xl;
+    font-weight: $font-weight-bold;
+    color: $neutral-800;
+    margin: 0 0 $spacing-1;
+    line-height: $line-height-heading;
+  }
+
+  &__subtitle {
+    font-size: $font-size-sm;
+    color: $neutral-500;
+    margin: 0;
+  }
+
+  &__close {
+    width: 36px;
+    height: 36px;
+    border-radius: $border-radius-lg !important;
+    flex-shrink: 0;
+    color: $neutral-400 !important;
+    transition: all $transition-fast !important;
+
+    &:hover {
+      background: $error-50 !important;
+      color: $error-500 !important;
+    }
+  }
+
+  &__stepper {
+    padding: $spacing-5 $spacing-8;
+    background: $primary-50;
+    border-bottom: $border-width-thin solid $primary-100;
+
+    @include mobile {
+      padding: $spacing-4 $spacing-5;
+    }
+
+    .ant-steps-item-title {
+      font-size: $font-size-xs !important;
+      font-weight: $font-weight-semibold !important;
+    }
+
+    .ant-steps-item-process .ant-steps-item-icon {
+      background: $primary-500 !important;
+      border-color: $primary-500 !important;
+    }
+
+    .ant-steps-item-finish .ant-steps-icon {
+      color: $primary-500 !important;
+    }
+  }
+}
+
+// ── Address form ──────────────────────────────────────────────────────
+.ab-form {
+  padding: $spacing-8;
+
+  @include mobile {
+    padding: $spacing-5;
+  }
+
+  // NZ-ZORRO label override
+  .ant-form-item-label>label {
+    font-size: $font-size-sm;
+    font-weight: $font-weight-semibold;
+    color: $neutral-700;
+  }
+
+  // Input border-radius
+  .ant-input,
+  .ant-input-affix-wrapper,
+  .ant-input-group-addon,
+  .ant-select-selector,
+  .ant-input-group>.ant-input {
+    border-radius: $border-radius-lg !important;
+    font-size: $font-size-sm;
+    border-color: $input-border-color;
+    transition: border-color $transition-fast, box-shadow $transition-fast;
+  }
+
+  .ant-input-affix-wrapper:hover,
+  .ant-input:hover {
+    border-color: $input-border-color-hover;
+  }
+
+  .ant-input-affix-wrapper-focused,
+  .ant-input:focus {
+    border-color: $input-border-color-focus;
+    box-shadow: $shadow-outline;
+  }
+
+  &__row {
+    @include form-row($spacing-5);
+  }
+
+  &__label-hint {
+    font-size: $font-size-xs;
+    font-weight: $font-weight-normal;
+    color: $neutral-400;
+    margin-left: $spacing-1-5;
+
+    &.optional {
+      background: $neutral-100;
+      padding: $spacing-0-5 $spacing-2;
+      border-radius: $border-radius-full;
+    }
+  }
+
+  // ── Default address options ────────────────────────────────────
+  &__defaults-section {
+    background: $neutral-50;
+    border: $border-width-thin solid $neutral-200;
+    border-radius: $border-radius-xl;
+    padding: $spacing-5 $spacing-6;
+    margin-bottom: $spacing-6;
+  }
+
+  &__defaults-title {
+    display: flex;
+    align-items: center;
+    gap: $spacing-2;
+    font-size: $font-size-base;
+    font-weight: $font-weight-bold;
+    color: $neutral-800;
+    margin: 0 0 $spacing-1;
+
+    span[nz-icon] {
+      color: $warning-500;
+      font-size: $icon-size-base;
+    }
+  }
+
+  &__defaults-desc {
+    font-size: $font-size-xs;
+    color: $neutral-500;
+    margin: 0 0 $spacing-4;
+    line-height: $line-height-normal;
+  }
+
+  &__defaults-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: $spacing-4;
+
+    @include mobile {
+      grid-template-columns: 1fr;
+      gap: $spacing-3;
+    }
+  }
+
+  // ── Form actions ───────────────────────────────────────────────
+  &__actions {
+    @include form-actions(flex-end);
+  }
+
+  &__submit-btn {
+    height: $btn-height-lg !important;
+    font-weight: $font-weight-bold !important;
+    border-radius: $border-radius-lg !important;
+    background: $primary-500 !important;
+    border-color: $primary-500 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: $spacing-2 !important;
+    padding: 0 $spacing-8 !important;
+    box-shadow: 0 4px 12px rgba(0, 156, 222, 0.3) !important;
+    transition: all $transition-fast !important;
+
+    &:hover:not(:disabled) {
+      background: $primary-600 !important;
+      border-color: $primary-600 !important;
+      transform: translateY(-1px);
+      box-shadow: 0 6px 18px rgba(0, 156, 222, 0.4) !important;
+    }
+  }
+}
+
+// ── Default option checkbox card ──────────────────────────────────────
+.ab-default-option {
+  display: block;
+  cursor: pointer;
+  border-radius: $border-radius-xl;
+  border: $border-width-base solid $neutral-200;
+  background: $card-bg;
+  transition: border-color $transition-fast, box-shadow $transition-fast,
+    background $transition-fast;
+  overflow: hidden;
+
+  &:hover {
+    border-color: $primary-300;
+    box-shadow: $shadow-sm;
+  }
+
+  &--active {
+    border-color: $primary-500;
+    background: $primary-50;
+    box-shadow: 0 0 0 3px rgba(0, 156, 222, 0.12);
+  }
+
+  &__input {
+    @include sr-only;
+  }
+
+  &__inner {
+    display: flex;
+    align-items: center;
+    gap: $spacing-3;
+    padding: $spacing-4 $spacing-5;
+  }
+
+  &__icon-wrap {
+    width: $avatar-size-base;
+    height: $avatar-size-base;
+    border-radius: $border-radius-lg;
+    @include flex-center;
+    font-size: $icon-size-lg;
+    flex-shrink: 0;
+    transition: background $transition-fast;
+
+    &--shipping {
+      background: $info-50;
+      color: $info-500;
+
+      .ab-default-option--active & {
+        background: $primary-100;
+        color: $primary-600;
+      }
+    }
+
+    &--billing {
+      background: $secondary-50;
+      color: $secondary-500;
+
+      .ab-default-option--active & {
+        background: $secondary-100;
+        color: $secondary-600;
+      }
+    }
+  }
+
+  &__text {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-0-5;
+  }
+
+  &__label {
+    font-size: $font-size-sm;
+    font-weight: $font-weight-bold;
+    color: $neutral-800;
+    transition: color $transition-fast;
+
+    .ab-default-option--active & {
+      color: $primary-700;
+    }
+  }
+
+  &__hint {
+    font-size: $font-size-xs;
+    color: $neutral-400;
+    line-height: $line-height-normal;
+  }
+
+  &__check {
+    font-size: $icon-size-lg;
+    color: $neutral-300;
+    flex-shrink: 0;
+    transition: color $transition-fast;
+
+    .ab-default-option--active & {
+      color: $primary-500;
+    }
+  }
+}
+
+// =========================================================================
+// SKELETON
+// =========================================================================
+
+.ab-skeleton-grid {
+  @include grid-responsive(1, 2, 3, null, $spacing-5);
+}
+
+.ab-skeleton-card {
+  background: $card-bg;
+  border-radius: $border-radius-2xl;
+  border: $border-width-thin solid $neutral-200;
+  padding: $spacing-6;
+  box-shadow: $shadow-xs;
+
+  .ant-skeleton {
+    margin: 0;
+  }
+}
+
+// =========================================================================
+// EMPTY STATE
+// =========================================================================
+
+.ab-empty {
+  background: $card-bg;
+  border: $border-width-thin solid $neutral-200;
+  border-radius: $border-radius-2xl;
+  @include flex-column-center;
+  gap: $spacing-4;
+  padding: $spacing-20 $spacing-6;
+  text-align: center;
+  box-shadow: $shadow-xs;
+
+  &__icon-wrap {
+    width: 96px;
+    height: 96px;
+    border-radius: 50%;
+    background: $primary-50;
+    border: $border-width-base solid $primary-100;
+    @include flex-center;
+    font-size: $icon-size-4xl;
+    color: $primary-300;
+  }
+
+  &__title {
+    font-family: $font-heading;
+    font-size: $font-size-2xl;
+    font-weight: $font-weight-bold;
+    color: $neutral-700;
+    margin: 0;
+  }
+
+  &__desc {
+    font-size: $font-size-base;
+    color: $neutral-400;
+    max-width: 360px;
+    line-height: $line-height-relaxed;
+    margin: 0;
+  }
+
+  &__cta {
+    height: $btn-height-xl !important;
+    font-weight: $font-weight-bold !important;
+    border-radius: $border-radius-lg !important;
+    background: $primary-500 !important;
+    border-color: $primary-500 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: $spacing-2 !important;
+    padding: 0 $spacing-8 !important;
+    box-shadow: 0 4px 14px rgba(0, 156, 222, 0.3) !important;
+    margin-top: $spacing-2;
+
+    &:hover {
+      background: $primary-600 !important;
+      border-color: $primary-600 !important;
+    }
+  }
+}
+
+// =========================================================================
+// ADDRESS CARD GRID
+// =========================================================================
+
+.ab-card-grid {
+  @include grid-responsive(1, 2, 3, null, $spacing-5);
+}
+
+// =========================================================================
+// ADDRESS CARD
+// =========================================================================
+
+.ab-address-card {
+  background: $card-bg;
+  border: $border-width-thin solid $neutral-200;
+  border-radius: $border-radius-2xl;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: box-shadow $transition-base, border-color $transition-fast,
+    transform $transition-base, opacity $transition-base;
+  box-shadow: $shadow-sm;
+
+  &:hover {
+    box-shadow: $shadow-lg;
+    transform: translateY(-3px);
+    border-color: $neutral-300;
+  }
+
+  // ── Variants based on default status ────────────────────────────
+  &--shipping {
+    border-color: $primary-300;
+    border-top-width: 3px;
+    border-top-color: $primary-500;
+  }
+
+  &--billing {
+    border-top-width: 3px;
+    border-top-color: $secondary-500;
+  }
+
+  &--both {
+    border-top-width: 3px;
+    border-top-color: $success-500;
+  }
+
+  &--deleting {
+    opacity: $opacity-50;
+    pointer-events: none;
+    transform: scale(0.98);
+  }
+
+  // ── Top strip ─────────────────────────────────────────────────
+  &__top-strip {
+    display: flex;
+    flex-wrap: wrap;
+    gap: $spacing-1-5;
+    padding: $spacing-3 $spacing-5;
+    background: $neutral-50;
+    border-bottom: $border-width-thin solid $neutral-100;
+  }
+
+  // ── Header ────────────────────────────────────────────────────
+  &__header {
+    display: flex;
+    align-items: center;
+    gap: $spacing-3;
+    padding: $spacing-5 $spacing-5 $spacing-3;
+  }
+
+  &__avatar {
+    width: $avatar-size-lg;
+    height: $avatar-size-lg;
+    border-radius: $border-radius-xl;
+    @include flex-center;
+    font-size: $font-size-base;
+    font-weight: $font-weight-extrabold;
+    color: $neutral-0;
+    font-family: $font-heading;
+    flex-shrink: 0;
+    letter-spacing: $letter-spacing-tight;
+  }
+
+  &__contact {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-0-5;
+  }
+
+  &__name {
+    font-size: $font-size-base;
+    font-weight: $font-weight-bold;
+    color: $neutral-800;
+    margin: 0;
+    @include text-truncate;
+  }
+
+  &__phone {
+    display: flex;
+    align-items: center;
+    gap: $spacing-1;
+    font-size: $font-size-xs;
+    color: $neutral-500;
+    font-weight: $font-weight-medium;
+
+    span[nz-icon] {
+      font-size: $icon-size-xs;
+      color: $success-500;
+    }
+  }
+
+  // ── Body ──────────────────────────────────────────────────────
+  &__body {
+    padding: 0 $spacing-5 $spacing-4;
+    flex: 1;
+  }
+
+  &__address-lines {
+    display: flex;
+    align-items: flex-start;
+    gap: $spacing-2;
+  }
+
+  &__map-icon {
+    font-size: $icon-size-base;
+    color: $primary-400;
+    margin-top: $spacing-0-5;
+    flex-shrink: 0;
+  }
+
+  &__lines {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-0-5;
+
+    p {
+      font-size: $font-size-sm;
+      color: $neutral-600;
+      margin: 0;
+      line-height: $line-height-normal;
+    }
+  }
+
+  &__country {
+    display: flex;
+    align-items: center;
+    gap: $spacing-1;
+    font-size: $font-size-xs !important;
+    color: $neutral-400 !important;
+    margin-top: $spacing-1 !important;
+
+    span[nz-icon] {
+      font-size: $icon-size-xs;
+    }
+  }
+
+  // ── Default tag toggles ───────────────────────────────────────
+  &__defaults {
+    display: flex;
+    flex-wrap: wrap;
+    gap: $spacing-2;
+    padding: $spacing-3 $spacing-5;
+    border-top: $border-width-thin solid $neutral-100;
+    background: $neutral-50;
+  }
+
+  &__set-default-btn {
+    font-size: $font-size-xs !important;
+    height: 28px !important;
+    border-radius: $border-radius-full !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: $spacing-1 !important;
+    padding: 0 $spacing-3 !important;
+    font-weight: $font-weight-semibold !important;
+    border: $border-width-thin solid transparent !important;
+    transition: all $transition-fast !important;
+
+    span[nz-icon] {
+      font-size: $icon-size-xs !important;
+    }
+
+    &--shipping {
+      color: $primary-600 !important;
+      background: $primary-50 !important;
+      border-color: $primary-200 !important;
+
+      &:hover {
+        background: $primary-100 !important;
+        border-color: $primary-400 !important;
+      }
+    }
+
+    &--billing {
+      color: $secondary-600 !important;
+      background: $secondary-50 !important;
+      border-color: $secondary-200 !important;
+
+      &:hover {
+        background: $secondary-100 !important;
+        border-color: $secondary-400 !important;
+      }
+    }
+  }
+
+  // ── Actions ───────────────────────────────────────────────────
+  &__actions {
+    display: flex;
+    align-items: center;
+    gap: $spacing-2;
+    padding: $spacing-4 $spacing-5;
+    border-top: $border-width-thin solid $neutral-100;
+    background: $neutral-0;
+  }
+
+  &__edit-btn {
+    border-radius: $border-radius-lg !important;
+    font-weight: $font-weight-semibold !important;
+    font-size: $font-size-xs !important;
+    border-color: $primary-300 !important;
+    color: $primary-600 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: $spacing-1 !important;
+    transition: all $transition-fast !important;
+
+    span[nz-icon] {
+      font-size: $icon-size-sm !important;
+    }
+
+    &:hover {
+      background: $primary-50 !important;
+      border-color: $primary-500 !important;
+    }
+  }
+
+  &__delete-btn {
+    margin-left: auto;
+    border-radius: $border-radius-lg !important;
+    font-weight: $font-weight-semibold !important;
+    font-size: $font-size-xs !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: $spacing-1 !important;
+
+    span[nz-icon] {
+      font-size: $icon-size-sm !important;
+    }
+
+    &:hover {
+      background: $error-50 !important;
+    }
+  }
+
+  &__locked-badge {
+    margin-left: auto;
+    display: inline-flex;
+    align-items: center;
+    gap: $spacing-1;
+    padding: 4px 12px;
+    font-size: $font-size-xs;
+    font-weight: $font-weight-semibold;
+    color: $neutral-500;
+    background: $neutral-100;
+    border: $border-width-thin solid $neutral-200;
+    border-radius: $border-radius-lg;
+    cursor: help;
+    transition: all $transition-fast;
+
+    span[nz-icon] {
+      font-size: $icon-size-xs;
+      color: $neutral-400;
+    }
+
+    &:hover {
+      background: $neutral-200;
+      color: $neutral-700;
+
+      span[nz-icon] {
+        color: $warning-500;
+      }
+    }
+  }
+}
+
+// ── Address tags (default badges on cards) ────────────────────────────
+.ab-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: $spacing-1;
+  font-size: $font-size-xs;
+  font-weight: $font-weight-bold;
+  padding: $spacing-0-5 $spacing-2;
+  border-radius: $border-radius-full;
+
+  span[nz-icon] {
+    font-size: $icon-size-xs;
+  }
+
+  &--shipping {
+    background: $primary-50;
+    color: $primary-700;
+    border: $border-width-thin solid $primary-200;
+  }
+
+  &--billing {
+    background: $secondary-50;
+    color: $secondary-700;
+    border: $border-width-thin solid $secondary-200;
+  }
+}
+
+// =========================================================================
+// ADD NEW ADDRESS TILE (at end of grid)
+// =========================================================================
+
+.ab-add-tile {
+  border: $border-width-base dashed $primary-300;
+  border-radius: $border-radius-2xl;
+  background: $primary-50;
+  cursor: pointer;
+  @include flex-column-center;
+  gap: $spacing-3;
+  padding: $spacing-10 $spacing-6;
+  min-height: 220px;
+  transition: background $transition-fast, border-color $transition-fast,
+    box-shadow $transition-base;
+  width: 100%;
+
+  &:hover {
+    background: $primary-100;
+    border-color: $primary-500;
+    box-shadow: $shadow-md;
+  }
+
+  &__icon {
+    font-size: $icon-size-3xl;
+    color: $primary-400;
+    transition: color $transition-fast, transform $transition-base;
+
+    .ab-add-tile:hover & {
+      color: $primary-600;
+      transform: scale(1.1);
+    }
+  }
+
+  &__label {
+    font-size: $font-size-sm;
+    font-weight: $font-weight-bold;
+    color: $primary-600;
+  }
+}
+
+// =========================================================================
+// KEYFRAMES
+// =========================================================================
+
+@keyframes formSlideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-12px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+::ng-deep .tooltip-dark-text {
+  .ant-tooltip-inner {
+    color: #000000 !important; // ✅ Black text
+    background-color: #ffffff; // White background
+    border: 1px solid #e0e0e0; // Subtle border
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  }
+
+  .ant-tooltip-arrow-content {
+    background-color: #ffffff; // Match arrow to bg
+    border: 1px solid #e0e0e0;
+  }
+}

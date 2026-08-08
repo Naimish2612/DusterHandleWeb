@@ -1,0 +1,204 @@
+<div class="my-tickets-page">
+    <!-- Breadcrumb -->
+    <nz-breadcrumb class="tickets-breadcrumb">
+        <nz-breadcrumb-item>
+            <a (click)="goBack()">
+                <span nz-icon nzType="left"></span>
+                Dashboard
+            </a>
+        </nz-breadcrumb-item>
+        <nz-breadcrumb-item>
+            <span nz-icon nzType="customer-service"></span>
+            My Support Tickets
+        </nz-breadcrumb-item>
+    </nz-breadcrumb>
+
+    <!-- Header -->
+    <div class="tickets-header">
+        <div class="tickets-header__title">
+            <h1>
+                <span nz-icon nzType="customer-service" nzTheme="fill"></span>
+                My Support Tickets
+            </h1>
+            <p>Track and manage all your support requests</p>
+        </div>
+        <button nz-button nzType="default" nzSize="large" (click)="refresh()" [nzLoading]="isLoading()">
+            <span nz-icon nzType="reload"></span>
+            Refresh
+        </button>
+    </div>
+
+    <!-- Stats Cards -->
+    <div class="stats-grid">
+
+        <div class="stat-card stat-card--total" [class.active]="statusFilter() === 'all'"
+            (click)="filterByStatus('all')">
+            <div class="stat-card__icon">
+                <span nz-icon nzType="file-text"></span>
+            </div>
+            <div class="stat-card__info">
+                <h3>{{ ticketStats().total }}</h3>
+                <p>Total Tickets</p>
+            </div>
+        </div>
+
+        <div class="stat-card stat-card--open" [class.active]="statusFilter() === 'Open'"
+            (click)="filterByStatus('Open')">
+            <div class="stat-card__icon">
+                <span nz-icon nzType="unlock"></span>
+            </div>
+            <div class="stat-card__info">
+                <h3>{{ ticketStats().open }}</h3>
+                <p>Open</p>
+            </div>
+        </div>
+
+        <div class="stat-card stat-card--progress" [class.active]="statusFilter() === 'In Progress'"
+            (click)="filterByStatus('In Progress')">
+            <div class="stat-card__icon">
+                <span nz-icon nzType="sync"></span>
+            </div>
+            <div class="stat-card__info">
+                <h3>{{ ticketStats().inProgress }}</h3>
+                <p>In Progress</p>
+            </div>
+        </div>
+
+        <div class="stat-card stat-card--resolved" [class.active]="statusFilter() === 'resolved-closed'"
+            (click)="filterByStatus('resolved-closed')">
+            <div class="stat-card__icon">
+                <span nz-icon nzType="check-circle"></span>
+            </div>
+            <div class="stat-card__info">
+                <h3>{{ ticketStats().resolved + ticketStats().closed }}</h3>
+                <p>Resolved / Closed</p>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Filters -->
+    <div class="tickets-filters">
+        <div class="filter-search">
+            <input nz-input nzSize="large" placeholder="Search by ticket ID, order number, or category..."
+                [ngModel]="searchText()" (ngModelChange)="searchText.set($event)">
+        </div>
+        <nz-select [ngModel]="statusFilter()" (ngModelChange)="statusFilter.set($event)" nzSize="large"
+            class="filter-status">
+            @for (option of statusOptions; track option.value) {
+            <nz-option [nzValue]="option.value" [nzLabel]="option.label"></nz-option>
+            }
+        </nz-select>
+    </div>
+
+    <!-- Loading -->
+    @if (isLoading() && allTickets().length === 0) {
+    <div class="tickets-loading">
+        <nz-spin nzSimple [nzSize]="'large'"></nz-spin>
+        <p>Loading your tickets...</p>
+    </div>
+    }
+
+    <!-- Tickets List -->
+
+    @if (!isLoading()) {
+
+    <!-- ── CASE 1: User has tickets AND filter returns results ── -->
+    @if (allTickets().length > 0 && filteredTickets().length > 0) {
+    <div class="tickets-list">
+        @for (ticket of filteredTickets(); track ticket.ticket_id) {
+        <div class="ticket-card" (click)="openTicket(ticket)">
+
+            <div class="ticket-card__header">
+                <div class="ticket-id">
+                    <span nz-icon [nzType]="getCategoryIcon(ticket.category)"></span>
+                    <span class="ticket-number">{{ ticket.ticket_no }}</span>
+                </div>
+                <div class="ticket-badges">
+                    <nz-tag [nzColor]="getStatusColor(ticket.status)">
+                        <span nz-icon [nzType]="getStatusIcon(ticket.status)"></span>
+                        {{ ticket.status }}
+                    </nz-tag>
+                    <nz-tag [nzColor]="getPriorityColor(ticket.priority)">
+                        {{ ticket.priority }}
+                    </nz-tag>
+                </div>
+            </div>
+
+            <div class="ticket-card__body">
+                <div class="ticket-info">
+                    <div class="info-row">
+                        <span class="info-label">
+                            <span nz-icon nzType="tag"></span>
+                            Category:
+                        </span>
+                        <span class="info-value">{{ ticket.category }}</span>
+                    </div>
+
+                    <div class="info-row">
+                        <span class="info-label">
+                            <span nz-icon nzType="shopping-cart"></span>
+                            Order:
+                        </span>
+                        <span class="info-value info-value--mono">{{ ticket.order_no }}</span>
+                    </div>
+
+                    @if (ticket.product_code) {
+                    <div class="info-row">
+                        <span class="info-label">
+                            <span nz-icon nzType="appstore"></span>
+                            Product Name:
+                        </span>
+                        <span class="info-value">{{ ticket.product_code }} - {{ ticket.name }}</span>
+                    </div>
+                    }
+
+                    @if (ticket.initial_message) {
+                    <div class="info-row info-row--message">
+                        <span class="info-label">
+                            <span nz-icon nzType="message"></span>
+                            Issue:
+                        </span>
+                        <p class="info-value info-value--message">{{ ticket.initial_message }}</p>
+                    </div>
+                    }
+                </div>
+            </div>
+
+            <div class="ticket-card__footer">
+                <button nz-button nzType="primary" nzSize="small">
+                    <span nz-icon nzType="message"></span>
+                    View Conversation
+                    <span nz-icon nzType="right"></span>
+                </button>
+            </div>
+        </div>
+        }
+    </div>
+    }
+
+    <!-- ── CASE 2: User has tickets BUT filter returns nothing ── -->
+    @else if (allTickets().length > 0 && filteredTickets().length === 0) {
+    <nz-empty nzNotFoundImage="simple" [nzNotFoundContent]="filteredEmptyContent">
+        <ng-template #filteredEmptyContent>
+            <span class="empty-title">No tickets match your filter</span>
+            <p class="empty-subtext">
+                Try adjusting your search or filter criteria.
+            </p>
+        </ng-template>
+    </nz-empty>
+    }
+
+    <!-- ── CASE 3: No tickets at all (first-time user) ── -->
+    @else {
+    <nz-empty nzNotFoundImage="simple" [nzNotFoundContent]="noTicketsContent">
+        <ng-template #noTicketsContent>
+            <span class="empty-title">No support tickets found</span>
+            <p class="empty-subtext">
+                You haven't raised any support requests yet.
+            </p>
+        </ng-template>
+    </nz-empty>
+    }
+    }
+</div>

@@ -1,0 +1,625 @@
+// @import '../../../../assets/styles/common.scss';
+@use '../../../../assets/styles/common' as *;
+@use '../../../../assets/styles/responsive' as *;
+
+
+// =========================================================================
+// SITE HEADER — Public Layout
+// =========================================================================
+
+.site-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: $z-index-fixed;
+  height: $header-height;
+  background: $public-header-bg;
+  border-bottom: $border-width-thin solid transparent;
+  transition: border-color $transition-base, box-shadow $transition-base;
+
+  &--scrolled {
+    border-bottom-color: $neutral-200;
+    box-shadow: $shadow-base;
+    background: rgba(255, 255, 255, 0.97);
+    backdrop-filter: blur(12px);
+  }
+
+  @include mobile {
+    height: $header-height-mobile;
+  }
+
+  // ── Inner container ──────────────────────────────────────────────
+  &__inner {
+    height: 100%;
+    gap: $spacing-8;
+    @include make-container($container-xxl);
+    @include flex-between;    
+  }
+
+  // ── Logo ─────────────────────────────────────────────────────────
+  &__logo {
+    display: flex;
+    align-items: center;
+    gap: $spacing-2;
+    text-decoration: none;
+    flex-shrink: 0;
+  }
+
+  &__logo-mark {
+    width: 36px;
+    height: 36px;
+    border-radius: $border-radius-lg;
+    background: linear-gradient(135deg, $primary-500 0%, $primary-700 100%);
+    @include flex-center;
+    font-size: $icon-size-lg;
+    color: $neutral-0;
+    box-shadow: 0 4px 12px rgba(0, 156, 222, 0.35);
+    flex-shrink: 0;
+  }
+
+  &__logo-text {
+    font-family: $font-heading;
+    font-size: $font-size-xl;
+    font-weight: $font-weight-bold;
+    color: $neutral-800;
+    letter-spacing: $letter-spacing-tight;
+  }
+
+  &__logo-accent {
+    color: $primary-500;
+  }
+
+  // ── Desktop nav ───────────────────────────────────────────────────
+  &__nav {
+    display: flex;
+    align-items: center;
+    gap: $spacing-1;
+    flex: 1;
+
+    @include tablet-down {
+      display: none;
+    }
+  }
+
+  &__nav-link {
+    position: relative;
+    padding: $spacing-2 $spacing-3-5;
+    font-size: $font-size-sm;
+    font-weight: $font-weight-semibold;
+    color: $neutral-700;
+    text-decoration: none;
+    border-radius: $border-radius-lg;
+    transition: color $transition-fast, background $transition-fast;
+
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: 2px;
+      left: 50%;
+      transform: translateX(-50%) scaleX(0);
+      width: 16px;
+      height: 2px;
+      border-radius: $border-radius-full;
+      background: $primary-500;
+      transition: transform $transition-base;
+    }
+
+    &:hover {
+      color: $primary-500;
+      background: $primary-50;
+
+      &::after { transform: translateX(-50%) scaleX(1); }
+    }
+
+    &--active {
+      color: $primary-500;
+
+      &::after { transform: translateX(-50%) scaleX(1); }
+    }
+  }
+
+  // ── Actions ───────────────────────────────────────────────────────
+  &__actions {
+    display: flex;
+    align-items: center;
+    gap: $spacing-1-5;
+    flex-shrink: 0;
+  }
+
+  &__icon-btn {
+    width: 38px;
+    height: 38px;
+    border-radius: $border-radius-lg;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    @include flex-center;
+    font-size: $icon-size-lg;
+    color: $neutral-600;
+    text-decoration: none;
+    transition: background $transition-fast, color $transition-fast;
+
+    &:hover {
+      background: $primary-50;
+      color: $primary-500;
+    }
+  }
+
+  &__account {
+    display: flex;
+    align-items: center;
+    gap: $spacing-1-5;
+    padding: $spacing-1 $spacing-2-5;
+    border-radius: $border-radius-lg;
+    cursor: pointer;
+    transition: background $transition-fast;
+    border: $border-width-thin solid $neutral-200;
+
+    &:hover { background: $primary-50; }
+
+    @include tablet-down { display: none; }
+  }
+
+  &__account-name {
+    font-size: $font-size-xs;
+    font-weight: $font-weight-semibold;
+    color: $neutral-700;
+
+    @media (max-width: #{$breakpoint-xl - 0.02px}) { display: none; }
+  }
+
+  &__btn {
+    padding: $spacing-2 $spacing-4;
+    border-radius: $border-radius-lg;
+    font-size: $font-size-xs;
+    font-weight: $font-weight-bold;
+    text-decoration: none;
+    transition: all $transition-fast;
+    white-space: nowrap;
+    cursor: pointer;
+    border: none;
+
+    &--ghost {
+      border: $border-width-thin solid $neutral-300;
+      color: $neutral-700;
+      background: transparent;
+
+      &:hover {
+        border-color: $primary-500;
+        color: $primary-500;
+      }
+    }
+
+    &--primary {
+      background: $primary-500;
+      color: $neutral-0;
+      border: $border-width-thin solid $primary-500;
+      box-shadow: 0 4px 12px rgba(0, 156, 222, 0.3);
+
+      &:hover {
+        background: $primary-600;
+        border-color: $primary-600;
+        transform: translateY(-1px);
+      }
+    }
+
+    @include tablet-down { display: none; }
+  }
+
+  // ── Hamburger ────────────────────────────────────────────────────
+  &__hamburger {
+    width: 38px;
+    height: 38px;
+    border-radius: $border-radius-lg;
+    border: $border-width-thin solid $neutral-200;
+    background: transparent;
+    cursor: pointer;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    font-size: $icon-size-lg;
+    color: $neutral-600;
+    transition: background $transition-fast;
+
+    &:hover {
+      background: $primary-50;
+      color: $primary-500;
+    }
+
+    @include tablet-down { display: flex; }
+  }
+}
+
+// ── Mobile Nav Drawer ─────────────────────────────────────────────────
+.mobile-nav {
+  @include flex-column;
+  gap: $spacing-1;
+  padding: $spacing-2 0;
+
+  &__logo {
+    display: flex;
+    align-items: center;
+    gap: $spacing-2;
+    padding: 0 $spacing-2 $spacing-4;
+    margin-bottom: $spacing-2;
+    border-bottom: $border-width-thin solid $neutral-100;
+  }
+
+  &__link {
+    display: flex;
+    align-items: center;
+    gap: $spacing-3;
+    padding: $spacing-3;
+    border-radius: $border-radius-lg;
+    font-size: $font-size-base;
+    font-weight: $font-weight-semibold;
+    color: $neutral-700;
+    text-decoration: none;
+    transition: background $transition-fast, color $transition-fast;
+
+    span[nz-icon] {
+      font-size: $icon-size-lg;
+      color: $neutral-400;
+      transition: color $transition-fast;
+    }
+
+    &:hover {
+      background: $primary-50;
+      color: $primary-500;
+
+      span[nz-icon] { color: $primary-500; }
+    }
+  }
+
+  &__badge {
+    margin-left: auto;
+    background: $primary-500;
+    color: $neutral-0;
+    font-size: $font-size-xs;
+    font-weight: $font-weight-bold;
+    padding: $spacing-0-5 $spacing-1-5;
+    border-radius: $border-radius-full;
+  }
+
+  &__divider {
+    height: $border-width-thin;
+    background: $neutral-100;
+    margin: $spacing-2 0;
+  }
+
+  &__logout {
+    display: flex;
+    align-items: center;
+    gap: $spacing-3;
+    padding: $spacing-3;
+    border-radius: $border-radius-lg;
+    font-size: $font-size-base;
+    font-weight: $font-weight-semibold;
+    color: $error-500;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+    transition: background $transition-fast;
+
+    &:hover { background: $error-50; }
+  }
+
+  &__cta {
+    display: block;
+    text-align: center;
+    padding: $spacing-3;
+    border-radius: $border-radius-lg;
+    font-size: $font-size-base;
+    font-weight: $font-weight-bold;
+    text-decoration: none;
+    margin-top: $spacing-1;
+    transition: all $transition-fast;
+
+    &--ghost {
+      border: $border-width-thin solid $neutral-300;
+      color: $neutral-700;
+
+      &:hover {
+        border-color: $primary-500;
+        color: $primary-500;
+      }
+    }
+
+    &--primary {
+      background: $primary-500;
+      color: $neutral-0;
+      box-shadow: 0 4px 14px rgba(0, 156, 222, 0.3);
+
+      &:hover { background: $primary-600; }
+    }
+  }
+}
+
+
+// =========================================================================
+// ACCOUNT TRIGGER (override existing __account block)
+// =========================================================================
+.site-header__account {
+  display      : flex;
+  align-items  : center;
+  gap          : $spacing-2;
+  padding      : $spacing-1 $spacing-3 $spacing-1 $spacing-1;
+  border-radius: $border-radius-full;
+  cursor       : pointer;
+  border       : $border-width-thin solid $neutral-200;
+  background   : $neutral-0;
+  transition   : all $transition-fast;
+  user-select  : none;
+
+  &:hover {
+    border-color: $primary-500;
+    background  : $primary-50;
+    box-shadow  : 0 0 0 4px rgba(0, 156, 222, 0.10);
+  }
+
+  &-avatar {
+    background : $primary-500 !important;
+    color      : $neutral-0 !important;
+    font-weight: $font-weight-bold !important;
+    font-size  : $font-size-xs !important;
+    flex-shrink: 0;
+  }
+
+  &-name {
+    font-size    : $font-size-sm;
+    font-weight  : $font-weight-semibold;
+    color        : $neutral-800;
+    max-width    : 140px;
+    overflow     : hidden;
+    text-overflow: ellipsis;
+    white-space  : nowrap;
+
+    @media (max-width: #{$breakpoint-xl - 0.02px}) { display: none; }
+  }
+
+  &-chevron {
+    font-size: 10px;
+    color    : $neutral-400;
+  }
+
+  @include tablet-down { display: none; }
+}
+
+// =========================================================================
+// ACCOUNT DROPDOWN — Spacious modern card
+// =========================================================================
+.account-dropdown {
+  width        : 340px;
+  background   : $neutral-0;
+  border-radius: $border-radius-lg;
+  box-shadow   : 0 20px 50px rgba(15, 23, 42, 0.18),
+                 0 4px 12px rgba(15, 23, 42, 0.06);
+  border       : $border-width-thin solid $neutral-100;
+  overflow     : hidden;
+  margin-top   : $spacing-2;
+
+  // ── Header (Profile) ─────────────────────────────────────────────────
+  &__header {
+    display    : flex;
+    align-items: center;
+    gap        : $spacing-3;
+    padding    : $spacing-5;
+    background : linear-gradient(135deg,
+                  rgba(0, 156, 222, 0.10) 0%,
+                  rgba(0, 156, 222, 0.02) 100%);
+    border-bottom: $border-width-thin solid $neutral-100;
+    position   : relative;
+
+    &::before {
+      content   : '';
+      position  : absolute;
+      top       : 0; left: 0; right: 0;
+      height    : 3px;
+      background: linear-gradient(90deg, $primary-500, $primary-700);
+    }
+  }
+
+  &__avatar {
+    background : $primary-500 !important;
+    color      : $neutral-0 !important;
+    font-weight: $font-weight-bold !important;
+    font-size  : $font-size-lg !important;
+    box-shadow : 0 4px 14px rgba(0, 156, 222, 0.4);
+    flex-shrink: 0;
+    border     : 3px solid $neutral-0;
+  }
+
+  &__user {
+    display       : flex;
+    flex-direction: column;
+    overflow      : hidden;
+    flex          : 1;
+    min-width     : 0;
+  }
+
+  &__name {
+    font-size    : $font-size-base;
+    font-weight  : $font-weight-bold;
+    color        : $neutral-800;
+    white-space  : nowrap;
+    overflow     : hidden;
+    text-overflow: ellipsis;
+    line-height  : 1.3;
+  }
+
+  &__email {
+    font-size    : $font-size-xs;
+    color        : $neutral-500;
+    white-space  : nowrap;
+    overflow     : hidden;
+    text-overflow: ellipsis;
+    margin-top   : 2px;
+  }
+
+  // ── Quick Stats Row ──────────────────────────────────────────────────
+  &__stats {
+    display    : flex;
+    align-items: center;
+    padding    : $spacing-3 $spacing-4;
+    background : $neutral-0;
+    border-bottom: $border-width-thin solid $neutral-100;
+  }
+
+  &__stat {
+    flex           : 1;
+    display        : flex;
+    flex-direction : column;
+    align-items    : center;
+    gap            : 2px;
+    padding        : $spacing-2;
+    border-radius  : $border-radius-lg;
+    text-decoration: none;
+    transition     : background $transition-fast;
+
+    &:hover { background: $primary-50; }
+  }
+
+  &__stat-value {
+    font-size    : $font-size-lg;
+    font-weight  : $font-weight-bold;
+    color        : $primary-500;
+    line-height  : 1;
+  }
+
+  &__stat-label {
+    font-size  : $font-size-xs;
+    color      : $neutral-500;
+    font-weight: $font-weight-medium;
+  }
+
+  &__stat-divider {
+    width     : 1px;
+    height    : 28px;
+    background: $neutral-100;
+  }
+
+  // ── Menu List ────────────────────────────────────────────────────────
+  &__menu {
+    list-style: none;
+    padding   : $spacing-2;
+    margin    : 0;
+  }
+
+  &__item {
+    display        : flex;
+    align-items    : center;
+    gap            : $spacing-3;
+    padding        : $spacing-2-5 $spacing-3;
+    border-radius  : $border-radius-lg;
+    text-decoration: none;
+    color          : $neutral-700;
+    transition     : background $transition-fast, color $transition-fast;
+    cursor         : pointer;
+
+    &:hover {
+      background: $primary-50;
+
+      .account-dropdown__item-icon {
+        background: $primary-500;
+        color     : $neutral-0;
+        transform : scale(1.05);
+      }
+
+      .account-dropdown__item-title { color: $primary-500; }
+      .account-dropdown__item-arrow { opacity: 1; transform: translateX(0); color: $primary-500; }
+    }
+  }
+
+  &__item-icon {
+    width          : 38px;
+    height         : 38px;
+    border-radius  : $border-radius-lg;
+    background     : $neutral-100;
+    color          : $neutral-600;
+    display        : flex;
+    align-items    : center;
+    justify-content: center;
+    font-size      : 16px;
+    flex-shrink    : 0;
+    transition     : all $transition-fast;
+  }
+
+  &__item-text {
+    display       : flex;
+    flex-direction: column;
+    flex          : 1;
+    min-width     : 0;
+    gap           : 2px;
+  }
+
+  &__item-title {
+    font-size  : $font-size-sm;
+    font-weight: $font-weight-semibold;
+    color      : $neutral-800;
+    line-height: 1.3;
+    transition : color $transition-fast;
+  }
+
+  &__item-sub {
+    font-size  : 11px;
+    color      : $neutral-500;
+    line-height: 1.3;
+  }
+
+  &__item-arrow {
+    font-size : 11px;
+    color     : $neutral-400;
+    opacity   : 0;
+    transform : translateX(-4px);
+    transition: all $transition-fast;
+  }
+
+  // ── Footer (Logout) ──────────────────────────────────────────────────
+  &__footer {
+    padding    : $spacing-2 $spacing-3 $spacing-3;
+    border-top : $border-width-thin solid $neutral-100;
+    background : $neutral-50;
+  }
+
+  &__logout {
+    width          : 100%;
+    display        : flex;
+    align-items    : center;
+    justify-content: center;
+    gap            : $spacing-2;
+    padding        : $spacing-2-5 $spacing-3;
+    border         : $border-width-thin solid $neutral-200;
+    background     : $neutral-0;
+    color          : $error-500;
+    font-size      : $font-size-sm;
+    font-weight    : $font-weight-bold;
+    border-radius  : $border-radius-lg;
+    cursor         : pointer;
+    transition     : all $transition-fast;
+    font-family    : inherit;
+
+    span[nz-icon] { font-size: 15px; }
+
+    &:hover {
+      background  : $error-500;
+      color       : $neutral-0;
+      border-color: $error-500;
+      box-shadow  : 0 4px 12px rgba(239, 68, 68, 0.3);
+      transform   : translateY(-1px);
+    }
+  }
+}
+
+// =========================================================================
+// Override ng-zorro dropdown wrapper (to remove default styling)
+// =========================================================================
+::ng-deep .ant-dropdown {
+  .ant-dropdown-menu {
+    padding         : 0 !important;
+    background      : transparent !important;
+    box-shadow      : none !important;
+    border-radius   : 0 !important;
+  }
+}

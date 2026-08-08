@@ -1,0 +1,325 @@
+@use '../../../../../assets/styles/common' as *;
+@use '../../../../../assets/styles/responsive' as *;
+
+.order-success {
+  min-height: 100vh;
+  background: $color-bg-body;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: $spacing-8 $spacing-6;
+
+  @include mobile {
+    padding: $spacing-5 $spacing-4;
+  }
+
+  &__wrap {
+    width: 100%;
+    max-width: 800px;
+  }
+
+  &__result {
+    background: $neutral-0;
+    border: 1px solid $color-border-light;
+    border-radius: $border-radius-2xl;
+    box-shadow: $shadow-card;
+    overflow: hidden;
+
+    ::ng-deep {
+      .ant-result-icon .anticon {
+        color: $success-500;
+        font-size: 72px;
+      }
+
+      .ant-result-title {
+        font-size: $font-size-2xl;
+        font-weight: $font-weight-bold;
+        color: $color-text-primary;
+
+        @include mobile {
+          font-size: $font-size-xl;
+        }
+      }
+
+      .ant-result-subtitle {
+        margin-top: $spacing-2;
+      }
+
+      .ant-result-extra {
+        margin-top: $spacing-6;
+        text-align: left;
+      }
+    }
+  }
+
+  &__subtitle {
+    font-size: $font-size-base;
+    color: $color-text-secondary;
+    margin: 0;
+  }
+
+  &__order-id {
+    font-family: $font-monospace;
+    color: $primary-600;
+    font-size: $font-size-base;
+  }
+ 
+  &__details-card {
+    background: $neutral-50;
+    border: 1px solid $color-border-light;
+    border-radius: $border-radius-xl;
+    overflow: hidden;
+    margin-bottom: $spacing-5;
+  }
+
+  &__card-head {
+    display: flex;
+    align-items: center;
+    gap: $spacing-2;
+    padding: $spacing-4 $spacing-5;
+    background: $neutral-0;
+    border-bottom: 1px solid $color-border-light;
+    font-size: $font-size-base;
+    font-weight: $font-weight-semibold;
+    color: $color-text-primary;
+
+    span[nz-icon] {
+      color: $primary-500;
+      font-size: $icon-size-lg;
+    }
+  }
+
+  &__desc {
+    ::ng-deep {
+      .ant-descriptions-item-label {
+        font-size: $font-size-xs;
+        font-weight: $font-weight-semibold;
+        background: $neutral-100;
+        color: $color-text-secondary;
+        white-space: nowrap;
+      }
+      .ant-descriptions-item-content {
+        font-size: $font-size-sm;
+      }
+    }
+  }
+
+  &__mono {
+    font-family: $font-monospace;
+    font-size: $font-size-xs;
+    color: $primary-600;
+  }
+
+  &__amount-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  &__original-amount {
+    font-size: $font-size-xs;
+    color: $color-text-tertiary;
+    text-decoration: line-through;
+  }
+
+  &__total {
+    font-size: $font-size-base;
+    font-weight: $font-weight-bold;
+    color: $primary-600;
+  }
+
+  &__coupon-card {
+    background: linear-gradient(135deg, #f6ffed 0%, #fff7e6 100%);
+    border: 1px solid #b7eb8f;
+    border-radius: $border-radius-xl;
+    overflow: hidden;
+    margin-bottom: $spacing-5;
+  }
+
+  &__coupon-head {
+    display: flex;
+    align-items: flex-start;
+    gap: $spacing-3;
+    padding: $spacing-4 $spacing-5;
+    background: rgba(82, 196, 26, 0.08);
+    border-bottom: 1px solid #b7eb8f;
+  }
+
+  &__coupon-gift-icon {
+    font-size: 28px;
+    color: #52c41a;
+    flex-shrink: 0;
+  }
+
+  &__coupon-head-title {
+    font-size: $font-size-base;
+    font-weight: $font-weight-bold;
+    color: #389e0d;
+    margin-bottom: 2px;
+  }
+
+  &__coupon-head-sub {
+    font-size: $font-size-xs;
+    color: $color-text-tertiary;
+  }
+
+  &__coupon-list {
+    padding: $spacing-3 $spacing-5;
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-2;
+    border-bottom: 1px dashed #b7eb8f;
+  }
+
+  &__coupon-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: $spacing-2;
+  }
+
+  &__coupon-item-left {
+    display: flex;
+    align-items: center;
+    gap: $spacing-1;
+    color: #389e0d;
+    font-size: $font-size-sm;
+    font-weight: $font-weight-semibold;
+
+    span[nz-icon] {
+      font-size: 13px;
+    }
+  }
+
+  &__coupon-code {
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  &__coupon-amount {
+    font-size: $font-size-sm;
+    font-weight: $font-weight-bold;
+    color: #389e0d;
+  }
+ 
+  &__coupon-total {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: $spacing-3 $spacing-5;
+    border-bottom: 1px solid #b7eb8f;
+    gap: $spacing-2;
+  }
+
+  &__coupon-total-left {
+    display: flex;
+    align-items: center;
+    gap: $spacing-1;
+    font-size: $font-size-sm;
+    font-weight: $font-weight-semibold;
+    color: #389e0d;
+
+    span[nz-icon] {
+      font-size: 14px;
+    }
+  }
+
+  &__coupon-total-right {
+    display: flex;
+    align-items: center;
+    gap: $spacing-2;
+  }
+
+  &__coupon-saved {
+    font-size: $font-size-base;
+    font-weight: $font-weight-bold;
+    color: #389e0d;
+  }
+ 
+  &__price-breakdown {
+    padding: $spacing-3 $spacing-5;
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-2;
+  }
+
+  &__breakdown-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: $font-size-sm;
+    color: $color-text-secondary;
+    padding: $spacing-1 0;
+ 
+    &--discount {
+      color: #389e0d;
+      font-weight: $font-weight-semibold;
+    }
+ 
+    &--final {
+      border-top: 2px solid #b7eb8f;
+      padding-top: $spacing-2;
+      margin-top: $spacing-1;
+      font-size: $font-size-base;
+      font-weight: $font-weight-bold;
+      color: $primary-600;
+    }
+  }
+ 
+  &__info-alert {
+    margin-bottom: $spacing-5;
+  }
+
+  &__steps-list {
+    margin: $spacing-2 0 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-3;
+  }
+
+  &__steps-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: $spacing-2;
+    font-size: $font-size-sm;
+    color: $color-text-secondary;
+    line-height: $line-height-relaxed;
+  }
+
+  &__step-icon {
+    font-size: $icon-size-base;
+    flex-shrink: 0;
+    margin-top: 2px;
+
+    &--done {
+      color: $success-500;
+    }
+    &--info {
+      color: $primary-500;
+    }
+  }
+ 
+  &__actions {
+    display: flex;
+    gap: $spacing-3;
+    justify-content: center;
+    flex-wrap: wrap;
+
+    @include mobile {
+      flex-direction: column;
+      button {
+        width: 100%;
+      }
+    }
+
+    button {
+      display: inline-flex;
+      align-items: center;
+      gap: $spacing-2;
+      min-width: 200px;
+      justify-content: center;
+    }
+  }
+}

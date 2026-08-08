@@ -1,0 +1,62 @@
+<div nz-row [nzGutter]="[16, 16]" class="process-page">
+  <div nz-col nzSpan="24">
+    <nz-card nzTitle="{{ roleCode }} - Role Permission Mapping">
+      <!-- <div class="mb-2"><strong>Role Code:</strong> {{ roleCode }}</div> -->
+
+      <nz-spin [nzSpinning]="loading">
+        <nz-row>
+          <div nz-col [nzXs]="24" [nzSm]="12" [nzMd]="8" [nzLg]="8" [nzXl]="6">
+            <label
+              nz-checkbox
+              [(ngModel)]="selectAll"
+              (ngModelChange)="toggleSelectAll($event)"
+              [nzIndeterminate]="
+                selectedPermissions.length > 0 && selectedPermissions.length !== permissions.length
+              "
+            >
+              Select All Permissions
+            </label>
+          </div>
+        </nz-row>
+        <nz-divider></nz-divider>
+
+        <div class="permission-list">
+          <nz-row>
+            <nz-col
+              [nzXs]="24"
+              [nzSm]="12"
+              [nzMd]="8"
+              [nzLg]="8"
+              [nzXl]="6"
+              nzSpan="6"
+              *ngFor="let p of permissions"
+            >
+              <label
+                class="pb-1"
+                nz-checkbox
+                [nzValue]="p.permission_code"
+                [nzChecked]="p.is_checked"
+                (nzCheckedChange)="onPermissionChange($event, p)"
+              >
+                {{ p.permission_name }}
+              </label>
+            </nz-col>
+          </nz-row>
+        </div>
+      </nz-spin>
+
+      <nz-divider></nz-divider>
+
+      <nz-row>
+        <div nz-col nzSpan="24" class="form-actions">
+          <button nz-button nzType="primary" (click)="save()">
+            <nz-icon nzType="save"></nz-icon> Save
+          </button>
+          <button nz-button nzType="default" class="ml-2" (click)="cancel()">
+            <nz-icon nzType="arrow-left"></nz-icon> Back
+          </button>
+        </div>
+      </nz-row>
+    </nz-card>
+  </div>
+</div>

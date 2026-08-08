@@ -1,0 +1,61 @@
+@use '../../../../../assets/styles/common' as *;
+@use '../../../../../assets/styles/responsive' as *;
+
+.switch-label {
+  margin-left: 8px;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.process-page {
+  padding: $spacing-6; // 24px
+}
+
+nz-card {
+  border-radius: $border-radius-lg;
+  background-color: $neutral-100;
+}
+
+nz-form-item {
+  margin-bottom: $spacing-4; // 16px vertical rhythm
+}
+
+.form-actions {
+  display: flex;
+  gap: $spacing-4;
+}
+
+.action-cell {
+  display: flex;
+  gap: $spacing-2; // 8px
+  white-space: nowrap;
+}
+
+.table-wrapper {
+  width: 100%;
+  overflow-x: auto; // KEY FIX
+  overflow-y: hidden;
+}
+.container {
+  display: flex;
+  flex-wrap: nowrap;
+  padding: 8px;
+}
+
+.add-item {
+  flex: 0 0 auto;
+  padding: 4px 8px;
+  display: block;
+  color: #1890ff;
+  align-self: center;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.add-item:hover {
+  color: #40a9ff;
+}
+
+input[nz-input] {
+  flex: 1;
+}

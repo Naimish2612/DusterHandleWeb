@@ -1,0 +1,411 @@
+@if (order) {
+<div nz-row [nzGutter]="[16, 16]" class="process-page max-w-7xl mx-auto p-6 bg-gray-50 min-h-screen">
+  <!-- ================= ACTION NAVIGATION HEADER ================= -->
+  <div nz-col [nzXs]="24" class="flex justify-between items-center flex-wrap gap-4">
+    <div>
+      <button nz-button nzType="link" class="p-0 text-base" (click)="goBack()">
+        <nz-icon nzType="arrow-left"></nz-icon> Back to List
+      </button>
+    </div>
+  </div>
+
+  <!-- ================= METADATA SUMMARY SECTION ================= -->
+  <div nz-col [nzXs]="24" class="image-upload-section bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+    <nz-divider nzOrientation="left" [nzText]="orderHeaderTemplate">
+      <ng-template #orderHeaderTemplate>
+        <span class="text-lg font-bold">Order Details: {{ order.order_no }}</span>
+      </ng-template>
+    </nz-divider>
+
+    <div nz-col [nzXs]="24">
+      <nz-descriptions nzBordered nzSize="small" [nzColumn]="{ xxl: 4, xl: 3, lg: 2, md: 2, sm: 1, xs: 1 }"
+        class="order-meta-table">
+        <nz-descriptions-item nzTitle="Order No.">
+          <strong>{{ order.order_no }}</strong>
+        </nz-descriptions-item>
+
+        <nz-descriptions-item nzTitle="Order Date">
+          {{ order.order_date | date: 'medium' }}
+        </nz-descriptions-item>
+
+        <nz-descriptions-item nzTitle="Payment Status">
+          <nz-badge [nzStatus]="getPaymentStatusBadge(order.payment_status)" [nzText]="order.payment_status"></nz-badge>
+        </nz-descriptions-item>
+
+        <nz-descriptions-item nzTitle="Order Status">
+          <nz-badge [nzStatus]="getOrderStatusBadge(order.order_status)" [nzText]="order.order_status"></nz-badge>
+        </nz-descriptions-item>
+
+        <nz-descriptions-item nzTitle="Payment Method">
+          {{ order.payment_method }}
+        </nz-descriptions-item>
+
+        <nz-descriptions-item nzTitle="User Name">
+          <strong>{{ user.user_name || 'N/A' }}</strong>
+        </nz-descriptions-item>
+
+        <nz-descriptions-item nzTitle="Contact Info">
+          <div style="font-weight: 600">Email: {{ user.email_id || 'N/A' }}</div>
+          <div style="font-weight: 600">Mobile: {{ user.mobile_no || 'N/A' }}</div>
+        </nz-descriptions-item>
+
+        <nz-descriptions-item nzTitle="Sub Total">
+          <span class="text-success font-weight-bold">{{
+            order.sub_total | currency: 'INR'
+            }}</span>
+        </nz-descriptions-item>
+
+        <nz-descriptions-item nzTitle="Delivery Charge">
+          <span class="text-success font-weight-bold">
+            {{ order.shipping_amount === 0 ? 'Free' : (order.shipping_amount | currency: 'INR') }}
+          </span>
+        </nz-descriptions-item>
+
+        @if (order.delivery_charges?.[0]?.delivery_tax_type === 'IGST') {
+        <nz-descriptions-item nzTitle="Order Type">
+          <strong>Inter State</strong>
+        </nz-descriptions-item>
+        }
+
+        <nz-descriptions-item nzTitle="Marketplace Fee">
+          <span class="text-success font-weight-bold">{{
+            order.marketplace_fee | currency: 'INR'
+            }}</span>
+        </nz-descriptions-item>
+
+        <nz-descriptions-item nzTitle="Total Amount">
+          <span class="text-success font-weight-bold" style="font-size: 15px">
+            {{ order.net_amount | currency: 'INR' }}
+          </span>
+        </nz-descriptions-item>
+
+        <!-- ================= SHIPMENT TRACKING INFO (Visible when shipped/delivered) ================= -->
+        @if (order.shipment_ack_number) {
+        <nz-descriptions-item nzTitle="Shipment Ack No.">
+          <strong>{{ order.shipment_ack_number }}</strong>
+        </nz-descriptions-item>
+        }
+        @if (order.shipment_tracking_url) {
+        <nz-descriptions-item nzTitle="Tracking URL">
+          <a [href]="order.shipment_tracking_url" target="_blank" rel="noopener noreferrer">
+            <nz-icon nzType="link"></nz-icon> Track Shipment
+          </a>
+        </nz-descriptions-item>
+        }
+
+        <!-- ================= INVOICE NUMBER (Visible after invoice upload) ================= -->
+        @if (order.invoice_number) {
+        <nz-descriptions-item nzTitle="Invoice No.">
+          <strong>{{ order.invoice_number }}</strong>
+        </nz-descriptions-item>
+        }
+      </nz-descriptions>
+    </div>
+  </div>
+
+  <!-- ================= USER INFORMATION ================= -->
+  <div nz-col [nzXs]="24" class="image-upload-section bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+    <nz-divider nzOrientation="left" [nzText]="userHeaderTemplate">
+      <ng-template #userHeaderTemplate>
+        <span class="text-lg font-bold">Delivery Information</span>
+      </ng-template>
+    </nz-divider>
+
+    <div class="image-table-wrapper">
+      <nz-table #userTable [nzData]="user ? [user] : []" nzSize="small" [nzFrontPagination]="false">
+        <thead>
+          <tr>
+            <th>Shipping Address</th>
+            <th>Billing Address</th>
+            <th>Delivery Base Fee</th>
+            <th>Delivery Tax Type</th>
+            <th>Delivery Tax Amount</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (user of userTable.data; track user) {
+          <tr>
+            <td>{{ user?.shipping_address || 'N/A' }}</td>
+            <td>{{ user?.billing_address || 'N/A' }}</td>
+            <td>
+              {{ (order.delivery_charges?.[0]?.delivery_base_fee | currency: 'INR') || 'N/A' }}
+            </td>
+            <td>
+              {{ order.delivery_charges?.[0]?.delivery_tax_type || 'N/A' }}
+            </td>
+            <td>
+              {{ (order.delivery_charges?.[0]?.delivery_tax_amount | currency: 'INR') || 'N/A' }}
+            </td>
+          </tr>
+          }
+        </tbody>
+      </nz-table>
+    </div>
+  </div>
+
+  <!-- ================= ITEM BREAKDOWN TABLE ================= -->
+  <div nz-col [nzXs]="24" class="image-upload-section bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+    <nz-divider nzOrientation="left" [nzText]="itemsHeaderTemplate">
+      <ng-template #itemsHeaderTemplate>
+        <span class="text-lg font-bold">Ordered Items</span>
+      </ng-template>
+    </nz-divider>
+
+    <div class="image-table-wrapper">
+      <nz-table #itemsTable [nzData]="order.orderItems || []" nzSize="small" [nzFrontPagination]="false">
+        <thead>
+          <tr>
+            <th nzWidth="100px">Image</th>
+            <th>Product Name / SKU</th>
+            <th nzWidth="150px" nzAlign="right">Unit Price</th>
+            <th nzWidth="100px" nzAlign="center">Quantity</th>
+            <th nzWidth="150px" nzAlign="right">Tax Amount</th>
+            <th nzWidth="150px" nzAlign="right">Total</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (item of itemsTable.data; track item.sku) {
+          <tr>
+            <td>
+              <img [src]="
+                      item.image_url ||
+                      'https://tse1.mm.bing.net/th/id/OIP.H1gHhKVbteqm1U5SrwpPgwHaFj?pid=Api'
+                    " [alt]="item.product_name" style="
+                      width: 60px;
+                      height: 60px;
+                      object-fit: contain;
+                      border: 1px solid #f0f0f0;
+                      border-radius: 4px;
+                    " />
+            </td>
+            <td>
+              <div style="font-weight: 600; color: #262626">{{ item.product_name }}</div>
+              <div style="font-size: 12px; color: #8c8c8c; margin-bottom: 4px">
+                SKU: {{ item.sku }}
+              </div>
+            </td>
+            <td nzAlign="right">{{ item.unit_price | currency: 'INR' }}</td>
+            <td nzAlign="center">{{ item.qty }}</td>
+            <td nzAlign="right">
+              <span nz-tooltip [nzTooltipTitle]="taxTooltipTemplate"
+                [nzTooltipOverlayStyle]="{ 'max-width': 'none', 'width': 'max-content' }"
+                style="cursor: pointer; border-bottom: 1px dashed #1890ff; color: #1890ff;">
+                {{ item.tax_amount | currency: 'INR' }}
+              </span>
+              <ng-template #taxTooltipTemplate>
+                <div style="text-align: left; padding: 4px 0;">
+                  @for (tax of getTaxBreakout(item.product_code); track tax.order_tax_id) {
+                  <div style="margin-bottom: 4px; white-space: nowrap;">
+                    <strong>{{ tax.component_name }}</strong> (Rate: {{ tax.rate }}%): Calculated: {{
+                    tax.calculated_amount | currency: 'INR' }}
+                  </div>
+                  } @empty {
+                  <div>No breakout details available</div>
+                  }
+                </div>
+              </ng-template>
+            </td>
+            <td nzAlign="right">
+              <strong>{{
+                item.total_amount || item.unit_price * item.qty | currency: 'INR'
+                }}</strong>
+            </td>
+          </tr>
+          } @empty {
+          <tr>
+            <td colspan="6">
+              <nz-empty nzNotFoundContent="No items found in this order."></nz-empty>
+            </td>
+          </tr>
+          }
+        </tbody>
+      </nz-table>
+    </div>
+  </div>
+
+  <!-- ================= ACTION NAVIGATION FOOTER ================= -->
+  <div nz-col [nzXs]="24" style="display: flex; justify-content: space-between; align-items: center; width: 100%">
+    <!-- Informational Status Labels -->
+    <div style="display: flex; gap: 16px">
+      @if (order.order_status === 'Cancelled') {
+      <span style="color: #ff4d4f; font-weight: 600">This order has been cancelled.</span>
+      }
+      @if (order.order_status === 'Delivered') {
+      <span style="color: #52c41a; font-weight: 600">This order has been delivered.</span>
+      }
+      @if (order.payment_status === 'Completed') {
+      <span style="color: #52c41a; font-weight: 600">The payment has been completed.</span>
+      }
+      @if (order.payment_status === 'Failed') {
+      <span style="color: #ff4d4f; font-weight: 600">The payment has been failed.</span>
+      }
+    </div>
+    <!-- Interactive Dropdowns Panel -->
+    <div class="status-container" style="display: flex; gap: 16px">
+      <!-- Payment Dropdown Form Control -->
+      @if (!(order.payment_status === 'Failed')) {
+      @if (order.payment_status !== 'Completed' && hasPaymentUpdatePermission) {
+      <div class="status-group" style="display: flex; gap: 16px">
+        <nz-select [(ngModel)]="selectedPayment" style="width: 160px" nzPlaceHolder="Payment Status">
+          @for (status of paymentStatusOptions; track status) {
+          <nz-option [nzValue]="status" [nzLabel]="status"></nz-option>
+          }
+        </nz-select>
+        <button nz-button nzType="primary" (click)="updatePaymentStatus(selectedPayment)">
+          <nz-icon nzType="credit-card"></nz-icon> Update Payment
+        </button>
+      </div>
+      }
+      }
+
+      <!-- Order Dropdown Form Control -->
+      @if (
+      order.order_status !== 'Delivered' &&
+      order.order_status !== 'Cancelled' &&
+      hasOrderUpdatePermission
+      ) {
+      <div class="status-group" style="display: flex; gap: 16px">
+        <nz-select [(ngModel)]="selectedOrderStatus" style="width: 140px" nzPlaceHolder="Order Status">
+          @for (status of orderStatusOptions; track status) {
+          <nz-option [nzValue]="status" [nzLabel]="status"></nz-option>
+          }
+        </nz-select>
+        <button nz-button nzType="primary" (click)="onOrderStatusUpdateClick(selectedOrderStatus)">
+          <nz-icon nzType="dropbox"></nz-icon> Update Order
+        </button>
+      </div>
+      }
+
+      <!-- Invoice Actions -->
+      <div class="status-group" style="display: flex; gap: 16px">
+        @if (!order.invoice_file_path) {
+        <button nz-button nzType="default" (click)="openInvoiceModal()">
+          <nz-icon nzType="upload"></nz-icon> Upload Invoice
+        </button>
+        }
+        @if (order.invoice_file_path) {
+        <button nz-button nzType="default" (click)="downloadInvoice()">
+          <nz-icon nzType="download"></nz-icon> Download Invoice
+        </button>
+        }
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ================= SHIPMENT TRACKING MODAL ================= -->
+<nz-modal [(nzVisible)]="showShipmentModal" nzTitle="Shipment Tracking Details" [nzMaskClosable]="false"
+  [nzClosable]="true" (nzOnCancel)="closeShipmentModal()" [nzFooter]="shipmentModalFooter" [nzWidth]="560">
+  <ng-container *nzModalContent>
+    <p style="margin-bottom: 16px; color: #595959;">
+      Please provide shipment tracking details before marking this order as
+      <strong>Shipped</strong>.
+    </p>
+    <form nz-form [formGroup]="shipmentForm" nzLayout="vertical">
+      <!-- Shipment Ack Number -->
+      <nz-form-item>
+        <nz-form-label nzRequired>Shipment Acknowledgement Number</nz-form-label>
+        <nz-form-control [nzErrorTip]="ackErrorTpl">
+          <input nz-input formControlName="shipment_ack_number" placeholder="e.g. AWB123456789" type="text"
+            maxlength="100" (blur)="onTrimBlur('shipmentForm', 'shipment_ack_number')" />
+          <ng-template #ackErrorTpl let-control>
+            @if (control.hasError('whitespace') || control.hasError('required')) {
+            Shipment Acknowledgement Number is required and cannot be blank spaces
+            }
+          </ng-template>
+        </nz-form-control>
+      </nz-form-item>
+
+      <!-- Shipment Tracking URL -->
+      <nz-form-item>
+        <nz-form-label nzRequired>Shipment Tracking URL</nz-form-label>
+        <nz-form-control [nzErrorTip]="urlErrorTpl">
+          <input nz-input formControlName="shipment_tracking_url" placeholder="https://courier.com/track/AWB123456789"
+            type="url" (blur)="onTrimBlur('shipmentForm', 'shipment_tracking_url')" />
+          <ng-template #urlErrorTpl let-control>
+            @if (control.hasError('whitespace') || control.hasError('required')) {
+            Tracking URL is required and cannot be blank spaces
+            }
+            @else if (control.hasError('pattern')) {
+            Please enter a valid URL (starting with http:// or https://)
+            }
+          </ng-template>
+        </nz-form-control>
+      </nz-form-item>
+    </form>
+  </ng-container>
+
+  <ng-template #shipmentModalFooter>
+    <button nz-button nzType="default" (click)="closeShipmentModal()">Cancel</button>
+    <button nz-button nzType="primary" (click)="confirmShipment()" [disabled]="isShipmentFormInvalid()">
+      <nz-icon nzType="check"></nz-icon> Confirm & Update
+    </button>
+  </ng-template>
+</nz-modal>
+
+<!-- ================= INVOICE UPLOAD MODAL ================= -->
+<nz-modal [(nzVisible)]="showInvoiceModal" nzTitle="Upload Invoice" [nzMaskClosable]="false" [nzClosable]="true"
+  (nzOnCancel)="closeInvoiceModal()" [nzFooter]="invoiceModalFooter" [nzWidth]="560">
+  <ng-container *nzModalContent>
+    <p style="margin-bottom: 16px; color: #595959;">
+      Please provide the invoice number and upload the invoice file (PDF only, max 2MB).
+    </p>
+    <form nz-form [formGroup]="invoiceForm" nzLayout="vertical">
+      <!-- Invoice Number -->
+      <nz-form-item>
+        <nz-form-label nzRequired>Invoice Number</nz-form-label>
+        <nz-form-control [nzErrorTip]="invoiceNoErrorTpl">
+          <input nz-input formControlName="invoice_number" placeholder="e.g. INV-2025-0001" type="text" maxlength="50"
+            (blur)="onTrimBlur('invoiceForm', 'invoice_number')" />
+          <ng-template #invoiceNoErrorTpl let-control>
+            @if (control.hasError('whitespace') || control.hasError('required')) {
+            Invoice Number is required and cannot be blank spaces
+            }
+          </ng-template>
+        </nz-form-control>
+      </nz-form-item>
+
+      <!-- Invoice File -->
+      <nz-form-item>
+        <nz-form-label nzRequired>Invoice File (PDF)</nz-form-label>
+        <nz-form-control>
+          <div class="invoice-upload-wrapper">
+            <input type="file" #invoiceFileInput accept=".pdf" (change)="onInvoiceFileSelected($event)"
+              style="display: none" />
+            <button nz-button nzType="dashed" type="button" (click)="invoiceFileInput.click()">
+              <nz-icon nzType="upload"></nz-icon>
+              {{ selectedInvoiceFile ? 'Change File' : 'Select PDF File' }}
+            </button>
+            @if (selectedInvoiceFile) {
+            <div class="selected-file-info">
+              <nz-icon nzType="file-pdf" nzTheme="outline" style="color: #ff4d4f; font-size: 18px;"></nz-icon>
+              <span class="file-name">{{ selectedInvoiceFile.name }}</span>
+              <span class="file-size">({{ formatFileSize(selectedInvoiceFile.size) }})</span>
+              <button nz-button nzType="text" nzDanger nzSize="small" (click)="clearSelectedInvoiceFile()"
+                title="Remove file">
+                <nz-icon nzType="close"></nz-icon>
+              </button>
+            </div>
+            } @else {
+            <div class="no-file-text">No file selected</div>
+            }
+          </div>
+        </nz-form-control>
+      </nz-form-item>
+    </form>
+  </ng-container>
+
+  <ng-template #invoiceModalFooter>
+    <button nz-button nzType="default" (click)="closeInvoiceModal()">Cancel</button>
+    <button nz-button nzType="primary" (click)="confirmInvoiceUpload()"
+      [disabled]="isInvoiceFormInvalid() || !selectedInvoiceFile">
+      <nz-icon nzType="upload"></nz-icon> Upload Invoice
+    </button>
+  </ng-template>
+</nz-modal>
+
+} @else {
+<div class="max-w-7xl mx-auto p-6 bg-white rounded-xl shadow-sm m-6">
+  <nz-skeleton [nzActive]="true" [nzParagraph]="{ rows: 8 }"></nz-skeleton>
+</div>
+}

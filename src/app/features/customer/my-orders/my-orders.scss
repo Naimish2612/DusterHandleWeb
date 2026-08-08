@@ -1,0 +1,814 @@
+@use '../../../../assets/styles/common' as *;
+@use '../../../../assets/styles/responsive' as *;
+
+.orders-page {
+  background: $color-bg-body;
+  min-height: 100vh;
+  font-family: $font-primary;
+
+  &__banner {
+    background: linear-gradient(135deg, $primary-900 0%, $primary-700 60%, $primary-500 100%);
+    padding: $spacing-10 0 $spacing-12;
+
+    @include mobile { padding: $spacing-8 0 $spacing-10; }
+  }
+
+  &__banner-inner {
+    @include make-container($container-xxl);
+    @include flex-between;
+    flex-wrap: wrap;
+    gap: $spacing-4;
+  }
+
+  &__title {
+    font-family: $font-heading;
+    font-size: $font-size-3xl;
+    font-weight: $font-weight-bold;
+    color: $neutral-0;
+    margin: 0 0 $spacing-2;
+    display: flex;
+    align-items: center;
+    gap: $spacing-3;
+    letter-spacing: $letter-spacing-tight;
+
+    span[nz-icon] { font-size: $icon-size-2xl; }
+
+    @include mobile { font-size: $font-size-2xl; }
+  }
+
+  &__subtitle {
+    font-size: $font-size-sm;
+    color: rgba(255, 255, 255, 0.65);
+    margin: 0;
+  }
+
+  &__summary {
+    display: flex;
+    gap: $spacing-3;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  &__body {
+    @include make-container($container-xxl);
+    padding-top: $spacing-12 !important;
+    padding-bottom: $spacing-16;
+    margin-top: -$spacing-6;
+    @include flex-column;
+    gap: $spacing-4;
+  }
+}
+
+.orders-summary-pill {
+  display: flex;
+  align-items: center;
+  gap: $spacing-2;
+  background: rgba(255, 255, 255, 0.12);
+  border: $border-width-thin solid rgba(255, 255, 255, 0.2);
+  border-radius: $border-radius-full;
+  padding: $spacing-2 $spacing-4;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-semibold;
+  color: $neutral-0;
+
+  span[nz-icon] { font-size: $icon-size-base; }
+
+  &--active {
+    background: rgba(0, 156, 222, 0.3);
+    border-color: rgba(0, 156, 222, 0.5);
+  }
+}
+
+// =========================================================================
+// TOOLBAR
+// =========================================================================
+
+.orders-toolbar {
+  background: $card-bg;
+  border: $border-width-thin solid $neutral-200;
+  border-radius: $border-radius-xl;
+  padding: $spacing-4 $spacing-5;
+  display: flex;
+  gap: $spacing-4;
+  align-items: center;
+  flex-wrap: wrap;
+  box-shadow: $shadow-xs;
+
+  &__search {
+    flex: 1;
+    min-width: 220px;
+
+    .ant-input-affix-wrapper {
+      border-radius: $border-radius-lg !important;
+    }
+  }
+
+  &__filter {
+    min-width: 180px;
+  }
+}
+
+// =========================================================================
+// SKELETON
+// =========================================================================
+
+.orders-skeleton {
+  background: $card-bg;
+  border-radius: $border-radius-xl;
+  padding: $spacing-6;
+  border: $border-width-thin solid $neutral-200;
+  @include flex-column;
+  gap: $spacing-6;
+
+  .ant-skeleton { margin: 0 !important; }
+}
+
+// =========================================================================
+// EMPTY STATE
+// =========================================================================
+
+.orders-empty {
+  background: $card-bg;
+  border: $border-width-thin solid $neutral-200;
+  border-radius: $border-radius-2xl;
+  @include flex-column-center;
+  gap: $spacing-4;
+  padding: $spacing-20 $spacing-6;
+  text-align: center;
+  box-shadow: $shadow-xs;
+
+  > span[nz-icon] {
+    font-size: 64px;
+    color: $neutral-300;
+    line-height: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  h3 {
+    font-family: $font-heading;
+    font-size: $font-size-xl;
+    font-weight: $font-weight-bold;
+    color: $neutral-700;
+    margin: 0;
+  }
+
+  p {
+    font-size: $font-size-sm;
+    color: $neutral-500;
+    margin: 0 0 $spacing-2;
+    max-width: 400px;
+  }
+
+  a[nz-button] {
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    gap: $spacing-2;
+    height: 44px;
+    padding: 0 $spacing-6;
+    font-size: $font-size-sm;
+    font-weight: $font-weight-semibold;
+    border-radius: $border-radius-lg;
+    min-width: 180px;
+
+    span[nz-icon] {
+      font-size: $icon-size-base;
+      line-height: 1;
+      display: inline-flex;
+      align-items: center;
+
+      // Remove default ng-zorro margin that causes overlap
+      + * {
+        margin-left: 0 !important;
+      }
+    }
+
+    // Override ng-zorro's default icon margin
+    .anticon + span,
+    span + .anticon {
+      margin-left: 0 !important;
+    }
+  }
+}
+
+// =========================================================================
+// ORDER CARD
+// =========================================================================
+
+.order-card {
+  background: $card-bg;
+  border: $border-width-thin solid $neutral-200;
+  border-radius: $border-radius-2xl;
+  overflow: hidden;
+  cursor: pointer;
+  transition: box-shadow $transition-base, border-color $transition-fast, transform $transition-base;
+  box-shadow: $shadow-xs;
+
+  &:hover {
+    box-shadow: $shadow-lg;
+    border-color: $primary-200;
+    transform: translateY(-2px);
+  }
+
+  // ── Header ──────────────────────────────────────────────────────
+  &__header {
+    @include flex-between;
+    padding: $spacing-4 $spacing-6;
+    background: $neutral-50;
+    border-bottom: $border-width-thin solid $neutral-100;
+
+    @include mobile { padding: $spacing-3 $spacing-4; }
+  }
+
+  &__header-left {
+    display: flex;
+    align-items: center;
+    gap: $spacing-4;
+    flex-wrap: wrap;
+
+    @include mobile { gap: $spacing-2; }
+  }
+
+  &__header-right {
+    display: flex;
+    align-items: center;
+    gap: $spacing-3;
+    flex-shrink: 0;
+  }
+
+  &__id {
+    display: flex;
+    align-items: center;
+    gap: $spacing-1-5;
+    font-size: $font-size-sm;
+    font-weight: $font-weight-bold;
+    color: $neutral-800;
+    font-family: $font-monospace;
+
+    span[nz-icon] {
+      color: $primary-500;
+      font-size: $icon-size-base;
+    }
+  }
+
+  &__date {
+    display: flex;
+    align-items: center;
+    gap: $spacing-1;
+    font-size: $font-size-xs;
+    color: $neutral-400;
+
+    span[nz-icon] { font-size: $icon-size-xs; }
+  }
+
+  &__status-tag {
+    font-size: $font-size-xs !important;
+    font-weight: $font-weight-semibold !important;
+    border-radius: $border-radius-full !important;
+
+    span[nz-icon] { margin-right: $spacing-0-5; }
+  }
+
+  &__chevron {
+    font-size: $icon-size-base;
+    color: $neutral-300;
+    transition: transform $transition-fast;
+
+    .order-card:hover & { transform: translateX(3px); color: $primary-500; }
+  }
+
+  // ── Items ────────────────────────────────────────────────────────
+  &__items {
+    padding: $spacing-5 $spacing-6;
+    @include flex-column;
+    gap: $spacing-3;
+
+    @include mobile { padding: $spacing-4; }
+  }
+
+  &__more-items {
+    font-size: $font-size-xs;
+    color: $primary-500;
+    font-weight: $font-weight-semibold;
+    background: $primary-50;
+    padding: $spacing-1 $spacing-3;
+    border-radius: $border-radius-full;
+    display: inline-block;
+    align-self: flex-start;
+    margin-top: $spacing-1;
+  }
+
+  // ── Footer ───────────────────────────────────────────────────────
+  &__footer {
+    @include flex-between;
+    padding: $spacing-4 $spacing-6;
+    background: $neutral-50;
+    border-top: $border-width-thin solid $neutral-100;
+    flex-wrap: wrap;
+    gap: $spacing-3;
+
+    @include mobile { padding: $spacing-3 $spacing-4; }
+  }
+
+  &__totals {
+    display: flex;
+    align-items: center;
+    gap: $spacing-3;
+    flex-wrap: wrap;
+  }
+
+  &__total-label {
+    font-size: $font-size-xs;
+    color: $neutral-500;
+    font-weight: $font-weight-medium;
+  }
+
+  &__total-value {
+    font-family: $font-heading;
+    font-size: $font-size-xl;
+    font-weight: $font-weight-extrabold;
+    color: $neutral-800;
+  }
+
+  &__payment-tag {
+    font-size: $font-size-xs !important;
+    border-radius: $border-radius-sm !important;
+  }
+
+  &__actions {
+    display: flex;
+    gap: $spacing-2;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  // ── Progress bar (active orders) ──────────────────────────────────
+  &__progress {
+    padding: $spacing-4 $spacing-6 $spacing-5;
+    background: linear-gradient(180deg, rgba(0, 156, 222, 0.04) 0%, transparent 100%);
+    border-top: $border-width-thin solid $primary-100;
+
+    @include mobile { padding: $spacing-3 $spacing-4 $spacing-4; }
+  }
+}
+
+// ── Order item preview (in card) ──────────────────────────────────────
+.order-item-preview {
+  display: flex;
+  gap: $spacing-3;
+  align-items: flex-start;
+
+  &__img-wrap {
+    width: 56px;
+    height: 56px;
+    border-radius: $border-radius-lg;
+    overflow: hidden;
+    flex-shrink: 0;
+    background: $neutral-100;
+    border: $border-width-thin solid $neutral-200;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+
+  &__info {
+    @include flex-column;
+    gap: $spacing-0-5;
+    min-width: 0;
+    flex: 1;
+  }
+
+  &__name {
+    font-size: $font-size-sm;
+    font-weight: $font-weight-semibold;
+    color: $neutral-800;
+    @include line-clamp(1);
+  }
+
+  &__meta {
+    font-size: $font-size-xs;
+    color: $neutral-500;
+  }
+
+  &__attrs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: $spacing-1;
+    margin-top: $spacing-1;
+  }
+
+  &__support {
+    margin-top: 8px;
+
+    button {
+      font-size: 12px;
+      height: 28px;
+      padding: 0 12px;
+    }
+  }
+
+}
+
+// ── Attribute chip ────────────────────────────────────────────────────
+.order-attr-chip {
+  font-size: $font-size-2xs;
+  background: $neutral-100;
+  color: $neutral-600;
+  padding: $spacing-0-5 $spacing-1-5;
+  border-radius: $border-radius-sm;
+  font-weight: $font-weight-medium;
+  letter-spacing: $letter-spacing-wide;
+}
+
+// ── Order progress steps ──────────────────────────────────────────────
+.order-progress-steps {
+  .ant-steps-item-title {
+    font-size: $font-size-xs !important;
+    font-weight: $font-weight-medium !important;
+  }
+
+  .ant-steps-item-process .ant-steps-item-icon {
+    background: $primary-500 !important;
+    border-color: $primary-500 !important;
+  }
+
+  .ant-steps-item-finish .ant-steps-icon { color: $primary-500 !important; }
+  .ant-steps-item-finish > .ant-steps-item-container > .ant-steps-item-tail::after {
+    background-color: $primary-500 !important;
+  }
+}
+
+// =========================================================================
+// ORDER DETAIL DRAWER
+// =========================================================================
+
+.order-detail {
+  @include flex-column;
+  gap: 0;
+  padding: $spacing-2;
+
+  &__section-title {
+    display: flex;
+    align-items: center;
+    gap: $spacing-2;
+    font-size: $font-size-base;
+    font-weight: $font-weight-bold;
+    color: $neutral-800;
+    margin: 0 0 $spacing-4;
+
+    span[nz-icon] { color: $primary-500; font-size: $icon-size-lg; }
+  }
+
+  &__meta {
+    background: $neutral-50;
+    border: $border-width-thin solid $neutral-200;
+    border-radius: $border-radius-xl;
+    padding: $spacing-5;
+    @include flex-column;
+    gap: $spacing-3;
+    margin-bottom: $spacing-5;
+  }
+
+  &__meta-row {
+    @include flex-between;
+    gap: $spacing-3;
+    flex-wrap: wrap;
+  }
+
+  &__meta-label {
+    display: flex;
+    align-items: center;
+    gap: $spacing-1-5;
+    font-size: $font-size-sm;
+    color: $neutral-500;
+    font-weight: $font-weight-medium;
+    flex-shrink: 0;
+
+    span[nz-icon] { font-size: $icon-size-sm; color: $neutral-400; }
+  }
+
+  &__meta-value {
+    font-size: $font-size-sm;
+    color: $neutral-700;
+    font-weight: $font-weight-semibold;
+    text-align: right;
+  }
+
+  &__tracking {
+    display: flex;
+    align-items: center;
+    gap: $spacing-1;
+    font-family: $font-monospace;
+    font-size: $font-size-xs !important;
+    color: $primary-600 !important;
+  }
+
+  &__est-delivery {
+    color: $warning-600 !important;
+  }
+
+  &__tracker {
+    background: $primary-50;
+    border: $border-width-thin solid $primary-100;
+    border-radius: $border-radius-xl;
+    padding: $spacing-5;
+    margin-bottom: $spacing-5;
+  }
+
+  &__items {
+    @include flex-column;
+    gap: $spacing-4;
+    margin-bottom: $spacing-2;
+  }
+
+  &__pricing {
+    margin-bottom: $spacing-2;
+  }
+
+  &__address {
+    margin-bottom: $spacing-2;
+  }
+
+  &__footer-actions {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-3;
+    padding-top: $spacing-4;
+    border-top: $border-width-thin solid $neutral-200;
+    margin-top: $spacing-4;
+  }
+
+  &__reorder-btn {
+    background: $primary-500 !important;
+    border-color: $primary-500 !important;
+    font-weight: $font-weight-semibold !important;
+  }
+}
+
+// ── Order detail item ─────────────────────────────────────────────────
+.order-detail-item {
+  display: flex;
+  gap: $spacing-4;
+  padding: $spacing-4;
+  background: $neutral-50;
+  border: $border-width-thin solid $neutral-200;
+  border-radius: $border-radius-xl;
+
+  &__img-wrap {
+    width: 80px;
+    height: 80px;
+    border-radius: $border-radius-lg;
+    overflow: hidden;
+    flex-shrink: 0;
+    border: $border-width-thin solid $neutral-200;
+    background: $neutral-100;
+
+    img { width: 100%; height: 100%; object-fit: cover; }
+  }
+
+  &__info {
+    @include flex-column;
+    gap: $spacing-1;
+    flex: 1;
+    min-width: 0;
+  }
+
+  &__name {
+    font-size: $font-size-base;
+    font-weight: $font-weight-semibold;
+    color: $neutral-800;
+    @include line-clamp(2);
+  }
+
+  &__sku {
+    font-size: $font-size-xs;
+    color: $neutral-400;
+    font-family: $font-monospace;
+  }
+
+  &__attrs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: $spacing-1;
+  }
+
+  &__pricing {
+    display: flex;
+    align-items: center;
+    gap: $spacing-3;
+    margin-top: $spacing-1;
+    flex-wrap: wrap;
+  }
+
+  &__qty {
+    font-size: $font-size-xs;
+    font-weight: $font-weight-semibold;
+    color: $neutral-500;
+    background: $neutral-100;
+    padding: $spacing-0-5 $spacing-2;
+    border-radius: $border-radius-sm;
+  }
+
+  &__unit {
+    font-size: $font-size-xs;
+    color: $neutral-400;
+  }
+
+  &__total {
+    font-size: $font-size-base;
+    font-weight: $font-weight-extrabold;
+    color: $neutral-800;
+    font-family: $font-heading;
+    margin-left: auto;
+  }
+
+  &__support-action {
+    display: flex;
+    align-items: center;
+  }
+
+  &__support-action {
+    .order-item-support-btn {
+      border-color: #52c41a;
+      color: #52c41a;
+
+      &:hover {
+        background: #f6ffed;
+        border-color: #73d13d;
+        color: #73d13d;
+      }
+    }
+  }
+}
+
+// ── Price breakdown table ─────────────────────────────────────────────
+.price-breakdown {
+  background: $neutral-50;
+  border: $border-width-thin solid $neutral-200;
+  border-radius: $border-radius-xl;
+  overflow: hidden;
+
+  &__row {
+    @include flex-between;
+    padding: $spacing-3 $spacing-5;
+    font-size: $font-size-sm;
+    color: $neutral-600;
+    border-bottom: $border-width-thin solid $neutral-100;
+
+    &:last-child { border-bottom: none; }
+
+    &--discount { color: $success-600; font-weight: $font-weight-medium; }
+
+    &--total {
+      background: $primary-50;
+      font-size: $font-size-base;
+      font-weight: $font-weight-extrabold;
+      color: $neutral-800;
+      padding: $spacing-4 $spacing-5;
+
+      span:last-child {
+        font-family: $font-heading;
+        font-size: $font-size-xl;
+        color: $primary-600;
+      }
+    }
+  }
+}
+
+// ── Order address box ─────────────────────────────────────────────────
+.order-address-box {
+  background: $neutral-50;
+  border: $border-width-thin solid $neutral-200;
+  border-radius: $border-radius-xl;
+  padding: $spacing-5;
+
+  &__label {
+    display: flex;
+    align-items: center;
+    gap: $spacing-1-5;
+    font-size: $font-size-xs;
+    font-weight: $font-weight-bold;
+    color: $primary-600;
+    text-transform: uppercase;
+    letter-spacing: $letter-spacing-wider;
+    margin-bottom: $spacing-2;
+
+    span[nz-icon] { font-size: $icon-size-sm; }
+  }
+
+  p {
+    font-size: $font-size-sm;
+    color: $neutral-600;
+    margin: 0;
+    line-height: $line-height-relaxed;
+  }
+}
+
+
+// =========================================================================
+// PER-PRODUCT REVIEW BUTTON (order card items)
+// =========================================================================
+
+.order-item-preview {
+  // extend existing rule — add flex alignment for review btn
+  align-items: center;
+
+  &__review {
+    flex-shrink: 0;
+    margin-left: auto;
+    padding-left: $spacing-3;
+  }
+}
+
+// Review button in item row
+.order-item-review-btn {
+  border-color: $warning-500 !important;
+  color: $warning-600 !important;
+  font-weight: $font-weight-semibold !important;
+  border-radius: $border-radius-full !important;
+  transition: all $transition-fast !important;
+
+  span[nz-icon] {
+    color: $warning-500 !important;
+  }
+
+  &:hover {
+    background: $warning-50 !important;
+    border-color: $warning-600 !important;
+    color: $warning-700 !important;
+    transform: scale(1.04);
+  }
+}
+
+// "Reviewed" badge
+.order-item-review-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: $spacing-1;
+  font-size: $font-size-xs;
+  font-weight: $font-weight-semibold;
+  padding: $spacing-1 $spacing-2-5;
+  border-radius: $border-radius-full;
+
+  &--done {
+    color: $success-600;
+    background: $success-50;
+    border: $border-width-thin solid $success-200;
+
+    span[nz-icon] {
+      color: $success-500;
+      font-size: $icon-size-sm;
+    }
+  }
+}
+
+// ── Review action row inside drawer item ─────────────────────────────
+.order-detail-item {
+  &__review-action {
+    display: flex;
+    align-items: center;
+    margin-top: $spacing-3;
+    padding-top: $spacing-3;
+    border-top: $border-width-thin dashed $neutral-200;
+  }
+}
+
+.order-card__invoice-btn {
+  margin-right: 8px;
+  color: #e53935; // subtle PDF red
+}
+
+.order-card__invoice-btn:hover {
+  background: rgba(229, 57, 53, 0.08);
+}
+
+/* ================= TRACKING LINK STYLE ================= */
+.order-detail__tracking-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: #1890ff;
+  font-weight: 500;
+  text-decoration: none;
+  padding: 4px 10px;
+  background: #e6f7ff;
+  border: 1px solid #91d5ff;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: #1890ff;
+    color: #fff;
+    border-color: #1890ff;
+    box-shadow: 0 2px 6px rgba(24, 144, 255, 0.25);
+  }
+
+  span[nz-icon] {
+    font-size: 13px;
+  }
+}

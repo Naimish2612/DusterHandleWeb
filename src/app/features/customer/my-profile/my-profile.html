@@ -1,0 +1,282 @@
+<!-- =====================================================================
+     MY PROFILE PAGE
+     ===================================================================== -->
+<div class="profile-page">
+  <!-- ── Page header ──────────────────────────────────────────────── -->
+  <div class="profile-page__banner">
+    <div class="profile-page__banner-inner">
+      <h1 class="profile-page__title">
+        <span nz-icon nzType="user"></span>
+        My Profile
+      </h1>
+      <p class="profile-page__subtitle">Manage your personal information and account settings</p>
+    </div>
+  </div>
+
+  <div class="profile-page__body">
+    <!-- ── Left: User card ──────────────────────────────────────── -->
+    <aside class="profile-sidebar">
+      @if (isLoading()) {
+      <nz-skeleton [nzActive]="true" [nzAvatar]="true" [nzParagraph]="{ rows: 4 }"></nz-skeleton>
+      }
+
+      @if (!isLoading() && profile(); as p) {
+      <!-- Avatar + name -->
+      <!-- Avatar + name -->
+      <div class="profile-sidebar__avatar-area">
+        <div class="profile-sidebar__avatar-wrap">
+          <!-- Show image if profile_photo_url exists, otherwise show initials -->
+          @if (p.profile_photo_url) {
+          <nz-avatar [nzSrc]="p.profile_photo_url" [nzSize]="96" class="profile-sidebar__avatar"></nz-avatar>
+          } @else {
+          <nz-avatar [nzText]="userInitials" [nzSize]="96" class="profile-sidebar__avatar"></nz-avatar>
+          }
+
+          <!-- Loading overlay while uploading -->
+          @if (isUploadingPic()) {
+          <div class="profile-sidebar__avatar-loading">
+            <span nz-icon nzType="loading"></span>
+          </div>
+          }
+
+          <!-- Camera button to trigger file input -->
+          <button class="profile-sidebar__avatar-edit" aria-label="Change photo" (click)="fileInput.click()"
+            [disabled]="isUploadingPic()">
+            <span nz-icon nzType="camera"></span>
+          </button>
+
+          <!-- Hidden file input -->
+          <input #fileInput type="file" accept="image/jpeg,image/jpg,image/png,image/webp"
+            (change)="onAvatarChange($event)" style="display: none" />
+        </div>
+
+        <h3 class="profile-sidebar__name">{{ p.full_name }}</h3>
+        <p class="profile-sidebar__email">{{ p.email_id }}</p>
+
+        <!-- Remove pic button (only shows when pic exists) -->
+        @if (p.profile_photo_url) {
+        <button nz-button nzType="link" nzDanger nzSize="small" (click)="removeProfilePic()"
+          [disabled]="isUploadingPic()">
+          <span nz-icon nzType="delete"></span>
+          Remove Photo
+        </button>
+        }
+
+        <span class="profile-sidebar__member-since">
+          <span nz-icon nzType="calendar"></span>
+          Member since {{ memberSince }}
+        </span>
+      </div>
+      
+      <nz-divider></nz-divider>
+
+      <!-- Verification status -->
+      <div class="profile-sidebar__verifications">
+        <h4 class="profile-sidebar__section-label">Verification Status</h4>
+
+        <div class="verify-row">
+          <div class="verify-row__icon verify-row__icon--email">
+            <span nz-icon nzType="mail"></span>
+          </div>
+          <div class="verify-row__info">
+            <span class="verify-row__label">Email Address</span>
+            <span class="verify-row__value">{{ p.email_id }}</span>
+          </div>
+          <nz-tag [nzColor]="p.is_email_verified ? 'green' : 'orange'" class="verify-row__tag">
+            <span nz-icon [nzType]="p.is_email_verified ? 'check-circle' : 'clock-circle'"></span>
+            {{ p.is_email_verified ? 'Verified' : 'Pending' }}
+          </nz-tag>
+        </div>
+
+        <div class="verify-row">
+          <div class="verify-row__icon verify-row__icon--phone">
+            <span nz-icon nzType="phone"></span>
+          </div>
+          <div class="verify-row__info">
+            <span class="verify-row__label">Mobile Number</span>
+            <span class="verify-row__value">{{ p.phone_code }} {{ p.mobile_no }}</span>
+          </div>
+          <nz-tag [nzColor]="p.is_phone_verified ? 'green' : 'orange'" class="verify-row__tag">
+            <span nz-icon [nzType]="p.is_phone_verified ? 'check-circle' : 'clock-circle'"></span>
+            {{ p.is_phone_verified ? 'Verified' : 'Pending' }}
+          </nz-tag>
+        </div>
+      </div>
+
+      <nz-divider></nz-divider>
+
+      <!-- Quick stats -->
+      <!-- <div class="profile-sidebar__stats">
+          <div class="profile-stat">
+            <span nz-icon nzType="shopping"></span>
+            <span class="profile-stat__value">14</span>
+            <span class="profile-stat__label">Orders</span>
+          </div>
+          <div class="profile-stat">
+            <span nz-icon nzType="heart"></span>
+            <span class="profile-stat__value">8</span>
+            <span class="profile-stat__label">Wishlist</span>
+          </div>
+          <div class="profile-stat">
+            <span nz-icon nzType="star"></span>
+            <span class="profile-stat__value">6</span>
+            <span class="profile-stat__label">Reviews</span>
+          </div>
+        </div> -->
+      }
+    </aside>
+
+    <!-- ── Right: Tabs ───────────────────────────────────────────── -->
+    <div class="profile-content">
+      <nz-tabs nzSize="large" [(nzSelectedIndex)]="activeTab" [nzAnimated]="false" class="profile-tabs">
+        <!-- ════ Tab 1: Personal Info ════ -->
+        <nz-tab [nzTitle]="tabTitle1">
+          <ng-template #tabTitle1>
+            <span nz-icon nzType="idcard" class="ml-5"></span>
+            Personal Info
+          </ng-template>
+
+          <div class="profile-tab-pane">
+            @if (isLoading()) {
+            <nz-skeleton [nzActive]="true" [nzParagraph]="{ rows: 8 }"></nz-skeleton>
+            }
+
+            @if (!isLoading()) {
+            <div class="form-section-header">
+              <h3>Personal Information</h3>
+              <p>Update your name, phone, gender and date of birth.</p>
+            </div>
+
+            <form nz-form nzLayout="vertical" [formGroup]="profileForm" (ngSubmit)="saveProfile()" class="profile-form">
+              <!-- Row: Full name -->
+              <div class="profile-form__row">
+                <nz-form-item>
+                  <nz-form-label nzRequired nzFor="full_name">Full Name</nz-form-label>
+                  <nz-form-control nzHasFeedback [nzErrorTip]="fnErr">
+                    <nz-input-group [nzPrefix]="pfxUser">
+                      <input nz-input id="full_name" formControlName="full_name" placeholder="Arjun" />
+                    </nz-input-group>
+                    <ng-template #pfxUser><span nz-icon nzType="user"></span></ng-template>
+                    <ng-template #fnErr>
+                      @if (profileForm.get('full_name')?.hasError('required')) {
+                      Full name is required
+                      } @else {
+                      Minimum 2 characters
+                      }
+                    </ng-template>
+                  </nz-form-control>
+                </nz-form-item>
+
+                <!-- <nz-form-item>
+                    <nz-form-label nzRequired nzFor="last_name">Last Name</nz-form-label>
+                    <nz-form-control nzHasFeedback [nzErrorTip]="lnErr">
+                      <nz-input-group [nzPrefix]="pfxUser2">
+                        <input
+                          nz-input
+                          id="last_name"
+                          formControlName="last_name"
+                          placeholder="Patel"
+                        />
+                      </nz-input-group>
+                      <ng-template #pfxUser2><span nz-icon nzType="user"></span></ng-template>
+                      <ng-template #lnErr>
+                        @if (profileForm.get('last_name')?.hasError('required')) {
+                          Last name is required
+                        } @else {
+                          Minimum 2 characters
+                        }
+                      </ng-template>
+                    </nz-form-control>
+                  </nz-form-item> -->
+
+                <!-- Email (read-only) -->
+                <nz-form-item>
+                  <nz-form-label nzFor="email_id">Email Address</nz-form-label>
+                  <nz-form-control nzWarningTip="Contact support to change your registered email address.">
+                    <nz-input-group [nzPrefix]="pfxMail" [nzSuffix]="sfxLocked">
+                      <input nz-input id="email" formControlName="email_id" type="email" />
+                    </nz-input-group>
+                    <ng-template #pfxMail><span nz-icon nzType="mail"></span></ng-template>
+                    <ng-template #sfxLocked>
+                      <span nz-icon nzType="lock" style="color: #52c41a" nz-tooltip
+                        nzTooltipTitle="Email cannot be changed"></span>
+                    </ng-template>
+                  </nz-form-control>
+                </nz-form-item>
+
+              </div>
+
+              <!-- mobile_no -->
+              <nz-form-item>
+                <nz-form-label nzRequired nzFor="mobile_no">Mobile Number</nz-form-label>
+                <nz-form-control nzHasFeedback [nzErrorTip]="phoneErr">
+                  <nz-input-group [nzAddOnBefore]="phonePrefixTpl">
+                    <input nz-input id="mobile_no" formControlName="mobile_no" type="tel" placeholder="98765 43210" />
+                  </nz-input-group>
+                  <ng-template #phonePrefixTpl>
+                    <nz-select formControlName="phone_code" style="width: 80px">
+                      @for (code of phonePrefixes; track code) {
+                      <nz-option [nzValue]="code" [nzLabel]="code"></nz-option>
+                      }
+                    </nz-select>
+                  </ng-template>
+                  <ng-template #phoneErr>
+                    @if (profileForm.get('mobile_no')?.hasError('required')) {
+                    Phone number is required
+                    } @else {
+                    Enter a valid 10-digit mobile number
+                    }
+                  </ng-template>
+                </nz-form-control>
+              </nz-form-item>
+
+              <!-- Row: Gender + DOB -->
+              <div class="profile-form__row">
+                <nz-form-item>
+                  <nz-form-label nzFor="gender">Gender</nz-form-label>
+                  <nz-form-control>
+                    <nz-select formControlName="gender" nzPlaceHolder="Select gender" nzSize="large">
+                      @for (g of genderOptions; track g.value) {
+                      <nz-option [nzValue]="g.value" [nzLabel]="g.label"></nz-option>
+                      }
+                    </nz-select>
+                  </nz-form-control>
+                </nz-form-item>
+
+                <nz-form-item>
+                  <nz-form-label nzFor="birthdate">Date of Birth</nz-form-label>
+                  <nz-form-control>
+                    <nz-date-picker id="birthdate" formControlName="birthdate" nzFormat="dd/MM/yyyy"
+                      nzPlaceHolder="DD/MM/YYYY" nzSize="large" style="width: 100%"></nz-date-picker>
+                  </nz-form-control>
+                </nz-form-item>
+              </div>
+
+              <!-- Save button -->
+              <div class="profile-form__actions">
+                <button nz-button nzType="primary" nzSize="large" type="submit" [nzLoading]="isSaving()"
+                  class="profile-form__save-btn">
+                  <span nz-icon nzType="save"></span>
+                  Save Changes
+                </button>
+              </div>
+            </form>
+            }
+          </div>
+        </nz-tab>
+
+        <!-- ════ Tab 3: Change Password ════ -->
+        <nz-tab [nzTitle]="tabTitle3">
+          <ng-template #tabTitle3>
+            <span nz-icon nzType="lock"></span>
+            Password
+          </ng-template>
+
+          <div class="profile-tab-pane profile-tab-pane--narrow">
+            <app-change-password userRole="customer" (passwordChanged)="onPasswordChanged()"></app-change-password>
+          </div>
+        </nz-tab>
+      </nz-tabs>
+    </div>
+  </div>
+</div>

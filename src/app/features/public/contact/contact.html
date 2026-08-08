@@ -1,0 +1,350 @@
+<!-- =====================================================================
+     CONTACT US PAGE
+     ===================================================================== -->
+
+<!-- ── Page Hero Banner ──────────────────────────────────────────────── -->
+<section class="contact-hero">
+  <div class="contact-hero__bg-pattern" aria-hidden="true"></div>
+  <div class="contact-hero__container">
+    <div class="contact-hero__label">
+      <span nz-icon nzType="customer-service" nzTheme="fill"></span>
+      Get in Touch
+    </div>
+    <h1 class="contact-hero__title">
+      We'd Love to<br />
+      <span class="contact-hero__title-accent">Hear From You</span>
+    </h1>
+    <p class="contact-hero__sub">
+      Have a question, feedback, or a big idea? Our friendly support team is
+      available 24 × 7 and we aim to respond within one business hour.
+    </p>
+    <!-- Stats row REMOVED as per requirement -->
+  </div>
+</section>
+
+<div class="contact-info-strip__blank-strip">
+</div>
+<!-- ═══════════════════════════════════════════════════════════════════
+     CONTACT INFORMATION STRIP (NEW — matches reference image)
+     ═══════════════════════════════════════════════════════════════════ -->
+<section class="contact-info-strip">
+  <div class="contact-info-strip__bg-pattern" aria-hidden="true"></div>
+  <div class="contact-info-strip__container">
+    <div class="contact-info-strip__grid">
+
+      <div class="contact-info-strip__label">
+        <h2>Contact<br />Information</h2>
+      </div>
+
+      <!-- Address (Usually not a link) -->
+      <div class="contact-info-strip__item">
+        <div class="contact-info-strip__icon">
+          <span nz-icon nzType="environment" nzTheme="outline"></span>
+        </div>
+        <div class="contact-info-strip__text">
+          <strong>EVEREST HOUSE</strong>
+          <span>
+            3, Times Corporate Park, Thaltej – Shilaj
+            Road, Thaltej, Ahmedabad- 380059,
+            Gujarat, India.
+          </span>
+        </div>
+      </div>
+
+      <!-- Email Item -->
+      <div class="contact-info-strip__item">
+        <div class="contact-info-strip__icon">
+          <span nz-icon nzType="mail" nzTheme="outline"></span>
+        </div>
+        <div class="contact-info-strip__text">
+          <a href="mailto:info@everestinstruments.in" class="contact-info-strip__link">
+            info&#64;everestinstruments.in
+          </a>
+        </div>
+      </div>
+
+      <!-- Phone Item -->
+      <div class="contact-info-strip__item">
+        <div class="contact-info-strip__icon">
+          <span nz-icon nzType="phone" nzTheme="outline"></span>
+        </div>
+        <div class="contact-info-strip__text">
+          <a href="tel:18002020010" class="contact-info-strip__link">
+            1800 202 0010
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ── Main Split: Form + Map / Head Office ─────────────────────────── -->
+<section class="contact-main-section">
+  <div class="contact-main-section__container">
+    <div class="contact-main-section__grid">
+
+      <!-- ── Contact Form ─────────────────────────────────────── -->
+      <div class="contact-form-panel">
+        <div class="contact-form-panel__header">
+          <span class="section-label">
+            <span nz-icon nzType="edit" nzTheme="outline"></span>
+            Send a Message
+          </span>
+          <h2 class="contact-form-panel__title">How Can We Help?</h2>
+          <p class="contact-form-panel__desc">
+            Fill in the form below with as much detail as possible and we'll
+            get back to you right away.
+          </p>
+        </div>
+
+        <form nz-form nzLayout="vertical" [formGroup]="contactForm" (ngSubmit)="submitForm()" class="contact-form">
+          <!-- Row: First + Last name -->
+          <div class="contact-form__row-2col">
+            <nz-form-item>
+              <nz-form-label nzRequired nzFor="firstName">First Name</nz-form-label>
+              <nz-form-control nzHasFeedback [nzErrorTip]="firstNameErr">
+                <nz-input-group [nzPrefix]="pfxUser">
+                  <input nz-input id="firstName" formControlName="firstName" placeholder="Arjun"
+                    autocomplete="given-name" />
+                </nz-input-group>
+                <ng-template #pfxUser>
+                  <span nz-icon nzType="user" nzTheme="outline"></span>
+                </ng-template>
+                <ng-template #firstNameErr>
+                  @if (contactForm.get('firstName')?.hasError('required')) {
+                  First name is required
+                  } @else {
+                  Minimum 2 characters
+                  }
+                </ng-template>
+              </nz-form-control>
+            </nz-form-item>
+
+            <nz-form-item>
+              <nz-form-label nzRequired nzFor="lastName">Last Name</nz-form-label>
+              <nz-form-control nzHasFeedback [nzErrorTip]="lastNameErr">
+                <nz-input-group [nzPrefix]="pfxUser2">
+                  <input nz-input id="lastName" formControlName="lastName" placeholder="Patel"
+                    autocomplete="family-name" />
+                </nz-input-group>
+                <ng-template #pfxUser2>
+                  <span nz-icon nzType="user" nzTheme="outline"></span>
+                </ng-template>
+                <ng-template #lastNameErr>
+                  @if (contactForm.get('lastName')?.hasError('required')) {
+                  Last name is required
+                  } @else {
+                  Minimum 2 characters
+                  }
+                </ng-template>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+
+          <!-- Row: Email + Phone -->
+          <div class="contact-form__row-2col">
+            <nz-form-item>
+              <nz-form-label nzRequired nzFor="email">Email Address</nz-form-label>
+              <nz-form-control nzHasFeedback [nzErrorTip]="emailErr">
+                <nz-input-group [nzPrefix]="pfxMail">
+                  <input nz-input type="email" id="email" formControlName="email" placeholder="arjun@example.com"
+                    autocomplete="email" />
+                </nz-input-group>
+                <ng-template #pfxMail>
+                  <span nz-icon nzType="mail" nzTheme="outline"></span>
+                </ng-template>
+                <ng-template #emailErr>
+                  @if (contactForm.get('email')?.hasError('required')) {
+                  Email is required
+                  } @else {
+                  Please enter a valid email
+                  }
+                </ng-template>
+              </nz-form-control>
+            </nz-form-item>
+
+            <nz-form-item>
+              <nz-form-label nzFor="phone">Phone (optional)</nz-form-label>
+              <nz-form-control [nzErrorTip]="'Enter a valid 10-digit number'">
+                <nz-input-group [nzPrefix]="pfxPhone" nzAddOnBefore="+91">
+                  <input nz-input type="tel" id="phone" formControlName="phone" placeholder="98765 43210"
+                    autocomplete="tel" />
+                </nz-input-group>
+                <ng-template #pfxPhone>
+                  <span nz-icon nzType="phone" nzTheme="outline"></span>
+                </ng-template>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+
+          <!-- Subject -->
+          <nz-form-item>
+            <nz-form-label nzRequired nzFor="subject">Subject</nz-form-label>
+            <nz-form-control [nzErrorTip]="'Please select a subject'">
+              <nz-select id="subject" formControlName="subject" nzPlaceHolder="Select a subject..." nzSize="large">
+                @for (opt of subjects; track opt.value) {
+                <nz-option [nzValue]="opt.value" [nzLabel]="opt.label"></nz-option>
+                }
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+
+          <!-- Message -->
+          <nz-form-item>
+            <nz-form-label nzRequired nzFor="message">Your Message</nz-form-label>
+            <nz-form-control nzHasFeedback [nzErrorTip]="msgErr">
+              <textarea nz-input id="message" formControlName="message"
+                placeholder="Tell us how we can help you... Please provide as much detail as possible."
+                [nzAutosize]="{ minRows: 5, maxRows: 12 }"></textarea>
+              <ng-template #msgErr>
+                @if (contactForm.get('message')?.hasError('required')) {
+                Message is required
+                } @else {
+                Minimum 20 characters required
+                }
+              </ng-template>
+            </nz-form-control>
+          </nz-form-item>
+
+          <!-- Submit -->
+          <nz-form-item class="contact-form__submit-item">
+            <button nz-button nzType="primary" nzSize="large" [nzLoading]="isLoading()" type="submit"
+              class="contact-form__submit-btn">
+              <span nz-icon nzType="send" nzTheme="outline"></span>
+              Send Message
+            </button>
+            <p class="contact-form__note">
+              <span nz-icon nzType="lock" nzTheme="fill"></span>
+              Your information is kept strictly confidential.
+            </p>
+          </nz-form-item>
+        </form>
+      </div>
+
+      <!-- ── Right side: Head Office / Map + Quick info ─────── -->
+      <div class="contact-right-panel">
+        <!-- Head Office / Google Map (CORRECTED ADDRESS) -->
+        <div class="contact-map">
+          <iframe class="contact-map__iframe"
+            src="https://www.google.com/maps?q=Everest+House,+Times+Corporate+Park,+Thaltej-Shilaj+Road,+Thaltej,+Ahmedabad,+Gujarat+380059&output=embed"
+            width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade" title="Everest House - Head Office Location">
+          </iframe>
+          <div class="contact-map__overlay">
+            <div class="contact-map__overlay-header">
+              <span nz-icon nzType="environment" nzTheme="fill"></span>
+              <strong>EVEREST HOUSE</strong>
+            </div>
+            <p>
+              3, Times Corporate Park, Thaltej – Shilaj Road,<br />
+              Thaltej, Ahmedabad- 380059, Gujarat, India.
+            </p>
+            <a href="https://www.google.com/maps?q=Everest+House,+Times+Corporate+Park,+Thaltej-Shilaj+Road,+Thaltej,+Ahmedabad,+Gujarat+380059"
+              target="_blank" rel="noopener noreferrer" class="contact-map__link">
+              <span nz-icon nzType="compass" nzTheme="outline"></span>
+              Open in Google Maps
+            </a>
+          </div>
+        </div>
+
+        <!-- Office hours -->
+        <div class="contact-hours-card">
+          <h4 class="contact-hours-card__title">
+            <span nz-icon nzType="clock-circle" nzTheme="fill"></span>
+            Support Hours
+          </h4>
+          <ul class="contact-hours-list">
+            <li>
+              <span>Monday – Saturday</span>
+              <strong>9 AM – 6 PM IST</strong>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Social links (WORKING HYPERLINKS) -->
+        <div class="contact-social-card">
+          <h4 class="contact-social-card__title">Follow Us</h4>
+          <div class="contact-social-row">
+            <a href="https://twitter.com/Everest_Twit" target="_blank" rel="noopener noreferrer"
+              class="contact-social-btn" aria-label="Twitter">
+              <span nz-icon nzType="twitter" nzTheme="outline"></span>
+            </a>
+            <a href="https://www.instagram.com/everestinstruments/" target="_blank" rel="noopener noreferrer"
+              class="contact-social-btn" aria-label="Instagram">
+              <span nz-icon nzType="instagram" nzTheme="outline"></span>
+            </a>
+            <a href="https://www.facebook.com/pages/category/Company/Everest-Instruments-Pvt-Ltd-531409663720221/"
+              target="_blank" rel="noopener noreferrer" class="contact-social-btn" aria-label="Facebook">
+              <span nz-icon nzType="facebook" nzTheme="outline"></span>
+            </a>
+            <a href="https://www.youtube.com/channel/UClOawB9IJoXH0rpCXO2ehKw" target="_blank" rel="noopener noreferrer"
+              class="contact-social-btn" aria-label="YouTube">
+              <span nz-icon nzType="youtube" nzTheme="outline"></span>
+            </a>
+            <a href="https://www.linkedin.com/company/everest-instruments-pvt-ltd-india/" target="_blank"
+              rel="noopener noreferrer" class="contact-social-btn" aria-label="LinkedIn">
+              <span nz-icon nzType="linkedin" nzTheme="outline"></span>
+            </a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ── FAQ Section ─────────────────────────────────────────────────────── -->
+<section class="faq-section">
+  <div class="faq-section__container">
+    <div class="faq-section__header">
+      <span class="section-label">
+        <span nz-icon nzType="question-circle" nzTheme="outline"></span>
+        FAQ
+      </span>
+      <h2 class="faq-section__title">Frequently Asked Questions</h2>
+      <p class="faq-section__sub">
+        Can't find what you're looking for? Reach out to our team directly.
+      </p>
+    </div>
+
+    <div class="faq-grid">
+      <nz-collapse nzAccordion [nzBordered]="false" class="faq-collapse">
+        @for (faq of faqs; track faq.question; let i = $index) {
+        <nz-collapse-panel [nzHeader]="faqPanelHeader" class="faq-panel">
+          <ng-template #faqPanelHeader>
+            <div class="faq-panel__header">
+              <span class="faq-panel__index">{{ (i + 1).toString().padStart(2, '0') }}</span>
+              <span class="faq-panel__question">{{ faq.question }}</span>
+            </div>
+          </ng-template>
+          <div class="faq-panel__answer">
+            <p>{{ faq.answer }}</p>
+          </div>
+        </nz-collapse-panel>
+        }
+      </nz-collapse>
+    </div>
+
+    <!-- Still need help? -->
+    <div class="faq-cta">
+      <div class="faq-cta__inner">
+        <span nz-icon nzType="customer-service" nzTheme="fill" class="faq-cta__icon"></span>
+        <div>
+          <h4>Still need help?</h4>
+          <p>Our support specialists are online and ready to assist you right now.</p>
+        </div>
+        <div class="faq-cta__actions">
+          <a href="tel:+9118002020010" class="faq-cta__btn faq-cta__btn--ghost">
+            <span nz-icon nzType="phone" nzTheme="fill"></span>
+            Call Now
+          </a>
+          <a href="mailto:info@everestinstruments.in" class="faq-cta__btn faq-cta__btn--primary">
+            <span nz-icon nzType="mail" nzTheme="fill"></span>
+            Send Email
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

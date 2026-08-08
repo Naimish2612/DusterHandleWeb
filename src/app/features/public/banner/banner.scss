@@ -1,0 +1,361 @@
+@use '../../../../assets/styles/common' as *;
+@use '../../../../assets/styles/responsive' as *;
+
+.home-banner {
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+
+    /* ==============================
+     VIEWPORT
+  ============================== */
+
+    &__viewport {
+        overflow: hidden;
+        height: 600px;
+        position: relative;
+
+        @include tablet {
+            height: 520px;
+        }
+
+        @include mobile {
+            height: 480px;
+        }
+
+        @media (max-width: 480px) {
+            height: 450px;
+        }
+    }
+
+    /* ==============================
+     TRACK (Sliding Container)
+  ============================== */
+
+    &__track {
+        display: flex;
+        height: 100%;
+        transition: transform $transition-slow ease-in-out;
+    }
+
+    /* ==============================
+     INDIVIDUAL SLIDE
+  ============================== */
+
+    &__slide {
+        flex: 0 0 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        position: relative;
+
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+
+        @include mobile {
+            align-items: flex-end;
+            padding-bottom: 70px;
+            background-position: center top;
+        }
+    }
+
+    /* ==============================
+     DARK OVERLAY
+  ============================== */
+
+    &__overlay {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(90deg,
+                rgba(0, 0, 0, 0.65) 0%,
+                rgba(0, 0, 0, 0.45) 40%,
+                rgba(0, 0, 0, 0.25) 70%,
+                rgba(0, 0, 0, 0.1) 100%);
+        z-index: 1;
+
+        @include mobile {
+            // ✅ Vertical gradient — darker at bottom for text readability
+            background: linear-gradient(180deg,
+                    rgba(0, 0, 0, 0.2) 0%,
+                    rgba(0, 0, 0, 0.5) 50%,
+                    rgba(0, 0, 0, 0.85) 100%);
+        }
+    }
+
+    /* ==============================
+     CONTENT CONTAINER
+  ============================== */
+
+    &__inner {
+        position: relative;
+        z-index: 2;
+        @include make-container($container-xxl);
+
+        @include mobile {
+            padding-left: $spacing-4;
+            padding-right: $spacing-4;
+            width: 100%;
+        }
+    }
+
+    &__content {
+        max-width: 620px;
+        color: $neutral-0;
+
+        @include mobile {
+            text-align: center;
+            margin: 0 auto;
+            max-width: 100%;
+        }
+    }
+
+    /* ==============================
+     TAG
+  ============================== */
+
+    &__tag {
+        display: inline-block;
+        background: rgba(255, 255, 255, 0.2);
+        color: $neutral-0;
+        padding: $spacing-1-5 $spacing-3;
+        border-radius: $border-radius-full;
+        font-size: $font-size-xs;
+        font-weight: $font-weight-bold;
+        letter-spacing: $letter-spacing-widest;
+        margin-bottom: $spacing-4;
+        backdrop-filter: blur(6px);
+
+        @include mobile {
+            font-size: 10px;
+            padding: 4px 12px;
+            margin-bottom: $spacing-3;
+        }
+    }
+
+    /* ==============================
+     TITLE
+  ============================== */
+
+    &__title {
+        font-size: $font-size-5xl;
+        font-weight: $font-weight-extrabold;
+        line-height: $line-height-heading;
+        margin-bottom: $spacing-5;
+        color: $neutral-0; // ✅ Force white text
+
+        @include tablet {
+            font-size: $font-size-4xl;
+        }
+
+        @include mobile {
+            font-size: $font-size-3xl;
+            margin-bottom: $spacing-3;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6); // ✅ Readability
+        }
+
+        @media (max-width: 480px) {
+            font-size: 28px;
+        }
+    }
+
+    /* ==============================
+     SUBTITLE
+  ============================== */
+
+    &__subtitle {
+        font-size: $font-size-lg;
+        line-height: $line-height-relaxed;
+        margin-bottom: $spacing-8;
+        color: $neutral-0;
+
+        @include mobile {
+            font-size: $font-size-sm;
+            margin-bottom: $spacing-5;
+            text-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
+        }
+    }
+
+    /* ==============================
+     BUTTONS
+  ============================== */
+
+    &__actions {
+        display: flex;
+        gap: $spacing-4;
+
+        @include mobile {
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: $spacing-3;
+        }
+
+        @media (max-width: 480px) {
+            flex-direction: column; // ✅ Stack buttons
+            align-items: center;
+            gap: $spacing-2-5;
+            width: 100%;
+        }
+    }
+
+    /* ==============================
+     ARROWS
+  ============================== */
+
+    &__arrow {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        z-index: 10;
+
+        width: 48px;
+        height: 48px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0;
+        line-height: 1;
+
+        background: transparent;
+        border: none;
+        color: $neutral-0;
+
+        font-size: 32px;
+        cursor: pointer;
+
+        &.left {
+            left: 5px;
+        }
+
+        &.right {
+            right: 5px;
+        }
+
+        &:hover {
+            opacity: 0.7;
+        }
+
+        @include tablet {
+            width: 40px;
+            height: 40px;
+            font-size: 26px;
+
+            &.left {
+                left: 16px;
+            }
+
+            &.right {
+                right: 16px;
+            }
+        }
+
+        @include mobile {
+            width: 36px;
+            height: 36px;
+            font-size: 22px;
+
+            // ✅ Add subtle bg circle so arrows visible on light images
+            border-radius: 50%;
+
+            &.left {
+                left: 5px;
+            }
+
+            &.right {
+                right: 5px;
+            }
+
+            &:hover {
+                opacity: 1;
+            }
+        }
+    }
+
+    /* ==============================
+     DOTS
+  ============================== */
+
+    &__dots {
+        position: absolute;
+        bottom: 30px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 5;
+
+        @include mobile {
+            bottom: 18px;
+        }
+
+        span {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            margin: 0 6px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.5);
+            cursor: pointer;
+            transition: all $transition-fast;
+
+            &.active {
+                background: $neutral-0;
+                transform: scale(1.2);
+            }
+
+            @include mobile {
+                width: 8px;
+                height: 8px;
+                margin: 0 4px;
+            }
+        }
+    }
+}
+
+/* ==============================
+   BUTTON STYLES
+============================== */
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: $spacing-3 $spacing-6;
+    font-size: $font-size-sm;
+    font-weight: $font-weight-semibold;
+    border-radius: $border-radius-full;
+    text-decoration: none;
+    transition: all $transition-fast;
+    white-space: nowrap; // ✅ Prevent text wrap
+    cursor: pointer;
+
+    @include mobile {
+        padding: $spacing-2-5 $spacing-5;
+        font-size: $font-size-sm;
+    }
+
+    @media (max-width: 480px) {
+        width: 100%;
+        max-width: 260px; // ✅ Buttons same width when stacked
+        padding: $spacing-3 $spacing-4;
+    }
+
+    &--primary {
+        background: $primary-500;
+        color: $neutral-0;
+        box-shadow: $shadow-md;
+
+        &:hover {
+            background: $primary-600;
+            box-shadow: $shadow-lg;
+        }
+    }
+
+    &--outline {
+        border: $border-width-thin solid $neutral-0;
+        color: $neutral-0;
+        background: transparent;
+
+        &:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+    }
+}

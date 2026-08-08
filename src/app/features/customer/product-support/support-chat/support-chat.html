@@ -1,0 +1,271 @@
+<div class="support-chat-page">
+  <!-- Breadcrumb -->
+  <nz-breadcrumb class="chat-breadcrumb">
+    <nz-breadcrumb-item>
+      <a (click)="goBack()">
+        <span nz-icon nzType="left"></span>
+        Back
+      </a>
+    </nz-breadcrumb-item>
+    <nz-breadcrumb-item>
+      <span nz-icon nzType="customer-service"></span>
+      Support Chat
+    </nz-breadcrumb-item>
+  </nz-breadcrumb>
+
+  <!-- Header -->
+  <!-- Enhanced Header -->
+  <div class="chat-header chat-header--enhanced">
+
+    <div class="chat-header__icon">
+      <span nz-icon nzType="customer-service" nzTheme="fill"></span>
+    </div>
+
+    <div class="chat-header__info">
+      <h2>
+        {{ hasTicket() ? 'Support Conversation' : 'Raise a Support Ticket' }}
+      </h2>
+
+      <div class="chat-header__meta">
+
+        <nz-tag nzColor="blue">
+          {{ supportType() === 'product' ? 'Product Support' : 'Order Support' }}
+        </nz-tag>
+
+        @if (order()) {
+        <nz-tag nzColor="geekblue">
+          Order #{{ order()!.order_no }}
+        </nz-tag>
+        }
+
+        @if (ticketId()) {
+        <nz-tag nzColor="purple">
+          Ticket #{{ ticketId() }}
+        </nz-tag>
+        }
+
+        @if (ticketStatus()) {
+        <nz-tag [nzColor]="
+            ticketStatus() === 'Open' ? 'green' :
+            ticketStatus() === 'In Progress' ? 'orange' :
+            ticketStatus() === 'Resolved' ? 'blue' : 'red'
+          ">
+          {{ ticketStatus() }}
+        </nz-tag>
+        }
+
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ========================= -->
+  <!-- RAISE TICKET FORM (No ticket yet) -->
+  <!-- ========================= -->
+  @if (!hasTicket()) {
+  <nz-card class="raise-ticket-card" [nzBordered]="false">
+
+    <!-- Context Preview -->
+    @if (product(); as p) {
+    <div class="context-preview">
+      <img [src]="p.image_url || this.placeholderImage" [alt]="p.product_name">
+      <div class="context-preview__info">
+        <h4>{{ p.product_name }}</h4>
+        <span>Qty: {{ p.qty }} | ₹{{ p.total_amount }}</span>
+      </div>
+    </div>
+    } @else if (order(); as o) {
+    <div class="context-preview context-preview--order">
+      <span nz-icon nzType="shopping-cart" nzTheme="outline"></span>
+      <div class="context-preview__info">
+        <h4>Order #{{ o.order_no }}</h4>
+        <span>Total: ₹{{ o.net_amount }}</span>
+      </div>
+    </div>
+    }
+
+    <!-- Category -->
+    <div class="form-group">
+      <label>
+        <span nz-icon nzType="tag" nzTheme="outline"></span>
+        Issue Category <span class="required">*</span>
+      </label>
+      <nz-select [ngModel]="category()" (ngModelChange)="category.set($event)" nzPlaceHolder="Select category"
+        nzSize="large" class="full-width">
+        @for (cat of categories; track cat) {
+        <nz-option [nzValue]="cat" [nzLabel]="cat"></nz-option>
+        }
+      </nz-select>
+    </div>
+
+    <!-- Other Category -->
+    @if (category() === 'Other') {
+    <div class="form-group">
+      <label>Specify Category <span class="required">*</span></label>
+      <input nz-input nzSize="large" placeholder="Enter your issue category" [ngModel]="otherCategory()"
+        (ngModelChange)="otherCategory.set($event)">
+    </div>
+    }
+
+    <!-- Message -->
+    <div class="form-group">
+      <label>
+        <span nz-icon nzType="message" nzTheme="outline"></span>
+        Describe Your Issue <span class="required">*</span>
+      </label>
+      <textarea nz-input rows="5" placeholder="Please provide as much detail as possible..."
+        [ngModel]="initialMessage()" (ngModelChange)="initialMessage.set($event)">
+      </textarea>
+    </div>
+
+    <!-- File Upload -->
+    <div class="form-group">
+      <label>
+        <span nz-icon nzType="paper-clip" nzTheme="outline"></span>
+        Attach Files (Optional, Max 5 files, 5MB each)
+      </label>
+      <input #initialFileInput type="file" multiple accept="image/*,.pdf,.doc,.docx"
+        (change)="onInitialFilesSelected($event)" hidden>
+      <button nz-button nzSize="large" nzType="dashed" class="upload-trigger" (click)="triggerInitialFileInput()">
+        <span nz-icon nzType="upload"></span>
+        Choose Files
+      </button>
+
+      @if (selectedFiles().length > 0) {
+      <div class="file-preview-list">
+        @for (file of selectedFiles(); track $index) {
+        <div class="file-chip">
+          @if (isImageFile(file)) {
+          <img [src]="getFilePreview(file)" alt="preview">
+          } @else {
+          <span nz-icon nzType="file" class="file-icon"></span>
+          }
+          <div class="file-chip__info">
+            <span class="file-name">{{ file.name }}</span>
+            <span class="file-size">{{ formatFileSize(file.size) }}</span>
+          </div>
+          <button nz-button nzType="text" nzSize="small" nzDanger (click)="removeSelectedFile($index)">
+            <span nz-icon nzType="close"></span>
+          </button>
+        </div>
+        }
+      </div>
+      }
+    </div>
+
+    <!-- Submit -->
+    <button nz-button nzSize="large" nzBlock class="raise-ticket-btn" [nzLoading]="isCreatingTicket()"
+      (click)="raiseTicket()">
+      <span nz-icon nzType="send"></span>
+      Raise Ticket
+    </button>
+  </nz-card>
+  }
+
+  <!-- ========================= -->
+  <!-- CHAT VIEW (Ticket exists) -->
+  <!-- ========================= -->
+  @if (hasTicket()) {
+  <nz-card class="chat-card" [nzBordered]="false">
+
+    @if (isLoadingThread()) {
+    <div class="thread-loading">
+      <nz-spin nzSimple [nzSize]="'large'"></nz-spin>
+      <p>Loading conversation...</p>
+    </div>
+    } @else {
+
+    <!-- Messages -->
+    <div class="messages-container" #messagesContainer>
+      @if (messages().length === 0) {
+      <nz-empty nzNotFoundContent="No messages yet"></nz-empty>
+      } @else {
+      @for (msg of messages(); track msg.message_id) {
+      <div class="message-row" [class.message-row--customer]="isCustomer(msg)">
+
+        <nz-avatar [nzIcon]="isCustomer(msg) ? 'user' : 'customer-service'"
+          [style.background]="isCustomer(msg) ? '#1890ff' : '#52c41a'">
+        </nz-avatar>
+
+        <div class="message-bubble">
+          <div class="message-bubble__header">
+            <strong>{{ isCustomer(msg) ? 'You' : 'Support' }}</strong>
+            <span class="time">{{ formatTime(msg.created_at) }}</span>
+          </div>
+
+          <p class="message-bubble__text">{{ msg.message_text }}</p>
+
+          @if (msg.upload_attachments.length) {
+          <div class="message-attachments">
+
+            @for (url of msg.upload_attachments; track url) {
+
+            @if (isImageUrl(url)) {
+            <div class="attachment-image-wrapper">
+              <img [src]="url" class="attachment-image" (click)="openImagePreview(url)" />
+            </div>
+            } @else {
+            <a [href]="url" target="_blank" class="attachment-link">
+              <span nz-icon nzType="paper-clip"></span>
+              Download Attachment
+            </a>
+            }
+            }
+
+          </div>
+          }
+        </div>
+      </div>
+      }
+      }
+    </div>
+
+    <!-- Reply Box -->
+    @if (ticketStatus() !== 'Closed') {
+    <div class="reply-box">
+      @if (replyAttachment(); as file) {
+      <div class="reply-attachment-preview">
+        <span nz-icon nzType="paper-clip"></span>
+        <span class="reply-file-name">{{ file.name }}</span>
+        <span class="reply-file-size">({{ formatFileSize(file.size) }})</span>
+        <button nz-button nzType="text" nzSize="small" nzDanger (click)="removeReplyAttachment()">
+          <span nz-icon nzType="close"></span>
+        </button>
+      </div>
+      }
+
+      <div class="reply-input-row">
+        <input #replyFileInput type="file" accept="image/*,.pdf,.doc,.docx" (change)="onReplyFileSelected($event)"
+          hidden>
+
+        <button nz-button nzType="text" nz-tooltip="Attach file" (click)="triggerReplyFileInput()">
+          <span nz-icon nzType="paper-clip"></span>
+        </button>
+
+        <textarea nz-input rows="1" placeholder="Type your message... (Enter to send, Shift+Enter for new line)"
+          [ngModel]="replyText()" (ngModelChange)="replyText.set($event)" (keydown.enter)="onEnterSend($any($event))">
+        </textarea>
+
+        <button nz-button nzType="primary" nzShape="circle" nzSize="large" [nzLoading]="isSendingMessage()"
+          [disabled]="!replyText().trim() && !replyAttachment()" (click)="sendReply()">
+          <span nz-icon nzType="send"></span>
+        </button>
+      </div>
+    </div>
+    } @else {
+    <div class="ticket-closed-notice">
+      <span nz-icon nzType="lock"></span>
+      This support ticket has been closed. You cannot send replies to this thread.
+    </div>
+
+    }
+    }
+  </nz-card>
+  }
+</div>
+
+@if (previewImageUrl()) {
+<div class="image-preview-overlay" (click)="closeImagePreview()">
+  <img [src]="previewImageUrl()" class="image-preview-full" />
+</div>
+}

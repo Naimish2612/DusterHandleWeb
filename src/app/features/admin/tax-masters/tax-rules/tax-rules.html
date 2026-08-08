@@ -1,0 +1,282 @@
+<div nz-row [nzGutter]="[16, 16]" class="process-page">
+  <!-- ================= FORM CARD ================= -->
+  <div nz-col nzSpan="24">
+    <nz-card nzTitle="Tax Rules Master">
+      <form nz-form [formGroup]="form" nzLayout="vertical">
+        <div nz-row [nzGutter]="[16, 16]">
+          <!-- Class Selection -->
+          <div nz-col [nzXs]="24" [nzLg]="6">
+            <nz-form-item>
+              <nz-form-label nzRequired nzTooltipTitle="Select the Tax Class and get the tax rules">Tax Class</nz-form-label>
+              <nz-form-control nzErrorTip="Please select a tax class">
+                <nz-select
+                  formControlName="class_id"
+                  nzPlaceHolder="Select Tax Class"
+                >
+                  <nz-option
+                    *ngFor="let item of classDropdownList"
+                    [nzValue]="item.id"
+                    [nzLabel]="item.value"
+                  ></nz-option>
+                </nz-select>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+
+          <!-- Component Selection -->
+          <div nz-col [nzXs]="24" [nzLg]="6">
+            <nz-form-item>
+              <nz-form-label nzRequired>Tax Component</nz-form-label>
+              <nz-form-control nzErrorTip="Please select a tax component">
+                <nz-select
+                  formControlName="component_id"
+                  nzPlaceHolder="Select Component"
+                >
+                  <nz-option
+                    *ngFor="let item of componentDropdownList"
+                    [nzValue]="item.id"
+                    [nzLabel]="item.value"
+                  ></nz-option>
+                </nz-select>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+
+          <!-- Transaction Type -->
+          <div nz-col [nzXs]="24" [nzLg]="6">
+            <nz-form-item>
+              <nz-form-label nzRequired>Transaction Type</nz-form-label>
+              <nz-form-control nzErrorTip="Please select transaction type">
+                <nz-select formControlName="transaction_type">
+                  <nz-option
+                    *ngFor="let item of transactionTypeOptions"
+                    [nzValue]="item.value"
+                    [nzLabel]="item.label"
+                  ></nz-option>
+                </nz-select>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+
+          <!-- Calculation Type -->
+          <div nz-col [nzXs]="24" [nzLg]="6">
+            <nz-form-item>
+              <nz-form-label nzRequired>Calculation Type</nz-form-label>
+              <nz-form-control nzErrorTip="Please select calculation type">
+                <nz-select formControlName="calculation_type">
+                  <nz-option
+                    *ngFor="let item of calculationTypeOptions"
+                    [nzValue]="item.value"
+                    [nzLabel]="item.label"
+                  ></nz-option>
+                </nz-select>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+
+          <!-- Rate -->
+          <div nz-col [nzXs]="24" [nzLg]="6">
+            <nz-form-item>
+              <nz-form-label nzRequired>Rate</nz-form-label>
+              <nz-form-control nzErrorTip="Please enter a valid rate">
+                <input
+                  nz-input
+                  formControlName="rate"
+                  type="number"
+                  placeholder="Enter Rate"
+                  step="0.01"
+                />
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+
+          <!-- Valid From -->
+          <div nz-col [nzXs]="24" [nzLg]="6">
+            <nz-form-item>
+              <nz-form-label nzRequired>Valid From</nz-form-label>
+              <nz-form-control nzErrorTip="Please select valid from date and time">
+                <nz-date-picker
+                  formControlName="valid_from"
+                  nzFormat="yyyy-MM-dd HH:mm:ss"
+                  nzPlaceHolder="Select Valid From"
+                  nzShowTime
+                ></nz-date-picker>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+
+          <!-- Valid To -->
+          <div nz-col [nzXs]="24" [nzLg]="6">
+            <nz-form-item>
+              <nz-form-label>Valid To</nz-form-label>
+              <nz-form-control>
+                <nz-date-picker
+                  formControlName="valid_to"
+                  nzFormat="yyyy-MM-dd HH:mm:ss"
+                  nzPlaceHolder="Select Valid To (Optional)"
+                  nzShowTime
+                ></nz-date-picker>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+
+          <!-- Status -->
+          <div nz-col [nzXs]="24" [nzLg]="6">
+            <nz-form-item>
+              <nz-form-label>IsActive</nz-form-label>
+              <nz-form-control>
+                <nz-switch formControlName="is_active"></nz-switch>
+                <span class="switch-label">
+                  {{ form.get('is_active')?.value ? 'Active' : 'Inactive' }}
+                </span>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+
+          <!-- ACTIONS -->
+          <div nz-col nzSpan="24" class="form-actions">
+            <button
+              nz-button
+              nzType="primary"
+              htmlType="submit"
+              [disabled]="form.invalid"
+              (click)="submit()"
+              *ngIf="showAddButton && hasAddPermission"
+            >
+              <nz-icon nzType="save"></nz-icon> Save
+            </button>
+            <button
+              nz-button
+              nzType="primary"
+              (click)="taxRuleUpdate()"
+              *ngIf="showUpdateButton && hasAddPermission"
+            >
+              <nz-icon nzType="edit"></nz-icon> Update
+            </button>
+            <button nz-button nzType="default" type="button" (click)="reset()">
+              <nz-icon nzType="reload"></nz-icon> Reset
+            </button>
+          </div>
+        </div>
+      </form>
+    </nz-card>
+  </div>
+
+  <!-- ================= GRID PLACEHOLDER ================= -->
+  <nz-divider nzOrientation="left" nzText="Tax Rules List"></nz-divider>
+
+  <!-- Calculate Tax Button -->
+  <div nz-col nzSpan="24" class="calculator-button">
+    <button
+      nz-button
+      nzType="primary"
+      nzSize="large"
+      (click)="openSimulatorModal()"
+    >
+      <nz-icon nzType="calculator"></nz-icon> Calculate Tax
+    </button>
+  </div>
+
+  <div nz-col nzSpan="24">
+    <nz-card>
+      <div class="table-wrapper">
+        <ui-grid
+        [autoColumns]="true"
+          [dataSource]="taxRuleGridDataSource"
+          [autoLoad]="true"
+          [reloadOn]="taxRuleGridReload$"
+          [pageSize]="10"
+          [pageSizeOptions]="[10, 20, 50]"
+          [serverSide]="false"
+          [selectable]="false"
+          selectionMode="multiple"
+          [actions]="[
+            {
+              key: 'edit',
+              icon: 'edit',
+              tooltip: 'Edit',
+              showIf: this.hasEditPermission,
+            },
+            {
+              key: 'delete',
+              icon: 'delete',
+              tooltip: 'Delete',
+              danger: true,
+              showIf: this.hasDeletePermission,
+            },
+          ]"
+          (selectionChange)="selectionChanged($event)"
+          (action)="onAction($event)"
+          [hildeColumn]="['rule_id','class_id', 'component_id','created_at','updated_at']"
+        ></ui-grid>
+      </div>
+    </nz-card>
+  </div>
+</div>
+  <!-- Simulator Modal -->
+  <nz-modal
+    [nzVisible]="showSimulatorModal"
+    nzTitle="Tax Simulator"
+    [nzFooter]="null"
+    [nzWidth]="1000"
+    (nzOnCancel)="closeSimulatorModal()"
+  >
+    <div *nzModalContent >
+      <form nz-form [formGroup]="simulatorForm">
+        <div nz-row [nzGutter]="[12,12]">
+          <div nz-col [nzXs]="24" [nzSm]="12">
+            <nz-form-item>
+              <nz-form-label nzRequired>Entered Price</nz-form-label>
+              <nz-form-control>
+                <input nz-input type="number" formControlName="entered_price" placeholder="Enter price" />
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+
+          <div nz-col [nzXs]="24" [nzSm]="12">
+            <nz-form-item>
+              <nz-form-label nzRequired>Tax Class</nz-form-label>
+              <nz-form-control>
+                <nz-select formControlName="tax_class_id" nzPlaceHolder="Select Tax Class">
+                  <nz-option *ngFor="let item of classDropdownList" [nzValue]="item.id" [nzLabel]="item.value"></nz-option>
+                </nz-select>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+
+          <div nz-col [nzXs]="24" [nzSm]="12">
+            <nz-form-item>
+              <nz-form-label>Transaction Type</nz-form-label>
+              <nz-form-control>
+                <nz-select formControlName="transaction_type">
+                  <nz-option *ngFor="let item of transactionTypeOptions" [nzValue]="item.value" [nzLabel]="item.label"></nz-option>
+                </nz-select>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+
+          <div nz-col [nzXs]="24" [nzSm]="12">
+            <nz-form-item>
+              <nz-form-label>Is Inclusive</nz-form-label>
+              <nz-form-control>
+                <nz-switch formControlName="is_inclusive"></nz-switch>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+
+          <div nz-col nzSpan="24" class="form-actions">
+            <button nz-button nzType="primary" (click)="calculateTax()" [disabled]="simulatorLoading">
+              <nz-icon nzType="calculator"></nz-icon> Calculate
+            </button>
+            <button nz-button nzType="default" (click)="closeSimulatorModal()">Close</button>
+          </div>
+        </div>
+      </form>
+<nz-divider></nz-divider>
+      <div *ngIf="simulatorResults" class="simulator-output">
+        <tax-simulator-result [data]="simulatorResults" [close]="closeSimulatorModal.bind(this)"></tax-simulator-result>
+      </div>
+    </div>
+  </nz-modal>
+
+

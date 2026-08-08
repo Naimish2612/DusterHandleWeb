@@ -1,0 +1,431 @@
+@use '../../../../assets/styles/common' as *;
+@use '../../../../assets/styles/responsive' as *;
+
+
+
+// =========================================================================
+// MY PROFILE PAGE
+// =========================================================================
+
+.profile-page {
+  background: $color-bg-body;
+  min-height: 100vh;
+  font-family: $font-primary;
+
+  // ── Banner ──────────────────────────────────────────────────────
+  &__banner {
+    background: linear-gradient(135deg, $primary-900 0%, $primary-700 60%, $primary-500 100%);
+    padding: $spacing-10 0 $spacing-14;
+
+    @include mobile { padding: $spacing-8 0 $spacing-12; }
+  }
+
+  &__banner-inner {
+    @include make-container($container-xxl);
+  }
+
+  &__title {
+    font-family: $font-heading;
+    font-size: $font-size-3xl;
+    font-weight: $font-weight-bold;
+    color: $neutral-0;
+    margin: 0 0 $spacing-2;
+    display: flex;
+    align-items: center;
+    gap: $spacing-3;
+    letter-spacing: $letter-spacing-tight;
+
+    span[nz-icon] { font-size: $icon-size-2xl; }
+
+    @include mobile { font-size: $font-size-2xl; }
+  }
+
+  &__subtitle {
+    font-size: $font-size-sm;
+    color: rgba(255, 255, 255, 0.65);
+    margin: 0;
+  }
+
+  // ── Body ────────────────────────────────────────────────────────
+  &__body {
+    @include make-container($container-xxl);
+    display: grid;
+    grid-template-columns: 300px 1fr;
+    gap: $spacing-6;
+    margin-top: -$spacing-8;
+    padding-bottom: $spacing-16;
+    align-items: start;
+
+    @include tablet {
+      grid-template-columns: 260px 1fr;
+      gap: $spacing-5;
+    }
+
+    @include mobile {
+      grid-template-columns: 1fr;
+      margin-top: -$spacing-6;
+      gap: $spacing-5;
+    }
+  }
+}
+
+// =========================================================================
+// SIDEBAR — User Card
+// =========================================================================
+
+.profile-sidebar {
+  background: $card-bg;
+  border-radius: $border-radius-2xl;
+  border: $border-width-thin solid $neutral-200;
+  box-shadow: $shadow-base;
+  padding: $spacing-6;
+  @include sticky-top($header-height + $spacing-4);
+
+  @include mobile { position: static; }
+
+  &__avatar-area {
+    @include flex-column-center;
+    text-align: center;
+    padding: $spacing-4 0 $spacing-2;
+  }
+
+  &__avatar-wrap {
+    position: relative;
+    margin-bottom: $spacing-4;
+  }
+
+  &__avatar {
+    background: linear-gradient(135deg, $primary-500 0%, $primary-700 100%) !important;
+    font-size: $font-size-2xl !important;
+    font-weight: $font-weight-extrabold !important;
+    font-family: $font-heading !important;
+    box-shadow: 0 8px 24px rgba(0, 156, 222, 0.35) !important;
+  }
+
+  &__avatar-edit {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: $primary-500;
+    border: $border-width-base solid $neutral-0;
+    @include flex-center;
+    font-size: $icon-size-sm;
+    color: $neutral-0;
+    cursor: pointer;
+    transition: background $transition-fast;
+    box-shadow: $shadow-sm;
+
+    &:hover { background: $primary-600; }
+  }
+
+  &__name {
+    font-family: $font-heading;
+    font-size: $font-size-xl;
+    font-weight: $font-weight-bold;
+    color: $neutral-800;
+    margin: 0 0 $spacing-1;
+  }
+
+  &__email {
+    font-size: $font-size-xs;
+    color: $neutral-400;
+    margin: 0 0 $spacing-2;
+  }
+
+  &__member-since {
+    display: inline-flex;
+    align-items: center;
+    gap: $spacing-1;
+    font-size: $font-size-xs;
+    color: $neutral-400;
+
+    span[nz-icon] { font-size: $icon-size-xs; }
+  }
+
+  &__section-label {
+    font-size: $font-size-xs;
+    font-weight: $font-weight-bold;
+    letter-spacing: $letter-spacing-widest;
+    text-transform: uppercase;
+    color: $neutral-400;
+    margin: 0 0 $spacing-3;
+  }
+
+  &__verifications {
+    @include flex-column;
+    gap: $spacing-3;
+  }
+
+  &__stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: $spacing-2;
+  }
+}
+
+// ── Verification row ──────────────────────────────────────────────────
+.verify-row {
+  display: flex;
+  align-items: center;
+  gap: $spacing-3;
+
+  &__icon {
+    width: 36px;
+    height: 36px;
+    border-radius: $border-radius-lg;
+    @include flex-center;
+    font-size: $icon-size-base;
+    flex-shrink: 0;
+
+    &--email {
+      background: $primary-50;
+      color: $primary-500;
+    }
+
+    &--phone {
+      background: $success-50;
+      color: $success-600;
+    }
+  }
+
+  &__info {
+    flex: 1;
+    min-width: 0;
+    @include flex-column;
+    gap: $spacing-0-5;
+  }
+
+  &__label {
+    font-size: $font-size-xs;
+    font-weight: $font-weight-semibold;
+    color: $neutral-600;
+  }
+
+  &__value {
+    font-size: $font-size-xs;
+    color: $neutral-400;
+    @include text-truncate;
+  }
+
+  &__tag {
+    flex-shrink: 0;
+    font-size: $font-size-xs !important;
+    border-radius: $border-radius-sm !important;
+
+    span[nz-icon] { font-size: $icon-size-xs; margin-right: $spacing-0-5; }
+  }
+}
+
+// ── Profile stat ──────────────────────────────────────────────────────
+.profile-stat {
+  @include flex-column-center;
+  gap: $spacing-0-5;
+  background: $neutral-50;
+  border: $border-width-thin solid $neutral-100;
+  border-radius: $border-radius-lg;
+  padding: $spacing-3 $spacing-2;
+  text-align: center;
+
+  span[nz-icon] {
+    font-size: $icon-size-base;
+    color: $primary-500;
+  }
+
+  &__value {
+    font-size: $font-size-lg;
+    font-weight: $font-weight-extrabold;
+    color: $neutral-800;
+    font-family: $font-heading;
+    line-height: $line-height-none;
+  }
+
+  &__label {
+    font-size: $font-size-2xs;
+    color: $neutral-400;
+    font-weight: $font-weight-medium;
+    text-transform: uppercase;
+    letter-spacing: $letter-spacing-wide;
+  }
+}
+
+// =========================================================================
+// CONTENT — Tabs
+// =========================================================================
+
+.profile-content {
+  background: $card-bg;
+  border-radius: $border-radius-2xl;
+  border: $border-width-thin solid $neutral-200;
+  box-shadow: $shadow-base;
+  overflow: hidden;
+}
+
+.profile-tabs {
+  .ant-tabs-nav {
+    padding: 0 $spacing-6 !important;
+    margin-bottom: 0 !important;
+    background: $neutral-50;
+    border-bottom: $border-width-thin solid $neutral-200;
+  }
+
+  .ant-tabs-tab {
+    font-size: $font-size-base !important;
+    font-weight: $font-weight-bold !important;
+    padding: $spacing-4 $spacing-2 !important;
+    color: $neutral-600 !important;
+  }
+
+  .ant-tabs-tab-active .ant-tabs-tab-btn { color: $primary-600 !important; }
+  .ant-tabs-ink-bar { background: $primary-500 !important; height: 3px !important; border-radius: $border-radius-sm !important; }
+  .ant-tabs-content-holder { padding: 0 !important; }
+
+  @include mobile {
+    .ant-tabs-nav {
+      padding: 0 $spacing-3 !important;
+    }
+
+    .ant-tabs-tab {
+      padding: $spacing-3 $spacing-1 !important;
+      font-size: $font-size-sm !important;
+      font-weight: $font-weight-semibold !important;
+    }
+  }
+}
+
+.profile-tab-pane {
+  padding: $spacing-8;
+
+  @include mobile { padding: $spacing-5; }
+
+  &--narrow {
+    max-width: 600px;
+    padding: $spacing-8;
+
+    @include mobile { padding: $spacing-5; }
+  }
+}
+
+// ── Form section header ───────────────────────────────────────────────
+.form-section-header {
+  @include flex-between;
+  margin-bottom: $spacing-6;
+  flex-wrap: wrap;
+  gap: $spacing-3;
+
+  h3 {
+    font-family: $font-heading;
+    font-size: $font-size-xl;
+    font-weight: $font-weight-bold;
+    color: $neutral-800;
+    margin: 0;
+  }
+
+  p {
+    font-size: $font-size-sm;
+    color: $neutral-500;
+    margin: $spacing-1 0 0;
+  }
+}
+
+// ── Profile form ──────────────────────────────────────────────────────
+.profile-form {
+  &__row {
+    @include form-row($spacing-5);
+  }
+
+  .ant-form-item-label > label {
+    font-size: $font-size-sm;
+    font-weight: $font-weight-semibold;
+    color: $neutral-700;
+  }
+
+  .ant-input,
+  .ant-input-affix-wrapper,
+  .ant-select-selector,
+  .ant-picker {
+    border-radius: $border-radius-lg !important;
+    font-size: $font-size-sm;
+  }
+
+  &__actions {
+    padding-top: $spacing-6;
+    border-top: $border-width-thin solid $neutral-100;
+    margin-top: $spacing-2;
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  &__save-btn {
+    height: $btn-height-lg !important;
+    font-weight: $font-weight-bold !important;
+    border-radius: $border-radius-lg !important;
+    background: $primary-500 !important;
+    border-color: $primary-500 !important;
+    box-shadow: 0 4px 12px rgba(0, 156, 222, 0.3) !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: $spacing-2 !important;
+    padding: 0 $spacing-8 !important;
+    transition: all $transition-fast !important;
+
+    &:hover {
+      background: $primary-600 !important;
+      border-color: $primary-600 !important;
+      transform: translateY(-1px);
+    }
+  }
+}
+
+
+// ── Empty state ───────────────────────────────────────────────────────
+.profile-empty {
+  @include flex-column-center;
+  gap: $spacing-3;
+  padding: $spacing-16 0;
+  text-align: center;
+
+  span[nz-icon] {
+    font-size: $icon-size-4xl;
+    color: $neutral-300;
+  }
+
+  p {
+    font-size: $font-size-base;
+    color: $neutral-400;
+    margin: 0;
+  }
+}
+
+.profile-sidebar__avatar-wrap {
+  position: relative;
+  display: inline-block;
+}
+
+.profile-sidebar__avatar-loading {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 28px;
+  z-index: 10;
+}
+
+.profile-sidebar__avatar-edit {
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+.ml-5 {
+    margin-left: 8px;
+}

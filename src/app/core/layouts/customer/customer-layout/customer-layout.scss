@@ -1,0 +1,19 @@
+@use '../../../../../assets/styles/common' as *;
+
+// =========================================================================
+// CUSTOMER LAYOUT SHELL
+// =========================================================================
+
+
+.cus-layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  font-family: $font-primary;
+  background: $color-bg-body;
+
+  &__main {
+    flex: 1;
+    padding-top: $header-height; 
+  }
+}

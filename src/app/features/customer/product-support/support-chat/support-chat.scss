@@ -1,0 +1,515 @@
+@use '../../../../../assets/styles/common' as *;
+@use '../../../../../assets/styles/responsive' as *;
+
+.support-chat-page {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: $spacing-6;
+    min-height: calc(100vh - 200px);
+
+    /* ===== Breadcrumb ===== */
+    .chat-breadcrumb {
+        margin-bottom: $spacing-5;
+
+        a {
+            color: $primary-500;
+            cursor: pointer;
+            transition: color $transition-fast;
+
+            &:hover {
+                color: $primary-400;
+            }
+        }
+    }
+
+    /* ===== Header ===== */
+    .chat-header {
+        display: flex;
+        align-items: center;
+        gap: $spacing-4;
+        margin-bottom: $spacing-6;
+        padding: $spacing-5;
+        background: linear-gradient(135deg, $primary-900 0%, $primary-800 60%, $primary-700 100%);
+        border-radius: $border-radius-xl;
+        color: $neutral-0;
+        box-shadow: $shadow-lg;
+
+        &__icon {
+            width: 60px;
+            height: 60px;
+            border-radius: $border-radius-full;
+            background: rgba(255, 255, 255, $opacity-20);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            [nz-icon] {
+                font-size: $icon-size-2xl;
+                color: $neutral-0;
+            }
+        }
+
+        &__info {
+            flex: 1;
+
+            h2 {
+                margin: 0 0 $spacing-1 0;
+                font-size: $font-size-2xl;
+                font-weight: $font-weight-semibold;
+                color: $neutral-0;
+            }
+
+            p {
+                margin: 0;
+                display: flex;
+                align-items: center;
+                gap: $spacing-2;
+                flex-wrap: wrap;
+
+                .context-title {
+                    color: rgba(255, 255, 255, $opacity-90);
+                    font-size: $font-size-sm;
+                }
+            }
+        }
+    }
+
+    /* ===== Raise Ticket Card ===== */
+    .raise-ticket-card {
+        box-shadow: $shadow-card;
+        border-radius: $border-radius-xl;
+        background: $card-bg;
+
+        .context-preview {
+            display: flex;
+            align-items: center;
+            gap: $spacing-3;
+            padding: $spacing-3;
+            background: $neutral-50;
+            border-radius: $border-radius-lg;
+            border-left: 3px solid $primary-500;
+            margin-bottom: $spacing-5;
+
+            img {
+                width: 50px;
+                height: 50px;
+                object-fit: cover;
+                border-radius: $border-radius-base;
+                border: $border-width-thin solid $neutral-200;
+            }
+
+            [nz-icon] {
+                font-size: $icon-size-2xl;
+                color: $primary-500;
+            }
+
+            &__info {
+                h4 {
+                    margin: 0 0 $spacing-1 0;
+                    font-size: $font-size-base;
+                    font-weight: $font-weight-semibold;
+                    color: $neutral-800;
+                }
+
+                span {
+                    font-size: $font-size-sm;
+                    color: $color-text-secondary;
+                }
+            }
+
+            &--order {
+                [nz-icon] {
+                    color: $primary-500;
+                }
+            }
+        }
+
+        .form-group {
+            margin-bottom: $spacing-5;
+
+            label {
+                display: flex;
+                align-items: center;
+                gap: $spacing-2;
+                font-size: $font-size-sm;
+                font-weight: $font-weight-medium;
+                color: $neutral-800;
+                margin-bottom: $spacing-2;
+
+                [nz-icon] {
+                    color: $primary-500;
+                }
+
+                .required {
+                    color: $error-500;
+                }
+            }
+
+            .full-width {
+                width: 100%;
+            }
+
+            .upload-trigger {
+                width: 100%;
+                border-color: $primary-300;
+                color: $primary-500;
+
+                &:hover {
+                    border-color: $primary-500;
+                    background: $primary-50;
+                }
+            }
+        }
+
+        .file-preview-list {
+            margin-top: $spacing-3;
+            display: flex;
+            flex-direction: column;
+            gap: $spacing-2;
+        }
+
+        .file-chip {
+            display: flex;
+            align-items: center;
+            gap: $spacing-3;
+            padding: $spacing-2 $spacing-3;
+            background: $neutral-50;
+            border: $border-width-thin solid $neutral-200;
+            border-radius: $border-radius-lg;
+
+            img {
+                width: 40px;
+                height: 40px;
+                object-fit: cover;
+                border-radius: $border-radius-base;
+            }
+
+            .file-icon {
+                font-size: $icon-size-xl;
+                color: $primary-500;
+            }
+
+            &__info {
+                flex: 1;
+                display: flex;
+                flex-direction: column;
+                overflow: hidden;
+
+                .file-name {
+                    font-size: $font-size-sm;
+                    font-weight: $font-weight-medium;
+                    color: $neutral-800;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                }
+
+                .file-size {
+                    font-size: $font-size-xs;
+                    color: $color-text-secondary;
+                }
+            }
+        }
+    }
+
+    /* ===== Chat Card ===== */
+    .chat-card {
+        box-shadow: $shadow-card;
+        border-radius: $border-radius-xl;
+        background: $card-bg;
+        overflow: hidden;
+        padding: 0;
+
+        ::ng-deep .ant-card-body {
+            padding: 0;
+        }
+
+        .thread-loading {
+            text-align: center;
+            padding: $spacing-16;
+
+            p {
+                margin-top: $spacing-4;
+                color: $color-text-secondary;
+            }
+        }
+    }
+
+    /* ===== Messages ===== */
+    .messages-container {
+        height: 500px;
+        overflow-y: auto;
+        padding: $spacing-5;
+        background: $neutral-50;
+        display: flex;
+        flex-direction: column;
+        gap: $spacing-4;
+        scroll-behavior: smooth;
+
+        &::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        &::-webkit-scrollbar-thumb {
+            background: $neutral-300;
+            border-radius: $border-radius-full;
+        }
+    }
+
+    .message-row {
+        display: flex;
+        gap: $spacing-3;
+        align-items: flex-start;
+        max-width: 80%;
+
+        &--customer {
+            flex-direction: row-reverse;
+            align-self: flex-end;
+
+            .message-bubble {
+                background: $primary-600;
+                color: $neutral-0;
+                border-radius: $border-radius-lg $border-radius-lg 0 $border-radius-lg;
+
+                .message-bubble__header {
+
+                    strong,
+                    .time {
+                        color: $neutral-0;
+                    }
+                }
+
+                .message-bubble__text {
+                    color: $neutral-0;
+                }
+            }
+        }
+    }
+
+    .message-bubble {
+        background: $neutral-0;
+        padding: $spacing-3 $spacing-4;
+        border-radius: $border-radius-lg $border-radius-lg $border-radius-lg 0;
+        box-shadow: $shadow-sm;
+        border: $border-width-thin solid $neutral-200;
+
+        &__header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: $spacing-3;
+            margin-bottom: $spacing-1;
+
+            strong {
+                font-size: $font-size-xs;
+                font-weight: $font-weight-semibold;
+                color: $neutral-800;
+            }
+
+            .time {
+                font-size: $font-size-2xs;
+                color: $color-text-secondary;
+            }
+        }
+
+        &__text {
+            margin: 0;
+            font-size: $font-size-sm;
+            line-height: $line-height-relaxed;
+            color: $neutral-800;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+    }
+
+    .message-attachments {
+        margin-top: $spacing-2;
+        display: flex;
+        flex-wrap: wrap;
+        gap: $spacing-2;
+
+        .attachment-link {
+            display: inline-flex;
+            align-items: center;
+            gap: $spacing-1;
+            padding: $spacing-1 $spacing-2;
+            background: rgba(0, 0, 0, 0.05);
+            border-radius: $border-radius-base;
+            font-size: $font-size-xs;
+            color: inherit;
+            text-decoration: none;
+
+            &:hover {
+                background: rgba(0, 0, 0, 0.1);
+            }
+        }
+    }
+
+    /* ===== Reply Box ===== */
+    .reply-box {
+        background: $neutral-0;
+        border-top: $border-width-thin solid $neutral-200;
+        padding: $spacing-3 $spacing-4;
+    }
+
+    .reply-attachment-preview {
+        display: flex;
+        align-items: center;
+        gap: $spacing-2;
+        padding: $spacing-2;
+        background: $primary-50;
+        border-radius: $border-radius-base;
+        margin-bottom: $spacing-2;
+        font-size: $font-size-sm;
+
+        [nz-icon] {
+            color: $primary-500;
+        }
+
+        .reply-file-name {
+            font-weight: $font-weight-medium;
+            color: $neutral-800;
+        }
+
+        .reply-file-size {
+            color: $color-text-secondary;
+            font-size: $font-size-xs;
+        }
+    }
+
+    .reply-input-row {
+        display: flex;
+        align-items: flex-end;
+        gap: $spacing-2;
+
+        textarea {
+            flex: 1;
+            resize: none;
+            border-radius: $border-radius-lg;
+            max-height: 120px;
+        }
+
+        button[nzShape="circle"] {
+            flex-shrink: 0;
+        }
+    }
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 768px) {
+    .support-chat-page {
+        padding: $spacing-4;
+
+        .chat-header {
+            flex-direction: column;
+            text-align: center;
+            gap: $spacing-3;
+        }
+
+        .messages-container {
+            height: 400px;
+            padding: $spacing-3;
+        }
+
+        .message-row {
+            max-width: 95%;
+        }
+    }
+}
+
+@media (max-width: 480px) {
+    .support-chat-page {
+        padding: $spacing-3;
+
+        .chat-header h2 {
+            font-size: $font-size-xl;
+        }
+
+        .messages-container {
+            height: 350px;
+        }
+    }
+}
+
+/* ===== Image Attachments in Chat ===== */
+
+.message-attachments {
+    margin-top: $spacing-2;
+    display: flex;
+    flex-wrap: wrap;
+    gap: $spacing-2;
+}
+
+.attachment-image-wrapper {
+    border-radius: $border-radius-base;
+    overflow: hidden;
+    cursor: pointer;
+    border: $border-width-thin solid $neutral-200;
+    transition: transform 0.2s ease;
+
+    &:hover {
+        transform: scale(1.05);
+    }
+}
+
+.attachment-image {
+    width: 120px;
+    height: 100px;
+    object-fit: cover;
+    display: block;
+}
+
+.image-preview-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.85);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 3000;
+    cursor: pointer;
+}
+
+.image-preview-full {
+    max-width: 90%;
+    max-height: 90%;
+    border-radius: $border-radius-lg;
+}
+
+.ticket-closed-notice {
+    padding: 16px;
+    margin-top: 12px;
+    border-radius: 8px;
+    background: #f5f5f5;
+    border: 1px solid #ddd;
+    color: #666;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 500;
+
+    [nz-icon] {
+        color: #999;
+    }
+}
+
+.raise-ticket-btn {
+  background: linear-gradient(135deg, #0f5e7d, #117da5);
+  border: none;
+  color: #ffffff;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  border-radius: 10px;
+  height: 48px;
+  transition: all 0.25s ease;
+
+  &:hover {
+    background: linear-gradient(135deg, #117da5, #0f5e7d);
+    box-shadow: 0 6px 18px rgba(17, 125, 165, 0.35);
+    transform: translateY(-1px);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+}

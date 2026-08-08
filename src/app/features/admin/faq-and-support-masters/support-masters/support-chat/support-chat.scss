@@ -1,0 +1,402 @@
+@use '../../../../../../assets/styles/common' as *;
+@use '../../../../../../assets/styles/responsive' as *;
+
+.chat-page-container {
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 135px) !important;
+  // padding: $spacing-6;
+  gap: $spacing-4;
+  background-color: $neutral-50;
+}
+
+// ================= HEADER CARD =================
+.ticket-header-card {
+  border-radius: $border-radius-lg;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  background-color: #fff;
+  flex-shrink: 0;
+
+  .header-main-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: $spacing-3;
+  }
+
+  .left-section {
+    display: flex;
+    align-items: center;
+    gap: $spacing-3;
+    flex-wrap: wrap;
+  }
+
+  .back-btn {
+    border-radius: $border-radius-lg;
+  }
+
+  .ticket-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: $neutral-800;
+  }
+
+  .status-tag {
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: $border-radius-sm;
+  }
+
+  .priority-tag {
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: $border-radius-sm;
+  }
+
+  .header-divider {
+    margin: $spacing-3 0;
+  }
+
+  .ticket-meta-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: $spacing-6;
+  }
+
+  .meta-item {
+    display: flex;
+    align-items: center;
+    gap: $spacing-2;
+    font-size: 14px;
+  }
+
+  .meta-label {
+    font-weight: 600;
+    color: $neutral-500;
+  }
+
+  .meta-value {
+    color: $neutral-800;
+  }
+}
+
+// ================= CHAT LOG AREA =================
+.chat-log-wrapper {
+  flex: 1;
+  background-color: #f8fafc;
+  border: 1px solid $neutral-200;
+  border-radius: $border-radius-lg;
+  overflow-y: auto;
+  position: relative;
+  box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.02);
+  padding: $spacing-4;
+
+  .messages-container {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-4;
+    min-height: 100%;
+    justify-content: flex-end;
+  }
+
+  .empty-thread-state {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    color: $neutral-400;
+    gap: $spacing-2;
+
+    .empty-icon {
+      font-size: 32px;
+    }
+
+    p {
+      margin: 0;
+      font-size: 14px;
+    }
+  }
+}
+
+// ================= MESSAGE BUBBLES =================
+.message-row {
+  display: flex;
+  width: 100%;
+
+  &.customer {
+    justify-content: flex-start;
+
+    .bubble-wrapper {
+      align-items: flex-start;
+    }
+
+    .bubble-content {
+      background-color: #fff;
+      color: $neutral-800;
+      border: 1px solid $neutral-200;
+      border-radius: 0 16px 16px 16px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+    }
+
+    .sender-name {
+      text-align: left;
+    }
+  }
+
+  &.agent {
+    justify-content: flex-end;
+
+    .bubble-wrapper {
+      align-items: flex-end;
+    }
+
+    .bubble-content {
+      background-color: #1890ff;
+      color: #fff;
+      border-radius: 16px 0 16px 16px;
+      box-shadow: 0 2px 6px rgba(24, 144, 255, 0.2);
+    }
+
+    .sender-name {
+      text-align: right;
+    }
+  }
+
+  &.system {
+    justify-content: center;
+    margin: $spacing-2 0;
+  }
+}
+
+.bubble-wrapper {
+  display: flex;
+  flex-direction: column;
+  max-width: 70%;
+  gap: 4px;
+}
+
+.sender-name {
+  font-size: 11px;
+  font-weight: 600;
+  color: $neutral-400;
+  padding: 0 $spacing-1;
+
+  .message-time {
+    font-weight: 400;
+    color: $neutral-400;
+  }
+}
+
+.bubble-content {
+  padding: $spacing-3 $spacing-4;
+  word-wrap: break-word;
+  white-space: pre-wrap;
+}
+
+.message-text {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+// System Message styling
+.system-message-bubble {
+  display: flex;
+  align-items: center;
+  gap: $spacing-2;
+  background-color: #f0f5ff;
+  border: 1px solid #d6e4ff;
+  color: #2f54eb;
+  padding: $spacing-2 $spacing-4;
+  border-radius: $border-radius-full;
+  font-size: 12px;
+  font-weight: 500;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.03);
+
+  .system-icon {
+    font-size: 14px;
+  }
+}
+
+// ================= ATTACHMENTS =================
+.attachments-gallery {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $spacing-2;
+  margin-top: $spacing-3;
+  padding-top: $spacing-2;
+  border-top: 1px dashed rgba(0, 0, 0, 0.06);
+
+  .message-row.agent & {
+    border-top-color: rgba(255, 255, 255, 0.2);
+  }
+}
+
+.attachment-item {
+  width: 90px;
+  height: 90px;
+  border-radius: $border-radius-lg;
+  overflow: hidden;
+  position: relative;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  background-color: $neutral-100;
+  cursor: pointer;
+
+  .attachment-link {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  .attachment-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .attachment-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.4);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #fff;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+    font-size: 18px;
+
+    &:hover {
+      opacity: 1;
+    }
+  }
+}
+
+// ================= REPLY INPUT CARD =================
+.chat-footer-card {
+  background-color: #fff;
+  border: 1px solid $neutral-200;
+  border-radius: $border-radius-lg;
+  padding: $spacing-3;
+  box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.03);
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-2;
+  flex-shrink: 0;
+
+  .selected-files-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: $spacing-2;
+    padding-bottom: $spacing-2;
+    border-bottom: 1px solid $neutral-100;
+  }
+
+  .file-chip {
+    display: flex;
+    align-items: center;
+    gap: $spacing-2;
+    background-color: $neutral-50;
+    border: 1px solid $neutral-200;
+    border-radius: $border-radius-full;
+    padding: 2px $spacing-1 2px $spacing-3;
+    font-size: 12px;
+
+    .file-icon {
+      color: #1890ff;
+    }
+
+    .file-name {
+      max-width: 120px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      color: $neutral-700;
+    }
+
+    .remove-file-btn {
+      width: 20px;
+      height: 20px;
+      min-width: 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: $neutral-400;
+      padding: 0;
+
+      &:hover {
+        color: $neutral-700;
+        background-color: $neutral-200;
+      }
+    }
+  }
+
+  .footer-input-row {
+    display: flex;
+    align-items: flex-end;
+    gap: $spacing-2;
+  }
+
+  .attach-btn {
+    height: 40px;
+    width: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 16px;
+    border-radius: $border-radius-lg;
+  }
+
+  .reply-textarea {
+    border-radius: $border-radius-lg;
+    font-size: 14px;
+    padding: $spacing-2 $spacing-3;
+    border-color: $neutral-300;
+    min-height: 40px !important;
+
+    &:focus {
+      border-color: #1890ff;
+      box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
+    }
+  }
+
+  .send-btn {
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: $spacing-1;
+    font-weight: 600;
+    border-radius: $border-radius-lg;
+  }
+}
+
+// ================= CLOSED TICKET STATE =================
+.closed-ticket-warning {
+  margin: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: $spacing-2;
+  background-color: $neutral-100;
+  border: 1px solid $neutral-200;
+  color: $neutral-500;
+  padding: $spacing-4;
+  border-radius: $border-radius-lg;
+  font-size: 14px;
+  font-weight: 500;
+  flex-shrink: 0;
+
+  .lock-icon {
+    font-size: 16px;
+  }
+}

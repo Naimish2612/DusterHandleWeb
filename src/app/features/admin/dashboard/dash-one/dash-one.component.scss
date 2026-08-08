@@ -1,0 +1,20 @@
+.admin-home h2 {
+  margin: 0 0 8px;
+}
+
+.admin-home p {
+  margin: 0 0 16px;
+  color: #8c8c8c;
+}
+
+.admin-home__stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+
+@media (max-width: 900px) {
+  .admin-home__stats {
+    grid-template-columns: 1fr;
+  }
+}

@@ -1,0 +1,403 @@
+// @import '../../../../assets/styles/common.scss';
+@use '../../../../assets/styles/common' as *;
+@use '../../../../assets/styles/responsive' as *;
+
+
+/* ===================================================================
+   MAIN SIDEBAR & HEADER - USING DESIGN SYSTEM
+   =================================================================== */
+
+/* ===== SIDEBAR ===== */
+.main-sidebar {
+  position: fixed;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  z-index: $z-index-fixed + 1;
+  overflow: auto;
+  box-shadow: $shadow-lg;
+  background: $neutral-900;
+  transition: all $transition-base;
+}
+
+.main-sidebar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.main-sidebar::-webkit-scrollbar-track {
+  background: $neutral-800;
+}
+
+.main-sidebar::-webkit-scrollbar-thumb {
+  background: $primary-500;
+  border-radius: $border-radius-sm;
+}
+
+.sidebar-logo {
+  height: $header-height;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba($neutral-0, 0.05);
+  border-bottom: $border-width-thin solid rgba($neutral-0, 0.1);
+}
+
+.logo-icon {
+  font-size: $font-size-xl;
+  font-weight: $font-weight-bold;
+  color: $neutral-0;
+  letter-spacing: -0.5px;
+
+  // Set the size you want the image to be
+  width: 150px;
+  height: auto; // Let the height scale naturally with the SVG
+
+  // Optional: If the image fails to load, this styles the alt text
+  color: $neutral-0;
+  font-size: $font-size-base;
+  text-align: center;
+}
+
+/* Menu Search */
+.menu-search {
+  padding: $spacing-4;
+  border-bottom: $border-width-thin solid rgba($neutral-0, 0.1);
+
+  ::ng-deep .ant-input-affix-wrapper {
+    background: rgba($neutral-0, 0.1);
+    border: $border-width-thin solid rgba($neutral-0, 0.2);
+    border-radius: $border-radius-base;
+
+    &:hover,
+    &:focus {
+      background: rgba($neutral-0, 0.15);
+      border-color: $primary-500;
+    }
+
+    .ant-input {
+      background: transparent;
+      color: $neutral-0;
+      font-size: $font-size-sm;
+
+      &::placeholder {
+        color: rgba($neutral-0, 0.5);
+      }
+    }
+
+    .ant-input-prefix,
+    .ant-input-suffix {
+      color: rgba($neutral-0, 0.6);
+    }
+  }
+
+  .clear-icon {
+    cursor: pointer;
+    color: rgba($neutral-0, 0.6);
+    transition: color $transition-fast;
+
+    &:hover {
+      color: $neutral-0;
+    }
+  }
+}
+
+.sidebar-menu {
+  padding: $spacing-4 0;
+  border-right: 0;
+}
+
+.menu-badge {
+  position: absolute;
+  right: $spacing-4;
+  background: $error-500;
+  color: $neutral-0;
+  border-radius: $border-radius-full;
+  padding: 0 $spacing-2;
+  font-size: $font-size-xs;
+  line-height: 18px;
+  min-width: 18px;
+  text-align: center;
+}
+
+::ng-deep .main-sidebar {
+  .ant-menu-dark {
+    background: transparent;
+  }
+
+  .ant-menu-inline .ant-menu-item,
+  .ant-menu-inline .ant-menu-submenu-title {
+    padding-left: 15px !important;
+  }
+
+  .ant-menu-item,
+  .ant-menu-submenu-title {
+    height: 40px;
+    line-height: 40px;
+    margin: $spacing-1 0;
+  }
+
+  .ant-menu-item-selected {
+    background: $primary-300 !important;
+  }
+
+  .ant-menu-submenu-selected > .ant-menu-submenu-title {
+    color: $primary-200;
+  }
+
+  .ant-menu-item:hover,
+  .ant-menu-submenu-title:hover {
+    color: $neutral-200;
+    background: rgba($neutral-200, 0.1);
+  }
+}
+
+/* Sidebar Backdrop */
+.sidebar-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba($neutral-1000, 0.45);
+  z-index: $z-index-dropdown;
+  display: none;
+}
+
+@include respond-to(lg) {
+  @media (max-width: #{$breakpoint-lg - 1}) {
+    .sidebar-backdrop {
+      display: block;
+    }
+  }
+}
+
+/* ===== HEADER ===== */
+.main-header {
+  position: fixed;
+  z-index: $z-index-sticky;
+  @include flex-between;
+  padding: 0 $spacing-6;
+  background: $neutral-0;
+  box-shadow: $shadow-md;
+  height: $header-height;
+  line-height: $header-height;
+  right: 0;
+  left: $sidebar-width;
+  width: auto;
+  transition: left $transition-base;
+
+  @include respond-to(md) {
+    padding: 0 $spacing-4;
+  }
+}
+
+.main-header.sidebar-hidden {
+  left: 0;
+}
+
+@include respond-to(lg) {
+  @media (max-width: #{$breakpoint-lg - 1}) {
+    .main-header {
+      left: 0;
+    }
+  }
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: $spacing-6;
+  flex: 1 1 auto;
+
+  @include respond-to(md) {
+    gap: $spacing-4;
+  }
+}
+
+.trigger {
+  font-size: $font-size-xl;
+  cursor: pointer;
+  transition: all $transition-fast;
+  padding: $spacing-2;
+  border-radius: $border-radius-sm;
+  color: $neutral-600;
+
+  &:hover {
+    color: $primary-500;
+    background: rgba($primary-500, 0.1);
+  }
+}
+
+.breadcrumb {
+  margin: 0;
+
+  @media (max-width: #{$breakpoint-md - 1}) {
+    display: none;
+  }
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: $spacing-5;
+  flex: 0 0 auto;
+  min-width: 0;
+
+  @include respond-to(md) {
+    gap: $spacing-3;
+  }
+}
+
+.notification-badge {
+  cursor: pointer;
+}
+
+.header-icon {
+  font-size: $font-size-lg;
+  cursor: pointer;
+  transition: color $transition-fast;
+  padding: $spacing-2;
+  color: $neutral-600;
+
+  &:hover {
+    color: $primary-500;
+  }
+}
+
+/* User Profile */
+.user-profile {
+  display: flex;
+  align-items: center;
+  gap: $spacing-3;
+  cursor: pointer;
+  padding: $spacing-2 $spacing-3;
+  border-radius: $border-radius-lg;
+  transition: background $transition-fast;
+  white-space: nowrap;
+
+  &:hover {
+    background: $neutral-100;
+  }
+}
+
+.user-avatar {
+  border: $border-width-base solid $primary-500;
+}
+
+.user-info {
+  display: flex;
+  flex-direction: column;
+  line-height: $line-height-tight;
+  min-width: 0;
+
+  @include respond-to(lg) {
+    @media (max-width: #{$breakpoint-lg - 1}) {
+      display: none;
+    }
+  }
+}
+
+.user-name {
+  font-size: $font-size-sm;
+  font-weight: $font-weight-semibold;
+  color: $neutral-900;
+}
+
+.user-role {
+  font-size: $font-size-xs;
+  color: $neutral-500;
+}
+
+/* User Dropdown */
+::ng-deep .ant-dropdown {
+  z-index: $z-index-modal !important;
+}
+
+.user-dropdown-menu {
+  min-width: 260px;
+  padding: $spacing-2;
+  box-shadow: $shadow-xl;
+}
+
+.user-menu-header {
+  cursor: default !important;
+  background: $neutral-50;
+  margin-bottom: $spacing-2;
+  border-radius: $border-radius-base;
+  padding: $spacing-3 !important;
+
+  &:hover {
+    background: $neutral-50 !important;
+  }
+}
+
+.dropdown-user-info {
+  display: flex;
+  align-items: center;
+  gap: $spacing-3;
+}
+
+.dropdown-user-details {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+}
+
+.dropdown-user-name {
+  font-size: $font-size-sm;
+  font-weight: $font-weight-semibold;
+  color: $neutral-900;
+  margin-bottom: $spacing-1;
+  @include text-truncate;
+}
+
+.dropdown-user-email {
+  font-size: $font-size-xs;
+  color: $neutral-500;
+  @include text-truncate;
+}
+
+::ng-deep .user-dropdown-menu {
+  .ant-dropdown-menu-item {
+    border-radius: $border-radius-sm;
+    padding: $spacing-3;
+    margin: $spacing-1 0;
+
+    .anticon {
+      margin-right: $spacing-3;
+      font-size: $font-size-base;
+    }
+
+    &:hover {
+      background: $neutral-100;
+    }
+  }
+
+  .logout-item {
+    color: $error-500;
+
+    &:hover {
+      background: rgba($error-500, 0.1);
+    }
+  }
+}
+
+/* Responsive Adjustments */
+@media (max-width: #{$breakpoint-sm - 1}) {
+  .main-header {
+    padding: 0 $spacing-3;
+  }
+
+  .header-left {
+    gap: $spacing-3;
+  }
+
+  .header-right {
+    gap: $spacing-2;
+  }
+
+  .user-dropdown-menu {
+    min-width: 240px;
+  }
+}

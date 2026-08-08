@@ -1,0 +1,301 @@
+// steps/address-step/address-step.component.scss
+@use '../../../../../assets/styles/common' as *;
+@use '../../../../../assets/styles/responsive' as *;
+
+.address-step {
+  &__loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 400px;
+  }
+
+  // ── Two-column Layout ─────────────────────────────────
+  &__layout {
+    display: grid;
+    grid-template-columns: 1fr 340px;
+    gap: $spacing-6;
+    align-items: flex-start;
+
+    @include tablet-down {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  &__selection-col {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-4;
+  }
+
+  &__summary-col {
+    position: sticky;
+    top: 120px;
+  }
+}
+
+// ── Same as Billing Toggle ───────────────────────────
+.addr-step {
+  &__same-toggle {
+    margin: 0 0 $spacing-4;
+  }
+
+  &__same-label {
+    display: inline-flex;
+    align-items: center;
+    gap: $spacing-2;
+    font-size: $font-size-sm;
+    font-weight: $font-weight-medium;
+    color: $color-text-secondary;
+    cursor: pointer;
+    padding: $spacing-3 $spacing-4;
+    border-radius: $border-radius-lg;
+    border: 1px dashed $color-border-base;
+    background: $neutral-50;
+    width: 100%;
+    transition: all $transition-fast;
+
+    &:hover {
+      border-color: $primary-400;
+      background: $primary-50;
+      color: $primary-600;
+    }
+
+    span[nz-icon] {
+      color: $primary-500;
+    }
+  }
+
+  &__same-checkbox {
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+    accent-color: $primary-500;
+  }
+}
+
+// ══════════════════════════════════════════════════════
+//  ADDRESS SECTION WRAPPER
+// ══════════════════════════════════════════════════════
+.addr-section {
+  background: $neutral-0;
+  border: 1px solid $color-border-light;
+  border-radius: $border-radius-xl;
+  overflow: hidden;
+
+  &__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: $spacing-4 $spacing-5;
+    background: $neutral-50;
+    border-bottom: 1px solid $color-border-light;
+  }
+
+  &__head-left {
+    display: flex;
+    align-items: center;
+    gap: $spacing-3;
+  }
+
+  &__head-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: $border-radius-lg;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: $icon-size-lg;
+    flex-shrink: 0;
+
+    &--shipping {
+      background: $primary-50;
+      color: $primary-500;
+    }
+
+    &--billing {
+      background: $secondary-50;
+      color: $secondary-500;
+    }
+  }
+
+  &__title {
+    font-size: $font-size-base;
+    font-weight: $font-weight-semibold;
+    color: $color-text-primary;
+    margin: 0 0 $spacing-0-5;
+  }
+
+  &__subtitle {
+    font-size: $font-size-xs;
+    color: $color-text-tertiary;
+    margin: 0;
+  }
+
+  &__cards {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+}
+
+// ══════════════════════════════════════════════════════
+//  ADDRESS CARD (Selectable)
+// ══════════════════════════════════════════════════════
+.addr-card {
+  display: flex;
+  align-items: flex-start;
+  gap: $spacing-3;
+  padding: $spacing-4 $spacing-5;
+  border-bottom: 1px solid $color-border-light;
+  cursor: pointer;
+  transition: background $transition-fast;
+  position: relative;
+
+  &:last-child {
+    border-bottom: none;
+  }
+
+  &:hover {
+    background: $primary-50;
+  }
+
+  &--selected {
+    background: $primary-50;
+    border-left: 3px solid $primary-500;
+
+    &:last-child {
+      border-bottom: none;
+    }
+  }
+
+  // ── Radio ──────────────────────────────────────────
+  &__radio {
+    padding-top: $spacing-0-5;
+    flex-shrink: 0;
+  }
+
+  &__radio-input {
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+    accent-color: $primary-500;
+  }
+
+  // ── Content ─────────────────────────────────────────
+  &__content {
+    flex: 1;
+    min-width: 0;
+  }
+
+  &__name-row {
+    display: flex;
+    align-items: center;
+    gap: $spacing-2;
+    flex-wrap: wrap;
+    margin-bottom: $spacing-1-5;
+  }
+
+  &__name {
+    font-size: $font-size-sm;
+    font-weight: $font-weight-semibold;
+    color: $color-text-primary;
+  }
+
+  &__default-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: $spacing-1;
+    font-size: $font-size-2xs;
+  }
+
+  &__addr-text {
+    font-size: $font-size-sm;
+    color: $color-text-secondary;
+    margin: 0;
+    line-height: $line-height-relaxed;
+  }
+
+  // ── Selected Check ────────────────────────────────
+  &__check {
+    color: $primary-500;
+    font-size: $icon-size-lg;
+    flex-shrink: 0;
+    margin-top: $spacing-0-5;
+  }
+}
+
+// ══════════════════════════════════════════════════════
+//  ADDRESS SUMMARY (Right Panel)
+// ══════════════════════════════════════════════════════
+.addr-summary {
+  background: $neutral-0;
+  border: 1px solid $color-border-light;
+  border-radius: $border-radius-xl;
+  padding: $spacing-5;
+  box-shadow: $shadow-sm;
+
+  &__title {
+    display: flex;
+    align-items: center;
+    gap: $spacing-2;
+    font-size: $font-size-base;
+    font-weight: $font-weight-semibold;
+    color: $color-text-primary;
+    margin: 0 0 $spacing-4;
+
+    span[nz-icon] {
+      color: $primary-500;
+    }
+  }
+
+  &__block {
+    margin-bottom: $spacing-2;
+  }
+
+  &__block-head {
+    display: flex;
+    align-items: center;
+    gap: $spacing-2;
+    font-size: $font-size-sm;
+    font-weight: $font-weight-semibold;
+    color: $color-text-secondary;
+    margin-bottom: $spacing-3;
+    text-transform: uppercase;
+    letter-spacing: $letter-spacing-wide;
+
+    span[nz-icon] {
+      color: $primary-400;
+    }
+  }
+
+  &__desc {
+    ::ng-deep {
+      .ant-descriptions-item-label {
+        font-size: $font-size-xs;
+        font-weight: $font-weight-semibold;
+        background: $neutral-50;
+        white-space: nowrap;
+      }
+      .ant-descriptions-item-content {
+        font-size: $font-size-sm;
+      }
+    }
+  }
+
+  &__nav {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-2;
+    margin-top: $spacing-5;
+
+    button {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: $spacing-2;
+
+    }
+  }
+}

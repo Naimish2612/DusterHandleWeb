@@ -1,0 +1,51 @@
+<div class="policy-page-wrapper">
+    <div class="policy-page-container">
+
+        <!-- Header -->
+        <header class="policy-header">
+            <div class="policy-icon-wrapper" aria-hidden="true">
+                <span class="policy-icon">
+                    <span nz-icon 
+                          [nzType]="meta.icon"
+                          [nzTheme]="meta.theme"
+                          [nzTwotoneColor]="meta.color ?? '#1890ff'">
+                    </span>
+                </span>
+            </div>
+
+            <h1 class="policy-title">{{ displayTitle }}</h1>
+        </header>
+
+        <!-- Loading State -->
+        <div class="policy-loading" *ngIf="isLoading" role="status" aria-live="polite">
+            <div class="spinner" aria-hidden="true"></div>
+            <p class="loading-text">Loading {{ displayTitle }}...</p>
+        </div>
+
+        <!-- Error State -->
+        <div class="policy-error" *ngIf="hasError" role="alert" aria-live="assertive">
+            <div class="error-icon-wrapper" aria-hidden="true">
+                <span class="error-icon">
+                    <span nz-icon nzType="warning" nzTheme="twotone" nzTwotoneColor="#ff4d4f"></span>
+                </span>
+            </div>
+            <h3 class="error-title">Unable to Load Content</h3>
+            <p class="error-message">{{ errorMessage }}</p>
+            <button type="button" class="btn-retry" (click)="retry()" aria-label="Retry loading content">
+                <span nz-icon nzType="reload" nzTheme="outline" aria-hidden="true"></span>
+                <span>Try Again</span>
+            </button>
+        </div>
+
+        <!-- Content -->
+        <main class="policy-content" *ngIf="!isLoading && !hasError && policyData" [innerHTML]="policyData"></main>
+
+        <!-- Footer Acknowledgment -->
+        <footer class="policy-footer" *ngIf="!isLoading && !hasError && policyData">
+            <p class="acknowledgment-text">
+                By using our services, you acknowledge that you have read and understood this document.
+            </p>
+        </footer>
+
+    </div>
+</div>

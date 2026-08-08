@@ -1,0 +1,7 @@
+// @forward '../assets/styles/common';
+@use '../assets/styles/common' as *;
+
+.btn{
+  background: $primary-500;
+  margin: $spacing-1;
+}

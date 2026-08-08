@@ -1,0 +1,591 @@
+// steps/payment-step/payment-step.component.scss
+@use '../../../../../assets/styles/common' as *;
+@use '../../../../../assets/styles/responsive' as *;
+
+.payment-step {
+
+  // ── Two-column Layout ─────────────────────────────────
+  &__layout {
+    display: grid;
+    grid-template-columns: 1fr 340px;
+    gap: $spacing-6;
+    align-items: flex-start;
+
+    @include tablet-down {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  &__methods-col {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-5;
+  }
+
+  &__review-col {
+    position: sticky;
+    top: 120px;
+  }
+
+  // ── Column Header ─────────────────────────────────────
+  &__col-head {
+    display: flex;
+    align-items: flex-start;
+    gap: $spacing-3;
+  }
+
+  &__col-icon {
+    width: 48px;
+    height: 48px;
+    flex-shrink: 0;
+    border-radius: $border-radius-lg;
+    background: $primary-50;
+    color: $primary-500;
+    font-size: $icon-size-xl;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &__col-title {
+    font-size: $font-size-lg;
+    font-weight: $font-weight-semibold;
+    color: $color-text-primary;
+    margin: 0 0 $spacing-1;
+  }
+
+  &__col-sub {
+    font-size: $font-size-sm;
+    color: $color-text-secondary;
+    margin: 0;
+  }
+
+  &__info-alert {
+    ::ng-deep .ant-alert-description {
+      padding-top: $spacing-1;
+    }
+  }
+
+  &__alert-text {
+    font-size: $font-size-sm;
+    color: $color-text-secondary;
+    margin: 0;
+    line-height: $line-height-relaxed;
+  }
+}
+
+// ══════════════════════════════════════════════════════
+//  PAYMENT OPTIONS
+// ══════════════════════════════════════════════════════
+.payment-options {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-3;
+}
+
+.payment-option {
+  display: flex;
+  align-items: center;
+  gap: $spacing-4;
+  padding: $spacing-4 $spacing-5;
+  background: $neutral-0;
+  border: 2px solid $color-border-light;
+  border-radius: $border-radius-xl;
+  cursor: pointer;
+  transition:
+    border-color $transition-fast,
+    background $transition-fast,
+    box-shadow $transition-fast;
+
+  &:hover:not(&--disabled) {
+    border-color: $primary-300;
+    background: $primary-50;
+    box-shadow: $shadow-sm;
+  }
+
+  &--selected {
+    border-color: $primary-500;
+    background: $primary-50;
+    box-shadow: $shadow-outline;
+  }
+
+  &--disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+    background: $neutral-50;
+
+    &:hover {
+      border-color: $color-border-light;
+      background: $neutral-50;
+      box-shadow: none;
+    }
+  }
+
+  // ── Icon ──────────────────────────────────────────
+  &__icon {
+    width: 48px;
+    height: 48px;
+    flex-shrink: 0;
+    border-radius: $border-radius-lg;
+    background: $neutral-100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: $icon-size-xl;
+    color: $color-text-tertiary;
+    transition: all $transition-fast;
+
+    &--selected {
+      background: $primary-500;
+      color: $neutral-0;
+    }
+
+    &--disabled {
+      background: $neutral-200;
+      color: $color-text-disabled;
+    }
+  }
+
+  // ── Info ──────────────────────────────────────────
+  &__info {
+    flex: 1;
+    min-width: 0;
+  }
+
+  &__name-row {
+    display: flex;
+    align-items: center;
+    gap: $spacing-2;
+    flex-wrap: wrap;
+    margin-bottom: $spacing-1;
+  }
+
+  &__name {
+    font-size: $font-size-base;
+    font-weight: $font-weight-semibold;
+    color: $color-text-primary;
+  }
+
+  &__soon-tag {
+    font-size: $font-size-2xs;
+  }
+
+  &__desc {
+    font-size: $font-size-sm;
+    color: $color-text-secondary;
+    margin: 0;
+  }
+
+  // ── Selected Check ────────────────────────────────
+  &__check {
+    color: $primary-500;
+    font-size: $icon-size-xl;
+    flex-shrink: 0;
+  }
+}
+
+// ══════════════════════════════════════════════════════
+//  ORDER REVIEW PANEL
+// ══════════════════════════════════════════════════════
+.order-review {
+  background: $neutral-0;
+  border: 1px solid $color-border-light;
+  border-radius: $border-radius-xl;
+  padding: $spacing-5;
+  box-shadow: $shadow-sm;
+
+  &__title {
+    display: flex;
+    align-items: center;
+    gap: $spacing-2;
+    font-size: $font-size-base;
+    font-weight: $font-weight-semibold;
+    color: $color-text-primary;
+    margin: 0 0 $spacing-5;
+
+    span[nz-icon] {
+      color: $primary-500;
+    }
+  }
+
+  &__block {
+    margin-bottom: $spacing-4;
+  }
+
+  &__block-label {
+    display: flex;
+    align-items: center;
+    gap: $spacing-1-5;
+    font-size: $font-size-xs;
+    font-weight: $font-weight-semibold;
+    color: $color-text-secondary;
+    text-transform: uppercase;
+    letter-spacing: $letter-spacing-wide;
+    margin: 0 0 $spacing-2;
+
+    span[nz-icon] {
+      color: $primary-400;
+    }
+  }
+
+  &__desc {
+    ::ng-deep {
+      .ant-descriptions-item-label {
+        font-size: $font-size-xs;
+        font-weight: $font-weight-semibold;
+        background: $neutral-50;
+      }
+
+      .ant-descriptions-item-content {
+        font-size: $font-size-sm;
+      }
+    }
+  }
+
+  &__free {
+    display: inline-flex;
+    align-items: center;
+    gap: $spacing-1;
+    color: $success-600;
+    font-weight: $font-weight-bold;
+    font-size: $font-size-xs;
+    letter-spacing: $letter-spacing-wider;
+  }
+
+  // ── Tax ───────────────────────────────────────────────────────────────────
+  &__tax {
+    color: #fa8c16;
+    font-weight: $font-weight-semibold;
+  }
+
+  // ── Shipping — tooltip trigger ─────────────────────────────────────────────
+  &__shipping-total {
+    font-size: $font-size-sm;
+    font-weight: $font-weight-bold;
+    color: $neutral-800;
+
+    // ✅ variant when it wraps an info icon + tooltip
+    &--tip {
+      display: inline-flex;
+      align-items: center;
+      gap: $spacing-1;
+      cursor: pointer;
+      transition: color $transition-fast;
+
+      &:hover {
+        color: $primary-500;
+
+        .order-review__shipping-info-icon {
+          color: $primary-500;
+        }
+      }
+    }
+  }
+
+  &__shipping-info-icon {
+    font-size: $font-size-sm;
+    color: $neutral-400;
+    transition: color $transition-fast;
+  }
+
+  // ✅ Coupon Discount — tooltip trigger
+  &__coupon-discount {
+    color: #389e0d;
+    font-weight: $font-weight-bold;
+    font-size: $font-size-sm;
+
+    &--tip {
+      display: inline-flex;
+      align-items: center;
+      gap: $spacing-1;
+      cursor: pointer;
+      transition: color $transition-fast;
+
+      &:hover {
+        color: $success-700;
+
+        .order-review__coupon-info-icon {
+          color: $success-600;
+        }
+      }
+    }
+  }
+
+  &__coupon-info-icon {
+    font-size: $font-size-sm;
+    color: $success-500;
+    transition: color $transition-fast;
+  }
+
+  // ✅ Total with strike-through
+  &__total-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  &__original-total {
+    font-size: $font-size-xs;
+    color: $color-text-tertiary;
+    text-decoration: line-through;
+  }
+
+  &__total {
+    color: $primary-600;
+    font-size: $font-size-base;
+    font-weight: $font-weight-bold;
+  }
+
+  // ── Address ─────────────────────────────────────────
+  &__addr-box {
+    padding: $spacing-3 $spacing-4;
+    background: $neutral-50;
+    border: 1px solid $color-border-light;
+    border-radius: $border-radius-lg;
+  }
+
+  &__addr-name {
+    font-size: $font-size-sm;
+    font-weight: $font-weight-semibold;
+    color: $color-text-primary;
+    margin: 0 0 $spacing-1;
+  }
+
+  &__addr-text {
+    font-size: $font-size-xs;
+    color: $color-text-secondary;
+    margin: 0;
+    line-height: $line-height-relaxed;
+  }
+
+  &__payment-tag {
+    font-size: $font-size-sm;
+    font-weight: $font-weight-semibold;
+    padding: $spacing-1 $spacing-3;
+  }
+
+  // ── Navigation ────────────────────────────────────
+  &__nav {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-2;
+
+    button {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: $spacing-2;
+    }
+  }
+
+  &__place-btn {
+    height: $btn-height-lg;
+    font-size: $font-size-base;
+    font-weight: $font-weight-semibold;
+    background: $success-500;
+    border-color: $success-500;
+
+    &:hover:not(:disabled) {
+      background: $success-600;
+      border-color: $success-600;
+    }
+  }
+
+  &__secure-note {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: $spacing-1-5;
+    font-size: $font-size-xs;
+    color: $color-text-tertiary;
+    margin: $spacing-3 0 0;
+
+    span[nz-icon] {
+      color: $success-500;
+    }
+  }
+}
+
+// ══════════════════════════════════════════════════════════════════════════════
+// DELIVERY BREAKDOWN TOOLTIP
+// ══════════════════════════════════════════════════════════════════════════════
+
+// ✅ Override Ant Design tooltip overlay background
+::ng-deep .ant-tooltip {
+  .ant-tooltip-inner {
+    background-color: $primary-50;
+    border: 1px solid $primary-100;
+    border-radius: 10px;
+    padding: 12px 14px;
+    box-shadow: 0 8px 24px $primary-100;
+    min-width: 220px;
+  }
+
+  .ant-tooltip-arrow-content,
+  .ant-tooltip-arrow::before {
+    background-color: $primary-50; // ✅ arrow matches inner bg
+  }
+}
+
+::ng-deep .delivery-tip {
+  min-width: 200px;
+
+  // ── Title ──────────────────────────────────────────────────────────────
+  &__title {
+    font-size: 10px;
+    font-weight: 700;
+    color: $neutral-1000;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin: 0 0 10px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  }
+
+  // ── Row ────────────────────────────────────────────────────────────────
+  &__row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 24px;
+    padding: 4px 0;
+
+    &--total {
+      margin-top: 4px;
+      padding-top: 8px;
+    }
+  }
+
+  // ── Divider ────────────────────────────────────────────────────────────
+  &__divider {
+    height: 1px;
+    background: rgba(0, 0, 0, 0.08);
+    margin: 6px 0;
+  }
+
+  // ── Label ──────────────────────────────────────────────────────────────
+  &__label {
+    font-size: 12px;
+    color: $neutral-1000;
+    white-space: nowrap;
+  }
+
+  // ── Value ──────────────────────────────────────────────────────────────
+  &__value {
+    font-size: 12px;
+    font-weight: 600;
+    color: $neutral-1000;
+    white-space: nowrap;
+
+    &--tax {
+      color: $warning-700; // ✅ warm orange — tax amount
+    }
+
+    &--discount {
+      color: $success-600; // ✅ green — discount
+    }
+
+    &--total {
+      font-size: 13px;
+      font-weight: 700;
+      color: $neutral-1000;
+    }
+  }
+}
+
+// ══════════════════════════════════════════════════════════════════════════════
+// ✅ COUPON BREAKDOWN TOOLTIP (same pattern as delivery)
+// ══════════════════════════════════════════════════════════════════════════════
+
+::ng-deep .coupon-tip {
+  min-width: 210px;
+
+  // ── Title with gift icon ──────────────────────────────────────────────
+  &__title {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 10px;
+    font-weight: 700;
+    color: $neutral-1000;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin: 0 0 10px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+
+    span[nz-icon] {
+      font-size: 13px;
+      color: $success-600;
+    }
+  }
+
+  // ── Row ───────────────────────────────────────────────────────────────
+  &__row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 24px;
+    padding: 5px 0;
+
+    &--total {
+      margin-top: 4px;
+      padding-top: 8px;
+    }
+  }
+
+  // ── Divider ───────────────────────────────────────────────────────────
+  &__divider {
+    height: 1px;
+    background: rgba(0, 0, 0, 0.08);
+    margin: 6px 0;
+  }
+
+  // ── Label with tag icon ───────────────────────────────────────────────
+  &__label {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 12px;
+    color: $neutral-1000;
+    white-space: nowrap;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+
+    span[nz-icon] {
+      font-size: 11px;
+      color: $success-600;
+    }
+  }
+
+  // ── Value ─────────────────────────────────────────────────────────────
+  &__value {
+    font-size: 12px;
+    font-weight: 600;
+    color: $neutral-1000;
+    white-space: nowrap;
+    font-family: $font-monospace;
+
+    &--discount {
+      color: $success-700;
+      font-weight: 700;
+    }
+
+    &--total {
+      font-size: 13px;
+      font-weight: 700;
+      color: $success-700;
+    }
+  }
+}
+
+// ══════════════════════════════════════════════════════════════════════════════
+// SHARED TAX HELPERS  (used across cart-view + payment-step)
+// ══════════════════════════════════════════════════════════════════════════════
+
+.cart-item__tax {
+  color: #fa8c16;
+  font-weight: $font-weight-medium;
+}

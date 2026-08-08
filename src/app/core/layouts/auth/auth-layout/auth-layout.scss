@@ -1,0 +1,381 @@
+@use '../../../../../assets/styles/common' as *;
+@use '../../../../../assets/styles/responsive' as *;
+
+
+// =========================================================================
+// AUTH LAYOUT — Split-screen design
+// =========================================================================
+
+.auth-layout {
+  display: flex;
+  min-height: 100vh;
+  background: $neutral-0;
+  font-family: $font-primary;
+
+  // ── LEFT BRAND PANEL ────────────────────────────────────────────────
+  &__brand {
+    position: relative;
+    width: 44%;
+    min-height: 100vh;
+    background: linear-gradient(145deg, $primary-800 0%, $primary-600 40%, $primary-400 100%);
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    @media (max-width: $breakpoint-lg) {
+      display: none;
+    }
+  }
+
+  &__grid-overlay {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+  }
+
+  &__brand-content {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: $spacing-8;
+    padding: $spacing-12;
+    text-align: center;
+    width: 100%;
+    max-width: 480px;
+  }
+
+  // Logo
+  &__logo {
+    display: flex;
+    align-items: center;
+    gap: $spacing-3;
+    text-decoration: none;
+    align-self: flex-start;
+  }
+
+  &__logo-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: $border-radius-lg;
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    color: $neutral-0;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+  }
+
+  &__logo-text {
+    font-size: $font-size-xl;
+    font-weight: $font-weight-bold;
+    color: $neutral-0;
+    letter-spacing: -0.02em;
+  }
+
+  &__logo-accent {
+    color: rgba(255, 255, 255, 0.7);
+  }
+
+  // Illustration
+  &__illustration {
+    position: relative;
+    width: 240px;
+    height: 240px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  // Tagline
+  &__tagline-title {
+    font-size: $font-size-4xl;
+    font-weight: $font-weight-extrabold;
+    color: $neutral-0;
+    line-height: $line-height-heading;
+    letter-spacing: -0.03em;
+    margin: 0;
+  }
+
+  &__tagline-sub {
+    font-size: $font-size-base;
+    color: rgba(255, 255, 255, 0.75);
+    line-height: $line-height-relaxed;
+    margin: $spacing-3 0 0;
+    max-width: 320px;
+  }
+
+  // Trust badges
+  &__badges {
+    display: flex;
+    gap: $spacing-3;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  // ── RIGHT FORM AREA ─────────────────────────────────────────────────
+  &__form-area {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    background: $neutral-50;
+    min-height: 100vh;
+    overflow-y: auto;
+  }
+
+  &__topbar {
+    padding: $spacing-6 $spacing-8;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: $neutral-0;
+    border-bottom: 1px solid $neutral-100;
+  }
+
+  &__back-link {
+    display: flex;
+    align-items: center;
+    gap: $spacing-2;
+    font-size: $font-size-sm;
+    color: $neutral-500;
+    text-decoration: none;
+    font-weight: $font-weight-medium;
+    transition: color 0.2s ease;
+
+    &:hover {
+      color: $primary-500;
+    }
+  }
+
+  &__form-wrapper {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: $spacing-10 $spacing-8;
+
+    @media (max-width: $breakpoint-sm) {
+      padding: $spacing-6 $spacing-4;
+    }
+  }
+
+  &__footer {
+    padding: $spacing-6 $spacing-8;
+    text-align: center;
+    border-top: 1px solid $neutral-200;
+    background: $neutral-0;
+
+    p {
+      font-size: $font-size-xs;
+      color: $neutral-400;
+      margin: 0 0 $spacing-2;
+    }
+  }
+
+  &__footer-links {
+    display: flex;
+    gap: $spacing-4;
+    justify-content: center;
+
+    a {
+      font-size: $font-size-xs;
+      color: $neutral-400;
+      text-decoration: none;
+      transition: color 0.2s;
+
+      &:hover {
+        color: $primary-500;
+      }
+    }
+  }
+}
+
+// ── Floating blobs ────────────────────────────────────────────────────
+.blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(60px);
+  opacity: 0.25;
+  animation: blobFloat 8s ease-in-out infinite;
+
+  &--1 {
+    width: 320px;
+    height: 320px;
+    background: $primary-300;
+    top: -80px;
+    right: -60px;
+    animation-delay: 0s;
+  }
+
+  &--2 {
+    width: 240px;
+    height: 240px;
+    background: $secondary-400;
+    bottom: 60px;
+    left: -40px;
+    animation-delay: -3s;
+  }
+
+  &--3 {
+    width: 180px;
+    height: 180px;
+    background: $primary-200;
+    top: 50%;
+    left: 40%;
+    animation-delay: -5s;
+  }
+}
+
+@keyframes blobFloat {
+  0%,
+  100% {
+    transform: translateY(0) scale(1);
+  }
+  50% {
+    transform: translateY(-20px) scale(1.05);
+  }
+}
+
+// ── Illustration rings ────────────────────────────────────────────────
+.illustration-ring {
+  position: absolute;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  animation: ringPulse 4s ease-in-out infinite;
+
+  &--outerss {
+    width: 470px;
+    height: 470px;
+    animation-delay: 0s;
+  }
+
+  &--outers {
+    width: 340px;
+    height: 340px;
+    animation-delay: 0s;
+  }
+
+  &--outer {
+    width: 240px;
+    height: 240px;
+    animation-delay: 0s;
+  }
+
+  &--middle {
+    width: 175px;
+    height: 175px;
+    animation-delay: -1.3s;
+    border-color: rgba(255, 255, 255, 0.22);
+  }
+
+  &--inner {
+    width: 110px;
+    height: 110px;
+    animation-delay: -2.6s;
+    border-color: rgba(255, 255, 255, 0.3);
+  }
+}
+
+@keyframes ringPulse {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.6;
+  }
+  50% {
+    transform: scale(1.04);
+    opacity: 1;
+  }
+}
+
+.illustration-center {
+  position: relative;
+  z-index: 2;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.18);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 34px;
+  color: $neutral-0;
+}
+
+// ── Floating cards ────────────────────────────────────────────────────
+.float-card {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  gap: $spacing-2;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: $border-radius-lg;
+  padding: $spacing-2 $spacing-4;
+  font-size: $font-size-xs;
+  font-weight: $font-weight-semibold;
+  color: $neutral-0;
+  white-space: nowrap;
+  animation: floatCard 5s ease-in-out infinite;
+
+  span[nz-icon] {
+    font-size: 14px;
+  }
+
+  &--top {
+    top: 10px;
+    right: -20px;
+    animation-delay: 0s;
+  }
+
+  &--bottom {
+    bottom: 10px;
+    left: -20px;
+    animation-delay: -2.5s;
+  }
+
+  &--bottom-right {
+    bottom: 35px;
+    right: 0px;
+    animation-delay: -1.5s;
+  }
+}
+
+@keyframes floatCard {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+// ── Trust badges ──────────────────────────────────────────────────────
+.trust-badge {
+  display: flex;
+  align-items: center;
+  gap: $spacing-1-5;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: $border-radius-full;
+  padding: $spacing-1-5 $spacing-3;
+  font-size: $font-size-xs;
+  color: rgba(255, 255, 255, 0.9);
+  font-weight: $font-weight-medium;
+
+  span[nz-icon] {
+    font-size: 12px;
+  }
+}

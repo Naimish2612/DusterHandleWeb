@@ -1,0 +1,267 @@
+<div class="product-support-page">
+  <!-- Breadcrumb -->
+  <nz-breadcrumb class="support-breadcrumb">
+    <nz-breadcrumb-item>
+      <a (click)="goBack()">
+        <span nz-icon nzType="left"></span>
+        My Orders
+      </a>
+    </nz-breadcrumb-item>
+    <nz-breadcrumb-item>
+      <span nz-icon nzType="customer-service"></span>
+      Order Support
+    </nz-breadcrumb-item>
+  </nz-breadcrumb>
+
+  <!-- Header -->
+  <div class="support-header">
+    <div class="support-header__content">
+      <h1 class="support-header__title">
+        <span nz-icon nzType="question-circle" nzTheme="outline"></span>
+        Order Support & FAQs
+      </h1>
+      <p class="support-header__subtitle">Order #{{ orderNumber() }}</p>
+    </div>
+  </div>
+
+  <div class="support-content">
+    <!-- Order Summary Card -->
+    @if (order(); as orderData) {
+    <nz-card class="order-summary-card" [nzBordered]="false">
+      <div class="order-summary">
+        <div class="order-summary__header">
+          <h3>
+            <span nz-icon nzType="file-text" nzTheme="outline"></span>
+            Order Summary
+          </h3>
+          <nz-tag [nzColor]="getStatusColor(orderStatus())">
+            {{ orderStatus() | titlecase }}
+          </nz-tag>
+        </div>
+
+        <div class="order-summary__details">
+          <div class="detail-row">
+            <span class="label">
+              <span nz-icon nzType="shopping"></span>
+              Order Number
+            </span>
+            <span class="value">{{ orderNumber() }}</span>
+          </div>
+
+          <div class="detail-row">
+            <span class="label">
+              <span nz-icon nzType="calendar"></span>
+              Order Date
+            </span>
+            <span class="value">{{ formatDate(orderDate()) }}</span>
+          </div>
+
+          <div class="detail-row">
+            <span class="label">
+              <span nz-icon nzType="wallet"></span>
+              Total Amount
+            </span>
+            <span class="value value--price">{{ formatPrice(orderTotal()) }}</span>
+          </div>
+
+          <div class="detail-row">
+            <span class="label">
+              <span nz-icon nzType="credit-card"></span>
+              Payment Status
+            </span>
+            <nz-tag [nzColor]="getPaymentColor(orderData.payment_status)">
+              {{ orderData.payment_status | titlecase }}
+            </nz-tag>
+          </div>
+
+          <div class="detail-row">
+            <span class="label">
+              <span nz-icon nzType="inbox"></span>
+              Total Items
+            </span>
+            <span class="value">{{ orderItems().length }} product(s)</span>
+          </div>
+        </div>
+
+        <!-- Order Items Preview -->
+        <nz-divider></nz-divider>
+        
+        <div class="order-items-preview">
+          <h4>
+            <span nz-icon nzType="appstore"></span>
+            Items in this Order
+          </h4>
+          <div class="items-grid">
+            @for (item of orderItems(); track item.product_code) {
+            <div class="item-preview-card">
+              <div class="item-preview-card__image">
+                <img [src]="item.image_url || this.placeholderImage" [alt]="item.product_name">
+              </div>
+              <div class="item-preview-card__info">
+                <span class="product-name">{{ item.product_name }}</span>
+                <span class="product-qty">Qty: {{ item.qty }}</span>
+                <span class="product-price">{{ formatPrice(item.total_amount) }}</span>
+              </div>
+            </div>
+            }
+          </div>
+        </div>
+      </div>
+    </nz-card>
+    }
+
+    <nz-divider></nz-divider>
+
+    <!-- Product-wise FAQs Section -->
+    <div class="product-faqs-section">
+      <div class="section-header">
+        <h2>
+          <span nz-icon nzType="question-circle" nzTheme="fill"></span>
+          Product FAQs
+        </h2>
+        <p>Find answers to common questions about your ordered products</p>
+      </div>
+
+      <!-- Loading State -->
+      @if (isLoadingAllFAQs()) {
+      <div class="faqs-loading">
+        <nz-spin nzSimple [nzSize]="'large'"></nz-spin>
+        <p>Loading product FAQs...</p>
+      </div>
+      }
+
+      <!-- Product FAQs List -->
+      @if (!isLoadingAllFAQs()) {
+      <div class="product-faqs-list">
+        @for (productFAQ of productFAQsList(); track productFAQ.productCode) {
+        <nz-card class="product-faq-card" [nzBordered]="true">
+          <!-- Product Header -->
+          <div class="product-faq-header" (click)="toggleProductFAQs(productFAQ.productCode)">
+            <div class="product-faq-header__left">
+              <div class="product-image">
+                <img [src]="productFAQ.productImage || this.placeholderImage" [alt]="productFAQ.productName">
+              </div>
+              <div class="product-info">
+                <h4>{{ productFAQ.productName }}</h4>
+                @if (productFAQ.faqs.length > 0) {
+                <span class="faq-count">{{ productFAQ.faqs.length }} FAQ(s) available</span>
+                } @else if (productFAQ.error) {
+                <span class="faq-count faq-count--error">No FAQs available</span>
+                } @else {
+                <span class="faq-count faq-count--empty">No FAQs found</span>
+                }
+              </div>
+            </div>
+            <div class="product-faq-header__right">
+              <button nz-button nzType="text" nzSize="small" (click)="openSupportChat(productFAQ.productCode); $event.stopPropagation()">
+                <span nz-icon nzType="message"></span>
+                Get Help
+              </button>
+              <span nz-icon 
+                [nzType]="isProductExpanded(productFAQ.productCode) ? 'up' : 'down'" 
+                class="expand-icon">
+              </span>
+            </div>
+          </div>
+
+          <!-- FAQs Content (Expanded) -->
+          @if (isProductExpanded(productFAQ.productCode)) {
+          <div class="product-faq-content">
+            <nz-divider></nz-divider>
+
+            <!-- Loading individual FAQs -->
+            @if (productFAQ.isLoading) {
+            <div class="faq-loading">
+              <nz-spin nzSimple></nz-spin>
+              <span>Loading FAQs...</span>
+            </div>
+            }
+
+            <!-- Error State -->
+            @if (productFAQ.error && !productFAQ.isLoading) {
+            <nz-alert
+              nzType="info"
+              [nzMessage]="productFAQ.error"
+              nzShowIcon>
+            </nz-alert>
+            }
+
+            <!-- FAQs List -->
+            @if (productFAQ.faqs.length > 0 && !productFAQ.isLoading) {
+            <div class="faq-items-list">
+              @for (faq of productFAQ.faqs; track faq.faq_id) {
+              <div 
+                class="faq-item"
+                [class.faq-item--expanded]="isFAQItemExpanded(productFAQ.productCode, faq.faq_id)"
+                (click)="toggleFAQItem(productFAQ.productCode, faq.faq_id)">
+                
+                <div class="faq-item__question">
+                  <span class="faq-item__icon">
+                    <span nz-icon 
+                      [nzType]="isFAQItemExpanded(productFAQ.productCode, faq.faq_id) ? 'minus-circle' : 'plus-circle'" 
+                      nzTheme="outline">
+                    </span>
+                  </span>
+                  <span class="faq-item__text">{{ faq.question }}</span>
+                </div>
+
+                @if (isFAQItemExpanded(productFAQ.productCode, faq.faq_id)) {
+                <div class="faq-item__answer">
+                  {{ faq.answer }}
+                </div>
+                }
+              </div>
+              }
+            </div>
+            }
+
+            <!-- Empty State -->
+            @if (productFAQ.faqs.length === 0 && !productFAQ.isLoading && !productFAQ.error) {
+            <nz-empty
+              nzNotFoundContent="No FAQs available for this product"
+              [nzNotFoundImage]="'simple'">
+            </nz-empty>
+            }
+          </div>
+          }
+        </nz-card>
+        }
+      </div>
+
+      <!-- No Products Message -->
+      @if (productFAQsList().length === 0 && !isLoadingAllFAQs()) {
+      <nz-empty
+        nzNotFoundContent="No products found in this order"
+        [nzNotFoundImage]="'simple'">
+      </nz-empty>
+      }
+      }
+    </div>
+
+    <nz-divider></nz-divider>
+
+    <!-- General Support Section -->
+    <div class="general-support-section">
+      <nz-card [nzBordered]="false" class="support-card">
+        <div class="support-card__content">
+          <div class="support-card__icon">
+            <span nz-icon nzType="customer-service" nzTheme="outline"></span>
+          </div>
+          <div class="support-card__text">
+            <h3>Still Need Help?</h3>
+            <p>Can't find the answer you're looking for? Our support team is ready to assist you with any questions about your order.</p>
+          </div>
+        </div>
+        <button 
+          nz-button 
+          nzType="primary" 
+          nzSize="large" 
+          nzBlock
+          (click)="openSupportChat()">
+          <span nz-icon nzType="message" nzTheme="outline"></span>
+          Start Live Support Chat
+        </button>
+      </nz-card>
+    </div>
+  </div>
+</div>

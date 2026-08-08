@@ -1,0 +1,197 @@
+<!-- =====================================================================
+     PUBLIC HEADER — Fixed top bar
+     ===================================================================== -->
+<header class="site-header" [class.site-header--scrolled]="isScrolled()">
+  <div class="site-header__inner">
+
+    <!-- Logo -->
+    <a routerLink="/home" class="site-header__logo">
+      <span>
+        <img src="/assets/images/brand-logo/duster_sky_blue.svg" style="height: 60px;">
+      </span>
+      <span class="site-header__logo-text">
+        <!-- Everest<span class="site-header__logo-accent">Shop</span> -->
+      </span>
+    </a>
+
+    <!-- Desktop Nav -->
+    <nav class="site-header__nav" aria-label="Main navigation">
+      @for (item of navItems; track item.route) {
+      <a [routerLink]="item.route" routerLinkActive="site-header__nav-link--active"
+        [routerLinkActiveOptions]="{ exact: item.route === '/' }" class="site-header__nav-link">{{ item.label }}</a>
+      }
+    </nav>
+
+    <!-- Actions -->
+    <div class="site-header__actions">
+
+      <button class="site-header__icon-btn" aria-label="Search">
+        <span nz-icon nzType="search" nzTheme="outline"></span>
+      </button>
+
+      @if (isLoggedIn) {
+      <!-- Cart -->
+      <a routerLink="/customer/checkout" class="site-header__icon-btn" aria-label="Cart">
+        <nz-badge [nzCount]="cartCount()" [nzOverflowCount]="99" nzSize="small">
+          <span nz-icon nzType="shopping-cart" nzTheme="outline"></span>
+        </nz-badge>
+      </a>
+
+      <!-- Account dropdown trigger -->
+      <div nz-dropdown [nzDropdownMenu]="accountMenu" nzTrigger="click" nzPlacement="bottomRight"
+        class="site-header__account">
+        <nz-avatar nzSize="small" [nzText]="userInitials()" class="site-header__account-avatar"></nz-avatar>
+        <span class="site-header__account-name">{{ userName() }}</span>
+        <span nz-icon nzType="down" class="site-header__account-chevron"></span>
+      </div>
+
+      <!-- Account dropdown menu -->
+      <nz-dropdown-menu #accountMenu="nzDropdownMenu">
+        <div class="account-dropdown">
+
+          <!-- Profile Header -->
+          <div class="account-dropdown__header">
+            <nz-avatar nzSize="large" [nzText]="userInitials()" class="account-dropdown__avatar"></nz-avatar>
+            <div class="account-dropdown__user">
+              <span class="account-dropdown__name">{{ userName() }}</span>
+            </div>
+          </div>
+
+          <!-- Menu List -->
+          <ul class="account-dropdown__menu">
+            <li>
+              <a routerLink="/customer/my/profile" class="account-dropdown__item">
+                <span class="account-dropdown__item-icon">
+                  <span nz-icon nzType="user" nzTheme="outline"></span>
+                </span>
+                <div class="account-dropdown__item-text">
+                  <span class="account-dropdown__item-title">My Account</span>
+                  <span class="account-dropdown__item-sub">Profile & personal info</span>
+                </div>
+                <span nz-icon nzType="right" class="account-dropdown__item-arrow"></span>
+              </a>
+            </li>
+
+            <li>
+              <a routerLink="/customer/my/orders" class="account-dropdown__item">
+                <span class="account-dropdown__item-icon">
+                  <span nz-icon nzType="shopping" nzTheme="outline"></span>
+                </span>
+                <div class="account-dropdown__item-text">
+                  <span class="account-dropdown__item-title">My Orders</span>
+                  <span class="account-dropdown__item-sub">Track & manage orders</span>
+                </div>
+                <span nz-icon nzType="right" class="account-dropdown__item-arrow"></span>
+              </a>
+            </li>
+
+            <li>
+              <a routerLink="/customer/wishlist" class="account-dropdown__item">
+                <span class="account-dropdown__item-icon">
+                  <span nz-icon nzType="heart" nzTheme="outline"></span>
+                </span>
+                <div class="account-dropdown__item-text">
+                  <span class="account-dropdown__item-title">Wishlist</span>
+                  <span class="account-dropdown__item-sub">Your saved products</span>
+                </div>
+                <span nz-icon nzType="right" class="account-dropdown__item-arrow"></span>
+              </a>
+            </li>
+
+            <li>
+              <a routerLink="/customer/my/address" class="account-dropdown__item">
+                <span class="account-dropdown__item-icon">
+                  <span nz-icon nzType="home" nzTheme="outline"></span>
+                </span>
+                <div class="account-dropdown__item-text">
+                  <span class="account-dropdown__item-title">Address Book</span>
+                  <span class="account-dropdown__item-sub">Your shipping & billing address</span>
+                </div>
+                <span nz-icon nzType="right" class="account-dropdown__item-arrow"></span>
+              </a>
+            </li>
+            <li>
+              <a routerLink="/customer/my-tickets" class="account-dropdown__item">
+                <span class="account-dropdown__item-icon">
+                 <span nz-icon nzType="customer-service" nzTheme="fill"></span>
+                </span>
+                <div class="account-dropdown__item-text">
+                  <span class="account-dropdown__item-title">My Tickets</span>
+                  <span class="account-dropdown__item-sub">Your Support Tickets</span>
+                </div>
+                <span nz-icon nzType="right" class="account-dropdown__item-arrow"></span>
+              </a>
+            </li>
+          </ul>
+
+          <!-- Logout -->
+          <div class="account-dropdown__footer">
+            <button class="account-dropdown__logout" (click)="logout()">
+              <span nz-icon nzType="logout" nzTheme="outline"></span>
+              <span>Sign Out</span>
+            </button>
+          </div>
+        </div>
+      </nz-dropdown-menu>
+      } @else {
+      <a routerLink="/auth/login" class="site-header__btn site-header__btn--ghost">Sign In</a>
+      <a routerLink="/auth/signup" class="site-header__btn site-header__btn--primary">Get Started</a>
+      }
+
+      <!-- Hamburger -->
+      <button class="site-header__hamburger" (click)="openDrawer()" aria-label="Open menu">
+        <span nz-icon nzType="menu" nzTheme="outline"></span>
+      </button>
+
+    </div>
+  </div>
+</header>
+
+<!-- Mobile Drawer -->
+<nz-drawer [nzVisible]="drawerOpen()" nzPlacement="right" nzTitle="Menu" [nzWidth]="300" (nzOnClose)="closeDrawer()"
+  nzClosable>
+  <ng-container *nzDrawerContent>
+    <div class="mobile-nav">
+      <div class="mobile-nav__logo">
+        <span nz-icon nzType="shopping" nzTheme="outline" style="color:#009CDE;font-size:22px"></span>
+        <span style="font-weight:700;font-size:17px;color:#1E293B">EverestShop</span>
+      </div>
+
+      @for (item of navItems; track item.route) {
+      <a [routerLink]="item.route" class="mobile-nav__link" (click)="closeDrawer()">
+        <span nz-icon [nzType]="item.icon" nzTheme="outline"></span>
+        {{ item.label }}
+      </a>
+      }
+
+      <div class="mobile-nav__divider"></div>
+
+      @if (isLoggedIn) {
+      <!-- <a routerLink="/cart" class="mobile-nav__link" (click)="closeDrawer()">
+        <span nz-icon nzType="shopping-cart" nzTheme="outline"></span>
+        Cart
+        <span class="mobile-nav__badge">{{ cartCount() }}</span>
+      </a> -->
+      <a routerLink="/cart" class="mobile-nav__link" (click)="closeDrawer()">
+        <nz-badge [nzCount]="cartCount()" [nzOffset]="[10, 0]" [nzShowZero]="false">
+          <span nz-icon nzType="shopping-cart" nzTheme="outline"></span>
+        </nz-badge>
+        Cart
+      </a>
+
+      <a routerLink="/account" class="mobile-nav__link" (click)="closeDrawer()">
+        <span nz-icon nzType="user" nzTheme="outline"></span>
+        My Account
+      </a>
+      <button class="mobile-nav__logout" (click)="logout(); closeDrawer()">
+        <span nz-icon nzType="logout" nzTheme="outline"></span>
+        Logout
+      </button>
+      } @else {
+      <a routerLink="/auth/login" class="mobile-nav__cta mobile-nav__cta--ghost" (click)="closeDrawer()">Sign In</a>
+      <a routerLink="/auth/signup" class="mobile-nav__cta mobile-nav__cta--primary" (click)="closeDrawer()">Get
+        Started</a>
+      }
+    </div>
+  </ng-container>
+</nz-drawer>

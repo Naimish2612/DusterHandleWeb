@@ -1,0 +1,149 @@
+@use '../../../../../assets/styles/common' as *;
+@use '../../../../../assets/styles/responsive' as *;
+
+//div {
+  // background-color: $info-500;
+  // border: 1px solid $info-700;
+//}
+
+.switch-label {
+  margin-left: 8px;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.process-page {
+  padding: $spacing-6; // 24px
+}
+
+nz-card {
+  border-radius: $border-radius-lg;
+  background-color: $neutral-100;
+}
+
+nz-form-item {
+  margin-bottom: $spacing-4; // 16px vertical rhythm
+}
+
+.form-actions {
+  display: flex;
+  gap: $spacing-4;
+}
+
+.action-cell {
+  display: flex;
+  gap: $spacing-2; // 8px
+  white-space: nowrap;
+}
+
+.table-wrapper {
+  width: 100%;
+  overflow-x: auto; // KEY FIX
+  overflow-y: hidden;
+}
+.divider-with-action {
+  position: relative;
+  display: flex;
+  align-items: center;
+  margin-bottom: 16px;
+
+  nz-divider {
+    margin: 0;
+
+    ::ng-deep {
+      .ant-divider-inner-text {
+        padding: 0;
+      }
+    }
+  }
+
+  .divider-title {
+    padding: 8px 16px;
+    font-weight: bold;
+    display: inline-block;
+  }
+
+  .filter-trigger-btn {
+    position: absolute;
+    right: 10px; 
+    top: 50%;
+    transform: translateY(-50%);
+    background: white;
+    border-color: #1890ff;
+    color: #1890ff;
+    z-index: 2;
+
+    &:hover {
+      background-color: #1890ff;
+      color: #fff;
+    }
+  }
+}
+.divider-with-action {
+  ::ng-deep {
+    .ant-divider-horizontal.ant-divider-with-text-left::after {
+      width: 82% !important;
+    }
+  }
+}
+::ng-deep {
+  .ant-modal-content {
+    .ant-descriptions-item-label {
+      font-weight: $font-weight-bold; 
+      background-color:$neutral-100;
+    }
+  }
+}
+
+
+/* Ensure modals are responsive and fit on all screen sizes, overriding the fixed nzWidth */
+::ng-deep .ant-modal {
+  max-width: calc(100vw - 32px) !important;
+
+  @media screen and (max-width: 1250px) {
+    width: 90% !important;
+  }
+}
+
+/* Target mobile devices up to tablet portrait width */
+@media screen and (max-width: 768px) {
+  /* Resets the fixed width to fit the screen size snugly */
+  ::ng-deep .ant-modal {
+    width: calc(100% - 16px) !important;
+    max-width: 100% !important;
+    margin: 8px auto !important;
+  }
+
+  /* Stacks both general info and attribute description cards into one column */
+  ::ng-deep .ant-descriptions-row {
+    display: flex !important;
+    flex-direction: column !important;
+  }
+
+  /* Resets grid item sizing so rows act as full-width blocks */
+  ::ng-deep .ant-descriptions-item {
+    display: flex !important;
+    flex-direction: column !important;
+    padding: 8px 12px !important;
+    width: 100% !important;
+  }
+
+  /* Ensures spans do not mess up the vertical block flow */
+  ::ng-deep .ant-descriptions-item-content {
+    display: block !important;
+    width: 100% !important;
+  }
+
+  /* Targets the bottom container and forces the Edit button to expand full-width */
+  ::ng-deep .ant-modal-content div[style*="justify-content: flex-end"] {
+    display: block !important;
+    width: 100% !important;
+    margin-top: 16px !important;
+  }
+
+  ::ng-deep .ant-modal-content div[style*="justify-content: flex-end"] button {
+    width: 100% !important;
+  }
+}
+
+

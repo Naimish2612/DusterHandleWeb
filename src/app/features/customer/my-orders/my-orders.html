@@ -1,0 +1,451 @@
+<!-- =====================================================================
+     MY ORDERS PAGE
+     ===================================================================== -->
+<div class="orders-page">
+
+  <!-- ── Page Banner ──────────────────────────────────────────────── -->
+  <div class="orders-page__banner">
+    <div class="orders-page__banner-inner">
+      <div>
+        <h1 class="orders-page__title">
+          <span nz-icon nzType="shopping"></span>
+          My Orders
+        </h1>
+        <p class="orders-page__subtitle">Track, manage and review all your orders</p>
+      </div>
+      <div class="orders-page__summary">
+        <div class="orders-summary-pill">
+          <span nz-icon nzType="shopping"></span>
+          <span>{{ orders().length }} Total</span>
+        </div>
+        <div class="orders-summary-pill orders-summary-pill--active">
+          <span nz-icon nzType="sync"></span>
+          <span>{{ activeCount }} Active</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="orders-page__body">
+
+    <!-- ── Toolbar ────────────────────────────────────────────────── -->
+    <div class="orders-toolbar">
+      <div class="orders-toolbar__search">
+        <nz-input-group [nzPrefix]="pfxSearch" nzSize="large">
+          <input nz-input [ngModel]="searchText()" (ngModelChange)="searchText.set($event)"
+            placeholder="Search by order number or product name..." />
+        </nz-input-group>
+        <ng-template #pfxSearch>
+          <span nz-icon nzType="search"></span>
+        </ng-template>
+      </div>
+
+      <nz-select [ngModel]="selectedStatus()" (ngModelChange)="selectedStatus.set($event)" nzSize="large"
+        class="orders-toolbar__filter">
+        @for (opt of filterOptions; track opt.value) {
+        <nz-option [nzValue]="opt.value" [nzLabel]="opt.label"></nz-option>
+        }
+      </nz-select>
+    </div>
+
+    <!-- ── Loading skeleton ─────────────────────────────────────── -->
+    @if (isLoading()) {
+    <div class="orders-skeleton">
+      @for (i of [1,2,3]; track i) {
+      <nz-skeleton [nzActive]="true" [nzAvatar]="true" [nzParagraph]="{ rows: 2 }"></nz-skeleton>
+      }
+    </div>
+    }
+
+    <!-- ── Order list ────────────────────────────────────────────── -->
+    @if (!isLoading()) {
+
+    @if (filteredOrders().length === 0) {
+    <div class="orders-empty">
+      <span nz-icon nzType="inbox"></span>
+      <h3>No orders found</h3>
+      <p>{{
+        searchText() || selectedStatus() !== 'all'
+        ? 'Try adjusting your search or filter.'
+        : "You haven't placed any orders yet."
+        }}</p>
+      <a nz-button nzType="primary" routerLink="/products">
+        <span nz-icon nzType="shopping-cart" nzTheme="outline"></span>
+        Start Shopping
+      </a>
+    </div>
+    }
+
+    @for (order of filteredOrders(); track order.order_id) {
+    <div class="order-card" (click)="openOrderDetail(order)">
+
+      <!-- ── Card header ─────────────────────────────────────── -->
+      <div class="order-card__header">
+        <div class="order-card__header-left">
+          <span class="order-card__id">
+            <span nz-icon nzType="file-text"></span>
+            {{ order.order_no }}
+          </span>
+          <span class="order-card__date">
+            <span nz-icon nzType="calendar"></span>
+            {{ formatDate(order.order_date) }}
+          </span>
+        </div>
+        <div class="order-card__header-right">
+          @if (normalizeStatus(order.order_status) === 'delivered') {
+          <button nz-button nzType="text" nzSize="small" nz-tooltip nzTooltipTitle="Download Invoice"
+            class="order-card__invoice-btn" (click)="onInvoiceClick($event, order)">
+
+            <span nz-icon nzType="file-text"></span>
+          </button>
+          }
+
+          <nz-tag [nzColor]="getStatusConfig(order.order_status).color" class="order-card__status-tag">
+            <span nz-icon [nzType]="getStatusConfig(order.order_status).icon"></span>
+            {{ getStatusConfig(order.order_status).label }}
+          </nz-tag>
+          <span nz-icon nzType="right" class="order-card__chevron"></span>
+        </div>
+      </div>
+
+      <!-- ── Product items with individual Review btn ────────── -->
+      <div class="order-card__items">
+        @for (item of order.orderItems; track item.product_code + '-' + $index; let i = $index) {
+
+        @if (i < 2) { <div class="order-item-preview">
+          <div class="order-item-preview__img-wrap">
+            <img [src]="getItemImage(item)" [alt]="item.product_name" />
+          </div>
+          <div class="order-item-preview__info">
+            <span class="order-item-preview__name">{{ item.product_name }}</span>
+            <span class="order-item-preview__meta">
+              Qty: {{ item.qty }}&nbsp;·&nbsp;{{ formatPrice(item.total_amount) }}
+            </span>
+          </div>
+
+          <!-- ✅ Per-product Review button (only for delivered orders) -->
+          @if (normalizeStatus(order.order_status) === 'delivered') {
+          <div class="order-item-preview__review" (click)="$event.stopPropagation()">
+            @if (isProductReviewed(item)) {
+            <!-- Already reviewed badge -->
+            <span class="order-item-review-badge order-item-review-badge--done">
+              <span nz-icon nzType="check-circle" nzTheme="fill"></span>
+              Reviewed
+            </span>
+            } @else {
+            <!-- Write review button -->
+            <button nz-button nzType="default" nzSize="small" class="order-item-review-btn" nz-tooltip
+              nzTooltipTitle="Write a review for this product" (click)="openReviewModal($event, item)">
+              <span nz-icon nzType="star" nzTheme="outline"></span>
+              Review
+            </button>
+            }
+          </div>
+          }
+
+      </div>
+      }
+      }
+
+      @if (order.orderItems.length > 2) {
+      <span class="order-card__more-items">
+        +{{ order.orderItems.length - 2 }} more item{{
+        order.orderItems.length - 2 > 1 ? 's' : ''
+        }}
+      </span>
+      }
+    </div>
+
+    <!-- ── Card footer ─────────────────────────────────────── -->
+    <div class="order-card__footer">
+      <div class="order-card__totals">
+        <span class="order-card__total-label">Order Total</span>
+        <span class="order-card__total-value">{{ formatPrice(order.net_amount) }}</span>
+        <!-- ✅ Tax info badge on card -->
+        @if (hasTax(order)) {
+        <span class="order-card__tax-badge">
+          <span> &nbsp; &nbsp;</span>
+          Tax Amount: {{ formatPrice(getOrderTotalTax(order)) }}
+        </span>
+        }
+        <nz-tag [nzColor]="getPaymentColor(order.payment_status)" class="order-card__payment-tag">
+          {{ order.payment_status | titlecase }}
+        </nz-tag>
+      </div>
+      <div class="order-card__actions" (click)="$event.stopPropagation()">
+        @if (isActiveOrder(order.order_status)) {
+        <button nz-button nzType="default" nzSize="small" (click)="trackOrder(order)">
+          <span nz-icon nzType="environment" nzTheme="outline"></span>
+          Track Order
+        </button>
+        }
+        @if (normalizeStatus(order.order_status) === 'delivered') {
+        <button nz-button nzType="default" nzSize="small" (click)="openOrderSupport($event, order)">
+          <span nz-icon nzType="customer-service" nzTheme="outline"></span>
+          Get Support
+        </button>
+        }
+        <button nz-button nzType="primary" nzGhost nzSize="small" (click)="openOrderDetail(order)">
+          View Details
+          <span nz-icon nzType="right" nzTheme="outline"></span>
+        </button>
+      </div>
+    </div>
+
+    <!-- ── Active order progress ────────────────────────────── -->
+    @if (isActiveOrder(order.order_status)) {
+    <div class="order-card__progress">
+      <nz-steps [nzCurrent]="getDeliveryStep(order)" nzSize="small" class="order-progress-steps">
+        <nz-step nzTitle="Confirmed"></nz-step>
+        <nz-step nzTitle="Shipped"></nz-step>
+        <nz-step nzTitle="Out for Delivery"></nz-step>
+        <nz-step nzTitle="Delivered"></nz-step>
+      </nz-steps>
+    </div>
+    }
+
+  </div>
+  }
+  }
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════
+     ORDER DETAIL DRAWER
+     ═══════════════════════════════════════════════════════════════════ -->
+<nz-drawer [nzVisible]="drawerOpen()" nzPlacement="right" [nzWidth]="650" nzTitle="Order Details"
+  (nzOnClose)="closeDrawer()" [nzExtra]="drawerExtra">
+  <ng-template #drawerExtra>
+    @if (selectedOrder()) {
+    <nz-tag [nzColor]="getStatusConfig(selectedOrder()!.order_status).color">
+      {{ getStatusConfig(selectedOrder()!.order_status).label }}
+    </nz-tag>
+    }
+  </ng-template>
+
+  <ng-container *nzDrawerContent>
+    @if (selectedOrder(); as order) {
+    <div class="order-detail">
+
+      <!-- Order meta -->
+      <div class="order-detail__meta">
+        <div class="order-detail__meta-row">
+          <span class="order-detail__meta-label">
+            <span nz-icon nzType="file-text"></span>Order Number
+          </span>
+          <strong class="order-detail__meta-value">{{ order.order_no }}</strong>
+        </div>
+        <div class="order-detail__meta-row">
+          <span class="order-detail__meta-label">
+            <span nz-icon nzType="calendar"></span>Order Date
+          </span>
+          <span class="order-detail__meta-value">{{ formatDate(order.order_date) }}</span>
+        </div>
+        <div class="order-detail__meta-row">
+          <span class="order-detail__meta-label">
+            <span nz-icon nzType="credit-card"></span>Payment
+          </span>
+          <span class="order-detail__meta-value">
+            {{ order.payment_method }}
+            <nz-tag [nzColor]="getPaymentColor(order.payment_status)" style="margin-left:6px">
+              {{ order.payment_status | titlecase }}
+            </nz-tag>
+          </span>
+        </div>
+
+        <!-- ✅ Invoice Number (only when delivered & has invoice number) -->
+        @if (normalizeStatus(order.order_status) === 'delivered' && order.invoice_number) {
+        <div class="order-detail__meta-row">
+          <span class="order-detail__meta-label">
+            <span nz-icon nzType="file-done"></span>Invoice No.
+          </span>
+          <strong class="order-detail__meta-value">{{ order.invoice_number }}</strong>
+        </div>
+        }
+
+        <!-- ✅ Shipment Tracking Info (Ack No. + Tracking URL) -->
+        @if (order.shipment_ack_number) {
+        <div class="order-detail__meta-row">
+          <span class="order-detail__meta-label">
+            <span nz-icon nzType="barcode"></span>Shipment Ack No.
+          </span>
+          <strong class="order-detail__meta-value">{{ order.shipment_ack_number }}</strong>
+        </div>
+        }
+
+        @if (order.shipment_tracking_url) {
+        <div class="order-detail__meta-row">
+          <span class="order-detail__meta-label">
+            <span nz-icon nzType="link"></span>Tracking URL
+          </span>
+          <span class="order-detail__meta-value">
+            <a [href]="order.shipment_tracking_url" target="_blank" rel="noopener noreferrer"
+              class="order-detail__tracking-link" (click)="$event.stopPropagation()">
+              <span nz-icon nzType="environment" nzTheme="outline"></span>
+              Track Shipment
+              <span nz-icon nzType="export" nzTheme="outline" style="font-size: 11px; margin-left: 4px;"></span>
+            </a>
+          </span>
+        </div>
+        }
+      </div>
+
+      <!-- Delivery tracker -->
+      @if (isActiveOrder(order.order_status)) {
+      <div class="order-detail__tracker">
+        <h4 class="order-detail__section-title">
+          <span nz-icon nzType="car"></span>
+          Delivery Progress
+        </h4>
+        <nz-steps [nzCurrent]="getDeliveryStep(order)" nzDirection="horizontal" nzSize="small">
+          <nz-step nzTitle="Confirmed"></nz-step>
+          <nz-step nzTitle="Shipped"></nz-step>
+          <nz-step nzTitle="Out for Delivery"></nz-step>
+          <nz-step nzTitle="Delivered"></nz-step>
+        </nz-steps>
+      </div>
+      }
+
+      <nz-divider></nz-divider>
+
+      <!-- Order items with Review button in drawer -->
+      <div class="order-detail__items">
+        <h4 class="order-detail__section-title">
+          <span nz-icon nzType="shopping"></span>
+          Items ({{ order.orderItems.length }})
+        </h4>
+
+        @for (item of order.orderItems; track item.product_code + '-' + $index) {
+        <div class="order-detail-item">
+          <div class="order-detail-item__img-wrap">
+            <img [src]="getItemImage(item)" [alt]="item.product_name" />
+          </div>
+          <div class="order-detail-item__info">
+            <span class="order-detail-item__name">{{ item.product_name }}</span>
+            <span class="order-detail-item__sku">SKU: {{ item.sku }}</span>
+            <p class="order-detail-item__desc">{{ item.description }}</p>
+            <div class="order-detail-item__pricing">
+              <span class="order-detail-item__qty">Qty: {{ item.qty }}</span>
+              <span class="order-detail-item__unit">
+                {{ formatPrice(item.unit_price) }} each
+              </span>
+              <span class="order-detail-item__total">
+                {{ formatPrice(item.total_amount) }}
+              </span>
+            </div>
+
+            <!-- ✅ Per-product review button inside drawer -->
+            @if (normalizeStatus(order.order_status) === 'delivered') {
+            <div class="order-detail-item__review-action">
+              @if (isProductReviewed(item)) {
+              <span class="order-item-review-badge order-item-review-badge--done">
+                <span nz-icon nzType="check-circle" nzTheme="fill"></span>
+                Review Submitted
+              </span>
+              } @else {
+              <button nz-button nzType="primary" nzGhost nzSize="small" class="order-item-review-btn"
+                (click)="openReviewModal($event, item)">
+                <span nz-icon nzType="star" nzTheme="outline"></span>
+                Write a Review
+              </button>
+              }
+            </div>
+            }
+
+          </div>
+        </div>
+        }
+      </div>
+
+      <nz-divider></nz-divider>
+
+      <!-- Price breakdown -->
+      <div class="order-detail__pricing">
+        <h4 class="order-detail__section-title">
+          <span nz-icon nzType="calculator"></span>
+          Price Breakdown
+        </h4>
+        <div class="price-breakdown">
+          <div class="price-breakdown__row">
+            <span>Subtotal</span>
+            <span>{{ formatPrice(getOrderSubtotal(order)) }}</span>
+          </div>
+          @if (order.shipping_amount > 0) {
+          <div class="price-breakdown__row">
+            <span>Delivery Charge</span>
+            <span>{{ formatPrice(order.shipping_amount) }}</span>
+          </div>
+          } @else {
+          <div class="price-breakdown__row">
+            <span>Delivery Charge</span>
+            <span>FREE</span>
+          </div>
+          }
+          @if (order.marketplace_fee > 0) {
+          <div class="price-breakdown__row">
+            <span>Marketplace Fee</span>
+            <span>{{ formatPrice(order.marketplace_fee) }}</span>
+          </div>
+          }
+
+          <!-- ✅ TAX ROW — Summed from all orderItems -->
+          @if (hasTax(order)) {
+          <div class="price-breakdown__row price-breakdown__row--tax">
+            <span class="price-breakdown__label price-breakdown__tax-label">
+              Tax Amount:
+              <nz-tag nzColor="orange" style="margin-left:6px; font-size:11px; padding: 0 5px;">
+                Included
+              </nz-tag>
+            </span>
+            <span class="price-breakdown__tax-value">
+              {{ formatPrice(getOrderTotalTax(order)) }}
+            </span>
+          </div>
+          }
+
+          <div class="price-breakdown__row">
+            <span>Discount Amount</span>
+            <span>{{ formatPrice(order.discount_amount) }}</span>
+          </div>
+ 
+          <div class="price-breakdown__row price-breakdown__row--total">
+            <span>Total Amount</span>
+            <span>{{ formatPrice(order.net_amount) }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Drawer footer actions -->
+      @if (normalizeStatus(order.order_status) === 'delivered') {
+      <div class="order-detail__footer-actions">
+        <!-- <button nz-button nzType="default" nzBlock>
+              <span nz-icon nzType="undo"></span>
+              Request Return
+            </button> -->
+        <button nz-button nzType="default" nzBlock (click)="onInvoiceClick($event, order)">
+          <span nz-icon nzType="file-text"></span>
+          View Invoice
+        </button>
+
+        <button nz-button nzType="default" nzBlock (click)="openOrderSupport($event, order)">
+          <span nz-icon nzType="customer-service"></span>
+          Need Help?
+        </button>
+
+        <button nz-button nzType="primary" nzBlock class="order-detail__reorder-btn">
+          <span nz-icon nzType="redo"></span>
+          Reorder
+        </button>
+      </div>
+      }
+
+    </div>
+    }
+  </ng-container>
+</nz-drawer>
+
+<!-- ═══════════════════════════════════════════════════════════════════
+     REVIEW MODAL
+     ═══════════════════════════════════════════════════════════════════ -->
+<app-review-modal [visible]="reviewModalVisible()" [product]="reviewTargetProduct()"
+  (visibleChange)="reviewModalVisible.set($event)" (reviewSubmitted)="onReviewSubmitted($event)"></app-review-modal>

@@ -1,0 +1,238 @@
+<!-- order-success/order-success.component.html -->
+<div class="order-success">
+  <div class="order-success__wrap">
+    <!-- ══════════════════════════════════════════════
+         NZ-RESULT
+    ══════════════════════════════════════════════ -->
+    <nz-result nzStatus="success" nzTitle="Order Placed Successfully!" [nzSubTitle]="successSubtitle"
+      class="order-success__result">
+      <!-- Custom subtitle -->
+      <ng-template #successSubtitle>
+        <p class="order-success__subtitle">
+          Your order
+          <strong class="order-success__order-id">
+            {{ placedOrder()?.order_no }}
+          </strong>
+          has been confirmed. Thank you for shopping with us!
+        </p>
+      </ng-template>
+
+      <!-- Extra content inside nz-result -->
+      <div nz-result-extra>
+        <!-- ── Order Details Card ─────────────────── -->
+        <div class="order-success__details-card">
+          <div class="order-success__card-head">
+            <span nz-icon nzType="file-done" nzTheme="outline"></span>
+            Order Details
+          </div>
+
+          <nz-descriptions nzBordered [nzColumn]="{ xxl: 2, xl: 2, lg: 2, md: 2, sm: 1, xs: 1 }" nzSize="small"
+            class="order-success__desc">
+            <nz-descriptions-item nzTitle="Order ID">
+              <span class="order-success__mono">
+                {{ placedOrder()?.order_no }}
+              </span>
+            </nz-descriptions-item>
+
+            <nz-descriptions-item nzTitle="Order Status">
+              <nz-tag nzColor="processing">
+                <span nz-icon nzType="sync" nzTheme="outline"></span>
+                {{ placedOrder()?.order_status }}
+              </nz-tag>
+            </nz-descriptions-item>
+
+            <nz-descriptions-item nzTitle="Order Date">
+              {{ orderDate() | date: 'MMMM d, yyyy hh:mm a' }}
+            </nz-descriptions-item>
+
+            <nz-descriptions-item nzTitle="Payment Method">
+              <nz-tag nzColor="blue">{{ paymentMethod() }}</nz-tag>
+            </nz-descriptions-item>
+
+            <nz-descriptions-item nzTitle="Payment Status">
+              <nz-tag nzColor="orange">Pending</nz-tag>
+            </nz-descriptions-item>
+
+            <!-- ✅ NEW: Total Tax -->
+            @if (totalTaxAmount() > 0) {
+            <nz-descriptions-item nzTitle="Total Tax">
+              <span class="order-review__tax">
+                ₹{{ totalTaxAmount() | number: '1.2-2' }}
+              </span>
+            </nz-descriptions-item>
+            }
+
+
+            <!-- ✅ UPDATED: Delivery Charge from API -->
+            <nz-descriptions-item nzTitle="Delivery Charge">
+
+              <!-- Loading state -->
+              @if (!deliveryCost()) {
+              <nz-skeleton [nzActive]="true" [nzTitle]="{ width: '90px' }" [nzParagraph]="false" [nzAvatar]="false">
+              </nz-skeleton>
+              }
+
+              <!-- Free shipping -->
+              @else if (deliveryCost()!.final_total === 0) {
+              <span class="order-review__free">
+                <span nz-icon nzType="check-circle" nzTheme="fill"></span>
+                FREE
+              </span>
+              }
+
+              <!-- Paid shipping — amount + info icon with tooltip -->
+              @else {
+              <span class="order-review__shipping-total order-review__shipping-total--tip">
+                ₹{{ deliveryCost()!.final_total | number: '1.2-2' }}
+              </span>
+              }
+
+            </nz-descriptions-item>
+
+            <!-- ✅ Total Amount (Final after coupon discount) -->
+            <nz-descriptions-item nzTitle="Total Amount">
+              <div class="order-success__amount-wrap">
+
+                <!-- Strike original if coupon applied -->
+                @if (totalCouponDiscount() > 0) {
+                <span class="order-success__original-amount">
+                  ₹{{ cart()?.net_amount | number: '1.2-2' }}
+                </span>
+                }
+
+                <!-- Final discounted total -->
+                <strong class="order-success__total">
+                  ₹{{ grandTotalAfterCoupons() | number: '1.2-2' }}
+                </strong>
+
+              </div>
+            </nz-descriptions-item>
+
+            @if (shippingAddress()) {
+            <nz-descriptions-item nzTitle="Ship To" [nzSpan]="shipToSpan()">
+              <strong>{{ shippingAddress()?.full_name }}</strong>
+              &nbsp;·&nbsp;
+              {{ shippingAddress()?.address_line1 }}, {{ shippingAddress()?.city }},
+              {{ shippingAddress()?.state }}-{{ shippingAddress()?.pin_code }}
+            </nz-descriptions-item>
+            }
+          </nz-descriptions>
+        </div>
+        <!-- /.order-success__details-card -->
+
+        <!-- ══════════════════════════════════════════
+             ✅ COUPON SAVINGS CARD
+             (Only shown if coupons were applied)
+        ══════════════════════════════════════════ -->
+        @if (appliedCoupons().length > 0) {
+        <div class="order-success__coupon-card">
+
+          <!-- Header -->
+          <div class="order-success__coupon-head">
+            <span nz-icon nzType="gift" nzTheme="outline" class="order-success__coupon-gift-icon"></span>
+            <div>
+              <div class="order-success__coupon-head-title">
+                🎉 You Saved on This Order!
+              </div>
+              <div class="order-success__coupon-head-sub">
+                Coupon discounts applied successfully
+              </div>
+            </div>
+          </div>
+
+          <!-- Coupon List -->
+          <div class="order-success__coupon-list">
+            @for (coupon of appliedCoupons(); track coupon.coupon_code) {
+            <div class="order-success__coupon-item">
+              <div class="order-success__coupon-item-left">
+                <span nz-icon nzType="tag" nzTheme="outline"></span>
+                <span class="order-success__coupon-code">
+                  {{ coupon.coupon_code }}
+                </span>
+              </div>
+              <span class="order-success__coupon-amount">
+                - ₹{{ coupon.discount_applied | number: '1.2-2' }}
+              </span>
+            </div>
+            }
+          </div>
+
+          <!-- Total Savings Row -->
+          <div class="order-success__coupon-total">
+            <div class="order-success__coupon-total-left">
+              <span nz-icon nzType="percentage" nzTheme="outline"></span>
+              Total Savings
+            </div>
+            <div class="order-success__coupon-total-right">
+              <span class="order-success__coupon-saved">
+                - ₹{{ totalCouponDiscount() | number: '1.2-2' }}
+              </span>
+            </div>
+          </div>
+
+          <!-- Price Breakdown -->
+          <div class="order-success__price-breakdown">
+            <div class="order-success__breakdown-row">
+              <span>Original Total</span>
+              <span>₹{{ cart()?.net_amount | number: '1.2-2' }}</span>
+            </div>
+            <div class="order-success__breakdown-row order-success__breakdown-row--discount">
+              <span>Coupon Discount</span>
+              <span>- ₹{{ totalCouponDiscount() | number: '1.2-2' }}</span>
+            </div>
+            <div class="order-success__breakdown-row order-success__breakdown-row--final">
+              <span>Final Amount Paid</span>
+              <span>₹{{ grandTotalAfterCoupons() | number: '1.2-2' }}</span>
+            </div>
+          </div>
+
+        </div>
+        }
+
+        <!-- ══════════════════════════════════════════
+             INFO ALERT
+        ══════════════════════════════════════════ -->
+        <nz-alert nzType="info" nzShowIcon class="order-success__info-alert" nzMessage="What happens next?"
+          [nzDescription]="nextStepsTpl">
+        </nz-alert>
+
+        <ng-template #nextStepsTpl>
+          <ul class="order-success__steps-list">
+            <li>
+              <span nz-icon nzType="check-circle" nzTheme="fill"
+                class="order-success__step-icon order-success__step-icon--done">
+              </span>
+              Your order is saved under <strong>Payment Pending</strong> status.
+            </li>
+            <li>
+              <span nz-icon nzType="team" nzTheme="outline"
+                class="order-success__step-icon order-success__step-icon--info">
+              </span>Our admin and store team will review your order and contact you soon with payment &amp; delivery
+              details.
+            </li>
+            <li>
+              <span nz-icon nzType="mail" nzTheme="outline"
+                class="order-success__step-icon order-success__step-icon--info">
+              </span>
+              A confirmation will be sent to your registered email.
+            </li>
+          </ul>
+        </ng-template>
+
+        <!-- ── Action Buttons ─────────────────────── -->
+        <div class="order-success__actions">
+          <button nz-button nzType="default" nzSize="large" (click)="continueShopping()">
+            <span nz-icon nzType="shopping" nzTheme="outline"></span>
+            Continue Shopping
+          </button>
+          <button nz-button nzType="primary" nzSize="large" (click)="goToOrders()">
+            <span nz-icon nzType="unordered-list" nzTheme="outline"></span>
+            View My Orders
+          </button>
+        </div>
+      </div>
+      <!-- /nz-result-extra -->
+    </nz-result>
+  </div>
+  <!-- /.order-success__wrap -->
+</div>

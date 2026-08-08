@@ -1,0 +1,189 @@
+<!-- =====================================================================
+     ABOUT US PAGE
+     ===================================================================== -->
+
+<!-- ════════════════════════════════════════════════════════════
+     1.  HERO
+     ════════════════════════════════════════════════════════════ -->
+<section class="about-hero">
+  <div class="about-hero__bg-grid" aria-hidden="true"></div>
+  <div class="about-hero__container">
+    <div class="about-hero__content">
+      <span class="about-hero__eyebrow">
+        <span nz-icon nzType="info-circle" nzTheme="fill"></span>
+        Our Story
+      </span>
+      <h1 class="about-hero__title">
+        Excellence in<br />
+        <span class="about-hero__title-accent">Analytical Solutions</span>
+      </h1>
+      <p class="about-hero__desc">
+        Everest Instruments has always been at the forefront of delivering excellence
+        in innovative and customized analytical and digital solutions. Driven by
+        customer-centric services, we empower lives, improve productivity and create
+        a transformational experience for the communities we serve. From milk collection
+        in the villages and bulk centres to complex data control in the dairy plant,
+        we ensure every aspect of the milk procurement process is streamlined and
+        seamlessly efficient. We also place a huge emphasis on extensive research and
+        tailored services that help simplify and ease the lives of our dairy farmers,
+        processors and the F&amp;B industry.
+      </p>
+      <div class="about-hero__actions">
+        <a routerLink="/products" class="about-hero__btn about-hero__btn--primary">
+          <span nz-icon nzType="shopping" nzTheme="outline"></span>
+          Our Products
+        </a>
+        <a routerLink="/contact" class="about-hero__btn about-hero__btn--ghost">
+          <span nz-icon nzType="mail" nzTheme="outline"></span>
+          Get in Touch
+        </a>
+      </div>
+    </div>
+    <div class="about-hero__visual" aria-hidden="true">
+      <div class="about-hero__ring about-hero__ring--outer"></div>
+      <div class="about-hero__ring about-hero__ring--mid"></div>
+      <div class="about-hero__ring about-hero__ring--inner"></div>
+      <div class="about-hero__center-icon">
+        <span nz-icon nzType="experiment" nzTheme="outline"></span>
+      </div>
+      <!-- Floating badges -->
+      <div class="about-hero__float-badge about-hero__float-badge--tl">
+        <span nz-icon nzType="smile" nzTheme="fill"></span>
+        Trusted Since 1999
+      </div>
+      <div class="about-hero__float-badge about-hero__float-badge--br">
+        <span nz-icon nzType="star" nzTheme="fill"></span>
+        World-Class Solutions
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════
+     3.  MISSION & VISION
+     ════════════════════════════════════════════════════════════ -->
+<section class="mission-vision-section">
+  <div class="mission-vision-section__container">
+    <div class="mission-vision-grid">
+
+      <!-- Mission -->
+      <div class="mission-card">
+        <div class="mission-card__icon-badge">
+          <span nz-icon nzType="rocket" nzTheme="fill"></span>
+        </div>
+        <h3 class="mission-card__title">Our Mission</h3>
+        <ul class="mission-card__pillars">
+          <li>
+            <span nz-icon nzType="check-circle" nzTheme="fill"></span>
+            To provide the dairy and food value chain with solutions and products to manage
+            inputs, using trustable, customized, and real time information.
+          </li>
+          <li>
+            <span nz-icon nzType="check-circle" nzTheme="fill"></span>
+            To be a value creator for all our stakeholders by providing analytical solutions
+            and products that enhance the prosperity of our customers and the communities
+            we serve.
+          </li>
+          <li>
+            <span nz-icon nzType="check-circle" nzTheme="fill"></span>
+            Strive to create advanced technological applications to satisfy our stakeholders.
+          </li>
+          <li>
+            <span nz-icon nzType="check-circle" nzTheme="fill"></span>
+            To be a customer-centric, innovation-driven, ethical and performance-oriented
+            learning organization.
+          </li>
+        </ul>
+      </div>
+
+      <!-- Vision -->
+      <div class="vision-card">
+        <div class="vision-card__icon-badge">
+          <span nz-icon nzType="eye" nzTheme="fill"></span>
+        </div>
+        <h3 class="vision-card__title">Our Vision</h3>
+        <ul class="vision-card__pillars">
+          <li>
+            <span nz-icon nzType="check-circle" nzTheme="fill"></span>
+            Driven by innovation, Everest Instruments aspires to be the leading, trusted
+            and customer-centric organization, committed to providing world-class analytical
+            solutions and products for dairy and food applications.
+          </li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════
+     5.  ACHIEVEMENTS TIMELINE
+     ════════════════════════════════════════════════════════════ -->
+<section class="achievements-section">
+  <div class="achievements-section__container">
+    <div class="achievements-section__header">
+      <span class="section-label">
+        <span nz-icon nzType="history" nzTheme="outline"></span>
+        Our Journey
+      </span>
+      <h2 class="achievements-section__title">Key Milestones &amp; Achievements</h2>
+      <p class="achievements-section__sub">
+        From our founding in 1999 to pioneering innovations in dairy and food analytics —
+        here's how Everest Instruments has grown, year by year.
+      </p>
+    </div>
+
+    <ul class="timeline">
+      @for (item of achievements; track item.year; let isEven = $even) {
+      <li class="timeline__item" [class.timeline__item--left]="isEven" [class.timeline__item--right]="!isEven">
+
+        <!-- Center dot with icon -->
+        <div class="timeline__dot" [class.timeline__dot--highlight]="item.highlight">
+          <span nz-icon [nzType]="item.icon" nzTheme="outline"></span>
+        </div>
+
+        <!-- Card -->
+        <div class="timeline__card" [class.timeline__card--filled]="isEven" [class.timeline__card--outlined]="!isEven">
+          <span class="timeline__year">{{ item.year }}</span>
+          <h4 class="timeline__title">{{ item.title }}</h4>
+          <p class="timeline__desc">{{ item.description }}</p>
+        </div>
+      </li>
+      }
+    </ul>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════
+    6.  JOIN CTA BANNER
+     ════════════════════════════════════════════════════════════ -->
+<section class="about-cta-section">
+  <div class="about-cta-section__container">
+    <div class="about-cta-card">
+      <div class="about-cta-card__content">
+        <span nz-icon nzType="experiment" nzTheme="fill" class="about-cta-card__icon"></span>
+        <div>
+          <h2 class="about-cta-card__title">Ready to Experience World-Class Analytical Solutions?</h2>
+          <p class="about-cta-card__sub">
+            Discover our range of innovative dairy and food analytical instruments,
+            designed to streamline your operations and enhance productivity.
+          </p>
+        </div>
+      </div>
+      <div class="about-cta-card__actions">
+        <a routerLink="/auth/signup" class="about-cta-btn about-cta-btn--primary">
+          <span nz-icon nzType="user-add" nzTheme="outline"></span>
+          Create Free Account
+        </a>
+        <a routerLink="/products" class="about-cta-btn about-cta-btn--ghost">
+          <span nz-icon nzType="appstore" nzTheme="outline"></span>
+          Browse Products
+        </a>
+        <a routerLink="/contact" class="about-cta-btn about-cta-btn--ghost">
+          <span nz-icon nzType="mail" nzTheme="outline"></span>
+          Contact Us
+        </a>
+      </div>
+    </div>
+  </div>
+</section>

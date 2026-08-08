@@ -1,0 +1,555 @@
+// =========================================================================
+// MY WISHLIST PAGE
+// =========================================================================
+
+@use '../../../../assets/styles/common' as *;
+@use '../../../../assets/styles/responsive' as *;
+
+.wishlist-page {
+  background: $color-bg-body;
+  min-height: 100vh;
+  font-family: $font-primary;
+
+  // ── Banner ──────────────────────────────────────────────────────
+  &__banner {
+    background: linear-gradient(135deg, $error-800 0%, $error-600 50%, $error-400 100%);
+    padding: $spacing-10 0 $spacing-12;
+
+    @include mobile { padding: $spacing-8 0 $spacing-10; }
+  }
+
+  &__banner-inner {
+    @include make-container($container-xxl);
+    @include flex-between;
+    flex-wrap: wrap;
+    gap: $spacing-5;
+    align-items: flex-end;
+  }
+
+  &__title {
+    font-family: $font-heading;
+    font-size: $font-size-3xl;
+    font-weight: $font-weight-bold;
+    color: $neutral-0;
+    margin: 0 0 $spacing-2;
+    display: flex;
+    align-items: center;
+    gap: $spacing-3;
+    letter-spacing: $letter-spacing-tight;
+
+    span[nz-icon] {
+      font-size: $icon-size-2xl;
+      filter: drop-shadow(0 2px 6px rgba(0,0,0,0.2));
+    }
+
+    @include mobile { font-size: $font-size-2xl; }
+  }
+
+  &__subtitle {
+    font-size: $font-size-sm;
+    color: rgba(255, 255, 255, 0.75);
+    margin: 0;
+  }
+
+  &__out-of-stock-note {
+    color: $warning-300;
+    font-weight: $font-weight-semibold;
+  }
+
+  &__banner-actions {
+    display: flex;
+    gap: $spacing-3;
+    align-items: center;
+    flex-wrap: wrap;
+
+    @include mobile { width: 100%; }
+  }
+
+  &__add-all-btn {
+    background: rgba(255, 255, 255, 0.15) !important;
+    border: 1.5px solid rgba(255, 255, 255, 0.4) !important;
+    color: $neutral-0 !important;
+    font-weight: $font-weight-semibold !important;
+    border-radius: $border-radius-lg !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: $spacing-2 !important;
+    transition: all $transition-fast !important;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.25) !important;
+      border-color: rgba(255, 255, 255, 0.7) !important;
+    }
+  }
+
+  &__clear-btn {
+    color: rgba(255, 255, 255, 0.65) !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: $spacing-1-5 !important;
+    transition: color $transition-fast !important;
+
+    &:hover { color: $neutral-0 !important; }
+  }
+
+  // ── Body ────────────────────────────────────────────────────────
+  &__body {
+    @include make-container($container-xxl);
+    padding-top: $spacing-12 !important;
+    padding-bottom: $spacing-16 !important;
+    margin-top: -$spacing-6;
+    @include flex-column;
+    gap: $spacing-5;
+  }
+}
+
+// =========================================================================
+// TOOLBAR
+// =========================================================================
+
+.wishlist-toolbar {
+  background: $card-bg;
+  border: $border-width-thin solid $neutral-200;
+  border-radius: $border-radius-xl;
+  padding: $spacing-4 $spacing-5;
+  display: flex;
+  gap: $spacing-4;
+  align-items: center;
+  flex-wrap: wrap;
+  box-shadow: $shadow-xs;
+
+  &__search {
+    flex: 1;
+    min-width: 200px;
+
+    .ant-input-affix-wrapper {
+      border-radius: $border-radius-lg !important;
+    }
+  }
+
+  &__sort {
+    min-width: 180px;
+  }
+
+  &__count {
+    font-size: $font-size-xs;
+    color: $neutral-400;
+    font-weight: $font-weight-medium;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+}
+
+// =========================================================================
+// LOADING SKELETON GRID
+// =========================================================================
+
+.wishlist-skeleton-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: $spacing-5;
+
+  @include mobile {
+    grid-template-columns: repeat(2, 1fr);
+    gap: $spacing-3;
+  }
+}
+
+.wishlist-skeleton-card {
+  background: $card-bg;
+  border-radius: $border-radius-xl;
+  border: $border-width-thin solid $neutral-200;
+  overflow: hidden;
+  padding: 0;
+
+  &__img {
+    width: 100% !important;
+    height: 220px !important;
+    border-radius: 0 !important;
+    display: block !important;
+  }
+
+  .ant-skeleton {
+    padding: $spacing-4;
+  }
+}
+
+// =========================================================================
+// EMPTY STATES
+// =========================================================================
+
+.wishlist-empty {
+  background: $card-bg;
+  border: $border-width-thin solid $neutral-200;
+  border-radius: $border-radius-2xl;
+  @include flex-column-center;
+  gap: $spacing-4;
+  padding: $spacing-20 $spacing-6;
+  text-align: center;
+  box-shadow: $shadow-xs;
+
+  &__icon-wrap {
+    width: 96px;
+    height: 96px;
+    border-radius: 50%;
+    background: $error-50;
+    @include flex-center;
+    font-size: $icon-size-4xl;
+    color: $error-300;
+    border: $border-width-base solid $error-100;
+  }
+
+  &__title {
+    font-family: $font-heading;
+    font-size: $font-size-2xl;
+    font-weight: $font-weight-bold;
+    color: $neutral-700;
+    margin: 0;
+  }
+
+  &__desc {
+    font-size: $font-size-base;
+    color: $neutral-400;
+    max-width: 360px;
+    line-height: $line-height-relaxed;
+    margin: 0;
+  }
+
+  &__cta {
+    margin-top: $spacing-2;
+    height: $btn-height-xl !important;
+    font-weight: $font-weight-bold !important;
+    border-radius: $border-radius-lg !important;
+    background: $primary-500 !important;
+    border-color: $primary-500 !important;
+    box-shadow: 0 4px 14px rgba(0, 156, 222, 0.3) !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: $spacing-2 !important;
+    padding: 0 $spacing-8 !important;
+
+    &:hover {
+      background: $primary-600 !important;
+      border-color: $primary-600 !important;
+    }
+  }
+
+  // Search empty variant
+  &--search {
+    padding: $spacing-12 $spacing-6;
+    background: $neutral-50;
+    border-style: dashed;
+
+    span[nz-icon] {
+      font-size: $icon-size-3xl;
+      color: $neutral-300;
+    }
+
+    p {
+      font-size: $font-size-base;
+      color: $neutral-500;
+      margin: 0;
+    }
+  }
+}
+
+// =========================================================================
+// WISHLIST GRID
+// =========================================================================
+
+.wishlist-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: $spacing-5;
+
+  @include mobile {
+    grid-template-columns: repeat(2, 1fr);
+    gap: $spacing-3;
+  }
+
+  @include mobile-sm {
+    grid-template-columns: 1fr;
+  }
+}
+
+// =========================================================================
+// WISHLIST PRODUCT CARD
+// =========================================================================
+
+.wl-card {
+  background: $card-bg;
+  border: $border-width-thin solid $neutral-200;
+  border-radius: $border-radius-2xl;
+  overflow: hidden;
+  @include flex-column;
+  transition: box-shadow $transition-base, border-color $transition-fast, transform $transition-base;
+  box-shadow: $shadow-xs;
+
+  @include hover-lift(-4px, $shadow-lg);
+
+  &:hover {
+    border-color: $primary-200;
+  }
+
+  // ── Image wrap ───────────────────────────────────────────────────
+  &__image-wrap {
+    position: relative;
+    @include aspect-ratio(4, 3);
+    overflow: hidden;
+    background: $neutral-100;
+    flex-shrink: 0;
+  }
+
+  &__image {
+    @include absolute-fill;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform $transition-slow;
+
+    .wl-card:hover & { transform: scale(1.05); }
+  }
+
+  // ── Badges ───────────────────────────────────────────────────────
+  &__badge {
+    position: absolute;
+    top: $spacing-2-5;
+    left: $spacing-2-5;
+    font-size: $font-size-xs;
+    font-weight: $font-weight-extrabold;
+    letter-spacing: $letter-spacing-wide;
+    padding: $spacing-0-5 $spacing-2;
+    border-radius: $border-radius-base;
+    z-index: $z-index-float;
+
+    &--sale { background: $error-500;    color: $neutral-0; }
+    &--new  { background: $success-500;  color: $neutral-0; }
+    &--hot  { background: $warning-600;  color: $neutral-0; }
+  }
+
+  &__discount-pill {
+    position: absolute;
+    top: $spacing-2-5;
+    right: $spacing-10;
+    background: $warning-50;
+    color: $warning-700;
+    font-size: $font-size-xs;
+    font-weight: $font-weight-extrabold;
+    padding: $spacing-0-5 $spacing-2;
+    border-radius: $border-radius-base;
+    z-index: $z-index-float;
+  }
+
+  // ── Out of stock ──────────────────────────────────────────────────
+  &__out-of-stock {
+    @include absolute-fill;
+    background: rgba(0, 0, 0, 0.52);
+    @include flex-center;
+    flex-direction: column;
+    gap: $spacing-2;
+    font-size: $font-size-sm;
+    font-weight: $font-weight-bold;
+    color: $neutral-0;
+    backdrop-filter: blur(2px);
+
+    span[nz-icon] { font-size: $icon-size-2xl; color: $error-300; }
+  }
+
+  // ── Remove button ─────────────────────────────────────────────────
+  &__remove-btn {
+    position: absolute;
+    top: $spacing-2-5;
+    right: $spacing-2-5;
+    z-index: 3;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: $error-500;
+    border: none;
+    cursor: pointer;
+    @include flex-center;
+    font-size: $icon-size-base;
+    color: $neutral-0;
+    box-shadow: $shadow-sm;
+    transition: all $transition-fast;
+
+    &:hover {
+      background: $error-600;
+      transform: scale(1.15);
+    }
+  }
+
+  // ── Quick view overlay ────────────────────────────────────────────
+  &__overlay {
+    @include absolute-fill;
+    background: rgba(0, 21, 41, 0.4);
+    @include flex-center;
+    opacity: 0;
+    transition: opacity $transition-fast;
+
+    .wl-card:hover & { opacity: 1; }
+  }
+
+  &__view-btn {
+    display: flex;
+    align-items: center;
+    gap: $spacing-1-5;
+    background: rgba(255, 255, 255, 0.92);
+    color: $neutral-800;
+    font-size: $font-size-xs;
+    font-weight: $font-weight-bold;
+    padding: $spacing-2 $spacing-4;
+    border-radius: $border-radius-full;
+    text-decoration: none;
+    transition: transform $transition-fast;
+
+    &:hover { transform: scale(1.04); }
+
+    span[nz-icon] { font-size: $icon-size-base; }
+  }
+
+  // ── Body ─────────────────────────────────────────────────────────
+  &__body {
+    padding: $spacing-4 $spacing-5 $spacing-5;
+    @include flex-column;
+    gap: $spacing-2-5;
+    flex: 1;
+  }
+
+  &__top-meta {
+    @include flex-between;
+    gap: $spacing-2;
+    flex-wrap: wrap;
+  }
+
+  &__category {
+    font-size: $font-size-xs;
+    font-weight: $font-weight-bold;
+    letter-spacing: $letter-spacing-widest;
+    text-transform: uppercase;
+    color: $primary-500;
+  }
+
+  &__added-date {
+    display: flex;
+    align-items: center;
+    gap: $spacing-1;
+    font-size: $font-size-2xs;
+    color: $neutral-400;
+
+    span[nz-icon] { font-size: $icon-size-xs; }
+  }
+
+  &__name {
+    font-size: $font-size-sm;
+    font-weight: $font-weight-semibold;
+    color: $neutral-800;
+    @include line-clamp(2);
+    line-height: $line-height-snug;
+    margin: 0;
+  }
+
+  &__rating {
+    display: flex;
+    align-items: center;
+    gap: $spacing-1;
+
+    .ant-rate { font-size: $font-size-xs !important; }
+  }
+
+  &__review-count {
+    font-size: $font-size-xs;
+    color: $neutral-400;
+    font-weight: $font-weight-medium;
+  }
+
+  // ── Pricing ───────────────────────────────────────────────────────
+  &__pricing {
+    @include flex-column;
+    gap: $spacing-0-5;
+  }
+
+  &__price {
+    font-family: $font-heading;
+    font-size: $font-size-xl;
+    font-weight: $font-weight-extrabold;
+    color: $neutral-800;
+    line-height: $line-height-none;
+  }
+
+  &__original {
+    font-size: $font-size-xs;
+    color: $neutral-400;
+    text-decoration: line-through;
+    font-weight: $font-weight-medium;
+  }
+
+  &__saving {
+    font-size: $font-size-xs;
+    color: $success-600;
+    font-weight: $font-weight-bold;
+    background: $success-50;
+    padding: $spacing-0-5 $spacing-2;
+    border-radius: $border-radius-full;
+    display: inline-block;
+    align-self: flex-start;
+  }
+
+  // ── Actions ───────────────────────────────────────────────────────
+  &__actions {
+    display: flex;
+    gap: $spacing-2;
+    margin-top: auto;
+    padding-top: $spacing-1;
+  }
+
+  &__cart-btn {
+    flex: 1;
+    height: $btn-height-base !important;
+    font-size: $font-size-xs !important;
+    font-weight: $font-weight-bold !important;
+    border-radius: $border-radius-lg !important;
+    background: $primary-500 !important;
+    border-color: $primary-500 !important;
+    box-shadow: 0 3px 10px rgba(0, 156, 222, 0.3) !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: $spacing-1-5 !important;
+    transition: all $transition-fast !important;
+
+    &:hover:not(:disabled) {
+      background: $primary-600 !important;
+      border-color: $primary-600 !important;
+      transform: translateY(-1px);
+    }
+
+    &:disabled {
+      background: $neutral-200 !important;
+      border-color: $neutral-200 !important;
+      color: $neutral-400 !important;
+      box-shadow: none !important;
+      cursor: not-allowed;
+    }
+
+    span[nz-icon] { font-size: $icon-size-sm !important; }
+  }
+
+  &__view-full-btn {
+    height: $btn-height-base !important;
+    width: $btn-height-base !important;
+    border-radius: $border-radius-lg !important;
+    flex-shrink: 0;
+    @include flex-center;
+    padding: 0 !important;
+    font-size: $icon-size-lg !important;
+    color: $primary-500 !important;
+    border-color: $primary-300 !important;
+    transition: all $transition-fast !important;
+
+    &:hover {
+      background: $primary-50 !important;
+      border-color: $primary-500 !important;
+    }
+  }
+}

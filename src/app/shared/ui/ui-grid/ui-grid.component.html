@@ -1,0 +1,133 @@
+<div class="app-table-container">
+  <!-- Title -->
+  @if (title || headerExtra || (columns && columns.length > 0)) {
+  <div class="table-header">
+    <div class="title">{{ title || '' }}</div>
+    <div class="extra" style="display: flex; align-items: center; gap: 12px;">
+      <ng-content select="[table-header-extra]"></ng-content>
+
+      <!-- Column Preference Controller -->
+      @if (columns && columns.length > 0) {
+      <div class="column-prefs-dropdown" (click)="$event.stopPropagation()">
+        <button nz-button nzType="default" nzSize="small" (click)="toggleColumnPrefs($event)" title="Column Preferences"
+          style="display: flex; align-items: center; justify-content: center; width: 32px; height: 32px; padding: 0;"
+          type="button">
+          <i nz-icon nzType="setting"></i>
+        </button>
+
+        @if (showColumnPrefs) {
+        <div class="column-prefs-menu">
+          <div class="menu-title">Visible Columns</div>
+          <div class="menu-item" style="border-bottom: 1px solid #f0f0f0; margin-bottom: 8px; padding-bottom: 4px;">
+            <label nz-checkbox [ngModel]="allColumnsVisible" [nzIndeterminate]="someColumnsHidden"
+              (ngModelChange)="toggleAllColumnsVisibility($event)">
+              <b>Select All</b>
+            </label>
+          </div>
+          @for (col of parentVisibleColumns; track col.key) {
+          <div class="menu-item">
+            <label nz-checkbox [ngModel]="isColumnVisible(col.key)"
+              (ngModelChange)="toggleColumnVisibility(col.key, $event)">
+              {{ col.title }}
+            </label>
+          </div>
+          }
+        </div>
+        }
+      </div>
+      }
+    </div>
+  </div>
+  }
+
+  <nz-table nzBordered [nzLoading]="loading" [nzData]="displayData" nzSize="small" [nzScroll]="scrollObj"
+    [nzFrontPagination]="false" [nzShowPagination]="true" [nzPageIndex]="pageIndex" [nzPageSize]="pageSize"
+    [nzTotal]="total" [nzPageSizeOptions]="pageSizeOptions" [nzShowSizeChanger]="showSizeChanger"
+    [nzPaginationPosition]="'bottom'" (nzPageIndexChange)="handlePageIndexChange($event)"
+    (nzPageSizeChange)="handlePageSizeChange($event)">
+    <!-- table header -->
+    <thead>
+      <tr>
+        @if (selectable) {
+        <th nzWidth="40px" class="checkbox-col">
+          @if (selectionMode === 'multiple') {
+          <label nz-checkbox nz-tooltip [nzTooltipTitle]="'Select All'" [(ngModel)]="allChecked"
+            [nzIndeterminate]="indeterminate" (ngModelChange)="toggleAll($event)">
+          </label>
+          }
+        </th>
+        }
+
+        @for (col of visibleColumns; track col.key) {
+        <th [style.width]="getColumnWidth(col)" [style.text-align]="col.align || 'left'"
+          (click)="isColumnSortable(col.key) ? handleSort(col.key) : null"
+          [style.cursor]="isColumnSortable(col.key) ? 'pointer' : 'default'">
+          <div
+            [style.justify-content]="col.align === 'center' ? 'center' : (col.align === 'right' ? 'flex-end' : 'space-between')"
+            style="display: flex; align-items: center; width: 100%;">
+            <span>{{ col.title }}</span>
+            @if (isColumnSortable(col.key)) {
+            <span class="sort-icons">
+              <i nz-icon nzType="caret-up"
+                [style.color]="sortKey === col.key && sortOrder === 'asc' ? '#1890ff' : '#bfbfbf'"></i>
+              <i nz-icon nzType="caret-down"
+                [style.color]="sortKey === col.key && sortOrder === 'desc' ? '#1890ff' : '#bfbfbf'"></i>
+            </span>
+            }
+          </div>
+        </th>
+        }
+
+        <th nzWidth="140px" style="text-align: center">Actions</th>
+      </tr>
+    </thead>
+
+    <!-- table body -->
+    <tbody>
+      @for (row of displayData; track identifyKey(row); let i = $index) {
+      <tr>
+        @if (selectable) {
+        <td nzWidth="40px" class="checkbox-col">
+          @if (selectionMode === 'multiple') {
+          <label nz-checkbox [ngModel]="isSelected(row)" (ngModelChange)="toggleRowSelection(row, $event)">
+          </label>
+          }
+          @if (selectionMode === 'single') {
+          <label class="checkbox-wrapper" nz-checkbox [ngModel]="isSelected(row)"
+            (ngModelChange)="toggleRowSelection(row, $event)">
+          </label>
+          }
+        </td>
+        }
+
+        @for (col of visibleColumns; track col.key) {
+        <td [style.text-align]="col.align || 'left'">
+          {{ resolveCell(row, col.key) }}
+        </td>
+        }
+
+        <td class="actions-col">
+          @for (act of actions; track act.key) {
+          @if (act.showIf === undefined || act.showIf === null ? true : act.showIf) {
+          <button nz-button [nzType]="act.type || 'text'" [nzDanger]="act.danger" nzSize="small" nz-tooltip
+            [nzTooltipTitle]="getActionTooltip(act, row)" (click)="triggerAction(act.key, row)" [disabled]="isActionDisabled(act, row)"
+            [nzLoading]="isActionLoading(act.key)" class="action-btn">
+            <i nz-icon [nzType]="getActionIcon(act, row)"></i>
+          </button>
+          }
+          }
+        </td>
+      </tr>
+      }
+
+      <!-- No result -->
+      @if (!displayData || displayData.length === 0) {
+      <tr>
+        <td [attr.colspan]="(visibleColumns.length || 0) + (selectable ? 2 : 1)" style="text-align: center">
+          <nz-empty [nzNotFoundImage]="'simple'"></nz-empty>
+        </td>
+      </tr>
+      }
+    </tbody>
+  </nz-table>
+</div>

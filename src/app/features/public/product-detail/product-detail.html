@@ -1,0 +1,418 @@
+<!-- =====================================================================
+     PRODUCT DETAIL PAGE
+     ===================================================================== -->
+
+<!-- ── Loading skeleton ─────────────────────────────────────────────── -->
+@if (isLoading()) {
+<div class="pd-skeleton">
+    <div class="pd-skeleton__container">
+        <nz-skeleton [nzActive]="true" [nzParagraph]="{ rows: 1, width: '40%' }"></nz-skeleton>
+        <div class="pd-skeleton__body">
+            <nz-skeleton-element nzType="image" [nzActive]="true" class="pd-skeleton__image"></nz-skeleton-element>
+            <div class="pd-skeleton__info">
+                <nz-skeleton [nzActive]="true" [nzParagraph]="{ rows: 6 }"></nz-skeleton>
+            </div>
+        </div>
+    </div>
+</div>
+}
+
+@if (!isLoading() && error()) {
+<div class="pd-error">
+    <nz-empty nzNotFoundImage="simple" [nzNotFoundContent]="error()"></nz-empty>
+</div>
+}
+
+<!-- ── Product detail (loaded) ──────────────────────────────────────── -->
+@if (!isLoading() && product(); as p) {
+<div class="pd-page">
+
+    <!-- ── Breadcrumb ─────────────────────────────────────────────── -->
+    <div class="pd-breadcrumb-bar">
+        <div class="pd-breadcrumb-bar__inner">
+            <nz-breadcrumb nzSeparator=">">
+                <nz-breadcrumb-item>
+                    <a routerLink="/home">
+                        <span nz-icon nzType="home" nzTheme="outline"></span>
+                    </a>
+                </nz-breadcrumb-item>
+                <nz-breadcrumb-item>
+                    <a routerLink="/products">Products</a>
+                </nz-breadcrumb-item>
+                <nz-breadcrumb-item>{{ p.name }}</nz-breadcrumb-item>
+            </nz-breadcrumb>
+        </div>
+    </div>
+
+    <!-- ── Main product section ───────────────────────────────────── -->
+    <section class="pd-main">
+        <div class="pd-main__container">
+            <div class="pd-main__grid">
+
+                <!-- ════════════════════════════════════════════════════════
+               LEFT — Image Gallery
+               ════════════════════════════════════════════════════════ -->
+                <div class="pd-gallery">
+
+                    <!-- Main image carousel -->
+                    <div class="pd-gallery__main">
+                        <div class="pd-gallery__main-img-wrap">
+                            <img [src]="p.product_images[activeImageIndex()]?.image_url || placeholderImage"
+                                [alt]="p.name" class="pd-gallery__main-img" />
+
+                            <!-- Stock badge overlay -->
+                            @if (!p.in_stock) {
+                            <div class="pd-gallery__out-of-stock">Out of Stock</div>
+                            }
+
+                            <!-- Image count pill -->
+                            <span class="pd-gallery__count-pill">
+                                {{ activeImageIndex() + 1 }} / {{ p.product_images.length }}
+                            </span>
+
+                            <!-- Prev / Next arrows -->
+                            @if (p.product_images.length > 1) {
+                            <button class="pd-gallery__arrow pd-gallery__arrow--prev"
+                                (click)="selectImage((activeImageIndex() - 1 + p.product_images.length) % p.product_images.length)"
+                                aria-label="Previous image">
+                                <span nz-icon nzType="left" nzTheme="outline"></span>
+                            </button>
+                            <button class="pd-gallery__arrow pd-gallery__arrow--next"
+                                (click)="selectImage((activeImageIndex() + 1) % p.product_images.length)"
+                                aria-label="Next image">
+                                <span nz-icon nzType="right" nzTheme="outline"></span>
+                            </button>
+                            }
+                        </div>
+                    </div>
+
+                    <!-- Thumbnail strip -->
+                    @if (p.product_images.length > 1) {
+                    <div class="pd-gallery__thumbs">
+                        @for (img of p.product_images; track $index; let i = $index) {
+                        <button class="pd-gallery__thumb" [class.pd-gallery__thumb--active]="activeImageIndex() === i"
+                            (click)="selectImage(i)" [attr.aria-label]="'View image ' + (i + 1)">
+                            <img [src]="img.image_url" [alt]="p.name + ' image ' + (i + 1)" />
+                        </button>
+                        }
+                    </div>
+                    }
+
+                    <!-- Stock info strip -->
+                    <div class="pd-gallery__stock-strip">
+                        @if (p.in_stock) {
+                        <span class="pd-stock-badge pd-stock-badge--in">
+                            <span nz-icon nzType="check-circle" nzTheme="fill"></span>
+                            In Stock ({{ p.stock_quantity }} units left)
+                        </span>
+                        } @else {
+                        <span class="pd-stock-badge pd-stock-badge--out">
+                            <span nz-icon nzType="close-circle" nzTheme="fill"></span>
+                            Out of Stock
+                        </span>
+                        }
+                        <span class="pd-sku-tag">SKU: {{ p.sku }}</span>
+                    </div>
+
+                </div>
+
+                <!-- ════════════════════════════════════════════════════════
+               RIGHT — Product Info
+               ════════════════════════════════════════════════════════ -->
+                <div class="pd-info">
+
+                    <!-- Product name -->
+                    <h1 class="pd-info__name">{{ p.name }}</h1>
+
+                    <!-- Ratings row -->
+                    <div class="pd-info__rating-row">
+                        <nz-rate [ngModel]="averageRating()" nzDisabled nzAllowHalf [nzCount]="5"></nz-rate>
+                        <span class="pd-info__rating-value">{{ averageRating() }}</span>
+                        <span class="pd-info__review-count">
+                            ({{ parsedReviews().length }} reviews)
+                        </span>
+                        <nz-divider nzType="vertical"></nz-divider>
+                        <span class="pd-info__sku">SKU: <strong>{{ p.sku }}</strong></span>
+                    </div>
+
+                    <!-- Price -->
+                    <div class="pd-info__price-block">
+                        <span class="pd-info__price">{{ formatPrice(p.base_price) }}</span>
+                        <nz-tag nzColor="green" class="pd-info__gst-tag">Incl. GST</nz-tag>
+                    </div>
+
+                    <nz-divider></nz-divider>
+
+                    <!-- Description -->
+                    <p class="pd-info__description">{{ p.description }}</p>
+
+                    <nz-divider></nz-divider>
+
+                    <!-- ── Quantity + Actions ──────────────────────────────── -->
+                    <div class="pd-actions">
+
+                        <!-- Quantity selector -->
+                        <div class="pd-qty">
+                            <span class="pd-qty__label">Qty</span>
+                            <div class="pd-qty__control">
+                                <button class="pd-qty__btn" (click)="decrementQty()" [disabled]="quantity() <= 1"
+                                    aria-label="Decrease quantity">
+                                    <span nz-icon nzType="minus" nzTheme="outline"></span>
+                                </button>
+                                <span class="pd-qty__value">{{ quantity() }}</span>
+                                <button class="pd-qty__btn" (click)="incrementQty()"
+                                    [disabled]="quantity() >= (product()?.stock_quantity ?? 99)"
+                                    aria-label="Increase quantity">
+                                    <span nz-icon nzType="plus" nzTheme="outline"></span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Add to Cart -->
+                        <button nz-button nzType="primary" nzSize="large" [nzLoading]="isAddingToCart()"
+                            [disabled]="!p.in_stock" (click)="addToCart(false)" class="pd-cart-btn">
+                            <span nz-icon nzType="shopping-cart" nzTheme="outline"></span>
+                            {{ p.in_stock ? 'Add to Cart' : 'Out of Stock' }}
+                        </button>
+
+                        <!-- Buy Now -->
+                        <button nz-button nzType="primary" nzSize="large" [nzLoading]="isAddingToCart()"
+                            [disabled]="!p.in_stock" (click)="addToCart(true)" class="pd-cart-btn">
+                            <span nz-icon nzType="thunderbolt" nzTheme="outline"></span>
+                            {{ p.in_stock ? 'Buy Now' : 'Out of Stock' }}
+                        </button>
+
+                        <!-- Wishlist -->
+                        @if (isLoggedIn()) {
+                        <button nz-button [nzType]="isWishlisted() ? 'primary' : 'default'" nzSize="large"
+                            (click)="toggleWishlist()" class="pd-wishlist-btn"
+                            [class.pd-wishlist-btn--active]="isWishlisted()" nz-tooltip
+                            [nzTooltipTitle]="isWishlisted() ? 'Remove from wishlist' : 'Add to wishlist'">
+                            <span nz-icon nzType="heart" [nzTheme]="isWishlisted() ? 'fill' : 'outline'"></span>
+                        </button>
+                        }
+
+                    </div>
+
+
+                    <!-- Trust badges -->
+                    <div class="pd-trust">
+                        <div class="pd-trust__item">
+                            <span nz-icon nzType="thunderbolt" nzTheme="fill"></span>
+                            <span>Fast Delivery</span>
+                        </div>
+                        <div class="pd-trust__item">
+                            <span nz-icon nzType="safety-certificate" nzTheme="fill"></span>
+                            <span>Genuine Product</span>
+                        </div>
+                        <div class="pd-trust__item">
+                            <span nz-icon nzType="customer-service" nzTheme="fill"></span>
+                            <span>24/7 Support</span>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ── Tabs: Specifications + Reviews ─────────────────────────── -->
+    <section class="pd-tabs-section">
+        <div class="pd-tabs-section__container">
+            <nz-tabs nzSize="large" class="pd-tabs">
+
+                <!-- ── Tab 1: Specifications ──────────────────────────── -->
+                <nz-tab [nzTitle]="specTabTitle">
+                    <ng-template #specTabTitle>
+                        <span nz-icon nzType="unordered-list" nzTheme="outline"></span>
+                        Specifications
+                    </ng-template>
+
+                    <div class="pd-specs">
+                        @if (attributeRows().length) {
+
+                        <h3 class="pd-specs__title">Product Attributes</h3>
+
+                        <!-- ✅ NEW: One-attribute-per-row table layout -->
+                        <div class="pd-attr-table-wrap">
+                            <table class="pd-attr-table">
+                                <thead>
+                                    <tr>
+                                        <th class="pd-attr-table__th pd-attr-table__th--label">Descriptions</th>
+                                        <th class="pd-attr-table__th">Specifications</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @for (row of attributeRows(); track trackByKey($index, row)) {
+                                    <tr class="pd-attr-table__row">
+
+                                        <!-- Label cell -->
+                                        <td class="pd-attr-table__label">{{ row.label }}</td>
+
+                                        <!-- Value cell -->
+                                        <td class="pd-attr-table__value">
+
+                                            <!-- Boolean attribute -->
+                                            @if (row.type === 'boolean') {
+                                            <nz-tag [nzColor]="row.rawValue ? 'green' : 'red'">
+                                                <span nz-icon [nzType]="row.rawValue ? 'check' : 'close'"></span>
+                                                {{ row.rawValue ? 'Yes' : 'No' }}
+                                            </nz-tag>
+                                            }
+
+                                            <!-- Array attribute (multiple values) -->
+                                            @else if (row.type === 'array') {
+                                            <div class="pd-spec-chips">
+                                                @for (val of $any(row.rawValue); track val) {
+                                                <nz-tag
+                                                    [nzColor]="isVariantSelected(row.key, val) ? 'blue' : 'default'">
+                                                    {{ val }}
+                                                </nz-tag>
+                                                }
+                                            </div>
+                                            }
+
+                                            <!-- Number attribute -->
+                                            @else if (row.type === 'number') {
+                                            <span class="pd-spec-number">{{ row.value }}</span>
+                                            }
+
+                                            <!-- Text attribute -->
+                                            @else {
+                                            <span class="pd-spec-text">{{ row.value }}</span>
+                                            }
+
+                                        </td>
+                                    </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+
+                        } @else {
+                        <nz-empty nzDescription="No specifications available"></nz-empty>
+                        }
+                    </div>
+                </nz-tab>
+
+                <!-- ── Tab 2: Reviews ──────────────────────────────────── -->
+                <nz-tab [nzTitle]="reviewTabTitle">
+                    <ng-template #reviewTabTitle>
+                        <span nz-icon nzType="star" nzTheme="outline"></span>
+                        Reviews ({{ parsedReviews().length }})
+                    </ng-template>
+
+                    <div class="pd-reviews">
+
+                        <!-- Rating summary card -->
+                        @if (parsedReviews().length) {
+                        <div class="pd-review-summary">
+
+                            <!-- Big average score -->
+                            <div class="pd-review-summary__score-box">
+                                <div class="pd-review-summary__avg">{{ averageRating() }}</div>
+                                <nz-rate [ngModel]="averageRating()" nzDisabled nzAllowHalf></nz-rate>
+                                <p class="pd-review-summary__count">Based on {{ parsedReviews().length }} reviews</p>
+                            </div>
+
+                            <!-- Distribution bars -->
+                            <div class="pd-review-summary__bars">
+                                @for (dist of ratingDistribution(); track dist.star) {
+                                <div class="pd-rating-bar">
+                                    <span class="pd-rating-bar__label">
+                                        {{ dist.star }}
+                                        <span nz-icon nzType="star" nzTheme="fill"></span>
+                                    </span>
+                                    <nz-progress [nzPercent]="dist.percent" [nzShowInfo]="false" nzSize="small"
+                                        [nzStrokeColor]="dist.star >= 4 ? '#52c41a' : dist.star === 3 ? '#faad14' : '#ff4d4f'"></nz-progress>
+                                    <span class="pd-rating-bar__count">{{ dist.count }}</span>
+                                </div>
+                                }
+                            </div>
+                        </div>
+
+                        <nz-divider></nz-divider>
+
+                        <!-- Review list -->
+                        <div class="pd-review-list">
+                            @for (review of parsedReviews(); track trackByReview($index, review)) {
+                            <div class="pd-review-card">
+
+                                <!-- Review header -->
+                                <div class="pd-review-card__header">
+                                    <nz-avatar [nzText]="review.initials" [style.background-color]="review.avatarColor"
+                                        [style.color]="'#fff'" [style.font-weight]="'700'" [style.font-size]="'14px'"
+                                        [nzSize]="'large'"></nz-avatar>
+
+                                    <div class="pd-review-card__meta">
+                                        <span class="pd-review-card__user">{{ review.user_name }}</span>
+                                        <div class="pd-review-card__rating-row">
+                                            <nz-rate [ngModel]="review.numericRating" nzDisabled nzAllowHalf
+                                                [nzCount]="5"></nz-rate>
+                                            <span class="pd-review-card__score">{{ review.rating }}</span>
+                                        </div>
+                                    </div>
+
+                                    <span class="pd-review-card__date">
+                                        <span nz-icon nzType="calendar" nzTheme="outline"></span>
+                                        {{ review.review_datetime }}
+                                    </span>
+                                </div>
+
+                                <!-- Review title -->
+                                <p class="pd-review-card__text">{{ review.review_title }}</p>
+
+                                <!-- Review body -->
+                                <p class="pd-review-card__text">{{ review.comment }}</p>
+
+                                <!-- Sentiment tag -->
+                                <div class="pd-review-card__footer">
+                                    @if (review.numericRating >= 4) {
+                                    <nz-tag nzColor="green">
+                                        <span nz-icon nzType="like" nzTheme="outline"></span>
+                                        Positive
+                                    </nz-tag>
+                                    } @else if (review.numericRating >= 3) {
+                                    <nz-tag nzColor="orange">
+                                        <span nz-icon nzType="meh" nzTheme="outline"></span>
+                                        Neutral
+                                    </nz-tag>
+                                    } @else {
+                                    <nz-tag nzColor="red">
+                                        <span nz-icon nzType="dislike" nzTheme="outline"></span>
+                                        Negative
+                                    </nz-tag>
+                                    }
+                                    <button nz-button nzType="text" nzSize="small" class="pd-review-card__helpful">
+                                        <span nz-icon nzType="like" nzTheme="outline"></span>
+                                        Helpful
+                                    </button>
+                                </div>
+
+                            </div>
+                            }
+                        </div>
+
+                        } @else {
+                        <nz-empty nzDescription="No reviews yet. Be the first to review!"></nz-empty>
+                        }
+                    </div>
+                </nz-tab>
+
+                <!-- ── Tab 3: Description ──────────────────────────────── -->
+                <nz-tab [nzTitle]="descTabTitle">
+                    <ng-template #descTabTitle>
+                        <span nz-icon nzType="file-text" nzTheme="outline"></span>
+                        Description
+                    </ng-template>
+                    <div class="pd-description-tab">
+                        <p>{{ p.description }}</p>
+                    </div>
+                </nz-tab>
+
+            </nz-tabs>
+        </div>
+    </section>
+
+</div>
+}

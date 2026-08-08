@@ -1,0 +1,327 @@
+<div nz-row [nzGutter]="[16, 16]" class="process-page">
+  <!-- ================= FORM CARD ================= -->
+  <!-- Add this modal before closing </div> of process-page -->
+  <nz-modal [(nzVisible)]="isFilterVisible" nzTitle="Filter Banners" [nzFooter]="filterFooter"
+    (nzOnCancel)="closeFilterModal()" [nzWidth]="900" nzCentered>
+    <ng-container *nzModalContent>
+      <div nz-form [formGroup]="form" nzLayout="vertical">
+        <div nz-row [nzGutter]="[16, 16]">
+          <div nz-col [nzXs]="24" [nzSm]="12">
+            <nz-form-item>
+              <nz-form-label>Start Date</nz-form-label>
+              <nz-form-control>
+                <nz-date-picker style="width: 100%" formControlName="from_date" nzPlaceHolder="Select start date">
+                </nz-date-picker>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+
+          <!-- End Date -->
+          <div nz-col [nzXs]="24" [nzSm]="12">
+            <nz-form-item>
+              <nz-form-label>End Date</nz-form-label>
+              <nz-form-control>
+                <nz-date-picker style="width: 100%" formControlName="to_date" nzPlaceHolder="Select end date">
+                </nz-date-picker>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+
+          <!-- State -->
+          <div nz-col [nzXs]="24" [nzSm]="6">
+            <nz-form-item>
+              <nz-form-label>Order Status</nz-form-label>
+              <nz-form-control>
+                <nz-select formControlName="order_status" nzShowSearch nzAllowClear nzPlaceHolder="Select Order Status">
+                  @for (s of orderStatusOptions; track s) {
+                  <nz-option [nzValue]="s" [nzLabel]="s"></nz-option>
+                  }
+                </nz-select>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+
+          <!-- Platform -->
+          <div nz-col [nzXs]="24" [nzSm]="6">
+            <nz-form-item>
+              <nz-form-label>Payment Status</nz-form-label>
+              <nz-form-control>
+                <nz-select formControlName="payment_status" nzPlaceHolder="Select Payment Status">
+                  @for (status of paymentStatusOptions; track status) {
+                  <nz-option [nzValue]="status" [nzLabel]="status"></nz-option>
+                  }
+                </nz-select>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+
+          <!-- Order No. -->
+          <div nz-col [nzXs]="24" [nzLg]="12">
+            <nz-form-item>
+              <nz-form-label>Order No.</nz-form-label>
+              <nz-form-control nzErrorTip="Please enter order number">
+                <input nz-input formControlName="order_no" placeholder="Enter Order No." type="text" />
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+
+    <!-- Modal Footer -->
+    <ng-template #filterFooter>
+      <div class="filter-modal-footer">
+        <button nz-button nzType="default" (click)="reset()">
+          <nz-icon nzType="reload"></nz-icon> Reset
+        </button>
+        <button nz-button nzType="primary" (click)="submit()">
+          <nz-icon nzType="search"></nz-icon> Apply Filter
+        </button>
+      </div>
+    </ng-template>
+  </nz-modal>
+  <div nz-col nzSpan="24" class="divider-with-action">
+    <nz-divider nzOrientation="left" [nzText]="requiredTemplate">
+      <ng-template #requiredTemplate>
+        <span class="divider-title">Order List</span>
+      </ng-template></nz-divider>
+    <button nz-button nzType="default" nzShape="circle" class="filter-trigger-btn" nz-tooltip
+      nzTooltipTitle="Filter Products" (click)="openFilterModal()">
+      <nz-icon nzType="filter" nzTheme="outline"></nz-icon>
+    </button>
+  </div>
+  <div nz-col nzSpan="24">
+    <nz-card>
+      <div class="table-wrapper">
+        <ui-grid [title]="" ref_name="Order List" [autoColumns]="true" [dataSource]="orderGridDataSource"
+          [autoLoad]="true" [reloadOn]="orderGridReload$" [pageSize]="10" [pageSizeOptions]="[10, 20, 50]"
+          [serverSide]="false" [selectable]="false" selectionMode="multiple" [actions]="rowActions"
+          (action)="onAction($event)" [hildeColumn]="['order_id', 'cart_details', 'invoice_file_path']"
+          [columnWidths]="{ order_no: '15rem' }" [nonSortableColumns]="['order_no']"></ui-grid>
+      </div>
+    </nz-card>
+  </div>
+
+  <!-- ================= CHANGE PAYMENT STATUS MODAL ================= -->
+  <nz-modal [(nzVisible)]="showPaymentStatusModal" nzTitle="Change Payment Status" [nzMaskClosable]="false"
+    [nzClosable]="true" (nzOnCancel)="closePaymentStatusModal()" [nzFooter]="paymentStatusFooter" [nzWidth]="560">
+    <ng-container *nzModalContent>
+      @if (selectedRow) {
+      <nz-descriptions nzBordered nzSize="small" [nzColumn]="1" class="status-modal-meta">
+        <nz-descriptions-item nzTitle="Order No.">
+          <strong>{{ selectedRow.order_no }}</strong>
+        </nz-descriptions-item>
+        <nz-descriptions-item nzTitle="Order Date">
+          {{ selectedRow.order_date | date: 'medium' }}
+        </nz-descriptions-item>
+        <nz-descriptions-item nzTitle="Current Payment Status">
+          <nz-badge [nzStatus]="getPaymentStatusBadge(selectedRow.payment_status)"
+            [nzText]="selectedRow.payment_status"></nz-badge>
+        </nz-descriptions-item>
+      </nz-descriptions>
+
+      <!-- Hide the dropdown when status is already Completed -->
+      @if (selectedRow.payment_status === 'Completed') {
+      <div class="status-locked-msg">
+        <nz-icon nzType="check-circle" nzTheme="fill" style="color: #52c41a;"></nz-icon>
+        <span>This order's payment is already <strong>Completed</strong>. No further changes can be made.</span>
+      </div>
+      } @else {
+      <form nz-form [formGroup]="paymentStatusForm" nzLayout="vertical" style="margin-top: 16px;">
+        <nz-form-item>
+          <nz-form-label nzRequired>New Payment Status</nz-form-label>
+          <nz-form-control nzErrorTip="Please select a new payment status">
+            <nz-select formControlName="payment_status" nzPlaceHolder="Select New Payment Status">
+              @for (status of paymentStatusOptions; track status) {
+              @if (status !== selectedRow.payment_status) {
+              <nz-option [nzValue]="status" [nzLabel]="status"></nz-option>
+              }
+              }
+            </nz-select>
+          </nz-form-control>
+        </nz-form-item>
+      </form>
+      }
+      }
+    </ng-container>
+
+    <ng-template #paymentStatusFooter>
+      <button nz-button nzType="default" (click)="closePaymentStatusModal()">Cancel</button>
+      @if (selectedRow?.payment_status !== 'Completed') {
+      <button nz-button nzType="primary" (click)="confirmPaymentStatusUpdate()" [disabled]="!paymentStatusForm.valid">
+        <nz-icon nzType="credit-card"></nz-icon> Update Payment
+      </button>
+      }
+    </ng-template>
+  </nz-modal>
+
+  <!-- ================= CHANGE ORDER STATUS MODAL ================= -->
+  <nz-modal [(nzVisible)]="showOrderStatusModal" nzTitle="Change Order Status" [nzMaskClosable]="false"
+    [nzClosable]="true" (nzOnCancel)="closeOrderStatusModal()" [nzFooter]="orderStatusFooter" [nzWidth]="560">
+    <ng-container *nzModalContent>
+      @if (selectedRow) {
+      <nz-descriptions nzBordered nzSize="small" [nzColumn]="1" class="status-modal-meta">
+        <nz-descriptions-item nzTitle="Order No.">
+          <strong>{{ selectedRow.order_no }}</strong>
+        </nz-descriptions-item>
+        <nz-descriptions-item nzTitle="Order Date">
+          {{ selectedRow.order_date | date: 'medium' }}
+        </nz-descriptions-item>
+        <nz-descriptions-item nzTitle="Current Order Status">
+          <nz-badge [nzStatus]="getOrderStatusBadge(selectedRow.order_status)"
+            [nzText]="selectedRow.order_status"></nz-badge>
+        </nz-descriptions-item>
+      </nz-descriptions>
+
+      <!-- Hide the dropdown when status is already Delivered or Cancelled -->
+      @if (selectedRow.order_status === 'Delivered' || selectedRow.order_status === 'Cancelled') {
+      <div class="status-locked-msg">
+        <nz-icon [nzType]="selectedRow.order_status === 'Delivered' ? 'check-circle' : 'close-circle'" nzTheme="fill"
+          [style.color]="selectedRow.order_status === 'Delivered' ? '#52c41a' : '#ff4d4f'"></nz-icon>
+        <span>
+          This order is already <strong>{{ selectedRow.order_status }}</strong>. No further status changes can be made.
+        </span>
+      </div>
+      } @else {
+      <form nz-form [formGroup]="orderStatusForm" nzLayout="vertical" style="margin-top: 16px;">
+        <nz-form-item>
+          <nz-form-label nzRequired>New Order Status</nz-form-label>
+          <nz-form-control nzErrorTip="Please select a new order status">
+            <nz-select formControlName="order_status" nzPlaceHolder="Select New Order Status"
+              (ngModelChange)="onOrderStatusChangeInModal($event)">
+              @for (status of orderStatusOptions; track status) {
+              @if (status !== selectedRow.order_status) {
+              <nz-option [nzValue]="status" [nzLabel]="status"></nz-option>
+              }
+              }
+            </nz-select>
+          </nz-form-control>
+        </nz-form-item>
+
+        <!-- Shipment tracking fields (visible only when Shipped is selected) -->
+        @if (orderStatusForm.value.order_status === 'Shipped') {
+        <nz-divider nzOrientation="left">
+          <span style="font-size: 13px; color: #1890ff;">Shipment Tracking Details</span>
+        </nz-divider>
+
+        <!-- Shipment Ack Number -->
+        <nz-form-item>
+          <nz-form-label nzRequired>Shipment Acknowledgement Number</nz-form-label>
+          <nz-form-control [nzErrorTip]="ackErrorTpl">
+            <input nz-input formControlName="shipment_ack_number" placeholder="e.g. AWB123456789" type="text"
+              maxlength="100" (blur)="onTrimBlur('orderStatusForm', 'shipment_ack_number')" />
+            <ng-template #ackErrorTpl let-control>
+              @if (control.hasError('whitespace') || control.hasError('required')) {
+              Shipment Acknowledgement Number is required and cannot be blank spaces
+              }
+            </ng-template>
+          </nz-form-control>
+        </nz-form-item>
+
+        <!-- Shipment Tracking URL -->
+        <nz-form-item>
+          <nz-form-label nzRequired>Shipment Tracking URL</nz-form-label>
+          <nz-form-control [nzErrorTip]="urlErrorTpl">
+            <input nz-input formControlName="shipment_tracking_url" placeholder="https://courier.com/track/AWB123456789"
+              type="url" (blur)="onTrimBlur('orderStatusForm', 'shipment_tracking_url')" />
+            <ng-template #urlErrorTpl let-control>
+              @if (control.hasError('whitespace') || control.hasError('required')) {
+              Tracking URL is required and cannot be blank spaces
+              }
+              @else if (control.hasError('pattern')) {
+              Please enter a valid URL (starting with http:// or https://)
+              }
+            </ng-template>
+          </nz-form-control>
+        </nz-form-item>
+        }
+      </form>
+      }
+      }
+    </ng-container>
+
+    <ng-template #orderStatusFooter>
+      <button nz-button nzType="default" (click)="closeOrderStatusModal()">Cancel</button>
+      @if (
+      selectedRow?.order_status !== 'Delivered' &&
+      selectedRow?.order_status !== 'Cancelled'
+      ) {
+      <button nz-button nzType="primary" (click)="confirmOrderStatusUpdate()" [disabled]="isOrderStatusFormInvalid()">
+        <nz-icon nzType="dropbox"></nz-icon> Update Order
+      </button>
+      }
+    </ng-template>
+  </nz-modal>
+
+  <!-- ================= INVOICE UPLOAD MODAL ================= -->
+  <nz-modal [(nzVisible)]="showInvoiceModal" nzTitle="Upload Invoice" [nzMaskClosable]="false" [nzClosable]="true"
+    (nzOnCancel)="closeInvoiceModal()" [nzFooter]="invoiceModalFooter" [nzWidth]="560">
+    <ng-container *nzModalContent>
+      @if (selectedRow) {
+      <nz-descriptions nzBordered nzSize="small" [nzColumn]="1" class="status-modal-meta">
+        <nz-descriptions-item nzTitle="Order No.">
+          <strong>{{ selectedRow.order_no }}</strong>
+        </nz-descriptions-item>
+        <nz-descriptions-item nzTitle="Order Date">
+          {{ selectedRow.order_date | date: 'medium' }}
+        </nz-descriptions-item>
+      </nz-descriptions>
+      }
+
+      <p style="margin: 16px 0; color: #595959;">
+        Please provide the invoice number and upload the invoice file (PDF only, max 2MB).
+      </p>
+      <form nz-form [formGroup]="invoiceForm" nzLayout="vertical">
+        <!-- Invoice Number -->
+        <nz-form-item>
+          <nz-form-label nzRequired>Invoice Number</nz-form-label>
+          <nz-form-control [nzErrorTip]="invoiceNoErrorTpl">
+            <input nz-input formControlName="invoice_number" placeholder="e.g. INV-2025-0001" type="text" maxlength="50"
+              (blur)="onTrimBlur('invoiceForm', 'invoice_number')" />
+            <ng-template #invoiceNoErrorTpl let-control>
+              @if (control.hasError('whitespace') || control.hasError('required')) {
+              Invoice Number is required and cannot be blank spaces
+              }
+            </ng-template>
+          </nz-form-control>
+        </nz-form-item>
+
+        <!-- Invoice File -->
+        <nz-form-item>
+          <nz-form-label nzRequired>Invoice File (PDF)</nz-form-label>
+          <nz-form-control>
+            <div class="invoice-upload-wrapper">
+              <input type="file" #invoiceFileInput accept=".pdf" (change)="onInvoiceFileSelected($event)"
+                style="display: none" />
+              <button nz-button nzType="dashed" type="button" (click)="invoiceFileInput.click()">
+                <nz-icon nzType="upload"></nz-icon>
+                {{ selectedInvoiceFile ? 'Change File' : 'Select PDF File' }}
+              </button>
+              @if (selectedInvoiceFile) {
+              <div class="selected-file-info">
+                <nz-icon nzType="file-pdf" nzTheme="outline" style="color: #ff4d4f; font-size: 18px;"></nz-icon>
+                <span class="file-name">{{ selectedInvoiceFile.name }}</span>
+                <span class="file-size">({{ formatFileSize(selectedInvoiceFile.size) }})</span>
+                <button nz-button nzType="text" nzDanger nzSize="small" (click)="clearSelectedInvoiceFile()"
+                  title="Remove file">
+                  <nz-icon nzType="close"></nz-icon>
+                </button>
+              </div>
+              } @else {
+              <div class="no-file-text">No file selected</div>
+              }
+            </div>
+          </nz-form-control>
+        </nz-form-item>
+      </form>
+    </ng-container>
+
+    <ng-template #invoiceModalFooter>
+      <button nz-button nzType="default" (click)="closeInvoiceModal()">Cancel</button>
+      <button nz-button nzType="primary" (click)="confirmInvoiceUpload()"
+        [disabled]="isInvoiceFormInvalid() || !selectedInvoiceFile">
+        <nz-icon nzType="upload"></nz-icon> Upload Invoice
+      </button>
+    </ng-template>
+  </nz-modal>
+</div>

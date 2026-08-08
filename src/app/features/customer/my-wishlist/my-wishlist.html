@@ -1,0 +1,206 @@
+<!-- =====================================================================
+     MY WISHLIST PAGE
+     ===================================================================== -->
+<div class="wishlist-page">
+
+  <!-- ── Page Banner ──────────────────────────────────────────────── -->
+  <div class="wishlist-page__banner">
+    <div class="wishlist-page__banner-inner">
+      <div>
+        <h1 class="wishlist-page__title">
+          <span nz-icon nzType="heart"></span>
+          My Wishlist
+        </h1>
+        <p class="wishlist-page__subtitle">
+          {{ wishlist().length }} saved item{{ wishlist().length !== 1 ? 's' : '' }}
+          @if (outStockCount > 0) {
+          &nbsp;·&nbsp;
+          <span class="wishlist-page__out-of-stock-note">{{ outStockCount }} out of stock</span>
+          }
+        </p>
+      </div>
+      @if (wishlist().length > 0) {
+      <div class="wishlist-page__banner-actions">
+        <!-- <button
+            nz-button
+            nzType="default"
+            class="wishlist-page__add-all-btn"
+            (click)="addAllToCart()"
+          >
+            <span nz-icon nzType="shopping-cart" nzTheme="outline"></span>
+            Add All to Cart
+          </button> -->
+        <button nz-button nzType="text" nz-popconfirm nzPopconfirmTitle="Clear your entire wishlist?"
+          nzOkText="Yes, clear" nzCancelText="Cancel" (nzOnConfirm)="clearAll()" class="wishlist-page__clear-btn">
+          <span nz-icon nzType="delete"></span>
+          Clear All
+        </button>
+      </div>
+      }
+    </div>
+  </div>
+
+  <div class="wishlist-page__body">
+
+    <!-- ── Toolbar ───────────────────────────────────────────────── -->
+    @if (!isLoading() && wishlist().length > 0) {
+    <div class="wishlist-toolbar">
+      <div class="wishlist-toolbar__search">
+        <nz-input-group [nzPrefix]="pfxSearch" nzSize="large">
+          <input nz-input [ngModel]="searchText()" (ngModelChange)="searchText.set($event)"
+            placeholder="Search your wishlist..." />
+        </nz-input-group>
+        <ng-template #pfxSearch>
+          <span nz-icon nzType="search"></span>
+        </ng-template>
+      </div>
+      <nz-select [ngModel]="sortBy()" (ngModelChange)="sortBy.set($event)" nzSize="large"
+        class="wishlist-toolbar__sort">
+        @for (opt of sortOptions; track opt.value) {
+        <nz-option [nzValue]="opt.value" [nzLabel]="opt.label"></nz-option>
+        }
+      </nz-select>
+      <div class="wishlist-toolbar__count">
+        <span>{{ filteredList().length }} of {{ wishlist().length }} items</span>
+      </div>
+    </div>
+    }
+
+    <!-- ── Skeleton ──────────────────────────────────────────────── -->
+    @if (isLoading()) {
+    <div class="wishlist-skeleton-grid">
+      @for (i of [1,2,3,4,5,6]; track i) {
+      <div class="wishlist-skeleton-card">
+        <nz-skeleton-element nzType="image" [nzActive]="true" class="wishlist-skeleton-card__img"></nz-skeleton-element>
+        <nz-skeleton [nzActive]="true" [nzParagraph]="{ rows: 3 }"></nz-skeleton>
+      </div>
+      }
+    </div>
+    }
+
+    <!-- ── Empty state ───────────────────────────────────────────── -->
+    @if (!isLoading() && wishlist().length === 0) {
+    <div class="wishlist-empty">
+      <div class="wishlist-empty__icon-wrap">
+        <span nz-icon nzType="heart"></span>
+      </div>
+      <h3 class="wishlist-empty__title">Your wishlist is empty</h3>
+      <p class="wishlist-empty__desc">
+        Save items you love to revisit them later. Tap the heart icon on any product to add it here.
+      </p>
+      <a nz-button nzType="primary" nzSize="large" routerLink="/products" class="wishlist-empty__cta">
+        <span nz-icon nzType="shopping"></span>
+        Explore Products
+      </a>
+    </div>
+    }
+
+    <!-- ── Empty search result ───────────────────────────────────── -->
+    @if (!isLoading() && wishlist().length > 0 && filteredList().length === 0) {
+    <div class="wishlist-empty wishlist-empty--search">
+      <span nz-icon nzType="search"></span>
+      <p>No items match "<strong>{{ searchText() }}</strong>"</p>
+      <button nz-button nzType="link" (click)="searchText.set('')">Clear search</button>
+    </div>
+    }
+
+    <!-- ── Product grid ──────────────────────────────────────────── -->
+    @if (!isLoading() && filteredList().length > 0) {
+    <div class="wishlist-grid">
+      @for (product of filteredList(); track product.id) {
+      <div class="wl-card">
+
+        <!-- Image area -->
+        <div class="wl-card__image-wrap">
+          <img [src]="product.image" [alt]="product.name" class="wl-card__image" loading="lazy"
+            (error)="onImageError($event)" />
+
+          <!-- Badges -->
+          @if (product.badge) {
+          <span class="wl-card__badge wl-card__badge--{{ product.badge_type }}">
+            {{ product.badge }}
+          </span>
+          }
+          @if (discount(product)) {
+          <span class="wl-card__discount-pill"> {{ discount(product) }}%</span>
+          }
+
+          <!-- Out of stock overlay -->
+          @if (!product.in_stock) {
+          <div class="wl-card__out-of-stock">
+            <span nz-icon nzType="close-circle"></span>
+            Out of Stock
+          </div>
+          }
+
+          <!-- Remove button (top right) -->
+          <button class="wl-card__remove-btn" nz-popconfirm nzPopconfirmTitle="Remove from wishlist?" nzOkText="Remove"
+            nzCancelText="Keep" nzPopconfirmPlacement="bottom" (nzOnConfirm)="removeFromWishlist(product)"
+            aria-label="Remove from wishlist">
+            <span nz-icon nzType="heart"></span>
+          </button>
+
+          <!-- Quick view overlay -->
+          <div class="wl-card__overlay">
+            <a [routerLink]="['/product-detail', product.slug || product.id]" class="wl-card__view-btn">
+              <span nz-icon nzType="eye"></span>
+              Quick View
+            </a>
+          </div>
+        </div>
+
+        <!-- Card body -->
+        <div class="wl-card__body">
+
+          <!-- Category + added date -->
+          <div class="wl-card__top-meta">
+            <span class="wl-card__category">{{ product.category }}</span>
+            <span class="wl-card__added-date">
+              <span nz-icon nzType="clock-circle"></span>
+              {{ formatDate(product.added_at) }}
+            </span>
+          </div>
+
+          <!-- Product name -->
+          <h3 class="wl-card__name">{{ product.name }}</h3>
+
+          <!-- Rating -->
+          <div class="wl-card__rating">
+            <nz-rate [ngModel]="product.rating" nzDisabled nzAllowHalf [nzCount]="5"></nz-rate>
+            <span class="wl-card__review-count">({{ product.review_count }})</span>
+          </div>
+
+          <!-- Pricing -->
+          <div class="wl-card__pricing">
+            <span class="wl-card__price">{{ formatPrice(product.price) }}</span>
+            @if (product.actual_price) {
+            <span class="wl-card__original">{{ formatPrice(product.actual_price) }}</span>
+            <span class="wl-card__saving">
+              Save {{ formatPrice(product.actual_price - product.price) }}
+            </span>
+            }
+          </div>
+
+          <!-- Actions -->
+          <div class="wl-card__actions">
+            <button nz-button nzType="primary" nzBlock [nzLoading]="isAddingToCart(product.id)"
+              [disabled]="!product.in_stock" (click)="addToCart(product)" class="wl-card__cart-btn">
+              @if (!isAddingToCart(product.id)) {
+              <span nz-icon nzType="shopping-cart" nzTheme="outline"></span>
+              }
+              {{ product.in_stock ? 'Add to Cart' : 'Out of Stock' }}
+            </button>
+            <a [routerLink]="['/product-detail', product.slug || product.id]" nz-button nzType="default"
+              class="wl-card__view-full-btn" nz-tooltip nzTooltipTitle="View full details">
+              <span nz-icon nzType="right-circle"></span>
+            </a>
+          </div>
+
+        </div>
+      </div>
+      }
+    </div>
+    }
+
+  </div>
+</div>

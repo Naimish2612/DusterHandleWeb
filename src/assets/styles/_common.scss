@@ -1,0 +1,588 @@
+/* ===================================================================
+   DESIGN SYSTEM - E-Commerce APPLICATION
+   Global Design Tokens & Variables
+   Angular 20.0 + NG-ZORRO 20.0
+   =================================================================== */
+
+/* =====================================================================
+   1. COLOR PALETTE
+   ===================================================================== */
+
+// Primary Colors Based on brand (Everest) color: #009CDE
+$primary-50:  #E0F5FB;   // Lightest — backgrounds, chips
+$primary-100: #B3E6F6;   // Very light — hover backgrounds
+$primary-200: #80D4EF;   // Light — borders, dividers
+$primary-300: #4DC2E8;   // Medium light — icons, illustrations
+$primary-400: #26B3E2;   // Medium — secondary buttons
+$primary-500: #009CDE;   // ★ BASE BRAND COLOR — primary buttons, links
+$primary-600: #0089C4;   // Dark — hover on primary
+$primary-700: #0077A8;   // Darker — active states
+$primary-800: #005A80;   // Deep — dark mode accents
+$primary-900: #003D58;   // Darkest — footer dark bg accent
+
+// Secondary Colors (Purple Accent)
+$secondary-50: #f3e5f5;
+$secondary-100: #e1bee7;
+$secondary-200: #ce93d8;
+$secondary-300: #ba68c8;
+$secondary-400: #ab47bc;
+$secondary-500: #9c27b0;
+$secondary-600: #8e24aa;
+$secondary-700: #7b1fa2;
+$secondary-800: #6a1b9a;
+$secondary-900: #4a148c;
+
+// Success Colors
+$success-50: #e8f5e9;
+$success-100: #c8e6c9;
+$success-200: #a5d6a7;
+$success-300: #81c784;
+$success-400: #66bb6a;
+$success-500: #52c41a;
+$success-600: #43a047;
+$success-700: #389e0d;
+$success-800: #2e7d32;
+$success-900: #1b5e20;
+
+// Warning Colors
+$warning-50: #fff8e1;
+$warning-100: #ffecb3;
+$warning-200: #ffe082;
+$warning-300: #ffd54f;
+$warning-400: #ffca28;
+$warning-500: #faad14;
+$warning-600: #f9a825;
+$warning-700: #d48806;
+$warning-800: #f57f17;
+$warning-900: #e65100;
+
+// Error / Danger Colors
+$error-50: #ffebee;
+$error-100: #ffcdd2;
+$error-200: #ef9a9a;
+$error-300: #e57373;
+$error-400: #ef5350;
+$error-500: #ff4d4f;
+$error-600: #e53935;
+$error-700: #cf1322;
+$error-800: #c62828;
+$error-900: #b71c1c;
+
+// Info Colors
+$info-50: #e1f5fe;
+$info-100: #b3e5fc;
+$info-200: #81d4fa;
+$info-300: #4fc3f7;
+$info-400: #29b6f6;
+$info-500: #1890ff;
+$info-600: #039be5;
+$info-700: #0050b3;
+$info-800: #0277bd;
+$info-900: #01579b;
+
+// Neutral Colors (Gray Scale)
+$neutral-0:    #FFFFFF;
+$neutral-50:   #F8FAFC;   // Page backgrounds
+$neutral-100:  #F1F5F9;   // Section alternates
+$neutral-200:  #E2E8F0;   // Borders, dividers
+$neutral-300:  #CBD5E1;   // Input borders
+$neutral-400:  #94A3B8;   // Placeholder text
+$neutral-500:  #64748B;   // Body text secondary
+$neutral-600:  #475569;   // Body text primary
+$neutral-700:  #334155;   // Headings light
+$neutral-800:  #1E293B;   // Headings dark
+$neutral-900:  #0F172A;   // Darkest text
+$neutral-1000: #000000;
+
+// Semantic Aliases
+$color-bg-body: $neutral-100;
+$color-bg-base: $neutral-0;
+$color-bg-component: $neutral-50;
+$color-bg-hover: rgba(0, 0, 0, 0.04);
+$color-bg-active: rgba(0, 0, 0, 0.06);
+$color-bg-mask: rgba(0, 0, 0, 0.45);
+
+$color-text-primary: rgba(0, 0, 0, 0.85);
+$color-text-secondary: rgba(0, 0, 0, 0.65);
+$color-text-tertiary: rgba(0, 0, 0, 0.45);
+$color-text-disabled: rgba(0, 0, 0, 0.25);
+$color-text-placeholder: rgba(0, 0, 0, 0.25);
+$color-text-inverse: $neutral-0;
+
+$color-border-base: #d9d9d9;
+$color-border-light: #f0f0f0;
+$color-border-dark: #b0b0b0;
+$color-divider: $neutral-200;
+
+// Gradient Colors
+$gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+$gradient-secondary: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+$gradient-success: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+$gradient-warm: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+$gradient-cool: linear-gradient(135deg, #30cfd0 0%, #330867 100%);
+$gradient-sunset: linear-gradient(135deg, #ff6e7f 0%, #bfe9ff 100%);
+$gradient-dark: linear-gradient(135deg, #0c0c1d 0%, #1a1a2e 100%);
+$gradient-sky: linear-gradient(135deg, #89f7fe 0%, #66a6ff 100%);
+
+// ─── Color Maps (for programmatic generation) ─────────────
+$theme-colors: (
+  "primary": $primary-500,
+  "secondary": $secondary-500,
+  "success": $success-500,
+  "warning": $warning-500,
+  "error": $error-500,
+  "info": $info-500,
+);
+
+$theme-colors-light: (
+  "primary": $primary-50,
+  "secondary": $secondary-50,
+  "success": $success-50,
+  "warning": $warning-50,
+  "error": $error-50,
+  "info": $info-50,
+);
+
+/* =====================================================================
+   2. TYPOGRAPHY
+   ===================================================================== */
+
+// Font Families
+$font-primary:
+  -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue",
+  Arial, sans-serif;
+$font-secondary:
+  "Inter",
+  -apple-system,
+  BlinkMacSystemFont,
+  sans-serif;
+$font-monospace: "Fira Code", "Courier New", monospace;
+$font-heading: $font-secondary;
+
+// Font Sizes
+$font-size-2xs: 10px;
+$font-size-xs: 12px;
+$font-size-sm: 14px;
+$font-size-base: 16px;
+$font-size-lg: 18px;
+$font-size-xl: 20px;
+$font-size-2xl: 24px;
+$font-size-3xl: 30px;
+$font-size-4xl: 36px;
+$font-size-5xl: 48px;
+$font-size-6xl: 60px;
+
+// Font Size Map
+$font-sizes: (
+  "2xs": $font-size-2xs,
+  "xs": $font-size-xs,
+  "sm": $font-size-sm,
+  "base": $font-size-base,
+  "lg": $font-size-lg,
+  "xl": $font-size-xl,
+  "2xl": $font-size-2xl,
+  "3xl": $font-size-3xl,
+  "4xl": $font-size-4xl,
+  "5xl": $font-size-5xl,
+  "6xl": $font-size-6xl,
+);
+
+// Font Weights
+$font-weight-light: 300;
+$font-weight-normal: 400;
+$font-weight-medium: 500;
+$font-weight-semibold: 600;
+$font-weight-bold: 700;
+$font-weight-extrabold: 800;
+
+// Line Heights
+$line-height-none: 1;
+$line-height-tight: 1.25;
+$line-height-snug: 1.375;
+$line-height-normal: 1.5;
+$line-height-relaxed: 1.75;
+$line-height-loose: 2;
+$line-height-heading: 1.3;
+
+// Letter Spacing
+$letter-spacing-tighter: -0.05em;
+$letter-spacing-tight: -0.025em;
+$letter-spacing-normal: 0;
+$letter-spacing-wide: 0.025em;
+$letter-spacing-wider: 0.05em;
+$letter-spacing-widest: 0.1em;
+
+/* =====================================================================
+   3. SPACING SCALE
+   ===================================================================== */
+
+$spacing-0: 0;
+$spacing-px: 1px;
+$spacing-0-5: 2px;
+$spacing-1: 4px;
+$spacing-1-5: 6px;
+$spacing-2: 8px;
+$spacing-2-5: 10px;
+$spacing-3: 12px;
+$spacing-3-5: 14px;
+$spacing-4: 16px;
+$spacing-5: 20px;
+$spacing-6: 24px;
+$spacing-7: 28px;
+$spacing-8: 32px;
+$spacing-9: 36px;
+$spacing-10: 40px;
+$spacing-11: 44px;
+$spacing-12: 48px;
+$spacing-14: 56px;
+$spacing-16: 64px;
+$spacing-18: 72px;
+$spacing-20: 80px;
+$spacing-24: 96px;
+$spacing-28: 112px;
+$spacing-32: 128px;
+
+// Spacing Map (for loops & utility generation)
+$spacings: (
+  0: $spacing-0,
+  1: $spacing-1,
+  2: $spacing-2,
+  3: $spacing-3,
+  4: $spacing-4,
+  5: $spacing-5,
+  6: $spacing-6,
+  7: $spacing-7,
+  8: $spacing-8,
+  10: $spacing-10,
+  12: $spacing-12,
+  14: $spacing-14,
+  16: $spacing-16,
+  20: $spacing-20,
+  24: $spacing-24,
+);
+
+/* =====================================================================
+   7. BORDERS
+   ===================================================================== */
+
+$border-radius-none: 0;
+$border-radius-sm: 4px;
+$border-radius-base: 6px;
+$border-radius-lg: 8px;
+$border-radius-xl: 12px;
+$border-radius-2xl: 16px;
+$border-radius-3xl: 24px;
+$border-radius-full: 9999px;
+
+$border-width-thin: 1px;
+$border-width-base: 2px;
+$border-width-thick: 4px;
+
+$border-color-base: $color-border-base;
+
+/* =====================================================================
+   8. SHADOWS
+   ===================================================================== */
+
+$shadow-none: none;
+$shadow-xs: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+$shadow-sm: 0 2px 4px 0 rgba(0, 0, 0, 0.06);
+$shadow-base: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+$shadow-md: 0 6px 12px -2px rgba(0, 0, 0, 0.12);
+$shadow-lg: 0 10px 20px -3px rgba(0, 0, 0, 0.15);
+$shadow-xl: 0 20px 30px -5px rgba(0, 0, 0, 0.2);
+$shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+$shadow-inner: inset 0 2px 4px 0 rgba(0, 0, 0, 0.06);
+$shadow-outline: 0 0 0 3px rgba($primary-500, 0.3);
+$shadow-card: 0 1px 2px -2px rgba(0, 0, 0, 0.16),
+              0 3px 6px 0 rgba(0, 0, 0, 0.12),
+              0 5px 12px 4px rgba(0, 0, 0, 0.09);
+
+/* =====================================================================
+   9. Z-INDEX SCALE
+   ===================================================================== */
+
+$z-index-hide: -1;
+$z-index-base: 0;
+$z-index-float: 1;
+$z-index-dropdown: 1000;
+$z-index-sticky: 1020;
+$z-index-fixed: 1030;
+$z-index-modal-backdrop: 1040;
+$z-index-modal: 1050;
+$z-index-popover: 1060;
+$z-index-tooltip: 1070;
+$z-index-toast: 1080;
+$z-index-max: 9999;
+
+/* =====================================================================
+   10. TRANSITIONS & ANIMATIONS
+   ===================================================================== */
+
+$transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+$transition-base: 300ms cubic-bezier(0.4, 0, 0.2, 1);
+$transition-slow: 500ms cubic-bezier(0.4, 0, 0.2, 1);
+$transition-bounce: 500ms cubic-bezier(0.68, -0.55, 0.265, 1.55);
+
+$ease-in: cubic-bezier(0.4, 0, 1, 1);
+$ease-out: cubic-bezier(0, 0, 0.2, 1);
+$ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+$ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+$duration-fast: 150ms;
+$duration-base: 300ms;
+$duration-slow: 500ms;
+$duration-slower: 700ms;
+
+/* =====================================================================
+   11. LAYOUT DIMENSIONS
+   ===================================================================== */
+
+// Header
+$header-height: 64px;
+$header-height-mobile: 56px;
+
+// Sidebar
+$sidebar-width: 256px;
+$sidebar-width-collapsed: 80px;
+$sidebar-width-mobile: 280px;
+
+// Footer
+$footer-height: 70px;
+$footer-height-mobile: 60px;
+
+// Content
+$content-padding: $spacing-6;
+$content-padding-mobile: $spacing-4;
+$content-padding-tablet: $spacing-5;
+
+// Auth Layout
+$auth-card-width: 440px;
+$auth-card-width-wide: 560px;
+$auth-card-padding: $spacing-8;
+$auth-card-padding-mobile: $spacing-5;
+
+// Form
+$form-max-width: 720px;
+$form-max-width-narrow: 480px;
+$form-max-width-wide: 960px;
+$form-item-margin-bottom: $spacing-6;
+$form-label-margin-bottom: $spacing-1;
+
+// Table
+$table-header-bg: $neutral-50;
+$table-row-hover-bg: $color-bg-hover;
+$table-padding-vertical: $spacing-3;
+$table-padding-horizontal: $spacing-4;
+
+// Layout Sidebar Theme Colors
+$admin-sidebar-bg: #001529;
+$admin-sidebar-text: rgba(255, 255, 255, 0.65);
+$admin-sidebar-text-active: $neutral-0;
+$admin-sidebar-item-hover-bg: rgba(255, 255, 255, 0.08);
+$admin-sidebar-item-active-bg: $primary-500;
+
+$vendor-sidebar-bg: #1a1a2e;
+$vendor-sidebar-text: rgba(255, 255, 255, 0.65);
+
+$public-header-bg: $neutral-0;
+$public-footer-bg: #001529;
+$public-footer-text: rgba(255, 255, 255, 0.65);
+
+$auth-bg: $gradient-primary;
+$auth-card-bg: $neutral-0;
+
+/* =====================================================================
+   12. OPACITY SCALE
+   ===================================================================== */
+
+$opacity-0: 0;
+$opacity-5: 0.05;
+$opacity-10: 0.1;
+$opacity-20: 0.2;
+$opacity-25: 0.25;
+$opacity-30: 0.3;
+$opacity-40: 0.4;
+$opacity-50: 0.5;
+$opacity-60: 0.6;
+$opacity-70: 0.7;
+$opacity-75: 0.75;
+$opacity-80: 0.8;
+$opacity-90: 0.9;
+$opacity-95: 0.95;
+$opacity-100: 1;
+
+/* =====================================================================
+   13. ICON SIZES
+   ===================================================================== */
+
+$icon-size-xs: 12px;
+$icon-size-sm: 14px;
+$icon-size-base: 16px;
+$icon-size-lg: 20px;
+$icon-size-xl: 24px;
+$icon-size-2xl: 32px;
+$icon-size-3xl: 40px;
+$icon-size-4xl: 48px;
+
+/* =====================================================================
+   14. AVATAR SIZES
+   ===================================================================== */
+
+$avatar-size-xs: 24px;
+$avatar-size-sm: 32px;
+$avatar-size-base: 40px;
+$avatar-size-lg: 48px;
+$avatar-size-xl: 64px;
+$avatar-size-2xl: 80px;
+$avatar-size-3xl: 96px;
+
+/* =====================================================================
+   15. BUTTON SIZES
+   ===================================================================== */
+
+$btn-height-sm: 28px;
+$btn-height-base: 36px;
+$btn-height-lg: 44px;
+$btn-height-xl: 52px;
+
+$btn-padding-x-sm: $spacing-3;
+$btn-padding-x-base: $spacing-4;
+$btn-padding-x-lg: $spacing-6;
+
+$btn-font-size-sm: $font-size-xs;
+$btn-font-size-base: $font-size-sm;
+$btn-font-size-lg: $font-size-base;
+
+/* =====================================================================
+   16. INPUT SIZES
+   ===================================================================== */
+
+$input-height-sm: 28px;
+$input-height-base: 36px;
+$input-height-lg: 44px;
+
+$input-padding-x: $spacing-3;
+$input-padding-y: $spacing-1;
+
+$input-bg: $neutral-0;
+$input-border-color: $color-border-base;
+$input-border-color-hover: $primary-400;
+$input-border-color-focus: $primary-500;
+$input-placeholder-color: $color-text-placeholder;
+$input-disabled-bg: $neutral-100;
+
+/* =====================================================================
+   17. CARD TOKENS
+   ===================================================================== */
+
+$card-bg: $neutral-0;
+$card-border-color: $color-border-light;
+$card-border-radius: $border-radius-lg;
+$card-padding: $spacing-6;
+$card-padding-mobile: $spacing-4;
+$card-shadow: $shadow-sm;
+$card-shadow-hover: $shadow-lg;
+$card-head-height: 48px;
+$card-head-padding: 0 $spacing-6;
+
+/* =====================================================================
+   18. MODAL TOKENS
+   ===================================================================== */
+
+$modal-width-sm: 400px;
+$modal-width-base: 520px;
+$modal-width-lg: 720px;
+$modal-width-xl: 960px;
+$modal-width-full: calc(100vw - 48px);
+$modal-border-radius: $border-radius-xl;
+$modal-body-padding: $spacing-6;
+$modal-body-padding-mobile: $spacing-4;
+$modal-body-max-height: 60vh;
+
+/* =====================================================================
+   19. DRAWER TOKENS
+   ===================================================================== */
+
+$drawer-width-sm: 320px;
+$drawer-width-base: 400px;
+$drawer-width-lg: 560px;
+$drawer-width-xl: 720px;
+$drawer-padding: $spacing-6;
+$drawer-padding-mobile: $spacing-4;
+
+/* =====================================================================
+   20. TABLE TOKENS
+   ===================================================================== */
+
+$table-border-radius: $border-radius-lg;
+$table-header-font-weight: $font-weight-semibold;
+$table-header-font-size: $font-size-sm;
+$table-body-font-size: $font-size-sm;
+$table-cell-padding: $spacing-3 $spacing-4;
+$table-cell-padding-sm: $spacing-2 $spacing-3;
+
+/* =====================================================================
+   21. SCROLLBAR TOKENS
+   ===================================================================== */
+
+$scrollbar-width: 6px;
+$scrollbar-track-bg: transparent;
+$scrollbar-thumb-bg: rgba(0, 0, 0, 0.15);
+$scrollbar-thumb-hover-bg: rgba(0, 0, 0, 0.3);
+$scrollbar-thumb-radius: $border-radius-full;
+
+/* =====================================================================
+   22. NOTIFICATION / TOAST TOKENS
+   ===================================================================== */
+
+$notification-width: 384px;
+$notification-padding: $spacing-5;
+$notification-border-radius: $border-radius-lg;
+$notification-shadow: $shadow-lg;
+
+$toast-min-width: 300px;
+$toast-padding: $spacing-3 $spacing-4;
+
+/* =====================================================================
+   FUNCTIONS
+   ===================================================================== */
+
+/// Get spacing value from map
+@function space($key) {
+  @if map-has-key($spacings, $key) {
+    @return map-get($spacings, $key);
+  }
+  @warn "Unknown spacing key: `#{$key}`.";
+  @return null;
+}
+
+/// Convert px to rem (base 16px)
+@function rem($px) {
+  @return ($px / 16) * 1rem;
+}
+
+/// Convert px to em
+@function em($px, $base: 16) {
+  @return ($px / $base) * 1em;
+}
+
+/// Lighten a color by mixing with white
+@function tint($color, $percentage) {
+  @return mix(white, $color, $percentage);
+}
+
+/// Darken a color by mixing with black
+@function shade($color, $percentage) {
+  @return mix(black, $color, $percentage);
+}
+
+/// Get a theme color from the map
+@function theme-color($key) {
+  @return map-get($theme-colors, $key);
+}
+
+/// Get the light variant of a theme color
+@function theme-color-light($key) {
+  @return map-get($theme-colors-light, $key);
+}

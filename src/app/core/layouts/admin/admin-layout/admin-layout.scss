@@ -1,0 +1,59 @@
+@use '../../../../../assets/styles/common' as *;
+@use '../../../../../assets/styles/responsive' as *;
+
+/* ===================================================================
+   ADMIN LAYOUT - USING DESIGN SYSTEM
+   =================================================================== */
+
+.main-layout {
+  min-height: 100vh;
+}
+
+.main-content-layout {
+  margin-left: $sidebar-width;
+  transition: margin-left $transition-base;
+  position: relative;
+  min-height: 100vh;
+
+  @include respond-to(lg) {
+    @media (max-width: #{$breakpoint-lg - 1}) {
+      margin-left: 0;
+    }
+  }
+}
+
+.main-content-layout.sidebar-hidden {
+  margin-left: 0;
+}
+
+.main-content {
+  margin-top: $header-height;
+  min-height: calc(100vh - #{$header-height} - #{$footer-height});
+  background: $neutral-50;
+}
+
+.content-wrapper {
+  padding: $spacing-6;
+  min-height: 100%;
+
+  @include respond-to(md) {
+    padding: $spacing-4;
+  }
+}
+
+/* NG-ZORRO Sider Overrides */
+::ng-deep {
+  .ant-layout-sider {
+    flex: 0 0 $sidebar-width !important;
+    max-width: $sidebar-width !important;
+    min-width: $sidebar-width !important;
+    width: $sidebar-width !important;
+  }
+
+  .ant-layout-sider-collapsed {
+    flex: 0 0 0 !important;
+    max-width: 0 !important;
+    min-width: 0 !important;
+    width: 0 !important;
+  }
+}

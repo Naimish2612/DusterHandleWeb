@@ -1,0 +1,312 @@
+/* ==========================================
+   SYSTEM INFORMATION DIAGNOSTIC STYLES
+   ========================================== */
+
+.system-info-container {
+  min-height: 100vh;
+  background-color: #f8f9fa;
+  padding: 24px;
+}
+
+/* Premium Card Design */
+.premium-card {
+  border-radius: 12px;
+  background: #ffffff;
+  border: 1px solid rgba(226, 232, 240, 0.8);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+  width: 100%;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+
+  &:hover {
+    box-shadow: 0 12px 20px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -2px rgba(0, 0, 0, 0.05) !important;
+  }
+
+  .ant-card-head {
+    border-bottom: 1px solid rgba(226, 232, 240, 0.8);
+    background-color: #fafbfc;
+    padding: 18px 24px;
+  }
+
+  .ant-card-body {
+    padding: 28px 24px;
+  }
+
+  /* Target extra elements at header right */
+  .ant-card-extra {
+    display: flex;
+    align-items: center;
+  }
+}
+
+/* Section Title styling */
+.section-title {
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #475569;
+  font-weight: 700;
+  border-left: 3px solid #1890ff;
+  padding-left: 10px;
+  margin-top: 24px;
+  margin-bottom: 16px;
+
+  &:first-of-type {
+    margin-top: 0;
+  }
+}
+
+/* Buttons styling */
+.action-btn {
+  border-radius: 6px;
+  height: 38px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.action-btn-primary {
+  border-radius: 6px;
+  height: 38px;
+  font-weight: 500;
+  box-shadow: 0 4px 6px rgba(24, 144, 255, 0.15);
+  transition: all 0.2s ease;
+
+  &:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 12px rgba(24, 144, 255, 0.25);
+  }
+}
+
+/* Server Health Info Section */
+.server-info-layout {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Hero Section inside card */
+.app-info-hero {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 24px;
+  background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+  border-radius: 12px;
+  border: 1px solid #bbf7d0;
+
+  .hero-icon-container {
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(34, 197, 94, 0.15);
+    color: #16a34a;
+
+    .hero-icon {
+      font-size: 30px;
+    }
+  }
+
+  .hero-text {
+    h3 {
+      margin: 0;
+      font-size: 22px;
+      font-weight: 700;
+      color: #14532d;
+      letter-spacing: -0.02em;
+    }
+
+    .badge-version {
+      font-size: 12px;
+      font-weight: 600;
+      color: #16a34a;
+      background: rgba(22, 163, 74, 0.15);
+      padding: 2px 8px;
+      border-radius: 12px;
+      display: inline-block;
+      margin-top: 4px;
+    }
+  }
+
+  /* Environment Badge */
+  .hero-env {
+    margin-left: auto; /* Ensures it pushes to the right end */
+  }
+
+  .env-badge {
+    display: inline-block;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    background-color: #3b82f6;
+    color: #ffffff;
+    box-shadow: 0 4px 6px rgba(59, 130, 246, 0.2);
+
+    &.env-dev {
+      background-color: #2563eb;
+      box-shadow: 0 4px 6px rgba(37, 99, 235, 0.2);
+    }
+  }
+}
+
+/* Grid layout for system metadata */
+.metadata-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  margin-bottom: 8px;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+  }
+
+  .metadata-item {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 16px 20px;
+    transition: all 0.2s ease;
+
+    &:hover {
+      background: #f1f5f9;
+      border-color: #cbd5e1;
+    }
+
+    &.full-width {
+      grid-column: 1 / -1;
+    }
+
+    .meta-label {
+      font-size: 11px;
+      color: #64748b;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-weight: 600;
+    }
+
+    .meta-value {
+      font-size: 15px;
+      font-weight: 600;
+      color: #1e293b;
+      word-break: break-all;
+    }
+
+    .text-monospace {
+      font-family: SFMono-Regular, Consolas, "Liberation Mono", Menlo, monospace;
+      font-size: 14px;
+    }
+  }
+}
+
+/* Uptime badge with pulsating dot */
+.uptime-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #f0fdf4;
+  color: #166534;
+  border: 1px solid #bbf7d0;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-weight: 600;
+  font-family: SFMono-Regular, Consolas, "Liberation Mono", Menlo, monospace;
+}
+
+/* Pulsating green dot animation */
+.dot-pulse {
+  width: 8px;
+  height: 8px;
+  background-color: #22c55e;
+  border-radius: 50%;
+  display: inline-block;
+  box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7);
+  animation: pulse-green 1.5s infinite cubic-bezier(0.66, 0, 0, 1);
+}
+
+@keyframes pulse-green {
+  to {
+    box-shadow: 0 0 0 8px rgba(34, 197, 94, 0);
+  }
+}
+
+/* Glow animation for app hero icon */
+.animate-glow {
+  animation: logo-glow 3s ease-in-out infinite alternate;
+}
+
+@keyframes logo-glow {
+  0% {
+    box-shadow: 0 0 5px rgba(34, 197, 94, 0.2);
+  }
+  100% {
+    box-shadow: 0 0 15px rgba(34, 197, 94, 0.5);
+  }
+}
+
+/* Error and Loading styling overrides */
+.error-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 250px;
+}
+
+/* Utility alignments to guarantee layout regardless of Bootstrap version */
+.d-flex {
+  display: flex !important;
+}
+
+.align-items-center {
+  align-items: center !important;
+}
+
+.font-weight-bold {
+  font-weight: 700 !important;
+}
+
+.text-muted {
+  color: #64748b !important;
+}
+
+.mr-1 {
+  margin-right: 4px !important;
+}
+
+.mr-2 {
+  margin-right: 8px !important;
+}
+
+.mb-3 {
+  margin-bottom: 12px !important;
+}
+
+.mb-4 {
+  margin-bottom: 16px !important;
+}
+
+.mt-4 {
+  margin-top: 16px !important;
+}
+
+/* System Action Buttons Spacing */
+.system-info-actions {
+  display: flex;
+  align-items: center;
+
+  .refresh-btn {
+    margin-right: 12px !important;
+  }
+
+  .copy-btn {
+    margin-left: 0 !important;
+  }
+}

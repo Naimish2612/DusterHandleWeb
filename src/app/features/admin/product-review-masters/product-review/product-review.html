@@ -1,0 +1,159 @@
+<div nz-row [nzGutter]="[16, 16]" class="process-page">
+  <!-- ================= FORM CARD ================= -->
+  <div nz-col nzSpan="24">
+    <nz-card nzTitle="Product Review">
+      <form nz-form [formGroup]="form" nzLayout="vertical">
+        <div nz-row [nzGutter]="[16, 16]">
+          <!-- Product Category -->
+          <div nz-col [nzXs]="24" [nzLg]="6">
+            <nz-form-item>
+              <nz-form-label nzRequired>Product Category</nz-form-label>
+              <nz-form-control>
+                <nz-select
+                  nzPlaceHolder="Select Type"
+                  formControlName="category_id"
+                  (ngModelChange)="onCategoryChange($event)"
+                >
+                  @for (category of categoryList; track category.id) {
+                    <nz-option [nzValue]="category.id" [nzLabel]="category.value"></nz-option>
+                  }
+                </nz-select>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+          <!-- Product Sub Category (Dropdown) -->
+          <div nz-col [nzXs]="24" [nzLg]="6">
+            <nz-form-item>
+              <nz-form-label nzRequired>Product Sub Category</nz-form-label>
+              <nz-form-control nzErrorTip="Please select a product sub category">
+                <nz-select
+                  formControlName="sub_category_id"
+                  nzShowSearch
+                  nzAllowClear
+                  nzPlaceHolder="Select Product Sub Category"
+                  (ngModelChange)="onSubCategoryChange($event)"
+                >
+                  @for (subCategory of subCategoryList; track subCategory.id) {
+                    <nz-option [nzValue]="subCategory.id" [nzLabel]="subCategory.value"></nz-option>
+                  }
+                </nz-select>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+
+          <!-- Product (Dropdown) -->
+          <div nz-col [nzXs]="24" [nzLg]="6">
+            <nz-form-item>
+              <nz-form-label nzRequired>Product</nz-form-label>
+              <nz-form-control nzErrorTip="Please select a product">
+                <nz-select
+                  formControlName="product_id"
+                  nzShowSearch
+                  nzAllowClear
+                  nzPlaceHolder="Select Product"
+                >
+                  @for (product of productList; track product.id) {
+                    <nz-option [nzValue]="product.id" [nzLabel]="product.value"></nz-option>
+                  }
+                </nz-select>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+          <!-- ACTIONS -->
+          <div nz-col nzSpan="24" class="form-actions">
+            <button
+              nz-button
+              nzType="primary"
+              htmlType="submit"
+              [disabled]="!form.valid"
+              (click)="submit()"
+            >
+              <nz-icon nzType="filter"></nz-icon> Filter
+            </button>
+          </div>
+        </div>
+      </form>
+    </nz-card>
+  </div>
+</div>
+<!-- ================= REVIEW DISPLAY ================= -->
+<nz-divider nzOrientation="left" nzText="Review List"></nz-divider>
+
+<div nz-row [nzGutter]="[16, 16]" style="padding: 24px">
+  @for (review of reviewList; track $index) {
+    <div nz-col [nzXs]="24" [nzSm]="12" [nzLg]="8">
+      <nz-card
+        [nzTitle]="titleTemplate"
+        [nzHoverable]="true"
+        [style.background-color]="getCardBgColor(review.rating)"
+        class="review-card"
+      >
+        <h4 nz-typography>
+          <strong>{{ review.review_title }}</strong>
+        </h4>
+        <p class="comment-text">{{ review.comment }}</p>
+
+        <div class="card-footer">
+          <!-- Date Stamp -->
+          <div nz-typography nzType="secondary" class="date-stamp">
+            Date: {{ review.review_datetime | date: 'mediumDate' }}
+          </div>
+
+          <!-- Action Buttons -->
+          <div class="footer-actions">
+            @if (!review.is_delete) {
+              @if (hasToggePublishPermission) {
+                <button
+                  nz-button
+                  nzSize="small"
+                  [nzType]="review.is_publish ? 'default' : 'primary'"
+                  (click)="togglePublish(review)"
+                >
+                  <i nz-icon [nzType]="review.is_publish ? 'eye-invisible' : 'eye'"></i>
+                  {{ review.is_publish ? 'Unpublish' : 'Publish' }}
+                </button>
+              }
+              @if (hasDeletePermission) {
+                <button
+                  nz-button
+                  nzSize="small"
+                  [nzDanger]="review.is_delete"
+                  nzType="default"
+                  (click)="deleteReview(review)"
+                >
+                  <i nz-icon nzType="delete"></i>
+                  Delete
+                </button>
+              }
+            } @else {
+              <nz-tag nzColor="error" class="m-0">
+                <i nz-icon nzType="close-circle"></i>
+                <span>Deleted</span>
+              </nz-tag>
+            }
+          </div>
+        </div>
+      </nz-card>
+
+      <ng-template #titleTemplate>
+        <div style="display: flex; justify-content: space-between">
+          <div class="user-id" style="margin-right: 8px">
+            <span>{{ review.user_name }}</span>
+          </div>
+          <div class="rating-container" style="align-items: left">
+            <nz-rate
+              [ngModel]="+review.rating"
+              nzDisabled
+              nzAllowHalf
+              [style.color]="getRatingColor(+review.rating)"
+            >
+            </nz-rate>
+            <span class="rating-number" [style.color]="getRatingColor(+review.rating)">
+              ({{ review.rating }})
+            </span>
+          </div>
+        </div>
+      </ng-template>
+    </div>
+  }
+</div>

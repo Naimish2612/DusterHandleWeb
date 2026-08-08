@@ -1,0 +1,995 @@
+@use '../../../../assets/styles/common' as *;
+@use '../../../../assets/styles/responsive' as *;
+
+.import-page-container {
+  padding: 0 24px;
+  background-color: $neutral-50;
+  display: flex;
+  flex-direction: column;
+}
+
+.import-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: $spacing-4;
+
+  .header-left {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-1;
+
+    .back-link-btn {
+      padding: 0;
+      text-align: left;
+      height: auto;
+      font-size: 13px;
+      color: $primary-500;
+      display: inline-flex;
+      align-items: center;
+      gap: $spacing-2;
+      font-weight: $font-weight-medium;
+      transition: all 0.2s ease;
+
+      &:hover {
+        color: $primary-600;
+        transform: translateX(-2px);
+      }
+    }
+
+    .page-title {
+      margin: $spacing-2 0 0 0;
+      font-size: $font-size-2xl;
+      font-weight: $font-weight-extrabold;
+      color: $neutral-900;
+      letter-spacing: -0.02em;
+    }
+  }
+
+  .import-tag {
+    font-size: 13px;
+    padding: $spacing-1-5 $spacing-3-5;
+    border-radius: $border-radius-lg;
+    font-weight: $font-weight-semibold;
+    border: none;
+    display: inline-flex;
+    align-items: center;
+    gap: $spacing-1-5;
+    background-color: rgba($primary-50, 0.8);
+    color: $primary-700;
+  }
+}
+
+.back-link-btn {
+  padding: 0;
+  text-align: left;
+  height: auto;
+  font-size: 13px;
+  color: $primary-500;
+  display: inline-flex;
+  align-items: center;
+  gap: $spacing-2;
+  font-weight: $font-weight-medium;
+  transition: all 0.2s ease;
+
+  &:hover {
+    color: $primary-600;
+    transform: translateX(-2px);
+  }
+}
+
+.import-history-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: $spacing-2;
+}
+
+.steps-progress-wrapper {
+  margin: 16px 0;
+  background: $neutral-0;
+  border-radius: 12px;
+  box-shadow: $shadow-sm;
+  border: 1px solid $neutral-100;
+
+  ::ng-deep {
+    .ant-steps-item-title {
+      font-weight: $font-weight-semibold !important;
+      color: $neutral-800 !important;
+      font-size: 14px;
+    }
+
+    .ant-steps-item-active .ant-steps-item-title {
+      color: $primary-500 !important;
+    }
+
+    .ant-steps-item-icon {
+      border-color: $neutral-300;
+      background-color: $neutral-0;
+      width: 28px;
+      height: 28px;
+      line-height: 26px;
+
+      .ant-steps-icon {
+        color: $neutral-500;
+        font-size: 13px;
+      }
+    }
+
+    .ant-steps-item-active .ant-steps-item-icon {
+      border-color: $primary-500;
+      background-color: $primary-500;
+
+      .ant-steps-icon {
+        color: $neutral-0;
+      }
+    }
+
+    .ant-steps-item-finish .ant-steps-item-icon {
+      border-color: $success-500;
+      background-color: $success-50;
+
+      .ant-steps-icon {
+        color: $success-500;
+      }
+    }
+
+    .ant-steps-item-description {
+      font-size: 12px;
+      color: $neutral-500 !important;
+    }
+  }
+}
+
+.wizard-panel {
+  margin-top: 12px;
+  flex-grow: 1;
+}
+
+.premium-card {
+  border-radius: 16px;
+  background-color: $neutral-0;
+  box-shadow: $shadow-md;
+  border: 1px solid $neutral-100;
+  overflow: hidden;
+  transition: box-shadow 0.3s;
+
+  &:hover {
+    box-shadow: $shadow-lg;
+  }
+
+  ::ng-deep .ant-card-body {
+    padding: 20px 24px;
+  }
+}
+
+.step-desc-alert {
+  margin-bottom: 16px;
+
+  ::ng-deep {
+    .ant-alert-info {
+      background-color: rgba($primary-50, 0.35);
+      border: 1px solid $primary-200;
+      border-radius: 12px;
+
+      .ant-alert-icon {
+        color: $primary-500;
+        font-size: 20px;
+        top: 22px;
+      }
+
+      .ant-alert-message {
+        color: $primary-800;
+        font-size: 16px;
+        font-weight: $font-weight-bold;
+        margin-bottom: 6px;
+      }
+
+      .ant-alert-description {
+        color: $neutral-600;
+        font-size: 13px;
+        line-height: 1.6;
+
+        ul {
+          margin-top: 8px;
+
+          li {
+            margin-bottom: 6px;
+
+            b {
+              color: $neutral-800;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+.transfer-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 16px 0;
+  width: 100%;
+
+  ::ng-deep {
+    .ant-transfer {
+      gap: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      max-width: 960px;
+    }
+
+    .ant-transfer-list {
+      width: 420px !important;
+      height: calc(100vh - 440px) !important;
+      min-height: 280px !important;
+      max-height: 300px !important;
+      flex: 0 0 420px;
+      border-radius: 12px;
+      border-color: $neutral-200;
+      box-shadow: $shadow-sm;
+      transition: all $transition-base;
+      background: $neutral-0;
+
+      &:hover {
+        border-color: $primary-400;
+        box-shadow: $shadow-md;
+      }
+
+      .ant-transfer-list-content-item {
+        padding: 6px 12px;
+        transition: background-color 0.2s;
+
+        &:hover {
+          background-color: $neutral-50;
+        }
+      }
+    }
+
+    .ant-transfer-list-header {
+      background: $neutral-50;
+      border-top-left-radius: 12px;
+      border-top-right-radius: 12px;
+      font-weight: $font-weight-semibold;
+      border-bottom: 1px solid $neutral-200;
+      padding: 12px 16px;
+      color: $neutral-800;
+      font-size: $font-size-sm;
+    }
+
+    .ant-transfer-list-body {
+      font-size: 13px;
+    }
+
+    .ant-transfer-operation {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+
+      .ant-btn {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: $shadow-sm;
+        border-color: $neutral-200;
+        transition: all $transition-fast;
+
+        &:hover {
+          border-color: $primary-500;
+          color: $primary-500;
+          transform: scale(1.05);
+        }
+
+        i {
+          font-size: 16px;
+        }
+      }
+    }
+  }
+
+  .field-item-custom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding: 6px 10px;
+    border-radius: 6px;
+    border-left: 3px solid transparent;
+    transition: all 0.25s ease;
+
+    &.required-item {
+      border-left-color: $error-400;
+      background-color: rgba($error-50, 0.4);
+
+      &:hover {
+        background-color: rgba($error-50, 0.8);
+      }
+    }
+
+    &.optional-item {
+      border-left-color: $primary-300;
+      background-color: rgba($primary-50, 0.3);
+
+      &:hover {
+        background-color: rgba($primary-50, 0.6);
+      }
+    }
+
+    .field-item-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+
+      .item-status-icon {
+        font-size: 14px;
+
+        &.lock-icon {
+          color: $error-500;
+        }
+
+        &.drag-icon {
+          color: $neutral-400;
+        }
+      }
+
+      .field-name {
+        font-size: 13px;
+        color: $neutral-700;
+        font-weight: $font-weight-medium;
+
+        &.required-field {
+          color: $neutral-900;
+          font-weight: $font-weight-semibold;
+        }
+      }
+    }
+
+    .field-item-right {
+      display: flex;
+      align-items: center;
+
+      .premium-tag {
+        font-size: 10px;
+        padding: 2px 8px;
+        border-radius: 12px;
+        font-weight: $font-weight-semibold;
+        margin: 0;
+        border: none;
+
+        &.red-tag {
+          background-color: $error-50;
+          color: $error-700;
+        }
+
+        &.blue-tag {
+          background-color: $primary-50;
+          color: $primary-700;
+        }
+      }
+    }
+  }
+}
+
+.form-actions {
+  display: flex;
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.uploader-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 20px;
+  background: $neutral-50;
+  border: 2px dashed $neutral-300;
+  border-radius: 16px;
+  transition: all $transition-base;
+  text-align: center;
+
+  &:hover {
+    border-color: $primary-500;
+    background: rgba($primary-50, 0.25);
+    box-shadow: inset 0 0 12px rgba($primary-500, 0.05);
+  }
+
+  .drag-uploader {
+    width: 100%;
+    max-width: 600px;
+    display: block;
+
+    ::ng-deep .ant-upload-drag {
+      background: transparent;
+      border: none;
+
+      .ant-upload-drag-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .ant-upload-btn {
+        padding: 24px 0;
+      }
+    }
+  }
+
+  .ant-upload-drag-icon {
+    margin-bottom: $spacing-4;
+
+    i {
+      font-size: 56px;
+      color: $info-500;
+      transition: transform 0.3s $ease-spring;
+    }
+  }
+
+  &:hover .ant-upload-drag-icon i {
+    transform: translateY(-8px) scale(1.05);
+  }
+
+  .ant-upload-text {
+    font-size: 16px;
+    font-weight: $font-weight-semibold;
+    color: $neutral-800;
+    margin-bottom: 6px;
+  }
+
+  .ant-upload-hint {
+    font-size: 13px;
+    color: $neutral-500;
+  }
+
+  .simulator-wrapper {
+    width: 100%;
+    max-width: 600px;
+    margin-top: 32px;
+    text-align: center;
+
+    ::ng-deep .ant-divider-inner-text {
+      color: $neutral-400;
+      font-size: 11px;
+      font-weight: $font-weight-bold;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .simulate-btn {
+      border-radius: 8px;
+      color: $primary-500;
+      border: 1.5px dashed $primary-400;
+      background-color: $neutral-0;
+      margin-top: 12px;
+      padding: 8px 24px;
+      height: auto;
+      font-weight: $font-weight-medium;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all $transition-base;
+
+      &:hover {
+        background: $primary-50;
+        border-color: $primary-500;
+        color: $primary-600;
+        transform: translateY(-2px);
+        box-shadow: $shadow-sm;
+      }
+    }
+  }
+}
+
+.preview-results-container {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.summary-alert-wrapper {
+  margin-bottom: 8px;
+
+  ::ng-deep {
+    .ant-alert {
+      border-radius: 12px;
+      padding: 16px 20px;
+
+      .ant-alert-icon {
+        font-size: 18px;
+      }
+
+      .ant-alert-message {
+        font-weight: $font-weight-bold;
+        font-size: 15px;
+      }
+
+      .ant-alert-description {
+        font-size: 13px;
+        color: $neutral-600;
+      }
+    }
+  }
+}
+
+.tabs-filter-wrapper {
+  ::ng-deep {
+    .ant-tabs-nav {
+      margin-bottom: 16px;
+      border-bottom: 1px solid $neutral-200;
+
+      &::before {
+        border-bottom: none;
+      }
+    }
+
+    .ant-tabs-tab {
+      padding: 12px 20px;
+      font-size: 14px;
+      font-weight: $font-weight-medium;
+      color: $neutral-500;
+      transition: all 0.3s;
+
+      &:hover {
+        color: $primary-500;
+      }
+
+      &.ant-tabs-tab-active {
+        .ant-tabs-tab-btn {
+          color: $primary-500;
+          font-weight: $font-weight-bold;
+        }
+      }
+    }
+
+    .ant-tabs-ink-bar {
+      background: $primary-500;
+      height: 3px;
+      border-radius: 3px;
+    }
+  }
+
+  .tab-count-tag {
+    margin-left: 8px;
+    font-size: 11px;
+    border-radius: 12px;
+    padding: 2px 10px;
+    font-weight: $font-weight-bold;
+    border: none;
+  }
+}
+
+.preview-grid {
+  width: 100%;
+  // max-height: calc(100vh - 440px);
+  // min-height: 250px;
+  overflow: auto;
+  border-radius: 12px;
+  border: 1px solid $neutral-200;
+  box-shadow: $shadow-sm;
+
+  .premium-table {
+    ::ng-deep {
+      .ant-table {
+        background: transparent;
+      }
+
+      .ant-table-thead>tr>th {
+        background: $neutral-50;
+        font-weight: $font-weight-bold;
+        color: $neutral-800;
+        border-bottom: 2px solid $neutral-200;
+        padding: 14px 16px;
+        font-size: 13px;
+      }
+
+      .ant-table-tbody>tr {
+        transition: background-color 0.25s ease;
+
+        &>td {
+          padding: 12px 16px;
+          border-bottom: 1px solid $neutral-100;
+          font-size: 13px;
+          color: $neutral-700;
+        }
+
+        &.row-invalid {
+          background-color: rgba($error-50, 0.35);
+
+          &>td {
+            color: $error-900;
+          }
+
+          &:hover>td {
+            background-color: rgba($error-100, 0.5) !important;
+          }
+        }
+
+        &.row-valid {
+          &:hover>td {
+            background-color: rgba($success-50, 0.5) !important;
+          }
+        }
+      }
+
+      .ant-pagination-item-active {
+        border-color: $primary-500;
+        background-color: $primary-500;
+
+        a {
+          color: $neutral-0;
+        }
+      }
+    }
+  }
+
+  .error-cell {
+    max-width: 320px;
+
+    .status-ready {
+      color: $success-600;
+      font-size: 13px;
+      font-weight: $font-weight-semibold;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+
+      i {
+        font-size: 14px;
+        color: $success-500;
+      }
+    }
+
+    .error-list {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+
+      li {
+        font-size: 12px;
+        color: $error-700;
+        font-weight: $font-weight-medium;
+        display: inline-flex;
+        align-items: flex-start;
+        gap: 6px;
+        line-height: 1.4;
+
+        .err-icon {
+          font-size: 12px;
+          margin-top: 3px;
+          color: $error-500;
+        }
+      }
+    }
+  }
+}
+
+.preview-grid {
+  ::ng-deep {
+    th.col-required {
+      background-color: rgba(34, 197, 94, 0.08) !important;
+      border-bottom: 2px solid rgba(34, 197, 94, 0.2) !important;
+    }
+    th.col-optional {
+      background-color: rgba(59, 130, 246, 0.05) !important;
+      border-bottom: 2px solid rgba(59, 130, 246, 0.15) !important;
+    }
+    .ant-table-tbody > tr > td.col-required {
+      background-color: rgba(34, 197, 94, 0.04);
+    }
+    .ant-table-tbody > tr > td.col-optional {
+      background-color: rgba(59, 130, 246, 0.02);
+    }
+    .ant-table-tbody > tr.row-valid:hover > td.col-required {
+      background-color: rgba(34, 197, 94, 0.08) !important;
+    }
+    .ant-table-tbody > tr.row-valid:hover > td.col-optional {
+      background-color: rgba(59, 130, 246, 0.05) !important;
+    }
+    .ant-table-tbody > tr.row-invalid > td.col-required {
+      background-color: rgba(239, 68, 68, 0.06) !important;
+      border-left: 2px solid rgba(239, 68, 68, 0.2);
+    }
+    .ant-table-tbody > tr.row-invalid > td.col-optional {
+      background-color: rgba(239, 68, 68, 0.03) !important;
+    }
+    .ant-table-tbody > tr.row-invalid:hover > td.col-required,
+    .ant-table-tbody > tr.row-invalid:hover > td.col-optional {
+      background-color: rgba(239, 68, 68, 0.1) !important;
+    }
+    .ant-table-tbody > tr.row-invalid > td.cell-invalid {
+      background-color: rgba(239, 68, 68, 0.15) !important;
+      box-shadow: inset 0 0 0 1px rgba(239, 68, 68, 0.25);
+    }
+    .cell-error-wrapper {
+      display: block;
+      width: 100%;
+      height: 100%;
+      cursor: help;
+      color: $error-500;
+      font-weight: $font-weight-semibold;
+    }
+  }
+}
+
+// Extra classes extracted from inline styles
+.alert-title-custom {
+  font-weight: $font-weight-semibold;
+  font-size: 15px;
+}
+
+.alert-desc-container {
+  margin-top: $spacing-1-5;
+  font-size: 13px;
+  line-height: 1.6;
+
+  p {
+    margin-bottom: $spacing-1-5;
+    font-weight: $font-weight-medium;
+  }
+
+  ul {
+    padding-left: 18px;
+    margin: 0;
+    list-style-type: disc;
+
+    li {
+      margin-bottom: $spacing-1;
+    }
+  }
+
+  .alert-tag {
+    font-size: 11px;
+    padding: 0 $spacing-1-5;
+    height: 18px;
+    line-height: 16px;
+    margin: 0 $spacing-1;
+
+    &.warning-tag {
+      font-weight: $font-weight-semibold;
+    }
+  }
+}
+
+.btn-align-right {
+  margin-left: auto !important;
+}
+
+.uploader-limit-wrapper {
+  margin-bottom: $spacing-4;
+  text-align: center;
+
+  .limit-tag {
+    font-size: 13px;
+    padding: $spacing-1 $spacing-3;
+    height: auto;
+    line-height: $spacing-5;
+    font-weight: $font-weight-semibold;
+    border-radius: $border-radius-base;
+
+    i {
+      margin-right: $spacing-1;
+    }
+  }
+}
+
+.text-center {
+  text-align: center !important;
+}
+
+.preview-grid {
+  .status-error {
+    cursor: pointer;
+    color: $error-500;
+    font-weight: $font-weight-semibold;
+    display: inline-flex;
+    align-items: center;
+    gap: $spacing-1-5;
+    justify-content: center;
+    width: 100%;
+  }
+
+  .tooltip-errors {
+    padding: $spacing-1;
+
+    .tooltip-error-item {
+      margin-bottom: $spacing-1-5;
+      display: flex;
+      align-items: flex-start;
+      gap: $spacing-1-5;
+      font-size: 12px;
+      line-height: 1.4;
+      color: $neutral-0;
+
+      .error-icon {
+        color: $error-500;
+        margin-top: $spacing-0-5;
+      }
+    }
+  }
+}
+
+.drawer-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: $spacing-4;
+}
+
+.drawer-subtitle {
+  font-weight: $font-weight-medium;
+  color: $neutral-500;
+}
+
+.panel-header-wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding-right: $spacing-4;
+}
+
+.panel-header-title {
+  font-weight: $font-weight-semibold;
+}
+
+.jobs-list-container {
+  max-height: 450px;
+  overflow-y: auto;
+  padding-right: $spacing-1;
+}
+
+.job-card {
+  margin-bottom: $spacing-3;
+  border-radius: $border-radius-lg;
+  border: 1px solid $neutral-200;
+  background: $neutral-0;
+  box-shadow: 0 2px 8px $color-bg-hover;
+}
+
+.job-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: $spacing-2-5;
+}
+
+.job-process-label {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: $neutral-400;
+  display: block;
+  font-weight: $font-weight-medium;
+  margin-bottom: $spacing-0-5;
+}
+
+.job-process-name {
+  font-weight: $font-weight-semibold;
+  font-size: $font-size-sm;
+  color: $neutral-800;
+}
+
+.status-tag {
+  border-radius: $border-radius-sm;
+  font-weight: $font-weight-medium;
+  margin: 0 !important;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: $spacing-1;
+  text-align: center;
+  background: $neutral-50;
+  padding: $spacing-2-5 $spacing-1-5;
+  border-radius: $border-radius-base;
+  border: 1px solid $color-border-light;
+  margin-bottom: $spacing-3;
+
+  .stats-col {
+    &.border-left {
+      border-left: 1px solid $neutral-200;
+    }
+
+    .stats-label {
+      font-size: 11px;
+      color: $neutral-400;
+      margin-bottom: $spacing-0-5;
+
+      &.label-success {
+        color: $success-700;
+      }
+
+      &.label-danger {
+        color: $error-700;
+      }
+    }
+
+    .stats-val {
+      font-size: $font-size-sm;
+      font-weight: $font-weight-bold;
+      color: $neutral-800;
+
+      &.val-success {
+        color: $success-800;
+      }
+
+      &.val-danger {
+        color: $error-800;
+      }
+    }
+  }
+}
+
+.job-error-details {
+  margin-top: $spacing-2;
+  padding: $spacing-2-5;
+  background-color: rgba($error-500, 0.05);
+  border: 1px solid rgba($error-500, 0.2);
+  border-radius: $border-radius-base;
+  color: $error-700;
+  font-size: 12px;
+  line-height: 1.5;
+  word-break: break-all;
+  margin-bottom: $spacing-2;
+
+  .error-icon {
+    margin-right: $spacing-1-5;
+  }
+}
+
+.job-card-footer {
+  margin-top: $spacing-3;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+  color: $neutral-400;
+}
+
+.job-time-wrapper {
+  display: inline-flex;
+  align-items: center;
+  gap: $spacing-1-5;
+}
+
+.job-actions-wrapper {
+  display: flex;
+  gap: $spacing-2;
+  align-items: center;
+}
+
+.download-errors-btn {
+  padding: 0 !important;
+  display: inline-flex !important;
+  align-items: center;
+  gap: $spacing-1;
+  font-weight: $font-weight-medium;
+}
+
+.no-jobs-container {
+  padding: $spacing-6 0;
+  text-align: center;
+  color: $neutral-400;
+
+  .no-jobs-icon {
+    font-size: $icon-size-2xl;
+    color: $neutral-300;
+    margin-bottom: $spacing-2;
+    display: block;
+  }
+
+  p {
+    font-size: 13px;
+    margin: 0;
+  }
+}

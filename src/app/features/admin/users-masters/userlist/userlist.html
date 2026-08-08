@@ -1,0 +1,44 @@
+<div nz-row [nzGutter]="[16, 16]" class="process-page">
+  <!-- ================= FORM CARD ================= -->
+  <div nz-col nzSpan="24" class="divider-with-action">
+    <nz-divider nzOrientation="left" [nzText]="requiredTemplate">
+      <ng-template #requiredTemplate>
+        <span class="divider-title">User List</span>
+      </ng-template></nz-divider
+    >
+    <button
+      nz-button
+      nzType="default"
+      nzShape="circle"
+      class="filter-trigger-btn"
+      nz-tooltip
+      nzTooltipTitle="Refresh"
+      (click)="refresh()"
+    >
+      <nz-icon nzType="reload" nzTheme="outline"></nz-icon>
+    </button>
+  </div>
+  <div nz-col nzSpan="24">
+    <nz-card>
+      <div class="table-wrapper">
+        <ui-grid
+          [title]=""
+          ref_name="User List"
+          [autoColumns]="true"
+          [dataSource]="userGridDataSource"
+          [autoLoad]="true"
+          [reloadOn]="userGridReload$"
+          [pageSize]="10"
+          [pageSizeOptions]="[10, 20, 50]"
+          [serverSide]="false"
+          [pageSize]="10"
+          [selectable]="false"
+          selectionMode="multiple"
+          [actions]="gridActions"
+          (action)="onAction($event)"
+          [hildeColumn]="['user_code', 'user_roles']"
+        ></ui-grid>
+      </div>
+    </nz-card>
+  </div>
+</div>

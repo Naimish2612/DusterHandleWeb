@@ -1,0 +1,47 @@
+<div class="checkout">
+  @if (currentStep() < 3) { <div class="checkout__header">
+    <div class="checkout__header-inner">
+      <div class="checkout__stepper-wrap">
+        <nz-steps [nzCurrent]="currentStep()" nzSize="default" nzType="navigation" class="checkout__steps">
+          <nz-step [nzTitle]="steps[0].title" [nzSubtitle]="steps[0].subtitle" [nzIcon]="cartIcon"></nz-step>
+          <nz-step [nzTitle]="steps[1].title" [nzSubtitle]="steps[1].subtitle" [nzIcon]="addressIcon"></nz-step>
+          <nz-step [nzTitle]="steps[2].title" [nzSubtitle]="steps[2].subtitle" [nzIcon]="paymentIcon"></nz-step>
+        </nz-steps>
+      </div>
+    </div>
+</div>
+}
+
+<ng-template #cartIcon>
+  <span nz-icon nzType="shopping-cart" nzTheme="outline"></span>
+</ng-template>
+
+<ng-template #addressIcon>
+  <span nz-icon nzType="environment" nzTheme="outline"></span>
+</ng-template>
+
+<ng-template #paymentIcon>
+  <span nz-icon nzType="credit-card" nzTheme="outline"></span>
+</ng-template>
+
+<div class="checkout__body" *ngIf="currentStep() < 3">
+  <div class="checkout__global-loading" *ngIf="isLoading()">
+    <nz-spin nzSize="large" nzTip="Loading…"></nz-spin>
+  </div>
+
+  <div [style.display]="isLoading() ? 'none' : 'block'">
+    @if (currentStep() === 0) {
+    <app-cart-view (proceedToCheckout)="goNext()"></app-cart-view>
+    }
+
+    @if (currentStep() === 1) {
+    <app-address-step (back)="goBack()" (next)="goNext()"> </app-address-step>
+    }
+    @if (currentStep() === 2) {
+    <app-payment-step (back)="goBack()" (orderPlaced)="onOrderPlaced()"> </app-payment-step>
+    }
+  </div>
+</div>
+
+@if (currentStep() === 3) {<app-order-success></app-order-success>}
+</div>

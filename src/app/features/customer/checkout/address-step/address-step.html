@@ -1,0 +1,326 @@
+<!-- steps/address-step/address-step.component.html -->
+<div class="address-step">
+  <!-- Loading -->
+  @if (isLoading()) {
+    <div class="address-step__loading">
+      <nz-spin nzSize="large" nzTip="Loading addresses…"></nz-spin>
+    </div>
+  }
+
+  @if (!isLoading()) {
+    <div class="address-step__layout">
+      <!-- ══════════════════════════════════════════════
+           LEFT — ADDRESS SELECTION
+      ══════════════════════════════════════════════ -->
+      <div class="address-step__selection-col">
+        <!-- ── Shipping Address ───────────────────── -->
+        <div class="addr-section">
+          <div class="addr-section__head">
+            <div class="addr-section__head-left">
+              <div class="addr-section__head-icon addr-section__head-icon--shipping">
+                <span nz-icon nzType="car" nzTheme="outline"></span>
+              </div>
+              <div>
+                <h4 class="addr-section__title">Shipping Address</h4>
+                <p class="addr-section__subtitle">Where should we deliver your order?</p>
+              </div>
+            </div>
+          </div>
+
+          @if (allAddresses().length === 0) {
+            <nz-empty nzNotFoundContent="No saved addresses found" nzNotFoundImage="simple">
+            </nz-empty>
+          }
+
+          <div class="addr-section__cards">
+            @for (addr of allAddresses(); track addr.address_book_id) {
+              <div
+                class="addr-card"
+                [class.addr-card--selected]="isRecalculating() && selectedShipping() === addr.address_book_id"
+                (click)="onShippingChange(addr.address_book_id)"
+              >
+                <!-- Radio -->
+                <div class="addr-card__radio">
+                  <input
+                    type="radio"
+                    [name]="'shipping'"
+                    [value]="addr.address_book_id"
+                    [checked]="selectedShipping() === addr.address_book_id"
+                    (change)="onShippingChange(addr.address_book_id)"
+                    class="addr-card__radio-input"
+                  />
+                </div>
+
+                <!-- Content -->
+                <div class="addr-card__content">
+                  <div class="addr-card__name-row">
+                    <span class="addr-card__name">{{ addr.full_name }}</span>
+                    @if (addr.is_default_shipping) {
+                      <nz-tag nzColor="blue" class="addr-card__default-tag">
+                        <span nz-icon nzType="star" nzTheme="fill"></span>
+                        Default Shipping
+                      </nz-tag>
+                    }
+                  </div>
+
+              <p class="addr-card__addr-text">
+                {{ formatAddress(addr) }}
+              </p>
+
+              <!-- ✅ ADDED — Recalculating badge inside selected shipping card -->
+              @if (
+              isRecalculating() &&
+              selectedShipping() === addr.address_book_id
+              ) {
+              <div class="recalc-badge">
+                <span nz-icon nzType="loading" class="recalc-badge__spin"></span>
+                <span>
+                  Recalculating tax &amp; shipping for
+                  <strong>{{ addr.state }}</strong>...
+                </span>
+              </div>
+              }
+              <!-- ✅ END ADDED -->
+
+            </div>
+
+                <!-- Selected Check -->
+                @if (selectedShipping() === addr.address_book_id) {
+                  <div class="addr-card__check">
+                    <span nz-icon nzType="check-circle" nzTheme="fill"></span>
+                  </div>
+                }
+              </div>
+              <!-- /.addr-card -->
+            }
+          </div>
+          <!-- /.addr-section__cards -->
+        </div>
+        <!-- /.addr-section shipping -->
+
+        <nz-divider nzText="Billing Address" nzOrientation="left"></nz-divider>
+
+        <!-- ── Same as Shipping Toggle ─────────────── -->
+        <div class="addr-step__same-toggle">
+          <label class="addr-step__same-label">
+            <input
+              type="checkbox"
+              [checked]="sameAsBilling()"
+              (change)="onSameAsBillingChange($any($event.target).checked)"
+              class="addr-step__same-checkbox"
+            />
+            <span nz-icon nzType="copy" nzTheme="outline"></span>
+            Use shipping address as billing address
+          </label>
+        </div>
+
+        <!-- ── Billing Address ────────────────────── -->
+        @if (!sameAsBilling()) {
+          <div class="addr-section">
+            <div class="addr-section__head">
+              <div class="addr-section__head-left">
+                <div class="addr-section__head-icon addr-section__head-icon--billing">
+                  <span nz-icon nzType="credit-card" nzTheme="outline"></span>
+                </div>
+                <div>
+                  <h4 class="addr-section__title">Billing Address</h4>
+                  <p class="addr-section__subtitle">Address used for your invoice</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="addr-section__cards">
+              @for (addr of allAddresses(); track addr.address_book_id) {
+                <div
+                  class="addr-card"
+                  [class.addr-card--selected]="selectedBilling() === addr.address_book_id"
+                  (click)="onBillingChange(addr.address_book_id)"
+                >
+                  <div class="addr-card__radio">
+                    <input
+                      type="radio"
+                      [name]="'billing'"
+                      [value]="addr.address_book_id"
+                      [checked]="selectedBilling() === addr.address_book_id"
+                      (change)="onBillingChange(addr.address_book_id)"
+                      class="addr-card__radio-input"
+                    />
+                  </div>
+
+                  <div class="addr-card__content">
+                    <div class="addr-card__name-row">
+                      <span class="addr-card__name">{{ addr.full_name }}</span>
+                      @if (addr.is_default_billing) {
+                        <nz-tag nzColor="purple" class="addr-card__default-tag">
+                          <span nz-icon nzType="star" nzTheme="fill"></span>
+                          Default Billing
+                        </nz-tag>
+                      }
+                    </div>
+                    <p class="addr-card__addr-text">
+                      {{ formatAddress(addr) }}
+                    </p>
+                  </div>
+
+                  @if (selectedBilling() === addr.address_book_id) {
+                    <div class="addr-card__check">
+                      <span nz-icon nzType="check-circle" nzTheme="fill"></span>
+                    </div>
+                  }
+                </div>
+              }
+            </div>
+          </div>
+        }
+      </div>
+      <!-- /.address-step__selection-col -->
+
+      <!-- ══════════════════════════════════════════════
+           RIGHT — SELECTED SUMMARY
+      ══════════════════════════════════════════════ -->
+      <div class="address-step__summary-col">
+        <div class="addr-summary">
+          <h4 class="addr-summary__title">
+            <span nz-icon nzType="environment" nzTheme="outline"></span>
+            Selected Addresses
+          </h4>
+
+          <!-- Shipping Summary -->
+          <div class="addr-summary__block">
+            <div class="addr-summary__block-head">
+              <span nz-icon nzType="car" nzTheme="outline"></span>
+              Shipping To
+            </div>
+
+            @if (shippingAddress()) {
+              <nz-descriptions nzBordered [nzColumn]="1" nzSize="small" class="addr-summary__desc">
+                <nz-descriptions-item nzTitle="Name">
+                  {{ shippingAddress()?.full_name }}
+                </nz-descriptions-item>
+                <nz-descriptions-item nzTitle="Address">
+                  {{ formatAddress(shippingAddress()!) }}
+                </nz-descriptions-item>
+              </nz-descriptions>
+            } @else {
+              <nz-alert nzType="warning" nzMessage="Please select a shipping address" nzShowIcon>
+              </nz-alert>
+            }
+          </div>
+
+          <nz-divider></nz-divider>
+
+          <!-- Billing Summary -->
+          <div class="addr-summary__block">
+            <div class="addr-summary__block-head">
+              <span nz-icon nzType="credit-card" nzTheme="outline"></span>
+              Bill To
+            </div>
+
+            @if (billingAddress()) {
+              <nz-descriptions nzBordered [nzColumn]="1" nzSize="small" class="addr-summary__desc">
+                <nz-descriptions-item nzTitle="Name">
+                  {{ billingAddress()?.full_name }}
+                </nz-descriptions-item>
+                <nz-descriptions-item nzTitle="Address">
+                  {{ formatAddress(billingAddress()!) }}
+                </nz-descriptions-item>
+              </nz-descriptions>
+            } @else {
+              <nz-alert nzType="warning" nzMessage="Please select a billing address" nzShowIcon>
+              </nz-alert>
+            }
+          </div>
+
+        <nz-divider></nz-divider>
+
+        <!-- ✅ ADDED — Order Summary Panel with live recalculating states -->
+        <div class="order-summary-panel" [class.order-summary-panel--recalculating]="isRecalculating()">
+
+          <h5 class="order-summary-panel__title">
+            <span nz-icon nzType="calculator" nzTheme="outline"></span>
+            Order Summary
+          </h5>
+
+          <!-- Tax Row -->
+          <!-- <div class="summary-row" [class.summary-row--recalculating]="isRecalculating()">
+            <span class="summary-row__label">Tax (GST)</span>
+            <span class="summary-row__value">
+              @if (isRecalculating()) {
+              <span nz-icon nzType="loading" class="recalc-spinner"></span>
+              } @else {
+              ₹{{ totalTaxAmount() | number: '1.2-2' }}
+              }
+            </span>
+          </div> -->
+
+          <!-- Delivery Row -->
+          <div class="summary-row" [class.summary-row--recalculating]="isRecalculating()">
+            <span class="summary-row__label">
+              Delivery Charge
+              @if (shippingAddress()) {
+              <small class="summary-row__sublabel">
+                ({{ shippingAddress()!.state }})
+              </small>
+              }
+            </span>
+            <span class="summary-row__value">
+              @if (isRecalculating()) {
+              <span nz-icon nzType="loading" class="recalc-spinner"></span>
+              } @else if (!shippingAddress()) {
+              <span class="summary-row__pending">Select address</span>
+              } @else if (shippingAmount() === 0) {
+              <span class="summary-row__free">
+                <span nz-icon nzType="check-circle" nzTheme="fill"></span>
+                FREE
+              </span>
+              } @else {
+              ₹{{ shippingAmount() | number: '1.2-2' }}
+              }
+            </span>
+          </div>
+
+          <!-- ✅ Recalculating notice bar -->
+          @if (isRecalculating()) {
+          <div class="recalc-notice">
+            <span nz-icon nzType="sync" class="recalc-notice__icon"></span>
+            <span>
+              Updating tax &amp; delivery for
+              <strong>{{ shippingAddress()?.state }}</strong>...
+            </span>
+          </div>
+          }
+
+        </div>
+        <!-- ✅ END ADDED -->
+
+        <!-- Nav Buttons -->
+        <div class="addr-summary__nav">
+          <button nz-button nzType="default" nzSize="large" (click)="onBack()">
+            <span nz-icon nzType="left" nzTheme="outline"></span>
+            Back to Cart
+          </button>
+
+          <button 
+              nz-button 
+              nzType="primary" 
+              nzSize="large" 
+              [disabled]="!canProceed() || isRecalculating()"
+            (click)="onNext()">
+
+            @if (isRecalculating()) {
+            <span nz-icon nzType="loading"></span>
+            Recalculating...
+            } @else {
+            Continue to Payment
+            <span nz-icon nzType="right" nzTheme="outline"></span>
+            }
+          </button>
+        </div>
+
+      </div>
+      <!-- /.addr-summary -->
+    </div>
+  </div>
+  <!-- /.address-step__layout -->
+  }
+</div>

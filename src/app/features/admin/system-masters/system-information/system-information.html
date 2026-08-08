@@ -1,0 +1,108 @@
+<div class="container-fluid py-4 system-info-container">
+    <div nz-row [nzGutter]="[16, 16]" class="process-page">
+        <div nz-col nzSpan="24">
+            <nz-card [nzBordered]="false" class="premium-card shadow-sm" [nzTitle]="statusTitleTpl"
+                [nzExtra]="extraTpl">
+                <ng-template #statusTitleTpl>
+                    <div class="d-flex align-items-center">
+                        <span nz-icon nzType="info-circle" class="title-icon mr-2 text-primary"
+                            style="font-size: 20px;"></span>
+                        <span class="font-weight-bold">System Status & Environment Diagnostic</span>
+                    </div>
+                </ng-template>
+
+                <ng-template #extraTpl>
+                    <div class="system-info-actions">
+                        <button nz-button nzType="default" (click)="fetchSystemInfo()" [nzLoading]="isLoadingInfo"
+                            class="action-btn refresh-btn">
+                            <span nz-icon nzType="reload"></span> Refresh
+                        </button>
+                        <button nz-button nzType="primary" (click)="copySystemDetails()" [disabled]="!welcomeData"
+                            class="action-btn-primary copy-btn">
+                            <span nz-icon nzType="copy"></span> Copy Diagnostic Info
+                        </button>
+                    </div>
+                </ng-template>
+
+                <nz-spin [nzSpinning]="isLoadingInfo" nzTip="Retrieving live environment diagnostic parameters...">
+                    @if (!isLoadingInfo && welcomeData) {
+                    <div class="server-info-layout">
+                        <!-- Application Hero Banner -->
+                        <div class="app-info-hero mb-4">
+                            <div class="hero-icon-container animate-glow">
+                                <span nz-icon nzType="cloud-server" class="hero-icon"></span>
+                            </div>
+                            <div class="hero-text">
+                                <h3>{{ welcomeData.application }}</h3>
+                                <span class="badge-version">v{{ welcomeData.version }}</span>
+                            </div>
+                            <div class="hero-env ms-auto">
+                                <span class="env-badge">
+                                    {{ welcomeData.environment }}
+                                </span>
+                            </div>
+                        </div>
+
+                        <!-- Diagnostic Details -->
+                        <h4 class="section-title mb-3">Diagnostic Parameters</h4>
+                        <div class="metadata-grid">
+                            <!-- Machine name -->
+                            <div class="metadata-item">
+                                <div class="meta-label">
+                                    <span nz-icon nzType="cluster" class="mr-1 text-muted"></span> Machine Name
+                                </div>
+                                <div class="meta-value text-monospace">{{ welcomeData.machine_name }}</div>
+                            </div>
+
+                            <!-- IP Address -->
+                            <div class="metadata-item">
+                                <div class="meta-label">
+                                    <span nz-icon nzType="global" class="mr-1 text-muted"></span> IP Address
+                                </div>
+                                <div class="meta-value text-monospace">{{ welcomeData.ip_address }}</div>
+                            </div>
+
+                            <!-- Local Server Time -->
+                            <div class="metadata-item">
+                                <div class="meta-label">
+                                    <span nz-icon nzType="clock-circle" class="mr-1 text-muted"></span> Local Server
+                                    Time
+                                </div>
+                                <div class="meta-value">{{ welcomeData.server_LOCAL_time }}</div>
+                            </div>
+
+                            <!-- Server UTC Time -->
+                            <div class="metadata-item">
+                                <div class="meta-label">
+                                    <span nz-icon nzType="history" class="mr-1 text-muted"></span> Server UTC Time
+                                </div>
+                                <div class="meta-value">{{ welcomeData.server_UTC_time }}</div>
+                            </div>
+
+                            <!-- Uptime -->
+                            <div class="metadata-item full-width">
+                                <div class="meta-label">
+                                    <span nz-icon nzType="dashboard" class="mr-1 text-muted"></span> Uptime
+                                </div>
+                                <div class="meta-value">
+                                    <span class="uptime-badge">
+                                        <span class="dot-pulse"></span>
+                                        {{ welcomeData.uptime }}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    } @else if (!isLoadingInfo && !welcomeData) {
+                    <div class="error-state text-center py-4">
+                        <span nz-icon nzType="exclamation-circle" nzTheme="outline"
+                            style="font-size: 32px; color: #ff4d4f;"></span>
+                        <p class="mt-2 text-muted">Unable to retrieve system details.</p>
+                        <button nz-button nzType="link" (click)="fetchSystemInfo()">Retry Connection</button>
+                    </div>
+                    }
+                </nz-spin>
+            </nz-card>
+        </div>
+    </div>
+</div>
