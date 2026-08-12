@@ -2,7 +2,6 @@
 @use '../../../../assets/styles/common' as *;
 @use '../../../../assets/styles/responsive' as *;
 
-
 /* ===================================================================
    MAIN SIDEBAR & HEADER - USING DESIGN SYSTEM
    =================================================================== */
@@ -14,23 +13,19 @@
   top: 0;
   bottom: 0;
   z-index: $z-index-fixed + 1;
-  overflow: auto;
-  box-shadow: $shadow-lg;
-  background: $neutral-900;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: $shadow-sm;
+  background: $neutral-0 !important;
+  border-right: 1px solid $neutral-200;
   transition: all $transition-base;
-}
 
-.main-sidebar::-webkit-scrollbar {
-  width: 6px;
-}
-
-.main-sidebar::-webkit-scrollbar-track {
-  background: $neutral-800;
-}
-
-.main-sidebar::-webkit-scrollbar-thumb {
-  background: $primary-500;
-  border-radius: $border-radius-sm;
+  ::ng-deep .ant-layout-sider-children {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
 }
 
 .sidebar-logo {
@@ -38,116 +33,260 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba($neutral-0, 0.05);
-  border-bottom: $border-width-thin solid rgba($neutral-0, 0.1);
+  border-bottom: 1px solid $neutral-100;
 }
 
 .logo-icon {
-  font-size: $font-size-xl;
-  font-weight: $font-weight-bold;
-  color: $neutral-0;
-  letter-spacing: -0.5px;
-
-  // Set the size you want the image to be
   width: 150px;
-  height: auto; // Let the height scale naturally with the SVG
-
-  // Optional: If the image fails to load, this styles the alt text
-  color: $neutral-0;
-  font-size: $font-size-base;
-  text-align: center;
+  height: auto;
+  display: block;
 }
 
 /* Menu Search */
 .menu-search {
-  padding: $spacing-4;
-  border-bottom: $border-width-thin solid rgba($neutral-0, 0.1);
+  padding: $spacing-4 $spacing-4 $spacing-3;
+  border-bottom: 1px solid $neutral-100;
 
   ::ng-deep .ant-input-affix-wrapper {
-    background: rgba($neutral-0, 0.1);
-    border: $border-width-thin solid rgba($neutral-0, 0.2);
-    border-radius: $border-radius-base;
+    background-color: $neutral-50 !important;
+    border: 1px solid $neutral-200 !important;
+    border-radius: $border-radius-lg !important;
+    height: 30px !important;
+    padding: 0 12px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    transition: all $transition-fast !important;
+    box-shadow: none !important;
 
     &:hover,
-    &:focus {
-      background: rgba($neutral-0, 0.15);
-      border-color: $primary-500;
+    &-focused {
+      background-color: $neutral-0 !important;
+      border-color: $primary-300 !important;
+      box-shadow: 0 0 0 2px rgba($primary-500, 0.1) !important;
     }
 
     .ant-input {
-      background: transparent;
-      color: $neutral-0;
-      font-size: $font-size-sm;
+      background: transparent !important;
+      color: $neutral-600 !important;
+      font-size: $font-size-sm !important;
+      border: none !important;
+      box-shadow: none !important;
+      padding-left: 6px !important;
+      height: 100% !important;
 
       &::placeholder {
-        color: rgba($neutral-0, 0.5);
+        color: $neutral-400 !important;
       }
     }
 
-    .ant-input-prefix,
-    .ant-input-suffix {
-      color: rgba($neutral-0, 0.6);
+    .ant-input-prefix {
+      color: $neutral-400 !important;
+      font-size: 14px !important;
+      display: inline-flex !important;
+      align-items: center !important;
     }
-  }
 
-  .clear-icon {
-    cursor: pointer;
-    color: rgba($neutral-0, 0.6);
-    transition: color $transition-fast;
+    .ant-input-suffix {
+      color: $neutral-400 !important;
+      display: inline-flex !important;
+      align-items: center !important;
+      transition: color $transition-fast !important;
 
-    &:hover {
-      color: $neutral-0;
+      .clear-icon {
+        cursor: pointer !important;
+
+        &:hover {
+          color: $primary-500 !important;
+        }
+      }
     }
   }
 }
 
-.sidebar-menu {
-  padding: $spacing-4 0;
-  border-right: 0;
+// Scrollable container for menu
+.menu-scroll-container {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: $spacing-3 0;
+
+  // Custom scrollbar
+  @include custom-scrollbar(6px, transparent, $neutral-200, $neutral-300);
 }
 
 .menu-badge {
-  position: absolute;
-  right: $spacing-4;
-  background: $error-500;
-  color: $neutral-0;
-  border-radius: $border-radius-full;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   padding: 0 $spacing-2;
+  height: 20px;
+  min-width: 20px;
   font-size: $font-size-xs;
-  line-height: 18px;
-  min-width: 18px;
-  text-align: center;
+  font-weight: $font-weight-bold;
+  line-height: 1;
+  color: $neutral-0;
+  background: $error-500;
+  border-radius: $border-radius-full;
+  margin-left: auto;
 }
 
 ::ng-deep .main-sidebar {
-  .ant-menu-dark {
-    background: transparent;
+  .sidebar-menu {
+    border-right: none !important;
+    background: transparent !important;
+    font-family: $font-primary;
+
+    .ant-menu-title-content {
+      display: flex !important;
+      align-items: center !important;
+      flex: 1 !important;
+      min-width: 0 !important;
+      height: 100% !important;
+    }
+
+    .ant-menu-item,
+    .ant-menu-submenu-title {
+      margin: 2px $spacing-3 !important;
+      width: calc(100% - #{$spacing-6}) !important;
+      border-radius: $border-radius-xl !important;
+      height: 42px !important;
+      line-height: 42px !important;
+      color: $neutral-600 !important;
+      font-weight: $font-weight-medium;
+      font-size: 13px !important;
+      transition: all $transition-fast !important;
+      display: flex;
+      align-items: center;
+      padding-left: 16px !important;
+
+      .menu-icon,
+      .ant-menu-item-icon,
+      .anticon {
+        font-size: 16px !important;
+        margin-right: 12px !important;
+        color: $neutral-500;
+        transition: color $transition-fast;
+        flex-shrink: 0 !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+      }
+
+      .menu-label-text,
+      span:not(.anticon):not(.menu-icon):not(.ant-menu-item-icon):not(.ant-menu-submenu-arrow) {
+        white-space: nowrap !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+        min-width: 0 !important;
+        transition: transform $transition-fast;
+      }
+
+      &:hover {
+        color: $primary-600 !important;
+        background: $neutral-50 !important;
+
+        .menu-icon,
+        .ant-menu-item-icon,
+        .anticon {
+          color: $primary-500 !important;
+        }
+      }
+    }
+
+    // Active state styling
+    .ant-menu-item-selected,
+    .active-item {
+      background: $primary-50 !important;
+      color: $primary-600 !important;
+      font-weight: $font-weight-semibold;
+
+      .menu-icon,
+      .ant-menu-item-icon,
+      .anticon {
+        color: $primary-500 !important;
+      }
+
+      &::after {
+        display: none !important; // Hide default ant indicator line
+      }
+    }
+
+    // Submenu expanded states
+    .ant-menu-submenu {
+      &-open {
+        > .ant-menu-submenu-title {
+          color: $neutral-800 !important;
+          font-weight: $font-weight-semibold;
+
+          .ant-menu-submenu-arrow {
+            color: $neutral-800;
+          }
+        }
+      }
+
+      .ant-menu-sub {
+        background: transparent !important;
+        border-left: 1.5px solid $neutral-200 !important;
+        margin-left: 24px !important;
+        padding-left: 0 !important;
+
+        .ant-menu-item,
+        .ant-menu-submenu-title {
+          height: 35px !important;
+          line-height: 38px !important;
+          font-size: 12px !important;
+          padding-left: 10px !important;
+          margin: 2px 0 !important;
+
+          // Staggered slide/fade animation for sub-items
+          animation: menu-item-slide-in 0.22s cubic-bezier(0.4, 0, 0.2, 1) both;
+
+          @for $i from 1 through 20 {
+            &:nth-child(#{$i}) {
+              animation-delay: #{$i * 0.2}s;
+            }
+          }
+
+          // Level 2 icon size override (smaller icon and margin)
+          .menu-icon,
+          .ant-menu-item-icon,
+          .anticon {
+            font-size: 13px !important;
+            margin-right: 8px !important;
+          }
+        }
+
+        // Nested level 3/4 submenu lines
+        .ant-menu-sub {
+          margin-left: 18px !important;
+
+          .ant-menu-item,
+          .ant-menu-submenu-title {
+            font-size: 11.5px !important;
+            padding-left: 10px !important;
+
+            // Level 3 icon size override (even smaller icon and margin)
+            .menu-icon,
+            .ant-menu-item-icon,
+            .anticon {
+              font-size: 11px !important;
+              margin-right: 6px !important;
+            }
+          }
+        }
+      }
+    }
   }
 
-  .ant-menu-inline .ant-menu-item,
-  .ant-menu-inline .ant-menu-submenu-title {
-    padding-left: 15px !important;
-  }
-
-  .ant-menu-item,
-  .ant-menu-submenu-title {
-    height: 40px;
-    line-height: 40px;
-    margin: $spacing-1 0;
-  }
-
-  .ant-menu-item-selected {
-    background: $primary-300 !important;
-  }
-
-  .ant-menu-submenu-selected > .ant-menu-submenu-title {
-    color: $primary-200;
-  }
-
-  .ant-menu-item:hover,
-  .ant-menu-submenu-title:hover {
-    color: $neutral-200;
-    background: rgba($neutral-200, 0.1);
+  @keyframes menu-item-slide-in {
+    from {
+      opacity: 0;
+      transform: translateX(-6px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
   }
 }
 
@@ -313,72 +452,113 @@
   z-index: $z-index-modal !important;
 }
 
-.user-dropdown-menu {
-  min-width: 260px;
-  padding: $spacing-2;
-  box-shadow: $shadow-xl;
-}
-
-.user-menu-header {
-  cursor: default !important;
-  background: $neutral-50;
-  margin-bottom: $spacing-2;
-  border-radius: $border-radius-base;
-  padding: $spacing-3 !important;
-
-  &:hover {
-    background: $neutral-50 !important;
-  }
-}
-
-.dropdown-user-info {
-  display: flex;
-  align-items: center;
-  gap: $spacing-3;
-}
-
-.dropdown-user-details {
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-  min-width: 0;
-}
-
-.dropdown-user-name {
-  font-size: $font-size-sm;
-  font-weight: $font-weight-semibold;
-  color: $neutral-900;
-  margin-bottom: $spacing-1;
-  @include text-truncate;
-}
-
-.dropdown-user-email {
-  font-size: $font-size-xs;
-  color: $neutral-500;
-  @include text-truncate;
-}
-
 ::ng-deep .user-dropdown-menu {
+  min-width: 280px !important;
+  padding: $spacing-3 !important;
+  background: rgba($neutral-0, 0.98) !important;
+  border: 1px solid rgba($neutral-200, 0.8) !important;
+  border-radius: $border-radius-xl !important;
+  box-shadow:
+    0 10px 30px -8px rgba($neutral-900, 0.12),
+    0 1px 3px 0 rgba($neutral-900, 0.05) !important;
+
+  .user-menu-header {
+    cursor: default !important;
+    background: linear-gradient(
+      135deg,
+      rgba($primary-50, 0.6) 0%,
+      rgba($primary-50, 0.1) 100%
+    ) !important;
+    border: 1px solid rgba($primary-100, 0.6) !important;
+    border-radius: $border-radius-lg !important;
+    padding: $spacing-3 $spacing-4 !important;
+    margin-bottom: $spacing-3 !important;
+    pointer-events: none !important;
+
+    &:hover {
+      background: linear-gradient(
+        135deg,
+        rgba($primary-50, 0.6) 0%,
+        rgba($primary-50, 0.1) 100%
+      ) !important;
+    }
+  }
+
+  .dropdown-user-info {
+    display: flex;
+    align-items: center;
+    gap: $spacing-3;
+  }
+
+  .dropdown-user-details {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-width: 0;
+  }
+
+  .dropdown-user-name {
+    font-size: $font-size-sm;
+    font-weight: $font-weight-semibold;
+    color: $neutral-800;
+    margin-bottom: 2px;
+    letter-spacing: -0.2px;
+    @include text-truncate;
+  }
+
+  .dropdown-user-email {
+    font-size: $font-size-xs - 1px;
+    color: $neutral-500;
+    @include text-truncate;
+  }
+
   .ant-dropdown-menu-item {
-    border-radius: $border-radius-sm;
-    padding: $spacing-3;
-    margin: $spacing-1 0;
+    border-radius: $border-radius-lg !important;
+    padding: 10px 14px !important;
+    margin: 4px 0 !important;
+    color: $neutral-600 !important;
+    font-size: 13px !important;
+    font-weight: $font-weight-medium !important;
+    transition: all $transition-fast ease !important;
+    display: flex !important;
+    align-items: center !important;
 
     .anticon {
-      margin-right: $spacing-3;
-      font-size: $font-size-base;
+      margin-right: 12px !important;
+      font-size: 16px !important;
+      color: $neutral-400 !important;
+      transition: color $transition-fast ease !important;
     }
 
     &:hover {
-      background: $neutral-100;
+      background: $primary-50 !important;
+      color: $primary-600 !important;
+
+      .anticon {
+        color: $primary-500 !important;
+      }
     }
+  }
+
+  .ant-dropdown-menu-item-divider {
+    background-color: $neutral-100 !important;
+    margin: $spacing-2 0 !important;
   }
 
   .logout-item {
-    color: $error-500;
+    color: $error-600 !important;
+
+    .anticon {
+      color: $error-500 !important;
+    }
 
     &:hover {
-      background: rgba($error-500, 0.1);
+      background: rgba($error-500, 0.08) !important;
+      color: $error-600 !important;
+
+      .anticon {
+        color: $error-500 !important;
+      }
     }
   }
 }

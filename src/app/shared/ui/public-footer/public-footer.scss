@@ -2,13 +2,11 @@
 @use '../../../../assets/styles/common' as *;
 @use '../../../../assets/styles/responsive' as *;
 
-
 // =========================================================================
 // SITE FOOTER — Public Layout
 // =========================================================================
 
 .site-footer {
-
   // ── Wave separator ───────────────────────────────────────────────
   &__wave {
     line-height: 0;
@@ -153,12 +151,16 @@
     color: $public-footer-text;
     text-decoration: none;
     padding: $spacing-1-5 0;
-    transition: color $transition-fast, gap $transition-fast;
+    transition:
+      color $transition-fast,
+      gap $transition-fast;
 
     span[nz-icon] {
       font-size: $icon-size-xs;
       opacity: 0.5;
-      transition: opacity $transition-fast, transform $transition-fast;
+      transition:
+        opacity $transition-fast,
+        transform $transition-fast;
       flex-shrink: 0;
     }
 
@@ -258,8 +260,11 @@
     font-size: $icon-size-lg;
     color: rgba(255, 255, 255, 0.65);
     text-decoration: none;
-    transition: background $transition-fast, color $transition-fast,
-      border-color $transition-fast, transform $transition-base;
+    transition:
+      background $transition-fast,
+      color $transition-fast,
+      border-color $transition-fast,
+      transform $transition-base;
 
     &:hover {
       background: $primary-500;

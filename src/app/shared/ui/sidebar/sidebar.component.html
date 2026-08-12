@@ -9,12 +9,12 @@
   [nzBreakpoint]="null"
 >
   <!-- Logo -->
-  <div class="sidebar-logo">
+  <div class="sidebar-logo">  
     <a routerLink="/admin/home" class="logo-link">
     <img
       class="logo-icon"
       src="/assets/images/brand-logo/duster-logo.png"
-      alt="Duster Brand Logo"
+      alt="EIPL Brand Logo"
     />
   </a>
   </div>
@@ -43,106 +43,98 @@
     </nz-input-wrapper>
   </div>
 
-  <!-- Menu -->
-  <ul nz-menu nzTheme="dark" nzMode="inline" class="sidebar-menu" [nzInlineIndent]="0">
-    <ng-container *ngFor="let item of filteredMenuItems()">
-      <!-- Menu item without children -->
-      <li
-        *ngIf="!item.children"
-        nz-menu-item
-        [routerLink]="item.route"
-        routerLinkActive="ant-menu-item-selected"
-        [routerLinkActiveOptions]="{ exact: false }"
-      >
-        <span nz-icon [nzType]="item.icon || 'folder'" nzTheme="outline"></span>
-        <span>{{ item.title }}</span>
-        <span *ngIf="item.badge" class="menu-badge">{{ item.badge }}</span>
-      </li>
+  <!-- Scrollable Menu -->
+  <div #scrollContainer class="menu-scroll-container">
+    <ul nz-menu nzTheme="light" nzMode="inline" class="sidebar-menu" [nzInlineIndent]="16">
+      <ng-container *ngFor="let item of filteredMenuItems()">
+        <!-- Menu item without children -->
+        <li
+          *ngIf="!item.children"
+          nz-menu-item
+          [routerLink]="item.route"
+          routerLinkActive="active-item"
+          [routerLinkActiveOptions]="{ exact: false }"
+        >
+          <span nz-icon [nzType]="item.icon || 'layout'" nzTheme="outline" class="menu-icon"></span>
+          <span class="menu-label-text">{{ item.title }}</span>
+          <span *ngIf="item.badge" class="menu-badge">{{ item.badge }}</span>
+        </li>
 
-      <!-- Menu item with children (submenu) -->
-      <li
-        *ngIf="item.children && item.children.length > 0"
-        nz-submenu
-        [nzTitle]="item.title"
-        [nzIcon]="item.icon || 'folder'"
-        [nzOpen]="menuSearchValue() !== ''"
-      >
-        <ul>
-          <ng-container *ngFor="let child of item.children">
-            <!-- Level 2: No children -->
-            <li
-              *ngIf="!child.children || child.children.length === 0"
-              nz-menu-item
-              [routerLink]="child.route"
-              routerLinkActive="ant-menu-item-selected"
-              [routerLinkActiveOptions]="{ exact: false }"
-            >
-              <span *ngIf="child.icon" nz-icon [nzType]="child.icon" nzTheme="outline"></span>
-              <span>{{ child.title }}</span>
-            </li>
+        <!-- Menu item with children (submenu) -->
+        <li
+          *ngIf="item.children && item.children.length > 0"
+          nz-submenu
+          [nzTitle]="item.title"
+          [nzIcon]="item.icon || 'folder'"
+          [nzOpen]="menuSearchValue() !== ''"
+        >
+          <ul>
+            <ng-container *ngFor="let child of item.children">
+              <!-- Level 2: No children -->
+              <li
+                *ngIf="!child.children || child.children.length === 0"
+                nz-menu-item
+                [routerLink]="child.route"
+                routerLinkActive="active-item"
+                [routerLinkActiveOptions]="{ exact: false }"
+              >
+                <span nz-icon [nzType]="child.icon || 'file'" nzTheme="outline" class="menu-icon"></span>
+                <span class="menu-label-text">{{ child.title }}</span>
+              </li>
 
-            <!-- Level 2: With children -->
-            <li
-              *ngIf="child.children && child.children.length > 0"
-              nz-submenu
-              [nzTitle]="child.title"
-              [nzIcon]="child.icon || 'folder'"
-              [nzOpen]="menuSearchValue() !== ''"
-            >
-              <ul>
-                <ng-container *ngFor="let grandChild of child.children">
-                  <!-- Level 3 -->
-                  <li
-                    *ngIf="!grandChild.children || grandChild.children.length === 0"
-                    nz-menu-item
-                    [routerLink]="grandChild.route"
-                    routerLinkActive="ant-menu-item-selected"
-                    [routerLinkActiveOptions]="{ exact: false }"
-                  >
-                    <span
-                      *ngIf="grandChild.icon"
-                      nz-icon
-                      [nzType]="grandChild.icon"
-                      nzTheme="outline"
-                    ></span>
-                    <span>{{ grandChild.title }}</span>
-                  </li>
+              <!-- Level 2: With children -->
+              <li
+                *ngIf="child.children && child.children.length > 0"
+                nz-submenu
+                [nzTitle]="child.title"
+                [nzIcon]="child.icon || 'folder'"
+                [nzOpen]="menuSearchValue() !== ''"
+              >
+                <ul>
+                  <ng-container *ngFor="let grandChild of child.children">
+                    <!-- Level 3 -->
+                    <li
+                      *ngIf="!grandChild.children || grandChild.children.length === 0"
+                      nz-menu-item
+                      [routerLink]="grandChild.route"
+                      routerLinkActive="active-item"
+                      [routerLinkActiveOptions]="{ exact: false }"
+                    >
+                      <span nz-icon [nzType]="grandChild.icon || 'link'" nzTheme="outline" class="menu-icon"></span>
+                      <span class="menu-label-text">{{ grandChild.title }}</span>
+                    </li>
 
-                  <!-- Level 3: With children -->
-                  <li
-                    *ngIf="grandChild.children && grandChild.children.length > 0"
-                    nz-submenu
-                    [nzTitle]="grandChild.title"
-                    [nzIcon]="grandChild.icon || 'folder'"
-                    [nzOpen]="menuSearchValue() !== ''"
-                  >
-                    <ul>
-                      <ng-container *ngFor="let deepChild of grandChild.children">
-                        <li
-                          nz-menu-item
-                          [routerLink]="deepChild.route"
-                          routerLinkActive="ant-menu-item-selected"
-                          [routerLinkActiveOptions]="{ exact: false }"
-                        >
-                          <span
-                            *ngIf="deepChild.icon"
-                            nz-icon
-                            [nzType]="deepChild.icon"
-                            nzTheme="outline"
-                          ></span>
-                          <span>{{ deepChild.title }}</span>
-                        </li>
-                      </ng-container>
-                    </ul>
-                  </li>
-                </ng-container>
-              </ul>
-            </li>
-          </ng-container>
-        </ul>
-      </li>
-    </ng-container>
-  </ul>
+                    <!-- Level 3: With children -->
+                    <li
+                      *ngIf="grandChild.children && grandChild.children.length > 0"
+                      nz-submenu
+                      [nzTitle]="grandChild.title"
+                      [nzIcon]="grandChild.icon || 'folder'"
+                      [nzOpen]="menuSearchValue() !== ''"
+                    >
+                      <ul>
+                        <ng-container *ngFor="let deepChild of grandChild.children">
+                          <li
+                            nz-menu-item
+                            [routerLink]="deepChild.route"
+                            routerLinkActive="active-item"
+                            [routerLinkActiveOptions]="{ exact: false }"
+                          >
+                            <span nz-icon [nzType]="deepChild.icon || 'tag'" nzTheme="outline" class="menu-icon"></span>
+                            <span class="menu-label-text">{{ deepChild.title }}</span>
+                          </li>
+                        </ng-container>
+                      </ul>
+                    </li>
+                  </ng-container>
+                </ul>
+              </li>
+            </ng-container>
+          </ul>
+        </li>
+      </ng-container>
+    </ul>
+  </div>
 </nz-sider>
 
 <!-- Backdrop for mobile -->
@@ -213,14 +205,14 @@
           <span nz-icon nzType="user" nzTheme="outline"></span>
           <span>My Profile</span>
         </li>
-        <li nz-menu-item>
+        <!-- <li nz-menu-item>
           <span nz-icon nzType="setting" nzTheme="outline"></span>
           <span>Account Settings</span>
         </li>
         <li nz-menu-item (click)="openChangePassword()">
           <span nz-icon nzType="lock" nzTheme="outline"></span>
           <span>Change Password</span>
-        </li>
+        </li> -->
         <li nz-menu-divider></li>
         <li nz-menu-item (click)="logout()" class="logout-item">
           <span nz-icon nzType="logout" nzTheme="outline"></span>

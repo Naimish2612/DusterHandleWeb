@@ -14,12 +14,12 @@ export class FooterComponent {
   currentYear = new Date().getFullYear();
 
   companyInfo = {
-    name: 'Everest Instruments Pvt. Ltd',
+    name: 'Duster Metal Products Pvt. Ltd',
     version: '1.0',
   };
 
   footerLinks = [
     { label: 'Privacy Policy', url: '#' },
-    { label: 'Terms of Service', url: '#' }
+    { label: 'Terms of Service', url: '#' },
   ];
 }

@@ -31,10 +31,10 @@ export class PublicFooter {
   ];
 
   socialLinks = [
-    { icon: 'twitter', label: 'Twitter', url: 'https://twitter.com/Everest_Twit' },
-    { icon: 'instagram', label: 'Instagram', url: 'https://www.instagram.com/everestinstruments/' },
-    { icon: 'facebook', label: 'Facebook', url: 'https://www.facebook.com/pages/category/Company/Everest-Instruments-Pvt-Ltd-531409663720221/' },
-    { icon: 'youtube', label: 'YouTube', url: 'https://www.youtube.com/channel/UClOawB9IJoXH0rpCXO2ehKw' },
-    { icon: 'linkedin', label: 'LinkedIn', url: 'https://www.linkedin.com/company/everest-instruments-pvt-ltd-india/' },
+    { icon: 'twitter', label: 'Twitter', url: '#' },
+    { icon: 'instagram', label: 'Instagram', url: '#' },
+    { icon: 'facebook', label: 'Facebook', url: '#' },
+    { icon: 'youtube', label: 'YouTube', url: '#' },
+    { icon: 'linkedin', label: 'LinkedIn', url: '#' },
   ];
 }
