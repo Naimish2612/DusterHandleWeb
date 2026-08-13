@@ -20,6 +20,7 @@ import { CatalogService } from '../services/catalog.service';
     CommonModule,
     ProductSlider,
     NzSpinModule,
+    RouterLink,
     NzEmptyModule,
     NzButtonModule,
     NzIconModule

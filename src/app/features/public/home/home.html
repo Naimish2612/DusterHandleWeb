@@ -16,11 +16,12 @@
       <span>Exquisite Framing</span>
       <h2>Product Portals</h2>
     </div>
-    
+
     <div class="aureum-media__grid">
       <!-- Category 01 -->
-      <div class="aureum-media__item aureum-media__item--tall" style="background-image: url('/assets/images/brand-logo/cabinet2.jpg')">
-        <a routerLink="/products" class="aureum-media__overlay">
+      <div class="aureum-media__item aureum-media__item--tall"
+        style="background-image: url('/assets/images/brand-logo/cabinet2.jpg')">
+        <a routerLink="/products" [queryParams]="{ category: 'Cabinet Profiles' }" class="aureum-media__overlay">
           <span class="aureum-media__number">01 / Profile</span>
           <h3 class="aureum-media__cat-title">Cabinet Profiles</h3>
           <span class="aureum-media__cat-sub">Minimalist drawer and cupboard integration</span>
@@ -28,8 +29,9 @@
       </div>
 
       <!-- Category 02 -->
-      <div class="aureum-media__item aureum-media__item--tall" style="background-image: url('/assets/images/brand-logo/kitchen profile.jpg')">
-        <a routerLink="/products" class="aureum-media__overlay">
+      <div class="aureum-media__item aureum-media__item--tall"
+        style="background-image: url('/assets/images/brand-logo/kitchen profile.jpg')">
+        <a routerLink="/products" [queryParams]="{ category: 'Gola Handles' }" class="aureum-media__overlay">
           <span class="aureum-media__number">02 / Integrated</span>
           <h3 class="aureum-media__cat-title">Gola Handles</h3>
           <span class="aureum-media__cat-sub">Seamless continuous kitchen channel pulls</span>
@@ -37,8 +39,9 @@
       </div>
 
       <!-- Category 03 -->
-      <div class="aureum-media__item aureum-media__item--full" style="background-image: url('/assets/images/brand-logo/concealed new theme.jpg')">
-        <a routerLink="/products" class="aureum-media__overlay">
+      <div class="aureum-media__item aureum-media__item--full"
+        style="background-image: url('/assets/images/brand-logo/concealed new theme.jpg')">
+        <a routerLink="/products" [queryParams]="{ category: 'Sliding Tracks' }" class="aureum-media__overlay">
           <span class="aureum-media__number">03 / Motion</span>
           <h3 class="aureum-media__cat-title">Sliding Tracks</h3>
           <span class="aureum-media__cat-sub">Precision concealed sliding gear hardware</span>
