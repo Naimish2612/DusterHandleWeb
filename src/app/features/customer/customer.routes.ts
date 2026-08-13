@@ -9,7 +9,7 @@ export const customerRoutes: Routes = [
   {
     path: 'home',
     loadComponent: () => import('./customer-home/customer-home').then((m) => m.CustoemrHome),
-    data: { title: 'Welcome To Everest ECommerce' },
+    data: { title: 'Welcome To Aureum Hardware' },
   },
   {
     path: 'products', // ← ADD THIS ROUTE

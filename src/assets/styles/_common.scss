@@ -8,17 +8,17 @@
    1. COLOR PALETTE
    ===================================================================== */
 
-// Primary Colors Based on brand (Everest) color: #009CDE
-$primary-50: #e0f5fb; // Lightest — backgrounds, chips
-$primary-100: #b3e6f6; // Very light — hover backgrounds
-$primary-200: #80d4ef; // Light — borders, dividers
-$primary-300: #4dc2e8; // Medium light — icons, illustrations
-$primary-400: #26b3e2; // Medium — secondary buttons
-$primary-500: #009cde; // ★ BASE BRAND COLOR — primary buttons, links
-$primary-600: #0089c4; // Dark — hover on primary
-$primary-700: #0077a8; // Darker — active states
-$primary-800: #005a80; // Deep — dark mode accents
-$primary-900: #003d58; // Darkest — footer dark bg accent
+// Primary Colors Based on luxury accent (Aureum Champagne Gold & Brass)
+$primary-50:  #221d10;   // Deep gold/brown tint for hover backdrops in dark mode
+$primary-100: #3b321c;   // Very deep gold tint
+$primary-200: #594c27;   // Dark gold border
+$primary-300: #8c773a;   // Muted gold border / icons
+$primary-400: #bda14d;   // Gold highlight
+$primary-500: #D4AF37;   // ★ BASE LUXURY ACCENT — Champagne Gold
+$primary-600: #E5C158;   // Muted Brass highlight
+$primary-700: #a88825;   // Active gold state
+$primary-800: #8c611f;   // Muted gold accent
+$primary-900: #614013;   // Deep gold footer highlight
 
 // Secondary Colors (Purple Accent)
 $secondary-50: #f3e5f5;
@@ -80,38 +80,38 @@ $info-700: #0050b3;
 $info-800: #0277bd;
 $info-900: #01579b;
 
-// Neutral Colors (Gray Scale)
-$neutral-0: #ffffff;
-$neutral-50: #f8fafc; // Page backgrounds
-$neutral-100: #f1f5f9; // Section alternates
-$neutral-200: #e2e8f0; // Borders, dividers
-$neutral-300: #cbd5e1; // Input borders
-$neutral-400: #94a3b8; // Placeholder text
-$neutral-500: #64748b; // Body text secondary
-$neutral-600: #475569; // Body text primary
-$neutral-700: #334155; // Headings light
-$neutral-800: #1e293b; // Headings dark
-$neutral-900: #0f172a; // Darkest text
-$neutral-1000: #000000;
+// Neutral Colors (Gray Scale) - Overhauled to Aureum Luxury Dark Theme
+$neutral-0:    #141414;   // Elevated Card / Surface Background (originally white)
+$neutral-50:   #0D0D0D;   // Base Canvas Background (originally light gray)
+$neutral-100:  #101010;   // Section alternates / intermediate dark layout bg
+$neutral-200:  #2C2C2E;   // Razor-thin, low-contrast structural border
+$neutral-300:  #2C2C2E;   // Input border
+$neutral-400:  #4a4a4f;   // Subtle grays / placeholders
+$neutral-500:  #8E8E93;   // Slate Gray secondary text
+$neutral-600:  #F2F2F7;   // Primary text off-white
+$neutral-700:  #e2e8f0;   // Headings
+$neutral-800:  #f1f2f3;   // Main title highlights
+$neutral-900:  #ffffff;   // Extra bright highlights
+$neutral-1000: #050505;   // Pitch black matte base
 
 // Semantic Aliases
-$color-bg-body: $neutral-100;
+$color-bg-body: $neutral-50;
 $color-bg-base: $neutral-0;
-$color-bg-component: $neutral-50;
-$color-bg-hover: rgba(0, 0, 0, 0.04);
-$color-bg-active: rgba(0, 0, 0, 0.06);
-$color-bg-mask: rgba(0, 0, 0, 0.45);
+$color-bg-component: $neutral-100;
+$color-bg-hover: rgba(255, 255, 255, 0.04);
+$color-bg-active: rgba(255, 255, 255, 0.06);
+$color-bg-mask: rgba(0, 0, 0, 0.75);
 
-$color-text-primary: rgba(0, 0, 0, 0.85);
-$color-text-secondary: rgba(0, 0, 0, 0.65);
-$color-text-tertiary: rgba(0, 0, 0, 0.45);
-$color-text-disabled: rgba(0, 0, 0, 0.25);
-$color-text-placeholder: rgba(0, 0, 0, 0.25);
+$color-text-primary: $neutral-600;
+$color-text-secondary: $neutral-500;
+$color-text-tertiary: $neutral-400;
+$color-text-disabled: rgba(255, 255, 255, 0.3);
+$color-text-placeholder: rgba(255, 255, 255, 0.25);
 $color-text-inverse: $neutral-0;
 
-$color-border-base: #d9d9d9;
-$color-border-light: #f0f0f0;
-$color-border-dark: #b0b0b0;
+$color-border-base: $neutral-300;
+$color-border-light: $neutral-200;
+$color-border-dark: $neutral-400;
 $color-divider: $neutral-200;
 
 // Gradient Colors
@@ -386,7 +386,7 @@ $vendor-sidebar-bg: #1a1a2e;
 $vendor-sidebar-text: rgba(255, 255, 255, 0.65);
 
 $public-header-bg: $neutral-0;
-$public-footer-bg: #001529;
+$public-footer-bg: #0D0D0D;
 $public-footer-text: rgba(255, 255, 255, 0.65);
 
 $auth-bg: $gradient-primary;

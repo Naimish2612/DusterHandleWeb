@@ -1,64 +1,63 @@
-<!-- =====================================================================
-     HOME PAGE
-     ===================================================================== -->
-
-<app-banner></app-banner>
-
-<!-- Top Selling Section - Added ID -->
-<section id="top-selling">
-  <app-product-slider sectionTag="Best Sellers" sectionTitle="Top <em>Selling</em> Products"
-    sectionSub="Handpicked favourites loved by thousands of happy customers." [products]="topSellingProducts()"
-    [Sliderloading]="loadingTop" [hasError]="!!errorTop" (retryClicked)="retryTopSelling()" />
+<!-- Hero Section -->
+<section class="aureum-hero">
+  <div class="aureum-hero__content">
+    <h1 class="aureum-hero__title">
+      ARCHITECTURAL PRECISION.
+      <span>DEFINED BY AUREUM.</span>
+    </h1>
+    <a routerLink="/products" class="aureum-hero__btn">Explore Collections</a>
+  </div>
 </section>
 
-<!-- Value props strip -->
-<section class="value-strip">
-  <div class="value-strip__inner">
-    <div class="value-prop">
-      <span class="value-prop__icon">
-        <span nz-icon nzType="rocket" nzTheme="twotone" [nzTwotoneColor]="'#ff4d4f'"></span>
-      </span>
-      <div class="value-prop__text">
-        <strong>Free Shipping</strong>
-        <span>On orders above ₹20,000</span>
-      </div>
+<!-- Media Section -->
+<section class="aureum-media">
+  <div class="aureum-media__inner">
+    <div class="aureum-media__header">
+      <span>Exquisite Framing</span>
+      <h2>Product Portals</h2>
     </div>
-
-    <div class="value-prop">
-      <span class="value-prop__icon">
-        <span nz-icon nzType="check-circle" nzTheme="twotone" [nzTwotoneColor]="'#1890ff'"></span>
-      </span>
-      <div class="value-prop__text">
-        <strong>Easy Returns</strong>
-        <span>30-day return policy*</span>
+    
+    <div class="aureum-media__grid">
+      <!-- Category 01 -->
+      <div class="aureum-media__item aureum-media__item--tall" style="background-image: url('/assets/images/brand-logo/cabinet2.jpg')">
+        <a routerLink="/products" class="aureum-media__overlay">
+          <span class="aureum-media__number">01 / Profile</span>
+          <h3 class="aureum-media__cat-title">Cabinet Profiles</h3>
+          <span class="aureum-media__cat-sub">Minimalist drawer and cupboard integration</span>
+        </a>
       </div>
-    </div>
 
-    <div class="value-prop">
-      <span class="value-prop__icon">
-        <span nz-icon nzType="lock" nzTheme="twotone" [nzTwotoneColor]="'#faad14'"></span>
-      </span>
-      <div class="value-prop__text">
-        <strong>Secure Payments</strong>
-        <span>100% protected checkout</span>
+      <!-- Category 02 -->
+      <div class="aureum-media__item aureum-media__item--tall" style="background-image: url('/assets/images/brand-logo/kitchen profile.jpg')">
+        <a routerLink="/products" class="aureum-media__overlay">
+          <span class="aureum-media__number">02 / Integrated</span>
+          <h3 class="aureum-media__cat-title">Gola Handles</h3>
+          <span class="aureum-media__cat-sub">Seamless continuous kitchen channel pulls</span>
+        </a>
       </div>
-    </div>
 
-    <div class="value-prop">
-      <span class="value-prop__icon">
-        <span nz-icon nzType="customer-service" nzTheme="twotone" [nzTwotoneColor]="'#722ed1'"></span>
-      </span>
-      <div class="value-prop__text">
-        <strong>24/7 Support</strong>
-        <span>Always here for you</span>
+      <!-- Category 03 -->
+      <div class="aureum-media__item aureum-media__item--full" style="background-image: url('/assets/images/brand-logo/concealed new theme.jpg')">
+        <a routerLink="/products" class="aureum-media__overlay">
+          <span class="aureum-media__number">03 / Motion</span>
+          <h3 class="aureum-media__cat-title">Sliding Tracks</h3>
+          <span class="aureum-media__cat-sub">Precision concealed sliding gear hardware</span>
+        </a>
       </div>
     </div>
   </div>
 </section>
 
-<!-- New Arrivals Section - Added ID -->
-<section id="new-arrivals">
-  <app-product-slider sectionTag="Just Launched" sectionTitle="New <em>Arrivals</em>"
+<!-- Top Selling Section -->
+<section id="top-selling" style="background-color: #0D0D0D; padding: 40px 0; border-bottom: 1px solid #2C2C2E;">
+  <app-product-slider sectionTag="Best Sellers" sectionTitle="Top Selling Products"
+    sectionSub="Handpicked favourites loved by thousands of happy customers." [products]="topSellingProducts()"
+    [Sliderloading]="loadingTop" [hasError]="!!errorTop" (retryClicked)="retryTopSelling()" />
+</section>
+
+<!-- New Arrivals Section -->
+<section id="new-arrivals" style="background-color: #0D0D0D; padding: 40px 0; border-bottom: 1px solid #2C2C2E;">
+  <app-product-slider sectionTag="Just Launched" sectionTitle="New Arrivals"
     sectionSub="Fresh drops — be the first to shop our latest collection." [products]="newArrivals()"
     [Sliderloading]="loadingNew" [hasError]="!!errorNew" [isDark]="false" (retryClicked)="retryNewArrivals()" />
 </section>

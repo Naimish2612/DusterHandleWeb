@@ -73,34 +73,27 @@ export class Contact {
     { label: 'Other',                value: 'other' },
   ];
 
-  // ─── Updated with correct Everest House details ───
+  // ─── Updated with correct Aureum Studio details ───
   contactCards: ContactInfo[] = [
-    // {
-    //   icon: 'home',
-    //   title: 'Contact Information',
-    //   subtitle: '',
-    //   value: '',
-    //   link: '#',
-    // },
     {
       icon: 'phone',
       title: 'Call Us',
       subtitle: 'Mon – Sat · 9:30 AM to 6:30 PM IST',
-      value: '1800 202 0010',
-      link: 'tel:+9118002020010',
+      value: '+91 93777 04346',
+      link: 'tel:+919377704346',
     },
     {
       icon: 'mail',
       title: 'Email Us',
       subtitle: 'We reply within 24 hours',
-      value: 'info@everestinstruments.in',
-      link: 'mailto:info@everestinstruments.in',
+      value: 'studio@aureumhardware.com',
+      link: 'mailto:studio@aureumhardware.com',
     },
     {
       icon: 'environment',
       title: 'Head Office',
       subtitle: 'Come visit us',
-      value: 'Everest House, 3, Times Corporate Park, Thaltej – Shilaj Road, Thaltej, Ahmedabad- 380059, Gujarat, India.',
+      value: 'Aureum Studio, Plot No 5, Ring Road, National Highway-27, Rajkot - 360002, Gujarat, India.',
     }
   ];
 
@@ -116,7 +109,7 @@ export class Contact {
         'We offer a hassle-free 30-day return policy for all products in their original, unused condition with original packaging. Initiate a return from your "My Orders" dashboard — we arrange free doorstep pickup. Refunds are credited within 5 – 7 business days to your original payment method.',
     },
     {
-      question: 'Are my payments secure on EverestShop?',
+      question: 'Are my payments secure on Aureum Hardware?',
       answer:
         'Absolutely. We use 256-bit SSL encryption and are fully PCI-DSS compliant. Accepted payment modes include UPI, Credit/Debit cards, Net Banking, Wallets, EMI, and Cash on Delivery. We never store your full card details on our servers — all card data is tokenised through our payment gateway.',
     },

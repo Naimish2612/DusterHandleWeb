@@ -200,7 +200,7 @@ export class ProductImages implements OnInit {
 
   private readonly MAX_IMAGES = 10;
   // private readonly MIN_IMAGES = 3;
-  private readonly MAX_FILE_SIZE_MB = 1;
+  private readonly MAX_FILE_SIZE_MB = 5;
   onFilesSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
     if (!input.files || input.files.length === 0) return;

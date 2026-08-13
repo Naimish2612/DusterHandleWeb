@@ -1,5 +1,6 @@
 import { Component, OnInit, inject, DestroyRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterLink } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { NzIconModule } from 'ng-zorro-antd/icon'; 
 
@@ -18,7 +19,6 @@ import { CatalogService } from '../services/catalog.service';
   imports   : [
     CommonModule,
     ProductSlider,
-    Banner,
     NzSpinModule,
     NzEmptyModule,
     NzButtonModule,

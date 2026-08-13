@@ -1,5 +1,5 @@
 import { Component, OnInit, signal, inject, DestroyRef, ChangeDetectorRef, ChangeDetectionStrategy, } from '@angular/core';
-import { Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -52,6 +52,7 @@ export class Products implements OnInit {
     private cartService = inject(CartService);
     private router = inject(Router);
     private sessionService = inject(SessionService);
+    private route = inject(ActivatedRoute);
 
     // ── UI Signals ────────────────────────────────────────────────────────────
     mobileFilterOpen = signal(false);
@@ -187,6 +188,23 @@ export class Products implements OnInit {
             this.loadWishlistIds();
         }
 
+        // Listen for query params change dynamically
+        this.route.queryParams
+            .pipe(takeUntilDestroyed(this.destroyRef))
+            .subscribe(params => {
+                const queryCategory = params['category'];
+                if (queryCategory && this.catalog.categories().length > 0) {
+                    const cat = this.catalog.categories().find(
+                        c => c.value.toLowerCase() === queryCategory.toLowerCase()
+                    );
+                    if (cat) {
+                        this.selectedCategories = [String(cat.id)];
+                        this.loadSubCategoriesForAll(this.selectedCategories);
+                        this.currentPage = 1;
+                        this.cdr.markForCheck();
+                    }
+                }
+            });
     }
 
     // ── Load Products ─────────────────────────────────────────────────────────
@@ -223,6 +241,18 @@ export class Products implements OnInit {
                 next: () => {
                     this.filterSections = this.catalog.filterSections();
                     this.loadingFilters = false;
+
+                    const queryCategory = this.route.snapshot.queryParams['category'];
+                    if (queryCategory) {
+                        const cat = this.catalog.categories().find(
+                            c => c.value.toLowerCase() === queryCategory.toLowerCase()
+                        );
+                        if (cat) {
+                            this.selectedCategories = [String(cat.id)];
+                            this.loadSubCategoriesForAll(this.selectedCategories);
+                        }
+                    }
+
                     this.cdr.markForCheck();
                 },
                 error: (err) => {

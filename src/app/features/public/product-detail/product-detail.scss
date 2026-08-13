@@ -140,19 +140,19 @@
     width: 44px;
     height: 44px;
     border-radius: $border-radius-xl;
-    background: rgba(255, 255, 255, 0.88);
-    border: $border-width-thin solid $neutral-200;
+    background: rgba(20, 20, 20, 0.75);
+    border: $border-width-thin solid rgba(255, 255, 255, 0.1);
     cursor: pointer;
     @include flex-center;
     font-size: $icon-size-base;
-    color: $neutral-700;
-    box-shadow: $shadow-md;
+    color: #D4AF37 !important;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
     transition: all $transition-fast;
 
     &:hover {
-      background: $primary-500;
-      color: $neutral-0;
-      border-color: $primary-500;
+      background: #D4AF37;
+      color: #141414 !important;
+      border-color: #D4AF37;
     }
 
     &--prev { left: $spacing-3; }
@@ -164,13 +164,14 @@
     position: absolute;
     bottom: $spacing-3;
     right: $spacing-3;
-    background: rgba(0, 0, 0, 0.55);
-    color: $neutral-0;
+    background: rgba(0, 0, 0, 0.65);
+    color: #F2F2F7 !important;
     font-size: $font-size-xs;
     font-weight: $font-weight-semibold;
     padding: $spacing-0-5 $spacing-2-5;
     border-radius: $border-radius-full;
     backdrop-filter: blur(4px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
   }
 
   // ── Out of stock overlay ──────────────────────────────────────────

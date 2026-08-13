@@ -14,14 +14,14 @@
   right: 0;
   z-index: $z-index-fixed;
   height: $header-height;
-  background: $public-header-bg;
-  border-bottom: $border-width-thin solid transparent;
+  background: #090909;
+  border-bottom: $border-width-thin solid #2C2C2E;
   transition: border-color $transition-base, box-shadow $transition-base;
 
   &--scrolled {
-    border-bottom-color: $neutral-200;
-    box-shadow: $shadow-base;
-    background: rgba(255, 255, 255, 0.97);
+    border-bottom-color: #2C2C2E;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+    background: rgba(9, 9, 9, 0.95);
     backdrop-filter: blur(12px);
   }
 
@@ -62,12 +62,12 @@
     font-family: $font-heading;
     font-size: $font-size-xl;
     font-weight: $font-weight-bold;
-    color: $neutral-800;
-    letter-spacing: $letter-spacing-tight;
+    color: #F2F2F7;
+    letter-spacing: 0.05em;
   }
 
   &__logo-accent {
-    color: $primary-500;
+    color: #D4AF37;
   }
 
   // ── Desktop nav ───────────────────────────────────────────────────
@@ -87,7 +87,7 @@
     padding: $spacing-2 $spacing-3-5;
     font-size: $font-size-sm;
     font-weight: $font-weight-semibold;
-    color: $neutral-700;
+    color: #AEAEB2;
     text-decoration: none;
     border-radius: $border-radius-lg;
     transition: color $transition-fast, background $transition-fast;
@@ -101,19 +101,19 @@
       width: 16px;
       height: 2px;
       border-radius: $border-radius-full;
-      background: $primary-500;
+      background: #D4AF37;
       transition: transform $transition-base;
     }
 
     &:hover {
-      color: $primary-500;
-      background: $primary-50;
+      color: #F2F2F7;
+      background: rgba(255, 255, 255, 0.05);
 
       &::after { transform: translateX(-50%) scaleX(1); }
     }
 
     &--active {
-      color: $primary-500;
+      color: #D4AF37;
 
       &::after { transform: translateX(-50%) scaleX(1); }
     }
@@ -136,13 +136,13 @@
     cursor: pointer;
     @include flex-center;
     font-size: $icon-size-lg;
-    color: $neutral-600;
+    color: #AEAEB2;
     text-decoration: none;
     transition: background $transition-fast, color $transition-fast;
 
     &:hover {
-      background: $primary-50;
-      color: $primary-500;
+      background: rgba(255, 255, 255, 0.05);
+      color: #D4AF37;
     }
   }
 
@@ -154,9 +154,9 @@
     border-radius: $border-radius-lg;
     cursor: pointer;
     transition: background $transition-fast;
-    border: $border-width-thin solid $neutral-200;
+    border: $border-width-thin solid #2C2C2E;
 
-    &:hover { background: $primary-50; }
+    &:hover { background: rgba(255, 255, 255, 0.05); }
 
     @include tablet-down { display: none; }
   }
@@ -164,7 +164,7 @@
   &__account-name {
     font-size: $font-size-xs;
     font-weight: $font-weight-semibold;
-    color: $neutral-700;
+    color: #F2F2F7;
 
     @media (max-width: #{$breakpoint-xl - 0.02px}) { display: none; }
   }
@@ -181,25 +181,27 @@
     border: none;
 
     &--ghost {
-      border: $border-width-thin solid $neutral-300;
-      color: $neutral-700;
+      border: $border-width-thin solid #D4AF37;
+      color: #D4AF37 !important;
       background: transparent;
 
       &:hover {
-        border-color: $primary-500;
-        color: $primary-500;
+        border-color: #E5C158;
+        color: #E5C158 !important;
+        background: rgba(212, 175, 55, 0.05);
       }
     }
 
     &--primary {
       background: $primary-500;
-      color: $neutral-0;
+      color: #141414 !important;
       border: $border-width-thin solid $primary-500;
-      box-shadow: 0 4px 12px rgba(0, 156, 222, 0.3);
+      box-shadow: 0 4px 12px rgba(212, 175, 55, 0.15);
 
       &:hover {
-        background: $primary-600;
-        border-color: $primary-600;
+        background: #E5C158;
+        border-color: #E5C158;
+        color: #141414 !important;
         transform: translateY(-1px);
       }
     }
@@ -370,7 +372,7 @@
   &-name {
     font-size    : $font-size-sm;
     font-weight  : $font-weight-semibold;
-    color        : $neutral-800;
+    color        : #F2F2F7;
     max-width    : 140px;
     overflow     : hidden;
     text-overflow: ellipsis;
@@ -381,7 +383,7 @@
 
   &-chevron {
     font-size: 10px;
-    color    : $neutral-400;
+    color    : #8E8E93;
   }
 
   @include tablet-down { display: none; }
