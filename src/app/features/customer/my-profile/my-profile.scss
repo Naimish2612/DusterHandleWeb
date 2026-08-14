@@ -99,7 +99,7 @@
     font-size: $font-size-2xl !important;
     font-weight: $font-weight-extrabold !important;
     font-family: $font-heading !important;
-    box-shadow: 0 8px 24px rgba(0, 156, 222, 0.35) !important;
+    box-shadow: 0 8px 24px rgba($primary-500, 0.35) !important;
   }
 
   &__avatar-edit {
@@ -364,7 +364,7 @@
     border-radius: $border-radius-lg !important;
     background: $primary-500 !important;
     border-color: $primary-500 !important;
-    box-shadow: 0 4px 12px rgba(0, 156, 222, 0.3) !important;
+    box-shadow: 0 4px 12px rgba($primary-500, 0.3) !important;
     display: inline-flex !important;
     align-items: center !important;
     gap: $spacing-2 !important;

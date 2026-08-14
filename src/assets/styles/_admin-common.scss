@@ -95,23 +95,23 @@ $neutral-900:  #0F172A;   // Darkest text
 $neutral-1000: #000000;
 
 // Semantic Aliases
-$color-bg-body: $neutral-50;
+$color-bg-body: $neutral-100;
 $color-bg-base: $neutral-0;
-$color-bg-component: $neutral-100;
-$color-bg-hover: rgba(255, 255, 255, 0.04);
-$color-bg-active: rgba(255, 255, 255, 0.06);
-$color-bg-mask: rgba(0, 0, 0, 0.75);
+$color-bg-component: $neutral-50;
+$color-bg-hover: rgba(0, 0, 0, 0.04);
+$color-bg-active: rgba(0, 0, 0, 0.06);
+$color-bg-mask: rgba(0, 0, 0, 0.45);
 
-$color-text-primary: $neutral-600;
-$color-text-secondary: $neutral-500;
-$color-text-tertiary: $neutral-400;
-$color-text-disabled: rgba(255, 255, 255, 0.3);
-$color-text-placeholder: rgba(255, 255, 255, 0.25);
+$color-text-primary: rgba(0, 0, 0, 0.85);
+$color-text-secondary: rgba(0, 0, 0, 0.65);
+$color-text-tertiary: rgba(0, 0, 0, 0.45);
+$color-text-disabled: rgba(0, 0, 0, 0.25);
+$color-text-placeholder: rgba(0, 0, 0, 0.25);
 $color-text-inverse: $neutral-0;
 
-$color-border-base: $neutral-300;
-$color-border-light: $neutral-200;
-$color-border-dark: $neutral-400;
+$color-border-base: #d9d9d9;
+$color-border-light: #f0f0f0;
+$color-border-dark: #b0b0b0;
 $color-divider: $neutral-200;
 
 // Gradient Colors
@@ -345,9 +345,10 @@ $shadow-xl: 0 20px 30px -5px rgba(0, 0, 0, 0.2);
 $shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
 $shadow-inner: inset 0 2px 4px 0 rgba(0, 0, 0, 0.06);
 $shadow-outline: 0 0 0 3px rgba($primary-500, 0.3);
-$shadow-card: 0 1px 2px -2px rgba(0, 0, 0, 0.16),
-              0 3px 6px 0 rgba(0, 0, 0, 0.12),
-              0 5px 12px 4px rgba(0, 0, 0, 0.09);
+$shadow-card:
+  0 1px 2px -2px rgba(0, 0, 0, 0.16),
+  0 3px 6px 0 rgba(0, 0, 0, 0.12),
+  0 5px 12px 4px rgba(0, 0, 0, 0.09);
 
 /* =====================================================================
    9. Z-INDEX SCALE
@@ -437,7 +438,7 @@ $vendor-sidebar-bg: #1a1a2e;
 $vendor-sidebar-text: rgba(255, 255, 255, 0.65);
 
 $public-header-bg: $neutral-0;
-$public-footer-bg: #0D0D0D;
+$public-footer-bg: #001529;
 $public-footer-text: rgba(255, 255, 255, 0.65);
 
 $auth-bg: $gradient-primary;
@@ -596,17 +597,8 @@ $toast-min-width: 300px;
 $toast-padding: $spacing-3 $spacing-4;
 
 /* =====================================================================
-   FUNCTIONS
+   RESPONSIVE FUNCTIONS
    ===================================================================== */
-
-/// Get spacing value from map
-@function space($key) {
-  @if map-has-key($spacings, $key) {
-    @return map-get($spacings, $key);
-  }
-  @warn "Unknown spacing key: `#{$key}`.";
-  @return null;
-}
 
 /// Get breakpoint value from map
 @function bp($key) {
@@ -615,36 +607,6 @@ $toast-padding: $spacing-3 $spacing-4;
   }
   @warn "Unknown breakpoint: `#{$key}`.";
   @return null;
-}
-
-/// Convert px to rem (base 16px)
-@function rem($px) {
-  @return ($px / 16) * 1rem;
-}
-
-/// Convert px to em
-@function em($px, $base: 16) {
-  @return ($px / $base) * 1em;
-}
-
-/// Lighten a color by mixing with white
-@function tint($color, $percentage) {
-  @return mix(white, $color, $percentage);
-}
-
-/// Darken a color by mixing with black
-@function shade($color, $percentage) {
-  @return mix(black, $color, $percentage);
-}
-
-/// Get a theme color from the map
-@function theme-color($key) {
-  @return map-get($theme-colors, $key);
-}
-
-/// Get the light variant of a theme color
-@function theme-color-light($key) {
-  @return map-get($theme-colors-light, $key);
 }
 
 /* =====================================================================
@@ -825,7 +787,7 @@ $toast-padding: $spacing-3 $spacing-4;
   }
 }
 
-/// Responsive content padding (used in layout content areas)
+/// Responsive content padding (used in layout content area)
 @mixin content-padding {
   padding: $content-padding-mobile;
 
@@ -1734,3 +1696,781 @@ $toast-padding: $spacing-3 $spacing-4;
     100% { transform: scale(4); opacity: 0; }
   }
 }
+
+/* =====================================================================
+   ADMIN PORTAL COMPONENT & OVERLAY RESETS
+   ===================================================================== */
+app-admin-layout {
+  /* ── Base canvas ── */
+  background-color: #f0f2f5 !important;
+  color: rgba(0, 0, 0, 0.85) !important;
+  display: block;
+
+  * {
+    letter-spacing: normal !important;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    color: rgba(0, 0, 0, 0.85) !important;
+    font-weight: 600 !important;
+  }
+
+  a {
+    color: #1890ff !important;
+
+    &:hover {
+      color: #40a9ff !important;
+    }
+  }
+
+  /* ── Sidebar Reset ── */
+  .main-sidebar,
+  ::ng-deep .main-sidebar {
+    background: #fff !important;
+    border-right: 1px solid #e2e8f0 !important;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1) !important;
+  }
+
+  .sidebar-logo,
+  ::ng-deep .sidebar-logo {
+    border-bottom: 1px solid #f1f5f9 !important;
+  }
+
+  .menu-search ::ng-deep .ant-input-affix-wrapper,
+  ::ng-deep .menu-search .ant-input-affix-wrapper {
+    background-color: #f8fafc !important;
+    border: 1px solid #e2e8f0 !important;
+
+    &:hover,
+    &-focused {
+      background-color: #fff !important;
+      border-color: #1890ff !important;
+    }
+
+    .ant-input {
+      background: transparent !important;
+      color: #475569 !important;
+
+      &::placeholder {
+        color: #94a3b8 !important;
+      }
+    }
+
+    .ant-input-prefix,
+    .ant-input-suffix {
+      color: #94a3b8 !important;
+    }
+  }
+
+  ::ng-deep .main-sidebar .sidebar-menu {
+
+    .ant-menu-item,
+    .ant-menu-submenu-title {
+      color: #475569 !important;
+
+      .menu-icon,
+      .ant-menu-item-icon,
+      .anticon {
+        color: #64748b !important;
+      }
+
+      &:hover {
+        color: #1890ff !important;
+        background: #f8fafc !important;
+
+        .menu-icon,
+        .ant-menu-item-icon,
+        .anticon {
+          color: #1890ff !important;
+        }
+      }
+    }
+
+    .ant-menu-item-selected,
+    .active-item {
+      background: #e6f7ff !important;
+      color: #1890ff !important;
+
+      .menu-icon,
+      .ant-menu-item-icon,
+      .anticon {
+        color: #1890ff !important;
+      }
+    }
+
+    .ant-menu-submenu-open>.ant-menu-submenu-title {
+      color: #1e293b !important;
+
+      .ant-menu-submenu-arrow {
+        color: #1e293b !important;
+      }
+    }
+
+    .ant-menu-sub {
+      background: transparent !important;
+      border-left-color: #e2e8f0 !important;
+    }
+  }
+
+  ::ng-deep .menu-scroll-container {
+    &::-webkit-scrollbar-track {
+      background: #fff !important;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: #e2e8f0 !important;
+    }
+
+    &::-webkit-scrollbar-thumb:hover {
+      background: #cbd5e1 !important;
+    }
+  }
+
+  .menu-badge,
+  ::ng-deep .menu-badge {
+    color: #fff !important;
+  }
+
+  /* ── Admin Header Reset ── */
+  .main-header,
+  ::ng-deep .main-header {
+    background: #fff !important;
+    box-shadow: 0 1px 4px rgba(0, 21, 41, 0.08) !important;
+  }
+
+  .trigger,
+  ::ng-deep .trigger {
+    color: #475569 !important;
+
+    &:hover {
+      color: #1890ff !important;
+      background: rgba(24, 144, 255, 0.1) !important;
+    }
+  }
+
+  .header-icon,
+  ::ng-deep .header-icon {
+    color: #475569 !important;
+
+    &:hover {
+      color: #1890ff !important;
+    }
+  }
+
+  .user-profile,
+  ::ng-deep .user-profile {
+    &:hover {
+      background: #f1f5f9 !important;
+    }
+  }
+
+  .user-avatar,
+  ::ng-deep .user-avatar {
+    border-color: #1890ff !important;
+  }
+
+  .user-name,
+  ::ng-deep .user-name {
+    color: #0f172a !important;
+  }
+
+  .user-role,
+  ::ng-deep .user-role {
+    color: #64748b !important;
+  }
+
+  /* ── Admin Footer Reset ── */
+  .main-footer,
+  ::ng-deep .main-footer {
+    background: #fff !important;
+    border-top: 1px solid #e2e8f0 !important;
+  }
+
+  ::ng-deep .footer-left {
+    color: #64748b !important;
+
+    .version {
+      background: #f1f5f9 !important;
+      color: #475569 !important;
+    }
+  }
+
+  ::ng-deep .footer-right {
+    a {
+      color: #475569 !important;
+
+      &:hover {
+        color: #1890ff !important;
+      }
+    }
+
+    .separator {
+      color: #cbd5e1 !important;
+    }
+  }
+
+  /* ── Inputs & Form Fields ── */
+  .ant-input,
+  .ant-input-affix-wrapper,
+  .ant-input-group-addon,
+  .ant-input-number,
+  .ant-picker,
+  .ant-select-selector,
+  .ant-input-group>.ant-input {
+    background-color: #fff !important;
+    color: rgba(0, 0, 0, 0.85) !important;
+    border-color: #d9d9d9 !important;
+    border-radius: 2px !important;
+  }
+
+  .ant-input:hover,
+  .ant-input-affix-wrapper:hover,
+  .ant-input-number:hover,
+  .ant-picker:hover,
+  .ant-select-selector:hover {
+    border-color: #40a9ff !important;
+  }
+
+  .ant-input:focus,
+  .ant-input-affix-wrapper-focused,
+  .ant-input-number:focus,
+  .ant-picker-focused,
+  .ant-select-focused .ant-select-selector,
+  .ant-select-selector:focus {
+    border-color: #40a9ff !important;
+    box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2) !important;
+  }
+
+  ::placeholder,
+  ::-webkit-input-placeholder {
+    color: #bfbfbf !important;
+  }
+
+  /* ── Buttons ── */
+  .ant-btn-primary {
+    background-color: #1890ff !important;
+    border-color: #1890ff !important;
+    color: #fff !important;
+    font-weight: 400 !important;
+    border-radius: 2px !important;
+    text-transform: none !important;
+    box-shadow: 0 2px 0 rgba(0, 0, 0, 0.045) !important;
+  }
+
+  .ant-btn-primary:hover,
+  .ant-btn-primary:focus {
+    background-color: #40a9ff !important;
+    border-color: #40a9ff !important;
+    color: #fff !important;
+    transform: none !important;
+    box-shadow: 0 2px 0 rgba(0, 0, 0, 0.045) !important;
+  }
+
+  .ant-btn-primary:disabled,
+  .ant-btn-primary[disabled] {
+    background-color: #f5f5f5 !important;
+    border-color: #d9d9d9 !important;
+    color: rgba(0, 0, 0, 0.25) !important;
+    box-shadow: none !important;
+  }
+
+  .ant-btn:not(.ant-btn-primary) {
+    background-color: #fff !important;
+    border-color: #d9d9d9 !important;
+    color: rgba(0, 0, 0, 0.85) !important;
+    border-radius: 2px !important;
+  }
+
+  .ant-btn:not(.ant-btn-primary):hover {
+    border-color: #40a9ff !important;
+    color: #1890ff !important;
+  }
+
+  /* ── Checkboxes & Radio ── */
+  .ant-checkbox-inner,
+  .ant-radio-inner {
+    background-color: #fff !important;
+    border-color: #d9d9d9 !important;
+    border-radius: 2px !important;
+  }
+
+  .ant-checkbox-checked .ant-checkbox-inner,
+  .ant-radio-checked .ant-radio-inner {
+    background-color: #1890ff !important;
+    border-color: #1890ff !important;
+  }
+
+  .ant-checkbox-wrapper:hover .ant-checkbox-inner,
+  .ant-radio-wrapper:hover .ant-radio-inner {
+    border-color: #1890ff !important;
+  }
+
+  /* ── Tables ── */
+  .ant-table {
+    background-color: #fff !important;
+    color: rgba(0, 0, 0, 0.85) !important;
+    border: 1px solid #f0f0f0 !important;
+  }
+
+  .ant-table-thead>tr>th {
+    background-color: #fafafa !important;
+    color: rgba(0, 0, 0, 0.85) !important;
+    border-bottom: 1px solid #f0f0f0 !important;
+    font-weight: 500 !important;
+  }
+
+  .ant-table-tbody>tr>td {
+    border-bottom: 1px solid #f0f0f0 !important;
+    color: rgba(0, 0, 0, 0.85) !important;
+  }
+
+  .ant-table-tbody>tr:nth-child(even)>td {
+    background-color: #fafafa !important;
+  }
+
+  .ant-table-tbody>tr.ant-table-row:hover>td {
+    background-color: #e6f7ff !important;
+  }
+
+  /* ── Cards ── */
+  .ant-card {
+    background-color: #fff !important;
+    border-color: #f0f0f0 !important;
+    color: rgba(0, 0, 0, 0.85) !important;
+    border-radius: 2px !important;
+  }
+
+  .ant-card-head {
+    border-bottom: 1px solid #f0f0f0 !important;
+    color: rgba(0, 0, 0, 0.85) !important;
+  }
+
+  /* ── Steps ── */
+  .ant-steps-item-title {
+    color: rgba(0, 0, 0, 0.85) !important;
+  }
+
+  .ant-steps-item-process .ant-steps-item-icon {
+    background-color: #1890ff !important;
+    border-color: #1890ff !important;
+  }
+
+  .ant-steps-item-process .ant-steps-item-icon>.ant-steps-icon {
+    color: #fff !important;
+  }
+
+  .ant-steps-item-wait .ant-steps-item-icon {
+    background-color: #fff !important;
+    border-color: #d9d9d9 !important;
+  }
+
+  .ant-steps-item-wait .ant-steps-item-icon>.ant-steps-icon {
+    color: rgba(0, 0, 0, 0.25) !important;
+  }
+
+  .ant-steps-item-finish .ant-steps-item-icon {
+    border-color: #1890ff !important;
+    background-color: #fff !important;
+  }
+
+  .ant-steps-item-finish .ant-steps-item-icon>.ant-steps-icon {
+    color: #1890ff !important;
+  }
+
+  /* ── Badges ── */
+  .ant-badge-count {
+    background-color: #ff4d4f !important;
+    color: #fff !important;
+    box-shadow: 0 0 0 1px #fff !important;
+  }
+
+  /* ── Pagination ── */
+  .ant-pagination {
+    color: rgba(0, 0, 0, 0.85) !important;
+  }
+
+  .ant-pagination-item,
+  .ant-pagination-prev,
+  .ant-pagination-next,
+  .ant-pagination-jump-prev,
+  .ant-pagination-jump-next {
+    background-color: #fff !important;
+    border: 1px solid #d9d9d9 !important;
+    border-radius: 2px !important;
+
+    a {
+      color: rgba(0, 0, 0, 0.85) !important;
+    }
+
+    &:hover {
+      border-color: #1890ff !important;
+
+      a {
+        color: #1890ff !important;
+      }
+    }
+  }
+
+  .ant-pagination-item-active {
+    background-color: #fff !important;
+    border-color: #1890ff !important;
+
+    a {
+      color: #1890ff !important;
+      font-weight: 500 !important;
+    }
+  }
+
+  /* ── Select Dropdown ── */
+  .ant-select-item {
+    color: rgba(0, 0, 0, 0.85) !important;
+  }
+
+  .ant-select-item-option-active:not(.ant-select-item-option-disabled) {
+    background-color: #f5f5f5 !important;
+    color: rgba(0, 0, 0, 0.85) !important;
+  }
+
+  .ant-select-item-option-selected:not(.ant-select-item-option-disabled) {
+    background-color: #e6f7ff !important;
+    color: rgba(0, 0, 0, 0.85) !important;
+    font-weight: 600 !important;
+  }
+
+  /* ── Breadcrumbs ── */
+  .ant-breadcrumb {
+    color: rgba(0, 0, 0, 0.45) !important;
+
+    a {
+      color: rgba(0, 0, 0, 0.45) !important;
+
+      &:hover {
+        color: rgba(0, 0, 0, 0.85) !important;
+      }
+    }
+
+    .ant-breadcrumb-separator {
+      color: rgba(0, 0, 0, 0.45) !important;
+    }
+  }
+
+  /* ── Layout backgrounds ── */
+  .main-layout,
+  .main-content-layout,
+  .main-content,
+  .content-wrapper {
+    background-color: #f0f2f5 !important;
+  }
+
+  /* ── Slider reset ── */
+  .ant-slider-rail {
+    background-color: #f5f5f5 !important;
+  }
+
+  .ant-slider-track {
+    background-color: #1890ff !important;
+  }
+
+  .ant-slider-handle {
+    background-color: #fff !important;
+    border: 2px solid #1890ff !important;
+  }
+
+  /* ── Message / Notification reset ── */
+  .ant-message-notice-content {
+    background: #fff !important;
+    color: rgba(0, 0, 0, 0.85) !important;
+  }
+
+  /* ── Scrollbars Reset ── */
+  ::-webkit-scrollbar {
+    width: 8px !important;
+    height: 8px !important;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: #f1f5f9 !important;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #cbd5e1 !important;
+    border-radius: 4px !important;
+    
+    &:hover {
+      background: #1890ff !important;
+    }
+  }
+}
+
+/* ── User dropdown menu reset (rendered in CDK overlay, outside app-admin-layout) ── */
+::ng-deep .user-dropdown-menu,
+.user-dropdown-menu {
+  background: rgba(255, 255, 255, 0.98) !important;
+  border: 1px solid rgba(226, 232, 240, 0.8) !important;
+  box-shadow: 0 10px 30px -8px rgba(15, 23, 42, 0.12), 0 1px 3px 0 rgba(15, 23, 42, 0.05) !important;
+
+  .user-menu-header {
+    background: linear-gradient(135deg, rgba(230, 247, 255, 0.6) 0%, rgba(230, 247, 255, 0.1) 100%) !important;
+    border: 1px solid rgba(186, 230, 253, 0.6) !important;
+
+    &:hover {
+      background: linear-gradient(135deg, rgba(230, 247, 255, 0.6) 0%, rgba(230, 247, 255, 0.1) 100%) !important;
+    }
+  }
+
+  .dropdown-user-name {
+    color: #1e293b !important;
+  }
+
+  .dropdown-user-email {
+    color: #64748b !important;
+  }
+
+  .ant-dropdown-menu-item {
+    color: #475569 !important;
+
+    .anticon {
+      color: #94a3b8 !important;
+    }
+
+    &:hover {
+      background: #e6f7ff !important;
+      color: #1890ff !important;
+
+      .anticon {
+        color: #1890ff !important;
+      }
+    }
+  }
+
+  .ant-dropdown-menu-item-divider {
+    background-color: #f1f5f9 !important;
+  }
+
+  .logout-item {
+    color: #dc2626 !important;
+
+    .anticon {
+      color: #ef4444 !important;
+    }
+
+    &:hover {
+      background: rgba(239, 68, 68, 0.08) !important;
+      color: #dc2626 !important;
+
+      .anticon {
+        color: #ef4444 !important;
+      }
+    }
+  }
+}
+
+/* ════════════════════════════════════════════════════════════════════
+   CDK OVERLAY RESET FOR ADMIN LAYOUT
+   Forces all dynamically rendered overlays (modals, pickers, dropdowns)
+   to use the default light/blue theme when the user is in the admin panel.
+   ════════════════════════════════════════════════════════════════════ */
+.admin-overlay {
+  /* Dynamic modal popups default style */
+  .ant-modal-content {
+    background-color: #ffffff !important;
+    color: rgba(0, 0, 0, 0.85) !important;
+    border-radius: 8px !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+  }
+
+  .ant-modal-header {
+    background: #ffffff !important;
+    border-bottom: 1px solid #f0f0f0 !important;
+    
+    .ant-modal-title {
+      color: rgba(0, 0, 0, 0.85) !important;
+    }
+  }
+
+  .ant-modal-close-x {
+    color: rgba(0, 0, 0, 0.45) !important;
+    &:hover {
+      color: rgba(0, 0, 0, 0.75) !important;
+    }
+  }
+
+  .ant-modal-confirm-body {
+    .ant-modal-confirm-title {
+      color: rgba(0, 0, 0, 0.85) !important;
+    }
+    .ant-modal-confirm-content {
+      color: rgba(0, 0, 0, 0.65) !important;
+    }
+  }
+
+  /* Inputs & Form Fields inside admin modals */
+  .ant-input,
+  .ant-input-affix-wrapper,
+  .ant-input-number,
+  .ant-select-selector,
+  .ant-picker,
+  .ant-input-group-addon,
+  .ant-input-group>.ant-input {
+    background-color: #ffffff !important;
+    color: rgba(0, 0, 0, 0.85) !important;
+    border-color: #d9d9d9 !important;
+    border-radius: 2px !important;
+  }
+
+  .ant-input:hover,
+  .ant-input-affix-wrapper:hover,
+  .ant-input-number:hover,
+  .ant-picker:hover,
+  .ant-select-selector:hover {
+    border-color: #40a9ff !important;
+  }
+
+  .ant-input:focus,
+  .ant-input-affix-wrapper-focused,
+  .ant-input-number:focus,
+  .ant-picker-focused,
+  .ant-select-focused .ant-select-selector,
+  .ant-select-selector:focus {
+    border-color: #40a9ff !important;
+    box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2) !important;
+  }
+
+  ::placeholder,
+  ::-webkit-input-placeholder,
+  .ant-select-selection-placeholder {
+    color: #bfbfbf !important;
+  }
+
+  .ant-input-prefix,
+  .ant-input-suffix {
+    color: rgba(0, 0, 0, 0.45) !important;
+  }
+
+  /* Modals action buttons default style */
+  .ant-btn-primary {
+    background-color: #1890ff !important;
+    border-color: #1890ff !important;
+    color: #ffffff !important;
+    font-weight: 500 !important;
+    border-radius: 6px !important;
+    text-transform: none !important;
+    letter-spacing: normal !important;
+    box-shadow: 0 2px 0 rgba(0, 0, 0, 0.045) !important;
+    transform: none !important;
+    
+    &:hover,
+    &:focus {
+      background-color: #40a9ff !important;
+      border-color: #40a9ff !important;
+      color: #ffffff !important;
+      transform: none !important;
+      box-shadow: 0 2px 0 rgba(0, 0, 0, 0.045) !important;
+    }
+  }
+
+  .ant-btn:not(.ant-btn-primary) {
+    background-color: #ffffff !important;
+    border-color: #d9d9d9 !important;
+    color: rgba(0, 0, 0, 0.85) !important;
+    border-radius: 6px !important;
+    transform: none !important;
+
+    &:hover,
+    &:focus {
+      border-color: #40a9ff !important;
+      color: #40a9ff !important;
+      background-color: #ffffff !important;
+    }
+  }
+
+  /* Dropdown selections & Date pickers */
+  .ant-select-dropdown {
+    background-color: #ffffff !important;
+    border: 1px solid #f0f0f0 !important;
+    box-shadow: 0 3px 6px -4px rgba(0,0,0,0.12), 0 6px 16px 0 rgba(0,0,0,0.08), 0 9px 28px 8px rgba(0,0,0,0.05) !important;
+    
+    .ant-select-item {
+      color: rgba(0, 0, 0, 0.85) !important;
+      
+      &-option-active:not(.ant-select-item-option-disabled) {
+        background-color: #f5f5f5 !important;
+        color: rgba(0, 0, 0, 0.85) !important;
+      }
+      
+      &-option-selected:not(.ant-select-item-option-disabled) {
+        background-color: #e6f7ff !important;
+        color: #1890ff !important;
+        font-weight: 600 !important;
+      }
+    }
+  }
+
+  .ant-picker-dropdown {
+    .ant-picker-panel-container {
+      background: #ffffff !important;
+      box-shadow: 0 3px 6px -4px rgba(0,0,0,0.12), 0 6px 16px 0 rgba(0,0,0,0.08), 0 9px 28px 8px rgba(0,0,0,0.05) !important;
+    }
+    
+    .ant-picker-cell {
+      color: rgba(0, 0, 0, 0.25) !important;
+      
+      &-in-view {
+        color: rgba(0, 0, 0, 0.85) !important;
+      }
+    }
+    
+    .ant-picker-header {
+      border-bottom: 1px solid #f0f0f0 !important;
+      color: rgba(0, 0, 0, 0.85) !important;
+      
+      button {
+        color: rgba(0, 0, 0, 0.45) !important;
+        &:hover {
+          color: rgba(0, 0, 0, 0.85) !important;
+        }
+      }
+    }
+
+    .ant-picker-content th {
+      color: rgba(0, 0, 0, 0.85) !important;
+    }
+
+    .ant-picker-cell-inner {
+      color: rgba(0, 0, 0, 0.85) !important;
+      &:hover {
+        background: #f5f5f5 !important;
+      }
+    }
+
+    .ant-picker-cell-selected .ant-picker-cell-inner {
+      background: #1890ff !important;
+      color: #fff !important;
+    }
+  }
+
+  /* ── Scrollbars Reset ── */
+  ::-webkit-scrollbar {
+    width: 8px !important;
+    height: 8px !important;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: #f1f5f9 !important;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #cbd5e1 !important;
+    border-radius: 4px !important;
+    
+    &:hover {
+      background: #1890ff !important;
+    }
+  }
+}
+

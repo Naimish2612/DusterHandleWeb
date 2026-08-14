@@ -222,7 +222,7 @@
     border-radius: $border-radius-lg !important;
     background: $primary-500 !important;
     border-color: $primary-500 !important;
-    box-shadow: 0 4px 14px rgba(0, 156, 222, 0.3) !important;
+    box-shadow: 0 4px 14px rgba($primary-500, 0.3) !important;
     display: inline-flex !important;
     align-items: center !important;
     gap: $spacing-2 !important;
@@ -314,17 +314,19 @@
   &__badge {
     position: absolute;
     top: $spacing-2-5;
-    left: $spacing-2-5;
-    font-size: $font-size-xs;
-    font-weight: $font-weight-extrabold;
-    letter-spacing: $letter-spacing-wide;
-    padding: $spacing-0-5 $spacing-2;
-    border-radius: $border-radius-base;
     z-index: $z-index-float;
 
-    &--sale { background: $error-500;    color: $neutral-0; }
-    &--new  { background: $success-500;  color: $neutral-0; }
-    &--hot  { background: $warning-600;  color: $neutral-0; }
+    font-size: 10px !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.05em !important;
+    padding: 3px 8px !important;
+    border-radius: 4px !important;
+    color: #ffffff !important;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+
+    &--sale { background: $error-500 !important; left: $spacing-2-5; }
+    &--new  { background: $success-500 !important; right: $spacing-2-5; }
+    &--hot  { background: $warning-600 !important; left: $spacing-2-5; }
   }
 
   &__discount-pill {
@@ -511,7 +513,7 @@
     border-radius: $border-radius-lg !important;
     background: $primary-500 !important;
     border-color: $primary-500 !important;
-    box-shadow: 0 3px 10px rgba(0, 156, 222, 0.3) !important;
+    box-shadow: 0 3px 10px rgba($primary-500, 0.3) !important;
     display: inline-flex !important;
     align-items: center !important;
     justify-content: center !important;

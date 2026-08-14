@@ -1,8 +1,7 @@
-@use '../../../../../assets/styles/common' as *;
-@use '../../../../../assets/styles/responsive' as *;
+@use '../../../../../assets/styles/admin-common' as *;
 
 // =========================================================================
-// PROCESS PAGE — form container
+// PROCESS PAGE â€” form container
 // =========================================================================
 .process-page {
   padding: $spacing-6; // 24px
@@ -24,7 +23,7 @@ nz-card {
 }
 
 // =========================================================================
-// FORM ITEMS — consistent vertical rhythm
+// FORM ITEMS â€” consistent vertical rhythm
 // =========================================================================
 nz-form-item {
   margin-bottom: $spacing-4;   // 16px between rows
@@ -38,7 +37,7 @@ nz-form-item {
       color: $neutral-700;
       height: auto;
       line-height: 1.4;
-      white-space: nowrap;         // ✅ prevent labels wrapping to 2 lines
+      white-space: nowrap;         // âœ… prevent labels wrapping to 2 lines
       overflow: hidden;
       text-overflow: ellipsis;
     }
@@ -50,7 +49,7 @@ nz-form-item {
 }
 
 // =========================================================================
-// INPUT / SELECT / DATE-PICKER / NUMBER — unified height
+// INPUT / SELECT / DATE-PICKER / NUMBER â€” unified height
 // =========================================================================
 ::ng-deep {
   .ant-input,
@@ -80,13 +79,13 @@ nz-form-item {
 }
 
 // =========================================================================
-// SWITCH — inline wrapper (switch + label on same line)
+// SWITCH â€” inline wrapper (switch + label on same line)
 // =========================================================================
 .switch-wrapper {
   display: flex;
   align-items: center;
   gap: $spacing-2;
-  min-height: 36px;             // ✅ match input height for row alignment
+  min-height: 36px;             // âœ… match input height for row alignment
 }
 
 .switch-label {

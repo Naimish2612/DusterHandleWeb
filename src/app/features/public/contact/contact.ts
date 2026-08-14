@@ -73,7 +73,7 @@ export class Contact {
     { label: 'Other',                value: 'other' },
   ];
 
-  // ─── Updated with correct Aureum Studio details ───
+  // ─── Updated with correct Duster details ───
   contactCards: ContactInfo[] = [
     {
       icon: 'phone',
@@ -86,14 +86,14 @@ export class Contact {
       icon: 'mail',
       title: 'Email Us',
       subtitle: 'We reply within 24 hours',
-      value: 'studio@aureumhardware.com',
-      link: 'mailto:studio@aureumhardware.com',
+      value: 'studio@duster.com',
+      link: 'mailto:studio@duster.com',
     },
     {
       icon: 'environment',
       title: 'Head Office',
       subtitle: 'Come visit us',
-      value: 'Aureum Studio, Plot No 5, Ring Road, National Highway-27, Rajkot - 360002, Gujarat, India.',
+      value: 'Duster, Plot No 5, Ring Road, National Highway-27, Rajkot - 360002, Gujarat, India.',
     }
   ];
 
@@ -109,7 +109,7 @@ export class Contact {
         'We offer a hassle-free 30-day return policy for all products in their original, unused condition with original packaging. Initiate a return from your "My Orders" dashboard — we arrange free doorstep pickup. Refunds are credited within 5 – 7 business days to your original payment method.',
     },
     {
-      question: 'Are my payments secure on Aureum Hardware?',
+      question: 'Are my payments secure on DUSTER?',
       answer:
         'Absolutely. We use 256-bit SSL encryption and are fully PCI-DSS compliant. Accepted payment modes include UPI, Credit/Debit cards, Net Banking, Wallets, EMI, and Cash on Delivery. We never store your full card details on our servers — all card data is tokenised through our payment gateway.',
     },

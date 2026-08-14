@@ -223,7 +223,7 @@
     display: inline-flex !important;
     align-items: center !important;
     gap: $spacing-2 !important;
-    box-shadow: 0 4px 12px rgba(0, 156, 222, 0.3) !important;
+    box-shadow: 0 4px 12px rgba($primary-500, 0.3) !important;
     flex-shrink: 0;
     transition: all $transition-fast !important;
 
@@ -279,7 +279,7 @@
     font-size: $icon-size-xl;
     color: $neutral-0;
     flex-shrink: 0;
-    box-shadow: 0 4px 12px rgba(0, 156, 222, 0.3);
+    box-shadow: 0 4px 12px rgba($primary-500, 0.3);
 
     &--edit {
       background: linear-gradient(135deg, $warning-600 0%, $warning-800 100%);
@@ -453,14 +453,14 @@
     align-items: center !important;
     gap: $spacing-2 !important;
     padding: 0 $spacing-8 !important;
-    box-shadow: 0 4px 12px rgba(0, 156, 222, 0.3) !important;
+    box-shadow: 0 4px 12px rgba($primary-500, 0.3) !important;
     transition: all $transition-fast !important;
 
     &:hover:not(:disabled) {
       background: $primary-600 !important;
       border-color: $primary-600 !important;
       transform: translateY(-1px);
-      box-shadow: 0 6px 18px rgba(0, 156, 222, 0.4) !important;
+      box-shadow: 0 6px 18px rgba($primary-500, 0.4) !important;
     }
   }
 }
@@ -484,7 +484,7 @@
   &--active {
     border-color: $primary-500;
     background: $primary-50;
-    box-shadow: 0 0 0 3px rgba(0, 156, 222, 0.12);
+    box-shadow: 0 0 0 3px rgba($primary-500, 0.12);
   }
 
   &__input {
@@ -635,7 +635,7 @@
     align-items: center !important;
     gap: $spacing-2 !important;
     padding: 0 $spacing-8 !important;
-    box-shadow: 0 4px 14px rgba(0, 156, 222, 0.3) !important;
+    box-shadow: 0 4px 14px rgba($primary-500, 0.3) !important;
     margin-top: $spacing-2;
 
     &:hover {

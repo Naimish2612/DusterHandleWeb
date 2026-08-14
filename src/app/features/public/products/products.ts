@@ -192,7 +192,7 @@ export class Products implements OnInit {
         this.route.queryParams
             .pipe(takeUntilDestroyed(this.destroyRef))
             .subscribe(params => {
-                const queryCategory = params['category'];
+                const queryCategory = params['category'] || history.state?.category;
                 if (queryCategory && this.catalog.categories().length > 0) {
                     const cat = this.catalog.categories().find(
                         c => c.value.toLowerCase() === queryCategory.toLowerCase()
@@ -242,7 +242,7 @@ export class Products implements OnInit {
                     this.filterSections = this.catalog.filterSections();
                     this.loadingFilters = false;
 
-                    const queryCategory = this.route.snapshot.queryParams['category'];
+                    const queryCategory = this.route.snapshot.queryParams['category'] || history.state?.category;
                     if (queryCategory) {
                         const cat = this.catalog.categories().find(
                             c => c.value.toLowerCase() === queryCategory.toLowerCase()

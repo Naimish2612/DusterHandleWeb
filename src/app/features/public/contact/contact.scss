@@ -420,21 +420,23 @@
     }
   }
 
-  .ant-form-item-label>label {
-    font-size: $font-size-sm;
-    font-weight: $font-weight-semibold;
-    color: $neutral-700;
-  }
+  ::ng-deep {
+    .ant-form-item-label > label {
+      font-size: $font-size-sm;
+      font-weight: $font-weight-semibold;
+      color: $neutral-700 !important;
+    }
 
-  .ant-input,
-  .ant-input-affix-wrapper,
-  .ant-input-group-addon,
-  .ant-select-selector {
-    border-radius: $border-radius-lg !important;
-  }
+    .ant-input,
+    .ant-input-affix-wrapper,
+    .ant-input-group-addon,
+    .ant-select-selector {
+      border-radius: $border-radius-lg !important;
+    }
 
-  textarea.ant-input {
-    border-radius: $border-radius-lg !important;
+    textarea.ant-input {
+      border-radius: $border-radius-lg !important;
+    }
   }
 
   &__submit-item {
@@ -450,7 +452,7 @@
     padding: 0 $spacing-10 !important;
     background: $primary-500 !important;
     border-color: $primary-500 !important;
-    box-shadow: 0 $spacing-1 $spacing-5 rgba(0, 156, 222, 0.3) !important;
+    box-shadow: 0 $spacing-1 $spacing-5 rgba($primary-500, 0.3) !important;
     transition: all $transition-base !important;
     display: inline-flex !important;
     align-items: center !important;
@@ -460,7 +462,7 @@
       background: $primary-600 !important;
       border-color: $primary-600 !important;
       transform: translateY(-1px);
-      box-shadow: 0 $spacing-2 $spacing-7 rgba(0, 156, 222, 0.4) !important;
+      box-shadow: 0 $spacing-2 $spacing-7 rgba($primary-500, 0.4) !important;
     }
   }
 
@@ -469,7 +471,7 @@
     align-items: center;
     gap: $spacing-1-5;
     font-size: $font-size-xs;
-    color: $neutral-400;
+    color: #ffffff;
     margin: $spacing-1-5 0 0;
     margin-left: $spacing-12 !important;
 
@@ -509,7 +511,7 @@
     left: $spacing-4;
     right: $spacing-4;
     bottom: $spacing-4;
-    background: rgba(255, 255, 255, 0.97);
+    background: rgba($neutral-0, 0.95);
     backdrop-filter: blur(8px);
     border-radius: $border-radius-lg;
     padding: $spacing-4;
@@ -735,37 +737,39 @@
 .faq-collapse {
   background: transparent !important;
 
-  .ant-collapse-item {
-    margin-bottom: $spacing-3 !important;
-    border: 1.5px solid $neutral-200 !important;
-    border-radius: $border-radius-xl !important;
-    overflow: hidden;
-    background: $neutral-0 !important;
-    transition: border-color $transition-fast, box-shadow $transition-base;
+  ::ng-deep {
+    .ant-collapse-item {
+      margin-bottom: $spacing-3 !important;
+      border: 1.5px solid $neutral-200 !important;
+      border-radius: $border-radius-xl !important;
+      overflow: hidden;
+      background: $neutral-0 !important;
+      transition: border-color $transition-fast, box-shadow $transition-base;
 
-    &:hover {
-      border-color: $primary-300 !important;
-      box-shadow: $shadow-sm;
+      &:hover {
+        border-color: $primary-300 !important;
+        box-shadow: $shadow-sm;
+      }
+
+      &.ant-collapse-item-active {
+        border-color: $primary-400 !important;
+        box-shadow: $shadow-base;
+      }
     }
 
-    &.ant-collapse-item-active {
-      border-color: $primary-400 !important;
-      box-shadow: $shadow-base;
+    .ant-collapse-header {
+      padding: $spacing-5 $spacing-6 !important;
+      background: $neutral-0 !important;
     }
-  }
 
-  .ant-collapse-header {
-    padding: $spacing-5 $spacing-6 !important;
-    background: $neutral-0 !important;
-  }
+    .ant-collapse-content {
+      border-top: 1px solid $neutral-100 !important;
+      background: $neutral-50 !important;
+    }
 
-  .ant-collapse-content {
-    border-top: 1px solid $neutral-100 !important;
-    background: $neutral-50 !important;
-  }
-
-  .ant-collapse-content-box {
-    padding: $spacing-5 $spacing-6 !important;
+    .ant-collapse-content-box {
+      padding: $spacing-5 $spacing-6 !important;
+    }
   }
 }
 
@@ -834,7 +838,7 @@
 
 .faq-cta__icon {
   font-size: $icon-size-3xl;
-  color: $primary-300;
+  color: $primary-500;
   flex-shrink: 0;
 
   @include mobile {
@@ -886,24 +890,40 @@
   }
 
   &--ghost {
-    border: 1.5px solid rgba(255, 255, 255, 0.35);
-    color: $neutral-0;
+    border: 1.5px solid rgba(255, 255, 255, 0.35) !important;
+    color: #ffffff !important;
+
+    span[nz-icon] {
+      color: #ffffff !important;
+    }
 
     &:hover {
-      background: rgba(255, 255, 255, 0.12);
-      border-color: rgba(255, 255, 255, 0.6);
+      background: rgba(255, 255, 255, 0.12) !important;
+      border-color: rgba(255, 255, 255, 0.6) !important;
+      color: #ffffff !important;
+      span[nz-icon] {
+        color: #ffffff !important;
+      }
     }
   }
 
   &--primary {
-    background: $primary-500;
-    color: $neutral-0;
-    border: 1.5px solid $primary-500;
-    box-shadow: 0 $spacing-1 $spacing-4 rgba(0, 156, 222, 0.4);
+    background: $primary-500 !important;
+    color: $neutral-1000 !important;
+    border: 1.5px solid $primary-500 !important;
+    box-shadow: 0 $spacing-1 $spacing-4 rgba($primary-500, 0.4) !important;
+
+    span[nz-icon] {
+      color: $neutral-1000 !important;
+    }
 
     &:hover {
-      background: $primary-400;
-      border-color: $primary-400;
+      background: $primary-600 !important;
+      border-color: $primary-600 !important;
+      color: $neutral-1000 !important;
+      span[nz-icon] {
+        color: $neutral-1000 !important;
+      }
     }
   }
 

@@ -5,10 +5,9 @@
   <div class="site-header__inner">
 
     <!-- Logo -->
-    <a routerLink="/home" class="site-header__logo">
-      <span class="site-header__logo-text">
-        AUREUM <span class="site-header__logo-accent">HARDWARE</span>
-      </span>
+    <a routerLink="/home" class="site-header__logo" style="display: flex; align-items: center; text-decoration: none;">
+      <img src="assets/images/brand-logo/duster-logo.png" alt="Duster Logo"
+        style="height: 36px; width: auto; object-fit: contain;" />
     </a>
 
     <!-- Desktop Nav -->
@@ -22,9 +21,9 @@
     <!-- Actions -->
     <div class="site-header__actions">
 
-      <button class="site-header__icon-btn" aria-label="Search">
+      <!-- <button class="site-header__icon-btn" aria-label="Search">
         <span nz-icon nzType="search" nzTheme="outline"></span>
-      </button>
+      </button> -->
 
       @if (isLoggedIn) {
       <!-- Cart -->
@@ -110,7 +109,7 @@
             <li>
               <a routerLink="/customer/my-tickets" class="account-dropdown__item">
                 <span class="account-dropdown__item-icon">
-                 <span nz-icon nzType="customer-service" nzTheme="fill"></span>
+                  <span nz-icon nzType="customer-service" nzTheme="fill"></span>
                 </span>
                 <div class="account-dropdown__item-text">
                   <span class="account-dropdown__item-title">My Tickets</span>
@@ -151,7 +150,8 @@
     <div class="mobile-nav">
       <div class="mobile-nav__logo">
         <span nz-icon nzType="shopping" nzTheme="outline" style="color:#D4AF37;font-size:22px"></span>
-        <span style="font-weight:700;font-size:17px;color:#F2F2F7;text-transform:uppercase;letter-spacing:0.06em">AUREUM</span>
+        <span
+          style="font-weight:700;font-size:17px;color:#F2F2F7;text-transform:uppercase;letter-spacing:0.06em">Duster</span>
       </div>
 
       @for (item of navItems; track item.route) {

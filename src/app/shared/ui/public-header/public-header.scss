@@ -54,7 +54,7 @@
     @include flex-center;
     font-size: $icon-size-lg;
     color: $neutral-0;
-    box-shadow: 0 4px 12px rgba(0, 156, 222, 0.35);
+    box-shadow: 0 4px 12px rgba($primary-500, 0.35);
     flex-shrink: 0;
   }
 
@@ -332,7 +332,7 @@
     &--primary {
       background: $primary-500;
       color: $neutral-0;
-      box-shadow: 0 4px 14px rgba(0, 156, 222, 0.3);
+      box-shadow: 0 4px 14px rgba($primary-500, 0.3);
 
       &:hover { background: $primary-600; }
     }
@@ -358,7 +358,7 @@
   &:hover {
     border-color: $primary-500;
     background  : $primary-50;
-    box-shadow  : 0 0 0 4px rgba(0, 156, 222, 0.10);
+    box-shadow  : 0 0 0 4px rgba($primary-500, 0.10);
   }
 
   &-avatar {
@@ -409,8 +409,8 @@
     gap        : $spacing-3;
     padding    : $spacing-5;
     background : linear-gradient(135deg,
-                  rgba(0, 156, 222, 0.10) 0%,
-                  rgba(0, 156, 222, 0.02) 100%);
+                  rgba($primary-500, 0.10) 0%,
+                  rgba($primary-500, 0.02) 100%);
     border-bottom: $border-width-thin solid $neutral-100;
     position   : relative;
 
@@ -428,7 +428,7 @@
     color      : $neutral-0 !important;
     font-weight: $font-weight-bold !important;
     font-size  : $font-size-lg !important;
-    box-shadow : 0 4px 14px rgba(0, 156, 222, 0.4);
+    box-shadow : 0 4px 14px rgba($primary-500, 0.4);
     flex-shrink: 0;
     border     : 3px solid $neutral-0;
   }

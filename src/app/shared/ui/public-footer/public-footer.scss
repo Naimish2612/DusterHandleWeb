@@ -236,7 +236,7 @@
     background: $primary-500 !important;
     border-color: $primary-500 !important;
     flex-shrink: 0;
-    box-shadow: 0 4px 12px rgba(0, 156, 222, 0.35) !important;
+    box-shadow: 0 4px 12px rgba($primary-500, 0.35) !important;
 
     &:hover {
       background: $primary-600 !important;

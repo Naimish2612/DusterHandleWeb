@@ -8,10 +8,10 @@
 
 .product-slider {
   padding: $spacing-18 0;
-  background: $neutral-0;
+  background: transparent;
 
   &--alt {
-    background: $neutral-50;
+    background: transparent;
   }
 
   &__inner {
@@ -46,11 +46,13 @@
     }
 
     &:hover {
-      background: $primary-500;
-      color: $neutral-0;
+      background: $primary-500 !important;
+      color: $neutral-1000 !important;
+      border-color: $primary-500 !important;
 
       span[nz-icon] {
-        transform: translateX(3px);
+        transform: translateX($spacing-1);
+        color: $neutral-1000 !important;
       }
     }
   }
@@ -112,7 +114,7 @@
     font-weight: $font-weight-bold;
     letter-spacing: $letter-spacing-widest;
     text-transform: uppercase;
-    color: $primary-500;
+    color: $primary-500 !important;
     background: $primary-50;
     padding: $spacing-1-5 $spacing-3;
     border-radius: $border-radius-full;
@@ -140,7 +142,7 @@
 
   .section-sub {
     font-size: $font-size-base;
-    color: $neutral-500;
+    color: $neutral-600;
     max-width: 520px;
     line-height: $line-height-relaxed;
     margin: 0;
@@ -260,34 +262,33 @@
     top: $spacing-2-5;
     z-index: $z-index-float;
 
-    font-size: $font-size-xs;
-    font-weight: $font-weight-extrabold;
-    letter-spacing: $letter-spacing-wide;
-    padding: $spacing-0-5 $spacing-2;
-    border-radius: $border-radius-base;
+    font-size: 10px !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.05em !important;
+    padding: 3px 8px !important;
+    border-radius: 4px !important;
     line-height: 1.4;
     white-space: nowrap;
+    color: #ffffff !important;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
 
     // ── TOP SALE → Top Left ──────────────────────────────
     &--sale {
       left: $spacing-2-5;
-      background: $error-500;
-      color: $neutral-0;
+      background: $error-500 !important;
     }
 
     // ── NEW → Top Right ──────────────────────────────────
     &--new {
       right: $spacing-2-5;
-      background: $success-500;
-      color: $neutral-0;
+      background: $success-500 !important;
     }
 
     // ── HOT → Top Left (stacks below SALE if both) ───────
     &--hot {
       left: $spacing-2-5;
       top: calc(#{$spacing-2-5} + 28px); // ✅ Stack below sale
-      background: $warning-600;
-      color: $neutral-0;
+      background: $warning-600 !important;
     }
   }
 

@@ -74,8 +74,8 @@
   span[nz-icon] { font-size: $icon-size-base; }
 
   &--active {
-    background: rgba(0, 156, 222, 0.3);
-    border-color: rgba(0, 156, 222, 0.5);
+    background: rgba($primary-500, 0.3);
+    border-color: rgba($primary-500, 0.5);
   }
 }
 
@@ -347,7 +347,7 @@
   // ── Progress bar (active orders) ──────────────────────────────────
   &__progress {
     padding: $spacing-4 $spacing-6 $spacing-5;
-    background: linear-gradient(180deg, rgba(0, 156, 222, 0.04) 0%, transparent 100%);
+    background: linear-gradient(180deg, rgba($primary-500, 0.04) 0%, transparent 100%);
     border-top: $border-width-thin solid $primary-100;
 
     @include mobile { padding: $spacing-3 $spacing-4 $spacing-4; }

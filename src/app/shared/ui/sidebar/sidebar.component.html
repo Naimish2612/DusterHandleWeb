@@ -1,45 +1,21 @@
 <!-- Sidebar -->
-<nz-sider
-  id="main-sidebar"
-  class="main-sidebar"
-  [nzCollapsed]="isCollapsed()"
-  [nzTrigger]="null"
-  [nzWidth]="256"
-  [nzCollapsedWidth]="0"
-  [nzBreakpoint]="null"
->
+<nz-sider id="main-sidebar" class="main-sidebar" [nzCollapsed]="isCollapsed()" [nzTrigger]="null" [nzWidth]="256"
+  [nzCollapsedWidth]="0" [nzBreakpoint]="null">
   <!-- Logo -->
-  <div class="sidebar-logo">  
+  <div class="sidebar-logo">
     <a routerLink="/admin/home" class="logo-link">
-    <img
-      class="logo-icon"
-      src="/assets/images/brand-logo/duster-logo.png"
-      alt="EIPL Brand Logo"
-    />
-  </a>
+      <img class="logo-icon" src="/assets/images/brand-logo/duster-logo.png" alt="EIPL Brand Logo" />
+    </a>
   </div>
 
   <!-- Menu Search -->
   <div class="menu-search">
     <nz-input-wrapper>
       <span nz-icon nzType="search" nzInputPrefix nzSize="small"></span>
-      <input
-        nz-input
-        type="text"
-        placeholder="Search menu..."
-        [ngModel]="menuSearchValue()"
-        (ngModelChange)="onMenuSearch($event)"
-      />
-      <span
-        *ngIf="menuSearchValue()"
-        nzInputSuffix
-        nz-icon
-        class="clear-icon"
-        nzTheme="fill"
-        nzType="close-circle"
-        nzSize="small"
-        (click)="clearSearch()"
-      ></span>
+      <input nz-input type="text" placeholder="Search menu..." [ngModel]="menuSearchValue()"
+        (ngModelChange)="onMenuSearch($event)" />
+      <span *ngIf="menuSearchValue()" nzInputSuffix nz-icon class="clear-icon" nzTheme="fill" nzType="close-circle"
+        nzSize="small" (click)="clearSearch()"></span>
     </nz-input-wrapper>
   </div>
 
@@ -48,78 +24,46 @@
     <ul nz-menu nzTheme="light" nzMode="inline" class="sidebar-menu" [nzInlineIndent]="16">
       <ng-container *ngFor="let item of filteredMenuItems()">
         <!-- Menu item without children -->
-        <li
-          *ngIf="!item.children"
-          nz-menu-item
-          [routerLink]="item.route"
-          routerLinkActive="active-item"
-          [routerLinkActiveOptions]="{ exact: false }"
-        >
+        <li *ngIf="!item.children" nz-menu-item [routerLink]="item.route" routerLinkActive="active-item"
+          [routerLinkActiveOptions]="{ exact: false }">
           <span nz-icon [nzType]="item.icon || 'layout'" nzTheme="outline" class="menu-icon"></span>
           <span class="menu-label-text">{{ item.title }}</span>
           <span *ngIf="item.badge" class="menu-badge">{{ item.badge }}</span>
         </li>
 
         <!-- Menu item with children (submenu) -->
-        <li
-          *ngIf="item.children && item.children.length > 0"
-          nz-submenu
-          [nzTitle]="item.title"
-          [nzIcon]="item.icon || 'folder'"
-          [nzOpen]="menuSearchValue() !== ''"
-        >
+        <li *ngIf="item.children && item.children.length > 0" nz-submenu [nzTitle]="item.title"
+          [nzIcon]="item.icon || 'folder'" [nzOpen]="menuSearchValue() !== ''">
           <ul>
             <ng-container *ngFor="let child of item.children">
               <!-- Level 2: No children -->
-              <li
-                *ngIf="!child.children || child.children.length === 0"
-                nz-menu-item
-                [routerLink]="child.route"
-                routerLinkActive="active-item"
-                [routerLinkActiveOptions]="{ exact: false }"
-              >
+              <li *ngIf="!child.children || child.children.length === 0" nz-menu-item [routerLink]="child.route"
+                routerLinkActive="active-item" [routerLinkActiveOptions]="{ exact: false }">
                 <span nz-icon [nzType]="child.icon || 'file'" nzTheme="outline" class="menu-icon"></span>
                 <span class="menu-label-text">{{ child.title }}</span>
               </li>
 
               <!-- Level 2: With children -->
-              <li
-                *ngIf="child.children && child.children.length > 0"
-                nz-submenu
-                [nzTitle]="child.title"
-                [nzIcon]="child.icon || 'folder'"
-                [nzOpen]="menuSearchValue() !== ''"
-              >
+              <li *ngIf="child.children && child.children.length > 0" nz-submenu [nzTitle]="child.title"
+                [nzIcon]="child.icon || 'folder'" [nzOpen]="menuSearchValue() !== ''">
                 <ul>
                   <ng-container *ngFor="let grandChild of child.children">
                     <!-- Level 3 -->
-                    <li
-                      *ngIf="!grandChild.children || grandChild.children.length === 0"
-                      nz-menu-item
-                      [routerLink]="grandChild.route"
-                      routerLinkActive="active-item"
-                      [routerLinkActiveOptions]="{ exact: false }"
-                    >
+                    <li *ngIf="!grandChild.children || grandChild.children.length === 0" nz-menu-item
+                      [routerLink]="grandChild.route" routerLinkActive="active-item"
+                      [routerLinkActiveOptions]="{ exact: false }">
                       <span nz-icon [nzType]="grandChild.icon || 'link'" nzTheme="outline" class="menu-icon"></span>
                       <span class="menu-label-text">{{ grandChild.title }}</span>
                     </li>
 
                     <!-- Level 3: With children -->
-                    <li
-                      *ngIf="grandChild.children && grandChild.children.length > 0"
-                      nz-submenu
-                      [nzTitle]="grandChild.title"
-                      [nzIcon]="grandChild.icon || 'folder'"
-                      [nzOpen]="menuSearchValue() !== ''"
-                    >
+                    <li *ngIf="grandChild.children && grandChild.children.length > 0" nz-submenu
+                      [nzTitle]="grandChild.title" [nzIcon]="grandChild.icon || 'folder'"
+                      [nzOpen]="menuSearchValue() !== ''">
                       <ul>
                         <ng-container *ngFor="let deepChild of grandChild.children">
-                          <li
-                            nz-menu-item
-                            [routerLink]="deepChild.route"
-                            routerLinkActive="active-item"
-                            [routerLinkActiveOptions]="{ exact: false }"
-                          >
+                          <li nz-menu-item [routerLink]="deepChild.route" routerLinkActive="active-item"
+                            [routerLinkActiveOptions]="{ exact: false }">
                             <span nz-icon [nzType]="deepChild.icon || 'tag'" nzTheme="outline" class="menu-icon"></span>
                             <span class="menu-label-text">{{ deepChild.title }}</span>
                           </li>
@@ -144,12 +88,8 @@
 <nz-header class="main-header" [class.sidebar-hidden]="isCollapsed()">
   <div class="header-left">
     <!-- Toggle Button -->
-    <span
-      class="trigger"
-      nz-icon
-      [nzType]="isCollapsed() ? 'menu-unfold' : 'menu-fold'"
-      (click)="toggleCollapsed()"
-    ></span>
+    <span class="trigger" nz-icon [nzType]="isCollapsed() ? 'menu-unfold' : 'menu-fold'"
+      (click)="toggleCollapsed()"></span>
   </div>
 
   <div class="header-right">
@@ -159,19 +99,9 @@
     </nz-badge> -->
 
     <!-- User Profile Dropdown -->
-    <div
-      class="user-profile"
-      nz-dropdown
-      [nzDropdownMenu]="userMenu"
-      nzTrigger="hover"
-      nzPlacement="bottomRight"
-    >
-      <nz-avatar
-        [nzSrc]="currentUser.avatar || undefined"
-        [nzText]="(currentUser.name || 'User').toUpperCase().charAt(0)"
-        [nzSize]="40"
-        class="user-avatar"
-      ></nz-avatar>
+    <div class="user-profile" nz-dropdown [nzDropdownMenu]="userMenu" nzTrigger="hover" nzPlacement="bottomRight">
+      <nz-avatar [nzSrc]="currentUser.avatar || undefined"
+        [nzText]="(currentUser.name || 'User').toUpperCase().charAt(0)" [nzSize]="40" class="user-avatar"></nz-avatar>
       <div class="user-info">
         <div class="user-name">
           {{ (currentUser.name || 'User').toUpperCase() }}
@@ -185,11 +115,8 @@
       <ul nz-menu class="user-dropdown-menu">
         <li nz-menu-item class="user-menu-header">
           <div class="dropdown-user-info">
-            <nz-avatar
-              [nzSrc]="currentUser.avatar || undefined"
-              [nzText]="(currentUser.name || 'User').toUpperCase().charAt(0)"
-              [nzSize]="40"
-            ></nz-avatar>
+            <nz-avatar [nzSrc]="currentUser.avatar || undefined"
+              [nzText]="(currentUser.name || 'User').toUpperCase().charAt(0)" [nzSize]="40"></nz-avatar>
             <div class="dropdown-user-details">
               <div class="dropdown-user-name">
                 {{ (currentUser.name || 'User').toUpperCase() }}

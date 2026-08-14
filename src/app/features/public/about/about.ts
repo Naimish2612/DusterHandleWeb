@@ -104,8 +104,8 @@ export class About {
   achievements: Achievement[] = [
     {
       year: '1999',
-      title: 'Founded Aureum Hardware',
-      description: 'Founded Aureum Hardware, establishing a specialized hub for bespoke architectural fittings and premium luxury profiles.',
+      title: 'Founded DUSTER',
+      description: 'Founded DUSTER, establishing a specialized hub for bespoke architectural fittings and premium luxury profiles.',
       icon: 'home',
       highlight: true,
     },
@@ -113,7 +113,7 @@ export class About {
       year: '2005',
       title: 'Pioneered Integrated Channel Pulls',
       description: 'Pioneered the first seamless integrated kitchen and cabinet profile systems in the local market.',
-      icon: 'experiment',
+      icon: 'build',
       highlight: false,
     },
     {

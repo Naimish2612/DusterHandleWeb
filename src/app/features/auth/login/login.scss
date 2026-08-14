@@ -327,13 +327,13 @@
     &:hover:not(:disabled) {
       background: $primary-600 !important;
       border-color: $primary-600 !important;
-      box-shadow: 0 6px 20px rgba(0, 156, 222, 0.4) !important;
+      box-shadow: 0 6px 20px rgba($primary-500, 0.4) !important;
       transform: translateY(-1px);
     }
 
     &:active:not(:disabled) {
       transform: translateY(0);
-      box-shadow: 0 2px 8px rgba(0, 156, 222, 0.2) !important;
+      box-shadow: 0 2px 8px rgba($primary-500, 0.2) !important;
     }
   }
 

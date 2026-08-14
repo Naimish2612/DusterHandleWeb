@@ -220,7 +220,7 @@
 
     &--active {
       border-color: $primary-500;
-      box-shadow: 0 0 0 3px rgba(0, 156, 222, 0.2);
+      box-shadow: 0 0 0 3px rgba($primary-500, 0.2);
     }
 
     @include mobile {
@@ -405,7 +405,7 @@
       background: $primary-500;
       color: $neutral-0;
       font-weight: $font-weight-semibold;
-      box-shadow: 0 2px 8px rgba(0, 156, 222, 0.3);
+      box-shadow: 0 2px 8px rgba($primary-500, 0.3);
     }
   }
 }
@@ -494,7 +494,7 @@
   font-size: $font-size-sm !important;
   font-weight: $font-weight-bold !important;
   border-radius: $border-radius-lg !important;
-  box-shadow: 0 2px 8px rgba(0, 156, 222, 0.25) !important;
+  box-shadow: 0 2px 8px rgba($primary-500, 0.25) !important;
   transition: all $transition-base !important;
   display: inline-flex !important;
   align-items: center !important;
@@ -515,7 +515,7 @@
       background: $primary-600 !important;
       border-color: $primary-600 !important;
       transform: translateY(-1px);
-      box-shadow: 0 4px 12px rgba(0, 156, 222, 0.4) !important;
+      box-shadow: 0 4px 12px rgba($primary-500, 0.4) !important;
     }
   }
 

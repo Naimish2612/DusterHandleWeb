@@ -77,7 +77,7 @@
     font-weight: $font-weight-bold;
     letter-spacing: $letter-spacing-widest;
     text-transform: uppercase;
-    color: $primary-300;
+    color: #ffffff;
     background: rgba(255, 255, 255, 0.1);
     border: 1px solid rgba(255, 255, 255, 0.15);
     border-radius: $border-radius-full;
@@ -86,6 +86,7 @@
 
     span[nz-icon] {
       font-size: $icon-size-base;
+      color: $primary-500;
     }
   }
 
@@ -108,12 +109,12 @@
   }
 
   &__title-accent {
-    color: $primary-300;
+    color: $primary-600;
   }
 
   &__desc {
     font-size: $font-size-lg;
-    color: rgba(255, 255, 255, 0.7);
+    color: #ffffff;
     line-height: $line-height-relaxed;
     margin: 0 0 $spacing-8;
 
@@ -146,24 +147,40 @@
 
     &--primary {
       background: $primary-500;
-      color: $neutral-0;
+      color: $neutral-1000 !important;
       border: 1.5px solid $primary-500;
-      box-shadow: 0 $spacing-1 $spacing-5 rgba(0, 156, 222, 0.4);
+      box-shadow: 0 $spacing-1 $spacing-5 rgba($primary-500, 0.4);
+
+      span[nz-icon] {
+        color: $neutral-1000 !important;
+      }
 
       &:hover {
         background: $primary-400;
         border-color: $primary-400;
         transform: translateY(-1px);
+        color: $neutral-1000 !important;
+        span[nz-icon] {
+          color: $neutral-1000 !important;
+        }
       }
     }
 
     &--ghost {
-      border: 1.5px solid rgba(255, 255, 255, 0.35);
-      color: $neutral-0;
+      border: 1.5px solid rgba(255, 255, 255, 0.35) !important;
+      color: #ffffff !important;
+
+      span[nz-icon] {
+        color: #ffffff !important;
+      }
 
       &:hover {
-        background: rgba(255, 255, 255, 0.1);
-        border-color: rgba(255, 255, 255, 0.6);
+        background: rgba(255, 255, 255, 0.1) !important;
+        border-color: rgba(255, 255, 255, 0.6) !important;
+        color: #ffffff !important;
+        span[nz-icon] {
+          color: #ffffff !important;
+        }
       }
     }
   }
@@ -366,7 +383,7 @@
     border: 1px solid rgba(255, 255, 255, 0.2);
     @include flex-center;
     font-size: $icon-size-2xl;
-    color: $primary-300;
+    color: $primary-500;
     margin-bottom: $spacing-6;
   }
 
@@ -670,7 +687,7 @@
       color: $neutral-0;
       box-shadow:
         0 0 0 5px $primary-100,
-        0 6px 16px rgba(0, 156, 222, 0.4);
+        0 6px 16px rgba($primary-500, 0.4);
     }
   }
 
@@ -944,7 +961,7 @@
 
   &__icon {
     font-size: $icon-size-4xl;
-    color: $primary-300;
+    color: $primary-500;
     flex-shrink: 0;
   }
 
@@ -1001,14 +1018,22 @@
 
   &--primary {
     background: $primary-500;
-    color: $neutral-0;
+    color: $neutral-1000 !important;
     border: 1.5px solid $primary-500;
-    box-shadow: 0 $spacing-1 $spacing-5 rgba(0, 156, 222, 0.4);
+    box-shadow: 0 $spacing-1 $spacing-5 rgba($primary-500, 0.4);
+
+    span[nz-icon] {
+      color: $neutral-1000 !important;
+    }
 
     &:hover {
       background: $primary-400;
       border-color: $primary-400;
       transform: translateY(-1px);
+      color: $neutral-1000 !important;
+      span[nz-icon] {
+        color: $neutral-1000 !important;
+      }
     }
   }
 
