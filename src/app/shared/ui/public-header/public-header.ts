@@ -53,6 +53,7 @@ export class PublicHeader implements OnInit {
   navItems: NavItem[] = [
     { label: 'Home', route: '/home', icon: 'home' },
     { label: 'Products', route: '/products', icon: 'appstore' },
+    { label: 'Catalogue', route: '/catalogue', icon: 'book' },
     { label: 'About', route: '/about', icon: 'info-circle' },
     { label: 'Contact', route: '/contact', icon: 'mail' },
   ];

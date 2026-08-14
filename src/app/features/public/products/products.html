@@ -184,14 +184,14 @@
         }
 
         @for (category of selectedCategories; track category) {
-        <nz-tag nzMode="closeable" nzColor="blue" (nzOnClose)="removeCategory(category)">
+        <nz-tag nzMode="closeable" (nzOnClose)="removeCategory(category)">
           <span nz-icon nzType="appstore" nzTheme="outline"></span>
           {{ getFilterLabel('category', category) }}
         </nz-tag>
         }
 
         @for (subcategory of selectedSubCategories; track subcategory) {
-        <nz-tag nzMode="closeable" nzColor="purple" (nzOnClose)="removeSubCategory(subcategory)">
+        <nz-tag nzMode="closeable" (nzOnClose)="removeSubCategory(subcategory)">
           <span nz-icon nzType="tag" nzTheme="outline"></span>
           {{ getFilterLabel('subCategory', subcategory) }}
         </nz-tag>

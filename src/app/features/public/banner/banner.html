@@ -1,60 +1,56 @@
 @if (isLoading) {
-  <div class="Duster-hero Duster-hero--loading">
-    <nz-spin nzSimple></nz-spin>
-  </div>
+<div class="Duster-hero Duster-hero--loading">
+  <nz-spin nzSimple></nz-spin>
+</div>
 } @else if (banners.length > 0) {
-  <section class="Duster-hero">
-    
-    <!-- Hero Gallery Accordion as the Background -->
-    <div class="Duster-hero__gallery">
-      @for (banner of banners; track banner.banner_id; let i = $index) {
-        <div class="Duster-hero__card"
-             [class.Duster-hero__card--active]="currentIndex === i"
-             (mouseenter)="goTo(i)"
-             (click)="goTo(i)"
-             [style.background-image]="'url(\'' + banner.image_url + '\')'">
-          
-          <div class="Duster-hero__card-overlay"></div>
+<section class="Duster-hero">
 
-        </div>
-      }
+  <!-- Hero Gallery Accordion as the Background -->
+  <div class="Duster-hero__gallery">
+    @for (banner of banners; track $index; let i = $index) {
+    <div class="Duster-hero__card" [class.Duster-hero__card--active]="currentIndex === i" (mouseenter)="goTo(i)"
+      (click)="goTo(i)" [style.background-image]="'url(\'' + banner.image_url + '\')'">
+
+      <div class="Duster-hero__card-overlay"></div>
+
     </div>
+    }
+  </div>
 
-    <!-- Floating Content Pane on top of the background -->
-    <div class="Duster-hero__content-overlay">
-      <div class="Duster-hero__content">
-        
-        <!-- Main Brand Typography -->
-        <h1 class="Duster-hero__title">
-          ARCHITECTURAL
-          <span>PRECISION.</span>
-          <span class="Duster-hero__brand">DEFINED BY DUSTER.</span>
-        </h1>
+  <!-- Floating Content Pane on top of the background -->
+  <div class="Duster-hero__content-overlay">
+    <div class="Duster-hero__content">
 
-        <!-- Divider line -->
-        <div class="Duster-hero__divider"></div>
+      <!-- Main Brand Typography -->
+      <h1 class="Duster-hero__title">
+        ARCHITECTURAL
+        <span>PRECISION.</span>
+        <span class="Duster-hero__brand">DEFINED BY DUSTER.</span>
+      </h1>
 
-        <!-- Dynamic Active Slide Details -->
-        <div class="Duster-hero__active-details">
-          <span class="Duster-hero__active-number">
-            0{{ currentIndex + 1 }} / COLLECTION
-          </span>
-          <h2 class="Duster-hero__active-title">
-            {{ banners[currentIndex].banner_title }}
-          </h2>
-          <p class="Duster-hero__active-desc">
-            {{ banners[currentIndex].description }}
-          </p>
-          <a [routerLink]="[banners[currentIndex].redirect_url || '/products']" 
-             class="Duster-hero__active-btn"
-             (click)="$event.stopPropagation()">
-            Explore Collection
-            <span nz-icon nzType="arrow-right" nzTheme="outline"></span>
-          </a>
-        </div>
+      <!-- Divider line -->
+      <div class="Duster-hero__divider"></div>
 
+      <!-- Dynamic Active Slide Details -->
+      <div class="Duster-hero__active-details">
+        <span class="Duster-hero__active-number">
+          0{{ currentIndex + 1 }} / COLLECTION
+        </span>
+        <h2 class="Duster-hero__active-title">
+          {{ banners[currentIndex].banner_title }}
+        </h2>
+        <p class="Duster-hero__active-desc">
+          {{ banners[currentIndex].description }}
+        </p>
+        <a [routerLink]="[banners[currentIndex].redirect_url || '/products']" class="Duster-hero__active-btn"
+          (click)="$event.stopPropagation()">
+          Explore Collection
+          <span nz-icon nzType="arrow-right" nzTheme="outline"></span>
+        </a>
       </div>
-    </div>
 
-  </section>
+    </div>
+  </div>
+
+</section>
 }

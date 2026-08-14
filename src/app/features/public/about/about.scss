@@ -162,49 +162,43 @@
   }
 }
 
-// ── Lineage Timeline Section ──────────────────────────────────────────────
-.lineage {
-  background-color: #0D0D0D;
+// ── Vision, Mission & Quality Section ─────────────────────────────────────
+.vision-mission {
+  background-color: #111111;
   padding: $spacing-20 0;
   border-bottom: 1px solid #2C2C2E;
 
   &__container {
     @include make-container($container-xxl);
-    display: grid;
-    grid-template-columns: 1.2fr 2fr;
-    gap: 60px;
-
-    @include tablet-down {
-      grid-template-columns: 1fr;
-      gap: 40px;
-    }
-  }
-
-  &__left {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: space-between;
-    height: 100%;
-    min-height: 200px;
-
-    @include tablet-down {
-      min-height: auto;
-      justify-content: flex-start;
-      gap: 20px;
-    }
   }
 
   &__header {
-    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
     border-bottom: 1px solid #2C2C2E;
-    padding-bottom: $spacing-6;
+    padding-bottom: $spacing-8;
+    margin-bottom: $spacing-12;
+    gap: $spacing-8;
 
-    @include mobile {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-end;
+    @include tablet-down {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 16px;
     }
+  }
+
+  &__header-left {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  &__index {
+    font-size: 11px;
+    font-weight: 700;
+    color: #D4AF37;
+    letter-spacing: 0.15em;
   }
 
   &__title {
@@ -216,116 +210,67 @@
     letter-spacing: 0.1em;
   }
 
-  &__index {
-    font-size: 11px;
-    font-weight: 700;
-    color: #D4AF37;
-    letter-spacing: 0.15em;
-    display: block;
-    margin-top: 8px;
+  &__intro {
+    font-size: 14px;
+    line-height: 1.7;
+    color: #A2A2A7;
+    max-width: 540px;
+    margin: 0;
 
-    @include mobile {
-      margin-top: 0;
+    @include tablet-down {
+      max-width: 100%;
     }
   }
 
-  &__btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    font-size: 11px;
-    font-weight: 700;
-    color: #D4AF37 !important;
-    background: transparent;
-    border: 1px solid #D4AF37;
-    padding: $spacing-3 $spacing-6;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    transition: all 0.2s;
-    text-decoration: none;
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 32px;
 
-    &:hover {
-      background: #D4AF37;
-      color: #0D0D0D !important;
+    @include tablet-down {
+      grid-template-columns: 1fr;
+      gap: 24px;
     }
   }
 }
 
-.timeline {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  position: relative;
+.vm-card {
+  background: rgba(26, 26, 26, 0.6);
+  border: 1px solid #2C2C2E;
+  padding: $spacing-8;
+  display: flex;
+  flex-direction: column;
+  transition: all 0.3s ease;
 
-  &::before {
-    content: '';
-    position: absolute;
-    top: 8px;
-    bottom: 8px;
-    left: 80px;
-    width: 1px;
-    background: #2C2C2E;
-
-    @include mobile {
-      left: 12px;
-    }
+  &:hover {
+    border-color: rgba(212, 175, 55, 0.4);
+    transform: translateY(-4px);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5);
   }
 
-  &__item {
-    position: relative;
+  &--featured {
+    background: linear-gradient(180deg, rgba(212, 175, 55, 0.04) 0%, rgba(20, 20, 20, 0.8) 100%);
+    border-color: rgba(212, 175, 55, 0.25);
+  }
+
+  &__header {
     display: flex;
-    margin-bottom: 40px;
-
-    &:last-child {
-      margin-bottom: 0;
-    }
-
-    @include mobile {
-      flex-direction: column;
-      padding-left: 36px;
-    }
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 20px;
   }
 
-  &__year {
-    font-family: $font-heading;
-    font-size: 18px;
-    font-weight: 700;
+  &__icon {
+    font-size: 22px;
     color: #D4AF37;
-    width: 80px;
-    flex-shrink: 0;
-    padding-top: 2px;
-    letter-spacing: 0.05em;
-
-    @include mobile {
-      width: auto;
-      margin-bottom: 8px;
-    }
-  }
-
-  &__content {
-    flex-grow: 1;
-    padding-left: 40px;
-    position: relative;
-
-    @include mobile {
-      padding-left: 0;
-    }
-
-    &::before {
-      content: '';
-      position: absolute;
-      left: -5px;
-      top: 10px;
-      width: 9px;
-      height: 9px;
-      background: #D4AF37;
-      border-radius: 50%;
-
-      @include mobile {
-        left: -29px;
-        top: -18px;
-      }
-    }
+    height: 44px;
+    width: 44px;
+    min-width: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(212, 175, 55, 0.3);
+    background: rgba(212, 175, 55, 0.05);
   }
 
   &__title {
@@ -333,13 +278,241 @@
     font-size: 15px;
     font-weight: 700;
     color: #FFFFFF !important;
-    margin: 0 0 8px;
-    letter-spacing: 0.02em;
+    letter-spacing: 0.1em;
+    margin: 0;
   }
 
   &__text {
+    font-size: 13.5px;
+    line-height: 1.65;
+    color: #A2A2A7;
+    margin: 0 0 14px;
+
+    &:last-of-type {
+      margin-bottom: 0;
+    }
+  }
+
+  &__iso-box {
+    margin-top: 24px;
+    padding: 14px 18px;
+    background: #FFFFFF;
+    border: 1px solid rgba(212, 175, 55, 0.4);
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+
+    @include mobile {
+      flex-direction: column;
+      text-align: center;
+    }
+  }
+
+  &__iso-img-wrap {
+    flex-shrink: 0;
+    max-width: 130px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &__iso-img {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+    display: block;
+  }
+
+  &__iso-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  &__iso-title {
+    font-family: $font-heading;
     font-size: 13px;
-    line-height: 1.6;
+    font-weight: 800;
+    color: #0D0D0D;
+    letter-spacing: 0.08em;
+  }
+
+  &__iso-sub {
+    font-size: 11px;
+    color: #555555;
+    font-weight: 500;
+  }
+}
+
+// ── Handle Process Section ────────────────────────────────────────────────
+.handle-process {
+  background-color: #0D0D0D;
+  border-bottom: 1px solid #2C2C2E;
+
+  &__hero {
+    position: relative;
+    background: linear-gradient(135deg, #141414 0%, #090909 100%);
+    padding: $spacing-16 0;
+    text-align: center;
+    border-bottom: 1px solid #2C2C2E;
+  }
+
+  &__hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at center, rgba(212, 175, 55, 0.05) 0%, transparent 70%);
+    z-index: 1;
+  }
+
+  &__hero-container {
+    @include make-container($container-xxl);
+    position: relative;
+    z-index: 2;
+    max-width: 800px;
+  }
+
+  &__tag {
+    font-size: 11px;
+    font-weight: 700;
+    color: #D4AF37;
+    letter-spacing: 0.15em;
+    display: inline-block;
+    margin-bottom: $spacing-3;
+  }
+
+  &__hero-title {
+    font-family: $font-heading;
+    font-size: 2.8rem;
+    font-weight: 800;
+    color: #FFFFFF !important;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    margin: 0 0 $spacing-4;
+
+    @include mobile {
+      font-size: 2rem;
+    }
+  }
+
+  &__hero-desc {
+    font-size: 15px;
+    line-height: 1.7;
+    color: #D1D1D6;
+    margin: 0 auto;
+    max-width: 680px;
+  }
+
+  &__body {
+    padding: $spacing-16 0 $spacing-20;
+  }
+
+  &__container {
+    @include make-container($container-xxl);
+  }
+
+  &__section-header {
+    text-align: center;
+    margin-bottom: $spacing-12;
+  }
+
+  &__sub-title {
+    font-family: $font-heading;
+    font-size: 22px;
+    font-weight: 700;
+    color: #D4AF37 !important;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin: 0 0 $spacing-2;
+  }
+
+  &__sub-desc {
+    font-size: 13px;
+    color: #8E8E93;
+    margin: 0;
+  }
+
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+
+    @include tablet-down {
+      grid-template-columns: 1fr;
+    }
+  }
+}
+
+.process-card {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  background: #141414;
+  border: 1px solid #2C2C2E;
+  padding: 16px;
+  transition: all 0.3s ease;
+
+  &:hover {
+    border-color: #D4AF37;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(212, 175, 55, 0.1);
+
+    .process-card__img {
+      transform: scale(1.06);
+    }
+  }
+
+  &__img-wrap {
+    position: relative;
+    width: 120px;
+    height: 120px;
+    flex-shrink: 0;
+    overflow: hidden;
+    background: #0D0D0D;
+    border: 1px solid #2C2C2E;
+
+    @include mobile {
+      width: 90px;
+      height: 90px;
+    }
+  }
+
+  &__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+  }
+
+  &__step-badge {
+    position: absolute;
+    top: 4px;
+    left: 4px;
+    background: #D4AF37;
+    color: #0D0D0D;
+    font-size: 10px;
+    font-weight: 800;
+    padding: 2px 6px;
+    letter-spacing: 0.05em;
+  }
+
+  &__content {
+    flex: 1;
+    min-width: 0;
+  }
+
+  &__title {
+    font-family: $font-heading;
+    font-size: 16px;
+    font-weight: 700;
+    color: #FFFFFF !important;
+    margin: 0 0 6px;
+    letter-spacing: 0.04em;
+  }
+
+  &__desc {
+    font-size: 13px;
+    line-height: 1.5;
     color: #8E8E93;
     margin: 0;
   }

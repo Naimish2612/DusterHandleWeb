@@ -27,11 +27,11 @@
 
       @if (isLoggedIn) {
       <!-- Cart -->
-      <a routerLink="/customer/checkout" class="site-header__icon-btn" aria-label="Cart">
+      <!-- <a routerLink="/customer/checkout" class="site-header__icon-btn" aria-label="Cart">
         <nz-badge [nzCount]="cartCount()" [nzOverflowCount]="99" nzSize="small">
           <span nz-icon nzType="shopping-cart" nzTheme="outline"></span>
         </nz-badge>
-      </a>
+      </a> -->
 
       <!-- Account dropdown trigger -->
       <div nz-dropdown [nzDropdownMenu]="accountMenu" nzTrigger="click" nzPlacement="bottomRight"
@@ -68,7 +68,7 @@
               </a>
             </li>
 
-            <li>
+            <!-- <li>
               <a routerLink="/customer/my/orders" class="account-dropdown__item">
                 <span class="account-dropdown__item-icon">
                   <span nz-icon nzType="shopping" nzTheme="outline"></span>
@@ -79,7 +79,7 @@
                 </div>
                 <span nz-icon nzType="right" class="account-dropdown__item-arrow"></span>
               </a>
-            </li>
+            </li> -->
 
             <li>
               <a routerLink="/customer/wishlist" class="account-dropdown__item">
@@ -106,7 +106,7 @@
                 <span nz-icon nzType="right" class="account-dropdown__item-arrow"></span>
               </a>
             </li>
-            <li>
+            <!-- <li>
               <a routerLink="/customer/my-tickets" class="account-dropdown__item">
                 <span class="account-dropdown__item-icon">
                   <span nz-icon nzType="customer-service" nzTheme="fill"></span>
@@ -117,7 +117,7 @@
                 </div>
                 <span nz-icon nzType="right" class="account-dropdown__item-arrow"></span>
               </a>
-            </li>
+            </li> -->
           </ul>
 
           <!-- Logout -->

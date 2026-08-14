@@ -55,22 +55,22 @@ export class Contact {
 
   contactForm: FormGroup = this.fb.group({
     firstName: [null, [Validators.required, Validators.minLength(2)]],
-    lastName:  [null, [Validators.required, Validators.minLength(2)]],
-    email:     [null, [Validators.required, Validators.pattern(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)]],
-    phone:     [null, [Validators.pattern(/^\d{10}$/)]],
-    subject:   [null, [Validators.required]],
-    message:   [null, [Validators.required, Validators.minLength(20)]],
+    lastName: [null, [Validators.required, Validators.minLength(2)]],
+    email: [null, [Validators.required, Validators.pattern(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)]],
+    phone: [null, [Validators.pattern(/^\d{10}$/)]],
+    subject: [null, [Validators.required]],
+    message: [null, [Validators.required, Validators.minLength(20)]],
   });
 
   subjects = [
-    { label: 'Order Inquiry',        value: 'order' },
-    { label: 'Return & Refund',      value: 'return' },
-    { label: 'Product Question',     value: 'product' },
-    { label: 'Technical Support',    value: 'support' },
-    { label: 'Bulk / B2B Orders',    value: 'bulk' },
-    { label: 'Partnership',          value: 'partner' },
-    { label: 'Feedback',             value: 'feedback' },
-    { label: 'Other',                value: 'other' },
+    { label: 'Order Inquiry', value: 'order' },
+    { label: 'Return & Refund', value: 'return' },
+    { label: 'Product Question', value: 'product' },
+    { label: 'Technical Support', value: 'support' },
+    { label: 'Bulk / B2B Orders', value: 'bulk' },
+    { label: 'Partnership', value: 'partner' },
+    { label: 'Feedback', value: 'feedback' },
+    { label: 'Other', value: 'other' },
   ];
 
   // ─── Updated with correct Duster details ───
@@ -99,36 +99,32 @@ export class Contact {
 
   faqs: FAQ[] = [
     {
-      question: 'How long does standard shipping take?',
+      question: 'Can you make my own handle designed Products ?',
       answer:
-        'Standard delivery takes 3 – 5 business days within India. Metro cities typically receive orders in 1 – 2 days. Express shipping (next-day delivery) is available at checkout for an additional fee. Orders placed before 2 PM IST are dispatched the same day.',
+        'Yes, we offer fully custom manufacturing and OEM/ODM services for bespoke designs. You can share your technical blueprints, 3D CAD models, or physical samples with our engineering team. We will evaluate tool design, structural viability, and material options before providing a comprehensive quotation and prototype timeline.',
     },
     {
-      question: 'What is the return & refund policy?',
+      question: 'What condition of drawer slide capacity do you test , please ?',
       answer:
-        'We offer a hassle-free 30-day return policy for all products in their original, unused condition with original packaging. Initiate a return from your "My Orders" dashboard — we arrange free doorstep pickup. Refunds are credited within 5 – 7 business days to your original payment method.',
+        'Our drawer slides undergo rigorous dynamic and static load capacity testing. We test them using fully extended configurations under continuous cycling (typically up to 50,000 to 100,000 open-close cycles) to measure structural fatigue, deflection limits, and smooth ball-bearing movement under maximum weight specifications.',
     },
     {
-      question: 'Are my payments secure on DUSTER?',
+      question: 'What is the base material for the handle?',
       answer:
-        'Absolutely. We use 256-bit SSL encryption and are fully PCI-DSS compliant. Accepted payment modes include UPI, Credit/Debit cards, Net Banking, Wallets, EMI, and Cash on Delivery. We never store your full card details on our servers — all card data is tokenised through our payment gateway.',
+        'Depending on the specific model collection, our premium handles are forged from high-grade base materials including Solid Brass, Stainless Steel (Grade 304/316 for superior corrosion resistance), Zinc Alloy (Zamak), and Premium Aluminium. This ensures excellent structural integrity, tensile strength, and long-term durability.',
     },
     {
-      question: 'How do I track my order in real time?',
+      question: 'What if my handle is free and the latch is working fine?',
       answer:
-        'As soon as your order is dispatched, you receive an SMS and email with a tracking link. You can also track any order from "My Orders" → "Track Shipment" in your account. Live tracking is supported for all our logistics partners including Delhivery, Blue Dart, and Ekart.',
+        'If the handle moves freely without resistance but the internal latch mechanism functions correctly, the issue is typically a broken or dislodged internal return spring inside the handle assembly, or a loose spindle/grub screw. Inspect the handle casing to ensure the square spindle bar is properly secured to both handles.',
     },
     {
-      question: 'Can I modify or cancel an order after placing it?',
+      question: 'What are the finishes available in the Door Handle ?',
       answer:
-        'Orders can be modified or cancelled within 2 hours of placement via the "My Orders" page. After the 2-hour window, if the order has been handed over to logistics, cancellation is not possible — you will need to follow the return process once the order is delivered. For urgent requests, contact our support team immediately via phone or live chat.',
-    },
-    {
-      question: 'Do you offer Cash on Delivery (COD)?',
-      answer:
-        'Yes! COD is available for orders up to ₹10,000 at most serviceable pin codes across India. A nominal ₹49 COD handling charge applies. Simply select "Cash on Delivery" at the payment step during checkout.',
+        'Our door handles are available in a wide selection of premium architectural finishes. These include Matt Black, Satin Nickel, Polished Chrome, Antique Brass, PVD Gold, Brushed Rose Gold, and Oil Rubbed Bronze. Most finishes feature an advanced electroplated or PVD coating to protect against tarnish and fingerprints.',
     },
   ];
+
 
   submitForm(): void {
     if (this.contactForm.valid) {

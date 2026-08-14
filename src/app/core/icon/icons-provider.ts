@@ -22,6 +22,9 @@ import {
   MailOutline,
   NumberOutline,
   EyeInvisibleOutline,
+  EyeOutline,
+  AimOutline,
+  SafetyCertificateOutline,
   TeamOutline,
   SaveOutline,
   UndoOutline,
@@ -135,7 +138,6 @@ import {
   StarFill,
   GiftOutline,
   IdcardOutline,
-  SafetyCertificateOutline,
   WarningFill,
   NotificationOutline,
   BgColorsOutline,
@@ -145,7 +147,6 @@ import {
   SyncOutline,
   LayoutOutline,
   UnorderedListOutline,
-  AimOutline,
   SortAscendingOutline,
   MinusCircleOutline,
   MinusOutline,
@@ -198,7 +199,7 @@ import {
   DropboxOutline,
   SnippetsOutline,
   DownloadOutline,
-  UnlockOutline, 
+  UnlockOutline,
   TruckOutline,
   CloudServerOutline,
   ClusterOutline,
@@ -218,7 +219,11 @@ import {
   NotificationTwoTone,
   SmileTwoTone,
   InteractionTwoTone,
-  WalletTwoTone
+  WalletTwoTone,
+  FullscreenExitOutline,
+  FullscreenOutline,
+  StepBackwardOutline,
+  StepForwardOutline
   // Add more as needed
 
 } from '@ant-design/icons-angular/icons';
@@ -299,7 +304,7 @@ const icons: IconDefinition[] = [
   GroupOutline,
   UsergroupAddOutline,
   FolderOutline,
-  AuditOutline, 
+  AuditOutline,
   BookOutline,
   ContainerOutline,
   ApartmentOutline,
@@ -449,7 +454,14 @@ const icons: IconDefinition[] = [
   NotificationTwoTone,
   SmileTwoTone,
   InteractionTwoTone,
-  WalletTwoTone
+  WalletTwoTone,
+  FullscreenExitOutline,
+  FullscreenOutline,
+  EyeOutline,
+  AimOutline,
+  SafetyCertificateOutline,
+  StepBackwardOutline,
+  StepForwardOutline
 ];
 
 export function provideNzIcons(): EnvironmentProviders {

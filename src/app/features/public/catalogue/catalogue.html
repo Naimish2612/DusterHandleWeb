@@ -1,0 +1,123 @@
+<div class="catalogue-page">
+  
+  <!-- Hero Section -->
+  <section class="catalogue-hero">
+    <div class="catalogue-hero__container">
+      <span class="catalogue-hero__badge">
+        <span nz-icon nzType="book" nzTheme="outline"></span>
+        OFFICIAL DIGITAL CATALOGUE 2026
+      </span>
+      <h1 class="catalogue-hero__title">
+        ARCHITECTURAL <span>HARDWARE BOOKLET</span>
+      </h1>
+      <p class="catalogue-hero__desc">
+        Explore our complete 2026 luxury collection of precision engineered mortise handles, cabinet knobs, profile fittings, and architectural hardware in 3D interactive flipbook format.
+      </p>
+    </div>
+  </section>
+
+  <!-- Booklet Viewer Container Section -->
+  <section class="catalogue-viewer-section" [class.catalogue-viewer-section--fullscreen]="isFullscreen()">
+    <div class="catalogue-viewer-container">
+      
+      <!-- Viewer Header Bar -->
+      <div class="catalogue-viewer-bar">
+        <div class="catalogue-viewer-bar__left">
+          <span class="catalogue-viewer-bar__dot"></span>
+          <span class="catalogue-viewer-bar__title">2026 Duster Metal Product PVT. LTD.</span>
+          <span class="catalogue-viewer-bar__tag">3D DIGITAL FLIPBOOK</span>
+        </div>
+
+        <div class="catalogue-viewer-bar__right">
+          <button class="viewer-icon-btn" nz-tooltip nzTooltipTitle="Toggle Thumbnails Grid" (click)="toggleThumbnails()">
+            <span nz-icon nzType="appstore"></span>
+          </button>
+          <button class="viewer-icon-btn" nz-tooltip nzTooltipTitle="Fullscreen Mode" (click)="toggleFullscreen()">
+            <span nz-icon [nzType]="isFullscreen() ? 'fullscreen-exit' : 'fullscreen'"></span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Booklet Stage Frame -->
+      <div class="catalogue-viewer-frame">
+
+        @if (isLoading()) {
+          <div class="catalogue-viewer-loading">
+            <div class="catalogue-spinner"></div>
+            <p>Loading 3D Architectural Booklet ({{ loadingProgress() }}%)...</p>
+          </div>
+        }
+
+        <!-- 3D PageFlip Container -->
+        <div class="pageflip-wrapper" [class.is-hidden]="isLoading()">
+          <div #flipbookContainer class="pageflip-container"></div>
+        </div>
+
+      </div>
+
+      <!-- Bottom Control Bar -->
+      <div class="catalogue-bottom-bar">
+        
+        <div class="catalogue-bottom-bar__left">
+          <button class="bottom-bar-btn" nz-tooltip nzTooltipTitle="Page Grid View" (click)="toggleThumbnails()">
+            <span nz-icon nzType="appstore"></span>
+          </button>
+        </div>
+
+        <!-- Center Navigation Toolbar -->
+        <div class="catalogue-bottom-bar__center">
+          <button class="bottom-bar-btn" [disabled]="currentPage() <= 0" nz-tooltip nzTooltipTitle="First Page" (click)="firstPage()">
+            <span nz-icon nzType="step-backward"></span>
+          </button>
+
+          <button class="bottom-bar-btn" [disabled]="currentPage() <= 0" nz-tooltip nzTooltipTitle="Previous Page" (click)="prevPage()">
+            <span nz-icon nzType="left"></span>
+          </button>
+
+          <span class="bottom-bar-page-text">{{ pageDisplayString() }}</span>
+
+          <button class="bottom-bar-btn" [disabled]="currentPage() >= totalPages() - 1" nz-tooltip nzTooltipTitle="Next Page" (click)="nextPage()">
+            <span nz-icon nzType="right"></span>
+          </button>
+
+          <button class="bottom-bar-btn" [disabled]="currentPage() >= totalPages() - 1" nz-tooltip nzTooltipTitle="Last Page" (click)="lastPage()">
+            <span nz-icon nzType="step-forward"></span>
+          </button>
+        </div>
+
+        <div class="catalogue-bottom-bar__right">
+          <button class="bottom-bar-btn" nz-tooltip nzTooltipTitle="Fullscreen Mode" (click)="toggleFullscreen()">
+            <span nz-icon [nzType]="isFullscreen() ? 'fullscreen-exit' : 'fullscreen'"></span>
+          </button>
+        </div>
+
+      </div>
+
+      <!-- Thumbnail Drawer Panel -->
+      @if (showThumbnails()) {
+        <div class="catalogue-thumbnail-drawer">
+          <div class="thumbnail-drawer__header">
+            <span>BOOKLET PAGES GRID</span>
+            <button class="viewer-icon-btn" (click)="toggleThumbnails()">
+              <span nz-icon nzType="close"></span>
+            </button>
+          </div>
+          <div class="thumbnail-drawer__grid">
+            @for (pIndex of pagesArray; track pIndex) {
+              <div 
+                class="thumb-card" 
+                [class.is-active]="currentPage() === pIndex"
+                (click)="goToPage(pIndex)">
+                <div class="thumb-card__spread">
+                  <span>Page {{ pIndex + 1 }}</span>
+                </div>
+              </div>
+            }
+          </div>
+        </div>
+      }
+
+    </div>
+  </section>
+
+</div>

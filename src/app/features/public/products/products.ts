@@ -81,7 +81,7 @@ export class Products implements OnInit {
     pageSize = 12;
 
     // ── Sort ──────────────────────────────────────────────────────────────────
-    selectedSort = 'default';
+    selectedSort = 'az';
 
     sortOptions = [
         { label: 'A → Z', value: 'az' },

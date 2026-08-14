@@ -272,7 +272,7 @@
   display: flex;
   align-items: center;
   gap: $spacing-3;
-  padding: $spacing-3-5 $spacing-5;
+  padding: 5px $spacing-5;
   background: #141414;
   border: 1px solid #2C2C2E;
   border-radius: 0px;
@@ -337,6 +337,44 @@
   flex-wrap: wrap;
   gap: $spacing-2;
   margin-bottom: $spacing-4;
+
+  ::ng-deep .ant-tag {
+    background: rgba(212, 175, 55, 0.08) !important;
+    border: 1px solid rgba(212, 175, 55, 0.35) !important;
+    color: #F2F2F7 !important;
+    font-size: 12px !important;
+    font-weight: 500 !important;
+    padding: 3px 10px !important;
+    border-radius: 2px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    margin: 0 !important;
+    transition: all 0.2s ease !important;
+
+    span[nz-icon] {
+      color: #D4AF37 !important;
+      font-size: 13px !important;
+    }
+
+    .ant-tag-close-icon,
+    span.anticon-close {
+      color: #8E8E93 !important;
+      font-size: 11px !important;
+      margin-left: 4px !important;
+      transition: color 0.15s ease !important;
+
+      &:hover {
+        color: #D4AF37 !important;
+      }
+    }
+
+    &:hover {
+      background: rgba(212, 175, 55, 0.15) !important;
+      border-color: #D4AF37 !important;
+      color: #FFFFFF !important;
+    }
+  }
 }
 
 // ── Product grid ──────────────────────────────────────────────────────

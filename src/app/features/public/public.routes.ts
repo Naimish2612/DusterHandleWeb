@@ -18,6 +18,11 @@ export const publicRoutes: Routes = [
     data: { title: 'Products - Duster' },
   },
   {
+    path: 'catalogue',
+    loadComponent: () => import('./catalogue/catalogue').then((m) => m.Catalogue),
+    data: { title: 'catalogue - Duster' },
+  },
+  {
     path: 'product-detail/:id',
     loadComponent: () => import('./product-detail/product-detail').then((m) => m.ProductDetail),
     data: { title: 'Product Details - Duster' },
