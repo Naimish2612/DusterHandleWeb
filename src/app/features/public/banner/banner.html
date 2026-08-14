@@ -1,117 +1,60 @@
-<!-- =====================================================================
-     BANNER — Hero Slider
-     ===================================================================== -->
-
-<!-- ── LOADING STATE — Skeleton ──────────────────────────────────────── -->
 @if (isLoading) {
-<section class="home-banner home-banner--skeleton">
-    <div class="home-banner__viewport">
-        <div class="home-banner__slide home-banner__slide--skeleton">
-
-            <!-- Shimmer overlay -->
-            <div class="home-banner__skeleton-shimmer"></div>
-
-            <div class="home-banner__inner">
-                <div class="home-banner__content">
-
-                    <!-- Title skeleton -->
-                    <nz-skeleton
-                        [nzActive]="true"
-                        [nzTitle]="{ width: '55%' }"
-                        [nzParagraph]="false"
-                        [nzAvatar]="false"
-                        class="home-banner__skeleton-title">
-                    </nz-skeleton>
-
-                    <!-- Subtitle skeleton -->
-                    <nz-skeleton
-                        [nzActive]="true"
-                        [nzTitle]="false"
-                        [nzParagraph]="{ rows: 2, width: ['70%', '50%'] }"
-                        [nzAvatar]="false"
-                        class="home-banner__skeleton-sub">
-                    </nz-skeleton>
-
-                    <!-- Buttons skeleton -->
-                    <div class="home-banner__skeleton-actions">
-                        <nz-skeleton-element
-                            nzType="button"
-                            [nzActive]="true"
-                            nzSize="large"
-                            class="home-banner__skeleton-btn">
-                        </nz-skeleton-element>
-                        <nz-skeleton-element
-                            nzType="button"
-                            [nzActive]="true"
-                            nzSize="large"
-                            class="home-banner__skeleton-btn">
-                        </nz-skeleton-element>
-                    </div>
-
-                </div>
-            </div>
+  <div class="Duster-hero Duster-hero--loading">
+    <nz-spin nzSimple></nz-spin>
+  </div>
+} @else if (banners.length > 0) {
+  <section class="Duster-hero">
+    
+    <!-- Hero Gallery Accordion as the Background -->
+    <div class="Duster-hero__gallery">
+      @for (banner of banners; track banner.banner_id; let i = $index) {
+        <div class="Duster-hero__card"
+             [class.Duster-hero__card--active]="currentIndex === i"
+             (mouseenter)="goTo(i)"
+             (click)="goTo(i)"
+             [style.background-image]="'url(\'' + banner.image_url + '\')'">
+          
+          <div class="Duster-hero__card-overlay"></div>
 
         </div>
+      }
     </div>
 
-    <!-- Skeleton dots -->
-    <div class="home-banner__dots">
-        @for (d of skeletonDots; track d) {
-        <span></span>
-        }
-    </div>
+    <!-- Floating Content Pane on top of the background -->
+    <div class="Duster-hero__content-overlay">
+      <div class="Duster-hero__content">
+        
+        <!-- Main Brand Typography -->
+        <h1 class="Duster-hero__title">
+          ARCHITECTURAL
+          <span>PRECISION.</span>
+          <span class="Duster-hero__brand">DEFINED BY DUSTER.</span>
+        </h1>
 
-</section>
-} 
+        <!-- Divider line -->
+        <div class="Duster-hero__divider"></div>
 
-<!-- ── LOADED STATE — Real Slider ────────────────────────────────────── -->
-@else if (banners.length > 0) {
-<section class="home-banner">
-    <div class="home-banner__viewport">
-        <div class="home-banner__track"
-            [style.transform]="'translateX(-' + currentIndex * 100 + '%)'">
-
-            @for (banner of banners; track banner.banner_title) {
-            <div class="home-banner__slide"
-                [ngStyle]="{ 'background-image': 'url(' + banner.image_url + ')' }">
-                <div class="home-banner__overlay"></div>
-                <div class="home-banner__inner">
-                    <div class="home-banner__content">
-
-                        <h1 class="home-banner__title">
-                            {{ banner.banner_title }}
-                        </h1>
-
-                        <p class="home-banner__subtitle">
-                            {{ banner.description }}
-                        </p>
-
-                        <div class="home-banner__actions">
-                            <a routerLink="/products" class="btn btn--primary">
-                                Shop Now
-                            </a>
-                            <a routerLink="/products" class="btn btn--outline">
-                                Explore Collection
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            }
-
+        <!-- Dynamic Active Slide Details -->
+        <div class="Duster-hero__active-details">
+          <span class="Duster-hero__active-number">
+            0{{ currentIndex + 1 }} / COLLECTION
+          </span>
+          <h2 class="Duster-hero__active-title">
+            {{ banners[currentIndex].banner_title }}
+          </h2>
+          <p class="Duster-hero__active-desc">
+            {{ banners[currentIndex].description }}
+          </p>
+          <a [routerLink]="[banners[currentIndex].redirect_url || '/products']" 
+             class="Duster-hero__active-btn"
+             (click)="$event.stopPropagation()">
+            Explore Collection
+            <span nz-icon nzType="arrow-right" nzTheme="outline"></span>
+          </a>
         </div>
+
+      </div>
     </div>
 
-    <!-- Arrows -->
-    <button class="home-banner__arrow left" (click)="prev()">‹</button>
-    <button class="home-banner__arrow right" (click)="next()">›</button>
-
-    <!-- Dots -->
-    <div class="home-banner__dots">
-        @for (banner of banners; track $index; let i = $index) {
-        <span [class.active]="i === currentIndex" (click)="goTo(i)"></span>
-        }
-    </div>
-
-</section>
+  </section>
 }

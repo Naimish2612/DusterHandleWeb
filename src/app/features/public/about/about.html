@@ -1,183 +1,121 @@
-<!-- =====================================================================
-     ABOUT US PAGE
-     ===================================================================== -->
-
-<!-- ════════════════════════════════════════════════════════════
-     1.  HERO
-     ════════════════════════════════════════════════════════════ -->
-<section class="about-hero">
-  <div class="about-hero__bg-grid" aria-hidden="true"></div>
+<!-- Hero Section -->
+<section class="about-hero" style="background-image: url('/assets/images/brand-logo/drill.jpg')">
+  <div class="about-hero__overlay"></div>
   <div class="about-hero__container">
     <div class="about-hero__content">
-      <span class="about-hero__eyebrow">
-        <span nz-icon nzType="info-circle" nzTheme="fill"></span>
-        Our Story
-      </span>
       <h1 class="about-hero__title">
-        Architectural Precision.<br />
-        <span class="about-hero__title-accent">Crafted to Elevate.</span>
+        DEFINING
+        <span>ARCHITECTURAL</span>
+        PRECISION.
       </h1>
       <p class="about-hero__desc">
-        DUSTER has always been at the forefront of delivering excellence in innovative, 
-        architecturally-precise custom profiles and premium hardware. Driven by design excellence 
-        and editorial execution, we elevate interior spaces, improve productivity, and create a 
-        transformational structural experience. From custom cabinet integration to complex continuous 
-        kitchen pulls and sliding tracks, we ensure every aspect of modern hardware design is streamlined, 
-        seamless, and high-end.
-      </p>
-      <div class="about-hero__actions">
-        <a routerLink="/products" class="about-hero__btn about-hero__btn--primary">
-          <span nz-icon nzType="shopping" nzTheme="outline"></span>
-          Our Products
-        </a>
-        <a routerLink="/contact" class="about-hero__btn about-hero__btn--ghost">
-          <span nz-icon nzType="mail" nzTheme="outline"></span>
-          Get in Touch
-        </a>
-      </div>
-    </div>
-    <div class="about-hero__visual" aria-hidden="true">
-      <div class="about-hero__ring about-hero__ring--outer"></div>
-      <div class="about-hero__ring about-hero__ring--mid"></div>
-      <div class="about-hero__ring about-hero__ring--inner"></div>
-      <div class="about-hero__center-icon">
-        <span nz-icon nzType="crown" nzTheme="outline"></span>
-      </div>
-      <!-- Floating badges -->
-      <div class="about-hero__float-badge about-hero__float-badge--tl">
-        <span nz-icon nzType="smile" nzTheme="fill"></span>
-        Trusted Since 1999
-      </div>
-      <div class="about-hero__float-badge about-hero__float-badge--br">
-        <span nz-icon nzType="star" nzTheme="fill"></span>
-        World-Class Solutions
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ════════════════════════════════════════════════════════════
-     3.  MISSION & VISION
-     ════════════════════════════════════════════════════════════ -->
-<section class="mission-vision-section">
-  <div class="mission-vision-section__container">
-    <div class="mission-vision-grid">
-
-      <!-- Mission -->
-      <div class="mission-card">
-        <div class="mission-card__icon-badge">
-          <span nz-icon nzType="rocket" nzTheme="fill"></span>
-        </div>
-        <h3 class="mission-card__title">Our Mission</h3>
-        <ul class="mission-card__pillars">
-          <li>
-            <span nz-icon nzType="check-circle" nzTheme="fill"></span>
-            To provide architects, designers, and homeowners with architecturally-precise
-            custom profiles and premium hardware systems that define modern spaces.
-          </li>
-          <li>
-            <span nz-icon nzType="check-circle" nzTheme="fill"></span>
-            To be a value creator for our partners and customers by delivering innovative
-            cabinet profiles, integrated pulls, and hardware solutions that elevate interior aesthetics.
-          </li>
-          <li>
-            <span nz-icon nzType="check-circle" nzTheme="fill"></span>
-            Strive to develop advanced mechanical and structural hardware applications to satisfy
-            design and durability standards.
-          </li>
-          <li>
-            <span nz-icon nzType="check-circle" nzTheme="fill"></span>
-            To be a customer-centric, innovation-driven, and design-led learning organization.
-          </li>
-        </ul>
-      </div>
-
-      <!-- Vision -->
-      <div class="vision-card">
-        <div class="vision-card__icon-badge">
-          <span nz-icon nzType="eye" nzTheme="fill"></span>
-        </div>
-        <h3 class="vision-card__title">Our Vision</h3>
-        <ul class="vision-card__pillars">
-          <li>
-            <span nz-icon nzType="check-circle" nzTheme="fill"></span>
-            Driven by innovation, DUSTER aspires to be the leading, trusted 
-            and design-focused organization, committed to providing world-class custom 
-            profiles and premium hardware for high-end spaces.
-          </li>
-        </ul>
-      </div>
-
-    </div>
-  </div>
-</section>
-
-<!-- ─── Achievements Timeline ─── -->
-<section class="achievements-section">
-  <div class="achievements-section__container">
-    <div class="achievements-section__header">
-      <span class="section-label">
-        <span nz-icon nzType="history" nzTheme="outline"></span>
-        Our Journey
-      </span>
-      <h2 class="achievements-section__title">Key Milestones &amp; Achievements</h2>
-      <p class="achievements-section__sub">
-        From our founding in 1999 to pioneering innovations in minimalist profile integration — 
-        here's how DUSTER has grown, year by year.
+        Duster was founded on a singular obsession: to elevate functional hardware into objects of structural permanence
+        and tactile luxury. We do not manufacture parts; we engineer the critical touchpoints of the built environment.
       </p>
     </div>
-
-    <ul class="timeline">
-      @for (item of achievements; track item.year; let isEven = $even) {
-      <li class="timeline__item" [class.timeline__item--left]="isEven" [class.timeline__item--right]="!isEven">
-
-        <!-- Center dot with icon -->
-        <div class="timeline__dot" [class.timeline__dot--highlight]="item.highlight">
-          <span nz-icon [nzType]="item.icon" nzTheme="outline"></span>
-        </div>
-
-        <!-- Card -->
-        <div class="timeline__card" [class.timeline__card--filled]="isEven" [class.timeline__card--outlined]="!isEven">
-          <span class="timeline__year">{{ item.year }}</span>
-          <h4 class="timeline__title">{{ item.title }}</h4>
-          <p class="timeline__desc">{{ item.description }}</p>
-        </div>
-      </li>
-      }
-    </ul>
   </div>
 </section>
 
-<!-- ════════════════════════════════════════════════════════════
-    6.  JOIN CTA BANNER
-     ════════════════════════════════════════════════════════════ -->
-<section class="about-cta-section">
-  <div class="about-cta-section__container">
-    <div class="about-cta-card">
-      <div class="about-cta-card__content">
-        <span nz-icon nzType="crown" nzTheme="fill" class="about-cta-card__icon"></span>
-        <div>
-          <h2 class="about-cta-card__title">Ready to Elevate Your Spaces with Duster?</h2>
-          <p class="about-cta-card__sub">
-            Explore our range of premium custom cabinet profiles, integrated handles,
-            and high-end hardware designed for modern, luxurious interiors.
-          </p>
+<!-- Core Doctrines Section -->
+<section class="doctrines">
+  <div class="doctrines__container">
+    <div class="doctrines__header">
+      <h2 class="doctrines__title">CORE DOCTRINES</h2>
+      <span class="doctrines__index">01 / FOUNDATION</span>
+    </div>
+
+    <div class="doctrines__grid">
+      <!-- Doctrine 1 -->
+      <div class="doctrine-card">
+        <div class="doctrine-card__icon">
+          <span nz-icon nzType="setting" nzTheme="outline"></span>
         </div>
+        <h3 class="doctrine-card__title">PRECISION ENGINEERING</h3>
+        <p class="doctrine-card__text">
+          Tolerances measured in microns. Every piece is CNC milled from solid billets, ensuring structural integrity
+          that far exceeds industry standards. A ruthless commitment to exactitude.
+        </p>
       </div>
-      <div class="about-cta-card__actions">
-        <a routerLink="/auth/signup" class="about-cta-btn about-cta-btn--primary">
-          <span nz-icon nzType="user-add" nzTheme="outline"></span>
-          Create Free Account
-        </a>
-        <a routerLink="/products" class="about-cta-btn about-cta-btn--ghost">
-          <span nz-icon nzType="appstore" nzTheme="outline"></span>
-          Browse Products
-        </a>
-        <a routerLink="/contact" class="about-cta-btn about-cta-btn--ghost">
-          <span nz-icon nzType="mail" nzTheme="outline"></span>
-          Contact Us
-        </a>
+
+      <!-- Doctrine 2 -->
+      <div class="doctrine-card">
+        <div class="doctrine-card__icon">
+          <span nz-icon nzType="global" nzTheme="outline"></span>
+        </div>
+        <h3 class="doctrine-card__title">SUSTAINABLE SOURCING</h3>
+        <p class="doctrine-card__text">
+          Utilizing 100% recycled architectural-grade alloys where possible. Our supply chain is transparent, rigorous,
+          and designed to minimize environmental impact without compromising material strength.
+        </p>
+      </div>
+
+      <!-- Doctrine 3 -->
+      <div class="doctrine-card">
+        <div class="doctrine-card__icon">
+          <span nz-icon nzType="tool" nzTheme="outline"></span>
+        </div>
+        <h3 class="doctrine-card__title">BESPOKE CRAFTSMANSHIP</h3>
+        <p class="doctrine-card__text">
+          The synthesis of advanced robotics and human finishing. After machining, every surface is hand-polished or
+          brushed to achieve a tactile response that is distinctively Duster.
+        </p>
       </div>
     </div>
+  </div>
+</section>
+
+<!-- Lineage (Timeline) Section -->
+<section class="lineage">
+  <div class="lineage__container">
+
+    <div class="lineage__left">
+      <div class="lineage__header">
+        <h2 class="lineage__title">LINEAGE</h2>
+        <span class="lineage__index">02 / HISTORY</span>
+      </div>
+    </div>
+
+    <div class="lineage__right">
+      <div class="timeline">
+        <!-- Milestone 1 -->
+        <div class="timeline__item">
+          <span class="timeline__year">2005</span>
+          <div class="timeline__content">
+            <h3 class="timeline__title">Inception</h3>
+            <p class="timeline__text">
+              Founded as a bespoke prototyping studio for high-end residential architecture in Milan. The initial focus
+              was purely on resolving complex structural joint issues with elegant, minimalist solutions.
+            </p>
+          </div>
+        </div>
+
+        <!-- Milestone 2 -->
+        <div class="timeline__item">
+          <span class="timeline__year">2012</span>
+          <div class="timeline__content">
+            <h3 class="timeline__title">The Monolith Collection</h3>
+            <p class="timeline__text">
+              Launch of our first commercial line, defining our signature aesthetic: heavy, unornamented geometries
+              milled from solid brass and stainless steel. Recognized globally for introducing tactile weight back into
+              hardware.
+            </p>
+          </div>
+        </div>
+
+        <!-- Milestone 3 -->
+        <div class="timeline__item">
+          <span class="timeline__year">2024</span>
+          <div class="timeline__content">
+            <h3 class="timeline__title">Global Infrastructure</h3>
+            <p class="timeline__text">
+              Expansion of precision manufacturing facilities. Today, Duster hardware is specified in landmark
+              architectural projects across five continents, remaining true to our founding principle of uncompromising
+              exactitude.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
   </div>
 </section>

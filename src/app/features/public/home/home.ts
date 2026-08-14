@@ -23,7 +23,8 @@ import { CatalogService } from '../services/catalog.service';
     RouterLink,
     NzEmptyModule,
     NzButtonModule,
-    NzIconModule
+    NzIconModule,
+    Banner
   ],
   templateUrl: './home.html',
   styleUrl   : './home.scss',

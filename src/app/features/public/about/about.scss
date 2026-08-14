@@ -1,1049 +1,451 @@
 @use '../../../../assets/styles/common' as *;
 @use '../../../../assets/styles/responsive' as *;
 
-
-// =========================================================================
-// SHARED UTILITY
-// =========================================================================
-
-.section-label {
-  display: inline-flex;
-  align-items: center;
-  gap: $spacing-1-5;
-  font-size: $font-size-xs;
-  font-weight: $font-weight-bold;
-  letter-spacing: $letter-spacing-widest;
-  text-transform: uppercase;
-  color: $primary-500;
-  background: $primary-50;
-  padding: $spacing-1-5 $spacing-3;
-  border-radius: $border-radius-full;
-  margin-bottom: $spacing-4;
-
-  span[nz-icon] {
-    font-size: $icon-size-sm;
-  }
-}
-
-// =========================================================================
-// 1. HERO
-// =========================================================================
-
+// ── Hero Section ─────────────────────────────────────────────────────────
 .about-hero {
   position: relative;
-  background: linear-gradient(145deg, $primary-900 0%, $primary-800 55%, $primary-700 100%);
-  padding: $spacing-20 0;
+  background-size: cover;
+  background-position: center;
+  height: 60vh;
+  min-height: 480px;
+  display: flex;
+  align-items: center;
   overflow: hidden;
+  border-bottom: 1px solid #2C2C2E;
 
-  @include mobile {
-    padding: $spacing-14 0 $spacing-12;
-  }
-
-  &__bg-grid {
-    background-image:
-      linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
-    background-size: 40px 40px;
-    pointer-events: none;
-    @include absolute-fill;
+  &__overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(13, 13, 13, 0.95) 0%, rgba(13, 13, 13, 0.6) 100%),
+                rgba(13, 13, 13, 0.3);
+    z-index: 1;
   }
 
   &__container {
-    position: relative;
-    z-index: 1;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: $spacing-16;
-    align-items: center;
+    @include make-container($container-xxl);
+    width: 100%;
+    z-index: 2;
+    padding-left: 8%;
 
-    @include make-container($container-xl);
-
-    @include tablet {
-      grid-template-columns: 1fr;
-      gap: $spacing-12;
-    }
-
-    @include mobile {
-      grid-template-columns: 1fr;
-      gap: $spacing-10;
+    @include tablet-down {
+      padding-left: $spacing-6;
+      text-align: center;
     }
   }
 
-  &__eyebrow {
-    display: inline-flex;
-    align-items: center;
-    gap: $spacing-2;
-    font-size: $font-size-xs;
-    font-weight: $font-weight-bold;
-    letter-spacing: $letter-spacing-widest;
-    text-transform: uppercase;
-    color: #ffffff;
-    background: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    border-radius: $border-radius-full;
-    padding: $spacing-1-5 $spacing-4;
-    margin-bottom: $spacing-6;
+  &__content {
+    max-width: 600px;
+  }
 
-    span[nz-icon] {
-      font-size: $icon-size-base;
-      color: $primary-500;
+  &__title {
+    font-family: $font-heading;
+    font-size: 3.2rem;
+    font-weight: 300;
+    line-height: 1.15;
+    color: #FFFFFF !important;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    margin: 0 0 24px;
+
+    @include mobile {
+      font-size: 2.2rem;
+      letter-spacing: 0.1em;
+    }
+
+    span {
+      display: block;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      color: #D4AF37 !important;
+    }
+  }
+
+  &__desc {
+    font-size: 15px;
+    line-height: 1.6;
+    color: #A2A2A7;
+    margin: 0;
+    max-width: 500px;
+
+    @include tablet-down {
+      margin: 0 auto;
+    }
+  }
+}
+
+// ── Core Doctrines Section ────────────────────────────────────────────────
+.doctrines {
+  background-color: #0D0D0D;
+  padding: $spacing-20 0;
+  border-bottom: 1px solid #2C2C2E;
+
+  &__container {
+    @include make-container($container-xxl);
+  }
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    border-bottom: 1px solid #2C2C2E;
+    padding-bottom: $spacing-6;
+    margin-bottom: $spacing-12;
+
+    @include mobile {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 8px;
     }
   }
 
   &__title {
     font-family: $font-heading;
-    font-size: $font-size-5xl;
-    font-weight: $font-weight-extrabold;
-    line-height: $line-height-tight;
-    color: $neutral-0;
-    letter-spacing: $letter-spacing-tight;
-    margin: 0 0 $spacing-6;
-
-    @include tablet {
-      font-size: $font-size-4xl;
-    }
-
-    @include mobile {
-      font-size: $font-size-3xl;
-    }
+    font-size: 24px;
+    font-weight: 700;
+    color: #FFFFFF !important;
+    margin: 0;
+    letter-spacing: 0.1em;
   }
 
-  &__title-accent {
-    color: $primary-600;
+  &__index {
+    font-size: 11px;
+    font-weight: 700;
+    color: #D4AF37;
+    letter-spacing: 0.15em;
   }
 
-  &__desc {
-    font-size: $font-size-lg;
-    color: #ffffff;
-    line-height: $line-height-relaxed;
-    margin: 0 0 $spacing-8;
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 40px;
 
-    @include mobile {
-      font-size: $font-size-base;
+    @include tablet-down {
+      grid-template-columns: 1fr;
+      gap: 32px;
     }
   }
+}
 
-  &__actions {
+.doctrine-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+
+  &__icon {
+    font-size: 24px;
+    color: #D4AF37;
+    margin-bottom: 20px;
+    height: 48px;
+    width: 48px;
     display: flex;
     align-items: center;
-    gap: $spacing-4;
-    flex-wrap: wrap;
+    justify-content: center;
+    border: 1px solid rgba(212, 175, 55, 0.25);
+    background: rgba(212, 175, 55, 0.03);
+    border-radius: 0px;
+  }
+
+  &__title {
+    font-family: $font-heading;
+    font-size: 14px;
+    font-weight: 700;
+    color: #FFFFFF !important;
+    letter-spacing: 0.08em;
+    margin: 0 0 12px;
+  }
+
+  &__text {
+    font-size: 13px;
+    line-height: 1.6;
+    color: #8E8E93;
+    margin: 0;
+  }
+}
+
+// ── Lineage Timeline Section ──────────────────────────────────────────────
+.lineage {
+  background-color: #0D0D0D;
+  padding: $spacing-20 0;
+  border-bottom: 1px solid #2C2C2E;
+
+  &__container {
+    @include make-container($container-xxl);
+    display: grid;
+    grid-template-columns: 1.2fr 2fr;
+    gap: 60px;
+
+    @include tablet-down {
+      grid-template-columns: 1fr;
+      gap: 40px;
+    }
+  }
+
+  &__left {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: space-between;
+    height: 100%;
+    min-height: 200px;
+
+    @include tablet-down {
+      min-height: auto;
+      justify-content: flex-start;
+      gap: 20px;
+    }
+  }
+
+  &__header {
+    width: 100%;
+    border-bottom: 1px solid #2C2C2E;
+    padding-bottom: $spacing-6;
+
+    @include mobile {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+    }
+  }
+
+  &__title {
+    font-family: $font-heading;
+    font-size: 24px;
+    font-weight: 700;
+    color: #FFFFFF !important;
+    margin: 0;
+    letter-spacing: 0.1em;
+  }
+
+  &__index {
+    font-size: 11px;
+    font-weight: 700;
+    color: #D4AF37;
+    letter-spacing: 0.15em;
+    display: block;
+    margin-top: 8px;
+
+    @include mobile {
+      margin-top: 0;
+    }
   }
 
   &__btn {
     display: inline-flex;
     align-items: center;
-    gap: $spacing-2;
+    gap: 10px;
+    font-size: 11px;
+    font-weight: 700;
+    color: #D4AF37 !important;
+    background: transparent;
+    border: 1px solid #D4AF37;
     padding: $spacing-3 $spacing-6;
-    border-radius: $border-radius-lg;
-    font-size: $font-size-sm;
-    font-weight: $font-weight-bold;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    transition: all 0.2s;
     text-decoration: none;
-    transition: all $transition-base;
-
-    span[nz-icon] {
-      font-size: $icon-size-base;
-    }
-
-    &--primary {
-      background: $primary-500;
-      color: $neutral-1000 !important;
-      border: 1.5px solid $primary-500;
-      box-shadow: 0 $spacing-1 $spacing-5 rgba($primary-500, 0.4);
-
-      span[nz-icon] {
-        color: $neutral-1000 !important;
-      }
-
-      &:hover {
-        background: $primary-400;
-        border-color: $primary-400;
-        transform: translateY(-1px);
-        color: $neutral-1000 !important;
-        span[nz-icon] {
-          color: $neutral-1000 !important;
-        }
-      }
-    }
-
-    &--ghost {
-      border: 1.5px solid rgba(255, 255, 255, 0.35) !important;
-      color: #ffffff !important;
-
-      span[nz-icon] {
-        color: #ffffff !important;
-      }
-
-      &:hover {
-        background: rgba(255, 255, 255, 0.1) !important;
-        border-color: rgba(255, 255, 255, 0.6) !important;
-        color: #ffffff !important;
-        span[nz-icon] {
-          color: #ffffff !important;
-        }
-      }
-    }
-  }
-
-  // ── Visual ring animation ────────────────────────────────────────
-  &__visual {
-    position: relative;
-    width: 360px;
-    height: 360px;
-    margin: 0 auto;
-    @include flex-center;
-
-    @include mobile {
-      width: 260px;
-      height: 260px;
-    }
-  }
-
-  &__ring {
-    position: absolute;
-    border-radius: 50%;
-    border: 1px solid rgba(255, 255, 255, 0.12);
-    animation: ringPulse 4s ease-in-out infinite;
-
-    &--outer {
-      width: 360px;
-      height: 360px;
-      animation-delay: 0s;
-
-      @include mobile {
-        width: 260px;
-        height: 260px;
-      }
-    }
-
-    &--mid {
-      width: 270px;
-      height: 270px;
-      animation-delay: -1.3s;
-
-      @include mobile {
-        width: 196px;
-        height: 196px;
-      }
-    }
-
-    &--inner {
-      width: 180px;
-      height: 180px;
-      animation-delay: -2.6s;
-      border-color: rgba(255, 255, 255, 0.25);
-
-      @include mobile {
-        width: 130px;
-        height: 130px;
-      }
-    }
-  }
-
-  &__center-icon {
-    position: relative;
-    z-index: 2;
-    width: 96px;
-    height: 96px;
-    border-radius: $border-radius-2xl;
-    background: rgba(255, 255, 255, 0.12);
-    border: 1.5px solid rgba(255, 255, 255, 0.25);
-    font-size: $icon-size-4xl;
-    color: $neutral-0;
-    @include flex-center;
-
-    @include mobile {
-      width: 72px;
-      height: 72px;
-      font-size: $icon-size-3xl;
-    }
-  }
-
-  &__float-badge {
-    position: absolute;
-    display: flex;
-    align-items: center;
-    gap: $spacing-2;
-    background: rgba(255, 255, 255, 0.14);
-    border: 1px solid rgba(255, 255, 255, 0.22);
-    border-radius: $border-radius-full;
-    padding: $spacing-2 $spacing-4;
-    font-size: $font-size-xs;
-    font-weight: $font-weight-semibold;
-    color: $neutral-0;
-    white-space: nowrap;
-    z-index: 3;
-
-    span[nz-icon] {
-      font-size: $icon-size-sm;
-      color: $warning-400;
-    }
-
-    &--tl {
-      top: $spacing-5;
-      left: -$spacing-6;
-      animation: floatY 5s ease-in-out infinite;
-
-      @include mobile {
-        left: 0;
-      }
-    }
-
-    &--br {
-      bottom: $spacing-5;
-      right: -$spacing-6;
-      animation: floatY 5s ease-in-out infinite -2.5s;
-
-      @include mobile {
-        right: 0;
-      }
-    }
-  }
-}
-
-@keyframes ringPulse {
-
-  0%,
-  100% {
-    transform: scale(1);
-    opacity: 0.6;
-  }
-
-  50% {
-    transform: scale(1.04);
-    opacity: 1;
-  }
-}
-
-@keyframes floatY {
-
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-
-  50% {
-    transform: translateY(-8px);
-  }
-}
-
-// =========================================================================
-// 3. MISSION & VISION
-// =========================================================================
-
-.mission-vision-section {
-  background: $neutral-100;
-  padding: $spacing-20 0;
-
-  @include mobile {
-    padding: $spacing-12 0;
-  }
-
-  &__container {
-    @include make-container($container-xl);
-  }
-}
-
-.mission-vision-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: $spacing-6;
-
-  @include mobile {
-    grid-template-columns: 1fr;
-    gap: $spacing-5;
-  }
-}
-
-// ── Mission card ──────────────────────────────────────────────────────
-.mission-card {
-  background: linear-gradient(145deg, $primary-900 0%, $primary-700 100%);
-  border-radius: $border-radius-2xl;
-  padding: $spacing-10;
-  position: relative;
-  overflow: hidden;
-
-  @include mobile {
-    padding: $spacing-7;
-  }
-
-  &::before {
-    content: '';
-    @include absolute-fill;
-    background-image: radial-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px);
-    background-size: 20px 20px;
-    pointer-events: none;
-  }
-
-  &__icon-badge {
-    width: $avatar-size-xl;
-    height: $avatar-size-xl;
-    border-radius: $border-radius-xl;
-    background: rgba(255, 255, 255, 0.12);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    @include flex-center;
-    font-size: $icon-size-2xl;
-    color: $primary-500;
-    margin-bottom: $spacing-6;
-  }
-
-  &__title {
-    font-family: $font-heading;
-    font-size: $font-size-2xl;
-    font-weight: $font-weight-bold;
-    color: $neutral-0;
-    margin: 0 0 $spacing-6;
-  }
-
-  &__pillars {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-    gap: $spacing-4;
-
-    li {
-      display: flex;
-      align-items: flex-start;
-      gap: $spacing-3;
-      font-size: $font-size-sm;
-      color: rgba(255, 255, 255, 0.85);
-      font-weight: $font-weight-medium;
-      line-height: $line-height-relaxed;
-
-      span[nz-icon] {
-        color: $success-400;
-        font-size: $icon-size-base;
-        flex-shrink: 0;
-        margin-top: 2px;
-      }
-    }
-  }
-}
-
-// ── Vision card ──────────────────────────────────────────────────────
-.vision-card {
-  background: $neutral-0;
-  border: 1.5px solid $neutral-200;
-  border-radius: $border-radius-2xl;
-  padding: $spacing-10;
-
-  @include mobile {
-    padding: $spacing-7;
-  }
-
-  &__icon-badge {
-    width: $avatar-size-xl;
-    height: $avatar-size-xl;
-    border-radius: $border-radius-xl;
-    background: $primary-50;
-    font-size: $icon-size-2xl;
-    color: $primary-500;
-    margin-bottom: $spacing-6;
-    @include flex-center;
-  }
-
-  &__title {
-    font-family: $font-heading;
-    font-size: $font-size-2xl;
-    font-weight: $font-weight-bold;
-    color: $neutral-800;
-    margin: 0 0 $spacing-6;
-  }
-
-  &__pillars {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-    gap: $spacing-4;
-
-    li {
-      display: flex;
-      align-items: flex-start;
-      gap: $spacing-3;
-      font-size: $font-size-sm;
-      color: $neutral-600;
-      font-weight: $font-weight-medium;
-      line-height: $line-height-relaxed;
-
-      span[nz-icon] {
-        color: $primary-500;
-        font-size: $icon-size-base;
-        flex-shrink: 0;
-        margin-top: 2px;
-      }
-    }
-  }
-}
-
-// =========================================================================
-// 5. ACHIEVEMENTS TIMELINE
-// =========================================================================
-
-.achievements-section {
-  background: $neutral-100;
-  
-  @include mobile {
-    padding: $spacing-12 0;
-  }
-
-  &__container {
-    @include make-container($container-xl);
-  }
-
-  &__header {
-    text-align: center;
-    max-width: 600px;
-    margin: 0 auto $spacing-14;
-  }
-
-  &__title {
-    font-family: $font-heading;
-    font-size: $font-size-4xl;
-    font-weight: $font-weight-bold;
-    color: $neutral-800;
-    line-height: $line-height-heading;
-    letter-spacing: $letter-spacing-tight;
-    margin: 0 0 $spacing-4;
-
-    @include mobile {
-      font-size: $font-size-3xl;
-    }
-  }
-
-  &__sub {
-    font-size: $font-size-base;
-    color: $neutral-500;
-    line-height: $line-height-relaxed;
-    margin: 0;
-  }
-}
-
-// ── Timeline ────────────────────────────────────────────────────────
-.timeline {
-  position: relative;
-  list-style: none;
-  padding: 0;
-  margin: 0 auto;
-  max-width: 1100px;
-
-  // Vertical center line
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 50%;
-    width: 3px;
-    background: linear-gradient(to bottom,
-        transparent 0%,
-        $primary-200 5%,
-        $primary-300 50%,
-        $primary-200 95%,
-        transparent 100%);
-    transform: translateX(-50%);
-    border-radius: $border-radius-full;
-    z-index: 0;
-
-    @include mobile {
-      left: 26px;
-      transform: none;
-    }
-  }
-
-  // ── Item (one milestone row) ─────────────────────────────────────
-  &__item {
-    position: relative;
-    width: 50%;
-    padding: 0 $spacing-10 $spacing-10 0;
-    box-sizing: border-box;
-    min-height: 100px;
-
-    &:last-child {
-      padding-bottom: 0;
-    }
-
-    @include mobile {
-      width: 100%;
-      padding: 0 0 $spacing-6 68px !important;
-    }
-
-    // LEFT (even index: 1999, 2010, 2017, 2023, 2025)
-    &--left {
-      left: 0;
-      padding: 0 $spacing-10 $spacing-10 0;
-      text-align: right;
-
-      @include mobile {
-        text-align: left;
-      }
-
-      .timeline__card {
-        &::after {
-          // Speech arrow pointing RIGHT (toward the line)
-          content: '';
-          position: absolute;
-          top: 24px;
-          right: -8px;
-          width: 0;
-          height: 0;
-          border-top: 8px solid transparent;
-          border-bottom: 8px solid transparent;
-          border-left: 8px solid $primary-50;
-
-          @include mobile {
-            right: auto;
-            left: -8px;
-            border-left: none;
-            border-right: 8px solid $primary-50;
-          }
-        }
-      }
-    }
-
-    // RIGHT (odd index: 2005, 2016, 2019, 2024)
-    &--right {
-      left: 50%;
-      padding: 0 0 $spacing-10 $spacing-10;
-      text-align: left;
-
-      @include mobile {
-        left: 0;
-      }
-
-      .timeline__card {
-        &::after {
-          // Speech arrow pointing LEFT (toward the line)
-          content: '';
-          position: absolute;
-          top: 24px;
-          left: -8px;
-          width: 0;
-          height: 0;
-          border-top: 8px solid transparent;
-          border-bottom: 8px solid transparent;
-          border-right: 8px solid $neutral-0;
-        }
-      }
-    }
-  }
-
-  // ── Dot (circle with icon) ───────────────────────────────────────
-  &__dot {
-    position: absolute;
-    top: 16px;
-    width: 52px;
-    height: 52px;
-    border-radius: 50%;
-    background: $neutral-0;
-    border: 2px solid $neutral-300;
-    color: $neutral-500;
-    z-index: 2;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-    transition: all $transition-base;
-
-    // Perfect centering using flex on the dot itself
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    @include mobile {
-      width: 44px;
-      height: 44px;
-      left: 4px !important;
-      right: auto !important;
-    }
-
-    // Force icon to be perfectly sized and centered
-    span[nz-icon] {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 22px;
-      line-height: 1;
-      width: 22px;
-      height: 22px;
-
-      @include mobile {
-        font-size: 18px;
-        width: 18px;
-        height: 18px;
-      }
-
-      // The actual svg element
-      svg {
-        display: block;
-        width: 100%;
-        height: 100%;
-      }
-    }
-
-    &--highlight {
-      background: linear-gradient(135deg, $primary-500 0%, $primary-700 100%);
-      border-color: $primary-500;
-      color: $neutral-0;
-      box-shadow:
-        0 0 0 5px $primary-100,
-        0 6px 16px rgba($primary-500, 0.4);
-    }
-  }
-
-  // Position dots on the correct side
-  &__item--left .timeline__dot {
-    right: -26px; // half of dot width (52/2) so it sits on the line
-
-    @include mobile {
-      right: auto;
-    }
-  }
-
-  &__item--right .timeline__dot {
-    left: -26px;
-
-    @include mobile {
-      left: 4px;
-    }
-  }
-
-  // ── Card ─────────────────────────────────────────────────────────
-  &__card {
-    position: relative;
-    border-radius: $border-radius-xl;
-    padding: $spacing-5 $spacing-6;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-    transition: box-shadow $transition-base, border-color $transition-base, transform $transition-base;
-    text-align: left; // Card content always left-aligned regardless of side
 
     &:hover {
-      box-shadow: $shadow-lg;
-      transform: translateY(-2px);
+      background: #D4AF37;
+      color: #0D0D0D !important;
+    }
+  }
+}
+
+.timeline {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  position: relative;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 8px;
+    bottom: 8px;
+    left: 80px;
+    width: 1px;
+    background: #2C2C2E;
+
+    @include mobile {
+      left: 12px;
+    }
+  }
+
+  &__item {
+    position: relative;
+    display: flex;
+    margin-bottom: 40px;
+
+    &:last-child {
+      margin-bottom: 0;
     }
 
-    &--filled {
-      background: $primary-50;
-      border: 1.5px solid $primary-200;
-
-      &:hover {
-        border-color: $primary-400;
-      }
-    }
-
-    &--outlined {
-      background: $neutral-0;
-      border: 1.5px solid $neutral-200;
-
-      &:hover {
-        border-color: $primary-300;
-      }
+    @include mobile {
+      flex-direction: column;
+      padding-left: 36px;
     }
   }
 
   &__year {
-    display: inline-block;
-    font-size: $font-size-xs;
-    font-weight: $font-weight-extrabold;
-    letter-spacing: $letter-spacing-wider;
-    color: $primary-500;
-    background: $primary-100;
-    padding: $spacing-0-5 $spacing-3;
-    border-radius: $border-radius-full;
-    margin-bottom: $spacing-3;
-  }
-
-  &__title {
     font-family: $font-heading;
-    font-size: $font-size-lg;
-    font-weight: $font-weight-bold;
-    color: $neutral-800;
-    margin: 0 0 $spacing-2;
-    line-height: $line-height-heading;
-  }
-
-  &__desc {
-    font-size: $font-size-sm;
-    color: $neutral-600;
-    line-height: $line-height-relaxed;
-    margin: 0;
-  }
-}
-
-// =========================================================================
-// 6. TEAM
-// =========================================================================
-
-.team-section {
-  background: $neutral-0;
-  padding: $spacing-20 0;
-
-  @include mobile {
-    padding: $spacing-12 0;
-  }
-
-  &__container {
-    @include make-container($container-xl);
-  }
-
-  &__header {
-    text-align: center;
-    max-width: 600px;
-    margin: 0 auto $spacing-12;
-  }
-
-  &__title {
-    font-family: $font-heading;
-    font-size: $font-size-4xl;
-    font-weight: $font-weight-bold;
-    color: $neutral-800;
-    line-height: $line-height-heading;
-    letter-spacing: $letter-spacing-tight;
-    margin: 0 0 $spacing-4;
+    font-size: 18px;
+    font-weight: 700;
+    color: #D4AF37;
+    width: 80px;
+    flex-shrink: 0;
+    padding-top: 2px;
+    letter-spacing: 0.05em;
 
     @include mobile {
-      font-size: $font-size-3xl;
+      width: auto;
+      margin-bottom: 8px;
     }
-  }
-}
-
-.team-grid {
-  @include grid-responsive(1, 2, 3, null, $spacing-5);
-
-  // Centered layout for only 2 cards
-  &--centered {
-    display: flex;
-    justify-content: center;
-    gap: $spacing-5;
-    flex-wrap: wrap;
-
-    .team-card {
-      width: 100%;
-      max-width: 340px;
-    }
-  }
-}
-
-.team-card {
-  background: $neutral-0;
-  border: 1.5px solid $neutral-200;
-  border-radius: $border-radius-2xl;
-  overflow: hidden;
-  transition: box-shadow $transition-base, border-color $transition-base, transform $transition-base;
-  display: flex;
-  flex-direction: column;
-
-  &:hover {
-    box-shadow: $shadow-lg;
-    border-color: $primary-200;
-    transform: translateY(-4px);
-  }
-
-  &__avatar {
-    height: 120px;
-    font-family: $font-heading;
-    font-size: $font-size-3xl;
-    font-weight: $font-weight-extrabold;
-    color: $neutral-0;
-    letter-spacing: $letter-spacing-tight;
-    @include flex-center;
-  }
-
-  &__body {
-    padding: $spacing-6;
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-  }
-
-  &__name {
-    font-family: $font-heading;
-    font-size: $font-size-lg;
-    font-weight: $font-weight-bold;
-    color: $neutral-800;
-    margin: 0 0 $spacing-1;
-  }
-
-  &__role {
-    display: block;
-    font-size: $font-size-xs;
-    font-weight: $font-weight-bold;
-    letter-spacing: $letter-spacing-wider;
-    text-transform: uppercase;
-    color: $primary-500;
-    margin-bottom: $spacing-4;
-  }
-
-  &__socials {
-    display: flex;
-    gap: $spacing-2;
-    margin-top: auto;
-  }
-
-  &__social-link {
-    width: 34px;
-    height: 34px;
-    border-radius: $border-radius-lg;
-    border: 1.5px solid $neutral-200;
-    font-size: $icon-size-base;
-    color: $neutral-400;
-    text-decoration: none;
-    transition: background $transition-fast, color $transition-fast, border-color $transition-fast;
-    @include flex-center;
-
-    &:hover {
-      background: $primary-50;
-      color: $primary-500;
-      border-color: $primary-300;
-    }
-  }
-}
-
-// =========================================================================
-// 7. FINAL CTA
-// =========================================================================
-
-.about-cta-section {
-  background: $neutral-100;
-  padding: $spacing-16 0;
-
-  @include mobile {
-    padding: $spacing-10 0;
-  }
-
-  &__container {
-    @include make-container($container-xl);
-  }
-}
-
-.about-cta-card {
-  background: linear-gradient(135deg, $primary-900 0%, $primary-700 100%);
-  border-radius: $border-radius-2xl;
-  padding: $spacing-12 $spacing-14;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: $spacing-8;
-  position: relative;
-  overflow: hidden;
-
-  @include tablet {
-    flex-direction: column;
-    text-align: center;
-    padding: $spacing-10;
-  }
-
-  @include mobile {
-    padding: $spacing-8 $spacing-6;
-  }
-
-  &::before {
-    content: '';
-    @include absolute-fill;
-    background-image: radial-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px);
-    background-size: 24px 24px;
-    pointer-events: none;
   }
 
   &__content {
-    display: flex;
-    align-items: center;
-    gap: $spacing-6;
-    position: relative;
-
-    @include tablet {
-      flex-direction: column;
-      gap: $spacing-4;
-    }
-  }
-
-  &__icon {
-    font-size: $icon-size-4xl;
-    color: $primary-500;
-    flex-shrink: 0;
-  }
-
-  &__title {
-    font-family: $font-heading;
-    font-size: $font-size-2xl;
-    font-weight: $font-weight-bold;
-    color: $neutral-0;
-    margin: 0 0 $spacing-2;
-    line-height: $line-height-heading;
-
-    @include mobile {
-      font-size: $font-size-xl;
-    }
-  }
-
-  &__sub {
-    font-size: $font-size-sm;
-    color: rgba(255, 255, 255, 0.65);
-    line-height: $line-height-relaxed;
-    margin: 0;
-    max-width: 500px;
-  }
-
-  &__actions {
-    display: flex;
-    gap: $spacing-3;
-    flex-shrink: 0;
+    flex-grow: 1;
+    padding-left: 40px;
     position: relative;
 
     @include mobile {
-      flex-direction: column;
-      width: 100%;
-    }
-  }
-}
-
-.about-cta-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: $spacing-2;
-  padding: $spacing-3 $spacing-6;
-  border-radius: $border-radius-lg;
-  font-size: $font-size-sm;
-  font-weight: $font-weight-bold;
-  text-decoration: none;
-  transition: all $transition-base;
-  white-space: nowrap;
-
-  span[nz-icon] {
-    font-size: $icon-size-base;
-  }
-
-  &--primary {
-    background: $primary-500;
-    color: $neutral-1000 !important;
-    border: 1.5px solid $primary-500;
-    box-shadow: 0 $spacing-1 $spacing-5 rgba($primary-500, 0.4);
-
-    span[nz-icon] {
-      color: $neutral-1000 !important;
+      padding-left: 0;
     }
 
-    &:hover {
-      background: $primary-400;
-      border-color: $primary-400;
-      transform: translateY(-1px);
-      color: $neutral-1000 !important;
-      span[nz-icon] {
-        color: $neutral-1000 !important;
+    &::before {
+      content: '';
+      position: absolute;
+      left: -5px;
+      top: 10px;
+      width: 9px;
+      height: 9px;
+      background: #D4AF37;
+      border-radius: 50%;
+
+      @include mobile {
+        left: -29px;
+        top: -18px;
       }
     }
   }
 
-  &--ghost {
-    border: 1.5px solid rgba(255, 255, 255, 0.35);
-    color: $neutral-0;
+  &__title {
+    font-family: $font-heading;
+    font-size: 15px;
+    font-weight: 700;
+    color: #FFFFFF !important;
+    margin: 0 0 8px;
+    letter-spacing: 0.02em;
+  }
 
-    &:hover {
-      background: rgba(255, 255, 255, 0.1);
-      border-color: rgba(255, 255, 255, 0.6);
+  &__text {
+    font-size: 13px;
+    line-height: 1.6;
+    color: #8E8E93;
+    margin: 0;
+  }
+}
+
+// ── Direction Leadership Section ──────────────────────────────────────────
+.direction {
+  background-color: #0D0D0D;
+  padding: $spacing-20 0;
+
+  &__container {
+    @include make-container($container-xxl);
+  }
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    border-bottom: 1px solid #2C2C2E;
+    padding-bottom: $spacing-6;
+    margin-bottom: $spacing-12;
+
+    @include mobile {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 8px;
     }
+  }
+
+  &__title {
+    font-family: $font-heading;
+    font-size: 24px;
+    font-weight: 700;
+    color: #FFFFFF !important;
+    margin: 0;
+    letter-spacing: 0.1em;
+  }
+
+  &__index {
+    font-size: 11px;
+    font-weight: 700;
+    color: #D4AF37;
+    letter-spacing: 0.15em;
+  }
+
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 32px;
+
+    @include tablet-down {
+      grid-template-columns: 1fr;
+    }
+  }
+}
+
+.leader-card {
+  height: 380px;
+  background-size: cover;
+  background-position: center;
+  position: relative;
+  overflow: hidden;
+  border: 1px solid #2C2C2E;
+  filter: grayscale(100%);
+  transition: all 0.4s ease;
+
+  &:hover {
+    filter: grayscale(0%);
+    border-color: #D4AF37;
+
+    .leader-card__overlay {
+      background: linear-gradient(to top, rgba(13, 13, 13, 0.95) 0%, rgba(13, 13, 13, 0.4) 100%);
+    }
+  }
+
+  &__overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(13, 13, 13, 0.95) 0%, rgba(13, 13, 13, 0.6) 100%);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: $spacing-8;
+    transition: background 0.4s ease;
+  }
+
+  &__info {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  &__name {
+    font-family: $font-heading;
+    font-size: 18px;
+    font-weight: 700;
+    color: #FFFFFF;
+    margin: 0 0 6px;
+    letter-spacing: 0.05em;
+  }
+
+  &__role {
+    font-size: 12px;
+    font-weight: 700;
+    color: #D4AF37;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
   }
 }

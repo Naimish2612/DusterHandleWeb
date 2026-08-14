@@ -151,7 +151,8 @@
                     <!-- ── Quantity + Actions ──────────────────────────────── -->
                     <div class="pd-actions">
 
-                        <!-- Quantity selector -->
+                        <!-- Quantity selector commented out -->
+                        <!--
                         <div class="pd-qty">
                             <span class="pd-qty__label">Qty</span>
                             <div class="pd-qty__control">
@@ -167,20 +168,25 @@
                                 </button>
                             </div>
                         </div>
+                        -->
 
-                        <!-- Add to Cart -->
+                        <!-- Add to Cart commented out -->
+                        <!--
                         <button nz-button nzType="primary" nzSize="large" [nzLoading]="isAddingToCart()"
                             [disabled]="!p.in_stock" (click)="addToCart(false)" class="pd-cart-btn">
                             <span nz-icon nzType="shopping-cart" nzTheme="outline"></span>
                             {{ p.in_stock ? 'Add to Cart' : 'Out of Stock' }}
                         </button>
+                        -->
 
-                        <!-- Buy Now -->
+                        <!-- Buy Now commented out -->
+                        <!--
                         <button nz-button nzType="primary" nzSize="large" [nzLoading]="isAddingToCart()"
                             [disabled]="!p.in_stock" (click)="addToCart(true)" class="pd-cart-btn">
                             <span nz-icon nzType="thunderbolt" nzTheme="outline"></span>
                             {{ p.in_stock ? 'Buy Now' : 'Out of Stock' }}
                         </button>
+                        -->
 
                         <!-- Wishlist -->
                         @if (isLoggedIn()) {

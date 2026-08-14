@@ -23,13 +23,15 @@
 // }
 
 
-import { Component, inject, signal, OnInit } from '@angular/core';
+import { Component, inject, signal, OnInit, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { en_US, hi_IN, NzI18nService } from 'ng-zorro-antd/i18n';
 import { GlobalLoaderComponent } from "./shared/ui/global-loader/global-loader.component";
 import { SessionService } from './core/infrastructure/session.service';
 import { CartService } from './features/public/services/cart.service'; // ✅ Adjust path
+import Lenis from 'lenis';
 
 @Component({
   selector: 'app-root',
@@ -42,9 +44,33 @@ export class App implements OnInit {
   private i18n = inject(NzI18nService);
   private sessionService = inject(SessionService); // ✅
   private cartService = inject(CartService);       // ✅
+  private platformId = inject(PLATFORM_ID);
+  private lenis: Lenis | null = null;
 
   ngOnInit(): void {
     this.restoreCustomerCart();
+    if (isPlatformBrowser(this.platformId)) {
+      this.initLenis();
+    }
+  }
+
+  private initLenis(): void {
+    this.lenis = new Lenis({
+      duration: 1.2,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      orientation: 'vertical',
+      gestureOrientation: 'vertical',
+      smoothWheel: true,
+      wheelMultiplier: 1.0,
+      touchMultiplier: 2.0,
+      infinite: false,
+    });
+
+    const raf = (time: number) => {
+      this.lenis?.raf(time);
+      requestAnimationFrame(raf);
+    };
+    requestAnimationFrame(raf);
   }
 
   /**

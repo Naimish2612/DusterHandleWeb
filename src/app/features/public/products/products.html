@@ -5,14 +5,27 @@
 
   <!-- ── Banner ──────────────────────────────────────────────────────── -->
   <div class="products-page__banner">
+    <!-- Collage Grid Background -->
+    <div class="products-page__collage">
+      <div class="products-page__collage-item" style="background-image: url('/assets/images/brand-logo/cabinet2.jpg')"></div>
+      <div class="products-page__collage-item" style="background-image: url('/assets/images/brand-logo/glass knob.jpg')"></div>
+      <div class="products-page__collage-item" style="background-image: url('/assets/images/brand-logo/kitchen profile.jpg')"></div>
+      <div class="products-page__collage-item" style="background-image: url('/assets/images/brand-logo/mortise.jpg')"></div>
+      <div class="products-page__collage-item" style="background-image: url('/assets/images/brand-logo/sofa leg.jpg')"></div>
+      <div class="products-page__collage-item" style="background-image: url('/assets/images/brand-logo/mainn door.jpg')"></div>
+    </div>
+
+    <!-- Gradient overlay for text legibility -->
+    <div class="products-page__collage-overlay"></div>
+
     <div class="products-page__banner-inner">
-      <div>
+      <div class="products-page__banner-content">
         <span class="products-page__breadcrumb">
           Home / <strong>Products</strong>
         </span>
-        <h1 class="products-page__title">All Products</h1>
+        <h1 class="products-page__title">Architectural Precision</h1>
         <p class="products-page__desc">
-          Showing {{ displayProducts.length }} of {{ allProducts.length }} products
+          Browse our collection of {{ displayProducts.length }} premium architectural hardware pieces
         </p>
       </div>
     </div>
@@ -27,7 +40,7 @@
 
       <!-- Header -->
       <div class="products-sidebar__header">
-        <h3>Filters</h3>
+        <h3>FILTERS</h3>
         @if (activeFilterCount > 0) {
         <button class="products-sidebar__clear" (click)="clearFilters()">
           Clear all ({{ activeFilterCount }})
@@ -93,8 +106,8 @@
       <div class="filter-section">
 
         <h4 class="filter-section__title">
-          <span nz-icon nzType="filter" nzTheme="outline"></span>
           {{ section.label }}
+          <span nz-icon nzType="down" nzTheme="outline" class="filter-section__arrow"></span>
         </h4>
 
         @if (section.loading) {
@@ -108,9 +121,9 @@
             <input type="checkbox" class="filter-option__check" [checked]="isSelected(section.key, opt.value)"
               (change)="toggleFilter(section.key, opt.value)" />
             <span class="filter-option__label">{{ opt.label }}</span>
-            @if (opt.count > 0) {
+            <!-- @if (opt.count > 0) {
             <span class="filter-option__count">{{ opt.count }}</span>
-            }
+            } -->
           </label>
           }
 
@@ -243,7 +256,8 @@
             <img [src]="getImage(product)" [alt]="product.name" class="pg-card__image" loading="lazy"
               (error)="onImageError($event)" />
 
-            <!-- Image Nav (only if multiple images) -->
+            <!-- Image Nav (only if multiple images) commented out -->
+            <!--
             @if (product.images.length > 1) {
             <button class="pg-card__img-nav pg-card__img-nav--prev" (click)="prevImage(product, $event)">
               <span nz-icon nzType="left" nzTheme="outline"></span>
@@ -258,6 +272,7 @@
               }
             </div>
             }
+            -->
 
             <!-- Badge -->
             @if (product.badge) {
@@ -301,22 +316,23 @@
           <!-- Card Body -->
           <div class="pg-card__body">
 
-            <span class="pg-card__category">
+            <!-- <span class="pg-card__category">
               {{ product.category || product.subCategory || 'General' }}
-            </span>
+            </span> -->
 
-            <h3 class="pg-card__name">{{ product.name }}</h3>
+            <h3 class="pg-card__name">SPEC: {{ product.name | uppercase }}</h3>
 
-            <!-- Rating -->
-            <div class="pg-card__rating">
+            <span class="pg-card__finish">FINISH: {{ (product.brand || 'BRUSHED GOLD') | uppercase }}</span>
+
+            <!-- <div class="pg-card__rating">
               <nz-rate [ngModel]="product.rating" nzDisabled nzAllowHalf></nz-rate>
               <span class="pg-card__review-count">
                 {{ product.total_review }}
               </span>
-            </div>
+            </div> -->
 
-            <!-- Price -->
-            <div class="pg-card__pricing">
+            <!-- Pricing Row -->
+            <div class="pg-card__pricing-row">
               <span class="pg-card__price">
                 {{ formatPrice(product.price) }}
               </span>
@@ -325,14 +341,22 @@
                 {{ formatPrice(product.actual_price) }}
               </span>
               }
+              
+              <!-- Commented out add to cart option to keep it hidden -->
+              <!--
+              <button class="pg-card__add-btn" [disabled]="!product.in_stock"
+                (click)="onAddToCart(product); $event.stopPropagation()">
+                <span nz-icon nzType="plus" nzTheme="outline"></span>
+              </button>
+              -->
             </div>
 
-            <!-- Add to Cart -->
-            <button class="pg-card__cart-btn" [disabled]="!product.in_stock"
+            <!-- Add to Cart commented out -->
+            <!-- <button class="pg-card__cart-btn" [disabled]="!product.in_stock"
               (click)="onAddToCart(product); $event.stopPropagation()">
               <span nz-icon nzType="shopping-cart" nzTheme="outline"></span>
               {{ product.in_stock ? 'Add to Cart' : 'Notify Me' }}
-            </button>
+            </button> -->
 
           </div>
 
@@ -365,7 +389,7 @@
         <h4 class="filter-section__title">
           <!-- <span nz-icon nzType="dollar-circle" nzTheme="outline"></span> -->
           <span
-            style="color: #009CDE;border: 1px solid; border-radius: 50%; padding: 2px; display: inline-flex; width: 16px; height: 16px; align-items: center; justify-content: center; font-size: 10px;">
+            style="color: #D4AF37;border: 1px solid; border-radius: 50%; padding: 2px; display: inline-flex; width: 16px; height: 16px; align-items: center; justify-content: center; font-size: 10px;">
             ₹
           </span>
           Price Range
@@ -407,9 +431,9 @@
             <input type="checkbox" class="filter-option__check" [name]="section.key" [value]="opt.value"
               [checked]="isSelected(section.key, opt.value)" (change)="toggleFilter(section.key, opt.value)" />
             <span class="filter-option__label">{{ opt.label }}</span>
-            @if (opt.count > 0) {
+            <!-- @if (opt.count > 0) {
             <span class="filter-option__count">{{ opt.count }}</span>
-            }
+            } -->
           </label>
           }
 

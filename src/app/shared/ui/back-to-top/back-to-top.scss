@@ -17,7 +17,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 8px 24px rgba(0,156,222,0.45);
+  box-shadow: 0 8px 24px rgba(212, 175, 55, 0.3);
   opacity: 0;
   transform: translateY(20px) scale(0.9);
   pointer-events: none;
@@ -32,7 +32,7 @@
   &:hover {
     background: $primary-800;
     transform: translateY(-3px) scale(1.05);
-    box-shadow: 0 12px 30px rgba(0,156,222,0.55);
+    box-shadow: 0 12px 30px rgba(212, 175, 55, 0.4);
   }
 
   @media (max-width: #{$breakpoint-md - 1px}) {

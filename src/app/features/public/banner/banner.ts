@@ -3,13 +3,14 @@ import { CommonModule } from '@angular/common';
 import { NzSkeletonModule } from 'ng-zorro-antd/skeleton';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzIconModule } from 'ng-zorro-antd/icon';
+import { NzSpinModule } from 'ng-zorro-antd/spin';
 import { BannerItem, BannerService } from '../services/banner.service';
 import { RouterLink } from '@angular/router';
 
 @Component({
     selector: 'app-banner',
     standalone: true,
-    imports: [CommonModule, NzSkeletonModule, NzButtonModule, NzIconModule, RouterLink],
+    imports: [CommonModule, NzSkeletonModule, NzButtonModule, NzIconModule, RouterLink, NzSpinModule],
     templateUrl: './banner.html',
     styleUrl: './banner.scss',
 })
@@ -39,9 +40,10 @@ export class Banner implements OnInit, OnDestroy {
             next: () => {
                 this.banners = this.bannerService.banners();
                 this.isLoading = false;
-                if (this.banners.length > 0) {
-                    this.startAutoSlide();
-                }
+                // Disable auto slide so panels only change on hover/interaction
+                // if (this.banners.length > 0) {
+                //     this.startAutoSlide();
+                // }
                 this.cdr.detectChanges();
             },
             error: (err) => {

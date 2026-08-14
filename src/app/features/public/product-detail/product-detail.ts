@@ -234,7 +234,8 @@ export class ProductDetail implements OnInit {
         return this.selectedVariants()[key] === value;
     }
 
-    // ── Quantity controls ────────────────────────────────────────────
+    // ── Quantity controls commented out ──
+    /*
     incrementQty(): void {
         const max = this.product()?.stock_quantity ?? 99;
         if (this.quantity() < max) this.quantity.update(q => q + 1);
@@ -243,13 +244,15 @@ export class ProductDetail implements OnInit {
     decrementQty(): void {
         if (this.quantity() > 1) this.quantity.update(q => q - 1);
     }
+    */
 
     // ── Image navigation ─────────────────────────────────────────────
     selectImage(index: number): void {
         this.activeImageIndex.set(index);
     }
 
-    // ── Cart action ──────────────────────────────────────────────────
+    // ── Cart action commented out ──
+    /*
     addToCart(buyNow: boolean = false): void {
         const product = this.product();
         if (!product || !product.in_stock) return;
@@ -310,6 +313,7 @@ export class ProductDetail implements OnInit {
                 },
             });
     }
+    */
 
     // ── Wishlist action (FIXED: update wishlistIds Set) ──────────────
     toggleWishlist(): void {

@@ -94,7 +94,7 @@ export class Banner implements OnInit {
   message = inject(NzMessageService);
   router = inject(Router);
 
-  private readonly MAX_FILE_SIZE_MB = 1;
+  private readonly MAX_FILE_SIZE_MB = 3;
 
   reset() {
     this.form.reset({
@@ -188,7 +188,7 @@ export class Banner implements OnInit {
   get hasEditPermission(): boolean {
     return this.permission.allowedActions$().has('edit_banner');
   }
-  urlRegex = /^https:\/\/www\.[a-zA-Z0-9-]+\.[a-z]{2,}(\/)?$/;
+  urlRegex = /^https:\/\/(www\.)?[a-zA-Z0-9-]+\.[a-z]{2,}(\/)?$/;
   initForm(): void {
     this.form = this.fb.group({
       banner_title: ['', [Validators.required]],
@@ -325,16 +325,16 @@ export class Banner implements OnInit {
       this.previewImageName = $event.row.name;
       this.isImagePreviewVisible = true;
     } else if ($event.actionKey === 'delete') {
-       this.nzModalService.confirm({
-      nzTitle: 'Are you sure you want to delete this image?',
-      nzOkText: 'Yes',
-      nzCancelText: 'No',
-      nzOkDanger: true,
-      nzOnOk: () => {
-        this.imageList = [];
-        this.imageReload$.next();
-      }
-    });
+      this.nzModalService.confirm({
+        nzTitle: 'Are you sure you want to delete this image?',
+        nzOkText: 'Yes',
+        nzCancelText: 'No',
+        nzOkDanger: true,
+        nzOnOk: () => {
+          this.imageList = [];
+          this.imageReload$.next();
+        }
+      });
     }
   }
 

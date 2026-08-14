@@ -302,7 +302,7 @@
     flex-wrap: wrap;
     margin-bottom: $spacing-5;
 
-    .ant-rate { font-size: $font-size-sm !important; }
+    .ant-rate { font-size: 11px !important; }
   }
 
   &__rating-value {
@@ -972,5 +972,309 @@
     color: $neutral-600;
     line-height: $line-height-relaxed;
     margin: 0;
+  }
+}
+
+// ── Storefront Catalog Dark Luxury Gold Theme Overrides ──────────────────
+.pd-page {
+  background: #0D0D0D !important;
+  color: #FFFFFF !important;
+}
+
+.pd-breadcrumb-bar {
+  background: #141414 !important;
+  border-bottom: 1px solid #2C2C2E !important;
+
+  ::ng-deep {
+    .ant-breadcrumb-link, .ant-breadcrumb-separator {
+      color: #A2A2A7 !important;
+
+      a {
+        color: #A2A2A7 !important;
+        transition: color 0.2s;
+
+        &:hover {
+          color: #D4AF37 !important;
+        }
+      }
+    }
+
+    .ant-breadcrumb-item:last-child {
+      color: #FFFFFF !important;
+      font-weight: 500;
+    }
+  }
+}
+
+.pd-gallery {
+  &__main {
+    background: #141414 !important;
+    border: 1px solid #2C2C2E !important;
+  }
+
+  &__thumb {
+    background: #141414 !important;
+    border-color: transparent !important;
+
+    &--active {
+      border-color: #D4AF37 !important;
+      box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.2) !important;
+    }
+
+    &:hover {
+      border-color: rgba(212, 175, 55, 0.5) !important;
+    }
+  }
+
+  &__stock-strip {
+    background: #141414 !important;
+    border: 1px solid #2C2C2E !important;
+  }
+}
+
+.pd-info {
+  &__name {
+    color: #FFFFFF !important;
+  }
+
+  &__rating-value {
+    color: #D4AF37 !important;
+  }
+
+  &__review-count {
+    color: #A2A2A7 !important;
+  }
+
+  &__price-block {
+    .pd-info__price {
+      color: #D4AF37 !important;
+    }
+  }
+
+  &__gst-tag {
+    background: rgba(212, 175, 55, 0.1) !important;
+    border: 1px solid rgba(212, 175, 55, 0.3) !important;
+    color: #D4AF37 !important;
+  }
+
+  &__description {
+    color: #D1D1D6 !important;
+  }
+
+  &__sku {
+    color: #A2A2A7 !important;
+
+    strong {
+      color: #FFFFFF !important;
+    }
+  }
+}
+
+// Override generic dividers
+::ng-deep .ant-divider-horizontal, ::ng-deep .ant-divider-vertical {
+  background-color: #2C2C2E !important;
+  border-top-color: #2C2C2E !important;
+}
+
+// Tabs overrides
+.pd-tabs-section {
+  background: #0D0D0D !important;
+  border-top: 1px solid #2C2C2E !important;
+}
+
+.pd-tabs {
+  ::ng-deep {
+    .ant-tabs-nav::before {
+      border-bottom-color: #2C2C2E !important;
+    }
+
+    .ant-tabs-tab {
+      color: #8E8E93 !important;
+
+      &:hover {
+        color: #D4AF37 !important;
+      }
+    }
+
+    .ant-tabs-tab-active .ant-tabs-tab-btn {
+      color: #D4AF37 !important;
+    }
+
+    .ant-tabs-ink-bar {
+      background: #D4AF37 !important;
+    }
+  }
+}
+
+// Attributes & Specifications
+.pd-specs {
+  &__title {
+    color: #FFFFFF !important;
+  }
+}
+
+.pd-attr-table-wrap {
+  background: #141414 !important;
+  border: 1px solid #2C2C2E !important;
+}
+
+.pd-attr-table {
+  &__th {
+    background: #1C1C1E !important;
+    color: #FFFFFF !important;
+    border-bottom: 2px solid #D4AF37 !important;
+  }
+
+  &__row {
+    border-bottom: 1px solid #2C2C2E !important;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.02) !important;
+    }
+  }
+
+  &__label {
+    background: #1A1A1C !important;
+    color: #D1D1D6 !important;
+    border-right: 1px solid #2C2C2E !important;
+  }
+
+  &__value {
+    color: #FFFFFF !important;
+  }
+}
+
+// Angular Material & NG-ZORRO Tags Overrides
+::ng-deep .ant-tag {
+  background: #1C1C1E !important;
+  border: 1px solid #2C2C2E !important;
+  color: #D1D1D6 !important;
+
+  &-blue {
+    background: rgba(212, 175, 55, 0.1) !important;
+    border-color: #D4AF37 !important;
+    color: #D4AF37 !important;
+  }
+
+  &-green {
+    background: rgba(82, 196, 26, 0.1) !important;
+    border-color: #52c41a !important;
+    color: #52c41a !important;
+  }
+
+  &-red {
+    background: rgba(255, 77, 79, 0.1) !important;
+    border-color: #ff4d4f !important;
+    color: #ff4d4f !important;
+  }
+}
+
+// Review Summary Card
+.pd-review-summary {
+  background: #141414 !important;
+  border: 1px solid #2C2C2E !important;
+
+  &__avg {
+    color: #FFFFFF !important;
+  }
+
+  &__count {
+    color: #8E8E93 !important;
+  }
+
+  .pd-rating-bar {
+    &__label {
+      color: #D1D1D6 !important;
+    }
+
+    &__count {
+      color: #A2A2A7 !important;
+    }
+  }
+}
+
+// Review List Card
+.pd-review-card {
+  border-bottom: 1px solid #2C2C2E !important;
+
+  &__user {
+    color: #FFFFFF !important;
+  }
+
+  &__date {
+    color: #8E8E93 !important;
+  }
+
+  &__text {
+    color: #D1D1D6 !important;
+  }
+
+  &__helpful {
+    color: #8E8E93 !important;
+
+    &:hover {
+      color: #D4AF37 !important;
+    }
+  }
+}
+
+// Description Tab text
+.pd-description-tab {
+  p {
+    color: #D1D1D6 !important;
+  }
+}
+
+// Wishlist button
+.pd-wishlist-btn {
+  background: #141414 !important;
+  border: 1px solid #2C2C2E !important;
+  color: #A2A2A7 !important;
+
+  &:hover:not(&--active) {
+    border-color: #ff4d4f !important;
+    color: #ff4d4f !important;
+    background: rgba(255, 77, 79, 0.1) !important;
+  }
+}
+
+// Trust badges
+.pd-trust {
+  border-top: 1px solid #2C2C2E !important;
+
+  &__item {
+    color: #A2A2A7 !important;
+
+    span[nz-icon] {
+      color: #D4AF37 !important;
+    }
+  }
+}
+
+// Variant selection chips
+.pd-variant {
+  &__label {
+    color: #A2A2A7 !important;
+
+    strong {
+      color: #FFFFFF !important;
+    }
+  }
+
+  &__chip {
+    background: #141414 !important;
+    border: 1px solid #2C2C2E !important;
+    color: #D1D1D6 !important;
+
+    &:hover {
+      border-color: #D4AF37 !important;
+      color: #D4AF37 !important;
+    }
+
+    &--active {
+      background: rgba(212, 175, 55, 0.1) !important;
+      border-color: #D4AF37 !important;
+      color: #D4AF37 !important;
+    }
   }
 }

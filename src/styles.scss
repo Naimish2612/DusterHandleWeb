@@ -6,3 +6,24 @@
 
 /* ─── Admin Portal Styles (Duster Dark Theme) ─── */
 @import "assets/styles/admin-common";
+
+/* ─── Lenis Smooth Scrolling Styles ─── */
+html.lenis, html.lenis body {
+  height: auto;
+}
+
+.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis-stopped {
+  overflow: hidden;
+}
+
+.lenis-scrolling iframe {
+  pointer-events: none;
+}

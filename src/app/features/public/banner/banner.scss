@@ -1,361 +1,260 @@
 @use '../../../../assets/styles/common' as *;
 @use '../../../../assets/styles/responsive' as *;
 
-.home-banner {
-    position: relative;
-    overflow: hidden;
-    width: 100%;
+/* ── Hero Section ── */
+.Duster-hero {
+  position: relative;
+  background-color: #0D0D0D;
+  height: 80vh;
+  min-height: 520px;
+  overflow: hidden;
+  border-bottom: 1px solid #2C2C2E;
 
-    /* ==============================
-     VIEWPORT
-  ============================== */
-
-    &__viewport {
-        overflow: hidden;
-        height: 600px;
-        position: relative;
-
-        @include tablet {
-            height: 520px;
-        }
-
-        @include mobile {
-            height: 480px;
-        }
-
-        @media (max-width: 480px) {
-            height: 450px;
-        }
-    }
-
-    /* ==============================
-     TRACK (Sliding Container)
-  ============================== */
-
-    &__track {
-        display: flex;
-        height: 100%;
-        transition: transform $transition-slow ease-in-out;
-    }
-
-    /* ==============================
-     INDIVIDUAL SLIDE
-  ============================== */
-
-    &__slide {
-        flex: 0 0 100%;
-        height: 100%;
-        display: flex;
-        align-items: center;
-        position: relative;
-
-        background-size: cover;
-        background-position: center;
-        background-repeat: no-repeat;
-
-        @include mobile {
-            align-items: flex-end;
-            padding-bottom: 70px;
-            background-position: center top;
-        }
-    }
-
-    /* ==============================
-     DARK OVERLAY
-  ============================== */
-
-    &__overlay {
-        position: absolute;
-        inset: 0;
-        background: linear-gradient(90deg,
-                rgba(0, 0, 0, 0.65) 0%,
-                rgba(0, 0, 0, 0.45) 40%,
-                rgba(0, 0, 0, 0.25) 70%,
-                rgba(0, 0, 0, 0.1) 100%);
-        z-index: 1;
-
-        @include mobile {
-            // ✅ Vertical gradient — darker at bottom for text readability
-            background: linear-gradient(180deg,
-                    rgba(0, 0, 0, 0.2) 0%,
-                    rgba(0, 0, 0, 0.5) 50%,
-                    rgba(0, 0, 0, 0.85) 100%);
-        }
-    }
-
-    /* ==============================
-     CONTENT CONTAINER
-  ============================== */
-
-    &__inner {
-        position: relative;
-        z-index: 2;
-        @include make-container($container-xxl);
-
-        @include mobile {
-            padding-left: $spacing-4;
-            padding-right: $spacing-4;
-            width: 100%;
-        }
-    }
-
-    &__content {
-        max-width: 620px;
-        color: $neutral-0;
-
-        @include mobile {
-            text-align: center;
-            margin: 0 auto;
-            max-width: 100%;
-        }
-    }
-
-    /* ==============================
-     TAG
-  ============================== */
-
-    &__tag {
-        display: inline-block;
-        background: rgba(255, 255, 255, 0.2);
-        color: $neutral-0;
-        padding: $spacing-1-5 $spacing-3;
-        border-radius: $border-radius-full;
-        font-size: $font-size-xs;
-        font-weight: $font-weight-bold;
-        letter-spacing: $letter-spacing-widest;
-        margin-bottom: $spacing-4;
-        backdrop-filter: blur(6px);
-
-        @include mobile {
-            font-size: 10px;
-            padding: 4px 12px;
-            margin-bottom: $spacing-3;
-        }
-    }
-
-    /* ==============================
-     TITLE
-  ============================== */
-
-    &__title {
-        font-size: $font-size-5xl;
-        font-weight: $font-weight-extrabold;
-        line-height: $line-height-heading;
-        margin-bottom: $spacing-5;
-        color: $neutral-0; // ✅ Force white text
-
-        @include tablet {
-            font-size: $font-size-4xl;
-        }
-
-        @include mobile {
-            font-size: $font-size-3xl;
-            margin-bottom: $spacing-3;
-            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6); // ✅ Readability
-        }
-
-        @media (max-width: 480px) {
-            font-size: 28px;
-        }
-    }
-
-    /* ==============================
-     SUBTITLE
-  ============================== */
-
-    &__subtitle {
-        font-size: $font-size-lg;
-        line-height: $line-height-relaxed;
-        margin-bottom: $spacing-8;
-        color: $neutral-0;
-
-        @include mobile {
-            font-size: $font-size-sm;
-            margin-bottom: $spacing-5;
-            text-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
-        }
-    }
-
-    /* ==============================
-     BUTTONS
-  ============================== */
-
-    &__actions {
-        display: flex;
-        gap: $spacing-4;
-
-        @include mobile {
-            justify-content: center;
-            flex-wrap: wrap;
-            gap: $spacing-3;
-        }
-
-        @media (max-width: 480px) {
-            flex-direction: column; // ✅ Stack buttons
-            align-items: center;
-            gap: $spacing-2-5;
-            width: 100%;
-        }
-    }
-
-    /* ==============================
-     ARROWS
-  ============================== */
-
-    &__arrow {
-        position: absolute;
-        top: 50%;
-        transform: translateY(-50%);
-        z-index: 10;
-
-        width: 48px;
-        height: 48px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 0;
-        line-height: 1;
-
-        background: transparent;
-        border: none;
-        color: $neutral-0;
-
-        font-size: 32px;
-        cursor: pointer;
-
-        &.left {
-            left: 5px;
-        }
-
-        &.right {
-            right: 5px;
-        }
-
-        &:hover {
-            opacity: 0.7;
-        }
-
-        @include tablet {
-            width: 40px;
-            height: 40px;
-            font-size: 26px;
-
-            &.left {
-                left: 16px;
-            }
-
-            &.right {
-                right: 16px;
-            }
-        }
-
-        @include mobile {
-            width: 36px;
-            height: 36px;
-            font-size: 22px;
-
-            // ✅ Add subtle bg circle so arrows visible on light images
-            border-radius: 50%;
-
-            &.left {
-                left: 5px;
-            }
-
-            &.right {
-                right: 5px;
-            }
-
-            &:hover {
-                opacity: 1;
-            }
-        }
-    }
-
-    /* ==============================
-     DOTS
-  ============================== */
-
-    &__dots {
-        position: absolute;
-        bottom: 30px;
-        left: 50%;
-        transform: translateX(-50%);
-        z-index: 5;
-
-        @include mobile {
-            bottom: 18px;
-        }
-
-        span {
-            display: inline-block;
-            width: 10px;
-            height: 10px;
-            margin: 0 6px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.5);
-            cursor: pointer;
-            transition: all $transition-fast;
-
-            &.active {
-                background: $neutral-0;
-                transform: scale(1.2);
-            }
-
-            @include mobile {
-                width: 8px;
-                height: 8px;
-                margin: 0 4px;
-            }
-        }
-    }
-}
-
-/* ==============================
-   BUTTON STYLES
-============================== */
-
-.btn {
-    display: inline-flex;
+  &--loading {
+    display: flex;
     align-items: center;
     justify-content: center;
-    padding: $spacing-3 $spacing-6;
-    font-size: $font-size-sm;
-    font-weight: $font-weight-semibold;
-    border-radius: $border-radius-full;
-    text-decoration: none;
-    transition: all $transition-fast;
-    white-space: nowrap; // ✅ Prevent text wrap
+    height: 80vh;
+    min-height: 520px;
+    background-color: #0D0D0D;
+
+    ::ng-deep .ant-spin-dot-item {
+      background-color: #D4AF37;
+    }
+  }
+
+  // ── Hero Gallery Accordion (Absolute Background Layer) ──
+  &__gallery {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    gap: 16px;
+    padding: 24px;
+    z-index: 1;
+
+    @include tablet-down {
+      flex-direction: column;
+      gap: 12px;
+      padding: 16px;
+    }
+  }
+
+  &__card {
+    height: 100%;
+    flex: 1 1 auto;
+    background-size: cover;
+    background-position: center;
+    position: relative;
+    overflow: hidden;
     cursor: pointer;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 20px;
+    transition: flex 1.5s cubic-bezier(0.25, 1, 0.25, 1), border-radius 1.5s cubic-bezier(0.25, 1, 0.25, 1);
+
+    @include tablet-down {
+      width: 100%;
+    }
+
+    &:hover:not(&--active) {
+      .Duster-hero__card-overlay {
+        background: rgba(13, 13, 13, 0.55);
+      }
+    }
+
+    &--active {
+      flex: 8 1 auto;
+      background-position: 72% center; /* Shunt door handle image contents rightwards to clear the left overlay */
+      border-color: #D4AF37;
+      border-radius: 24px;
+      cursor: default;
+
+      @include tablet-down {
+        background-position: center;
+      }
+    }
+  }
+
+  &__card-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(13, 13, 13, 0.25);
+    transition: background 0.5s ease;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+
+    .Duster-hero__card--active & {
+      background: linear-gradient(to right, rgba(10, 10, 10, 0.75) 0%, rgba(10, 10, 10, 0.25) 35%, rgba(10, 10, 10, 0) 100%);
+
+      @include tablet-down {
+        background: linear-gradient(to top, rgba(10, 10, 10, 0.8) 0%, rgba(10, 10, 10, 0.3) 50%, rgba(10, 10, 10, 0) 100%);
+      }
+    }
 
     @include mobile {
-        padding: $spacing-2-5 $spacing-5;
-        font-size: $font-size-sm;
+      padding: 20px;
+    }
+  }
+
+  // ── Floating Content Overlay Panel ──
+  &__content-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    pointer-events: none;
+    display: flex;
+    align-items: center;
+    padding-left: 5%;
+
+    @include tablet-down {
+      padding-left: 0;
+      justify-content: center;
+      align-items: flex-start;
+      padding-top: 48px;
+    }
+  }
+
+  &__content {
+    pointer-events: auto;
+    max-width: 440px;
+    background: rgba(10, 10, 10, 0.88);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    padding: 36px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-left: 3px solid #D4AF37;
+    border-radius: 16px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+
+    @include tablet-down {
+      max-width: 90%;
+      text-align: center;
+      margin: 0 auto;
+    }
+  }
+
+  &__title {
+    font-family: $font-heading;
+    font-size: 2.3rem;
+    font-weight: 300;
+    line-height: 1.15;
+    color: #FFFFFF !important;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    margin: 0;
+
+    @include mobile {
+      font-size: 1.6rem;
+      letter-spacing: 0.12em;
     }
 
-    @media (max-width: 480px) {
-        width: 100%;
-        max-width: 260px; // ✅ Buttons same width when stacked
-        padding: $spacing-3 $spacing-4;
+    span {
+      display: block;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      color: #D4AF37 !important;
+    }
+  }
+
+  &__brand {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 500;
+    letter-spacing: 0.25em;
+    color: #D4AF37 !important;
+    margin-top: 14px;
+    text-transform: uppercase;
+  }
+
+  // ── Divider ──
+  &__divider {
+    height: 1px;
+    background: rgba(255, 255, 255, 0.08);
+    margin: 24px 0;
+  }
+
+  // ── Dynamic Slide Details inside the box ──
+  &__active-details {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    animation: slideUpFade 0.4s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+
+    @include tablet-down {
+      align-items: center;
+    }
+  }
+
+  &__active-number {
+    font-size: 10px;
+    font-weight: 700;
+    color: #D4AF37;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    display: block;
+    margin-bottom: 6px;
+  }
+
+  &__active-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: #FFFFFF;
+    margin: 0 0 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+  }
+
+  &__active-desc {
+    font-size: 13px;
+    color: #D1D1D6;
+    line-height: 1.5;
+    margin: 0 0 20px;
+    text-align: left;
+
+    @include tablet-down {
+      text-align: center;
+    }
+  }
+
+  &__active-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 11px;
+    font-weight: 700;
+    color: #0D0D0D !important;
+    background-color: #D4AF37;
+    padding: 10px 20px;
+    border-radius: 0px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    transition: all 0.2s ease-in-out;
+    text-decoration: none;
+
+    span[nz-icon] {
+      font-size: 10px;
+      transition: transform 0.2s;
     }
 
-    &--primary {
-        background: $primary-500;
-        color: $neutral-0;
-        box-shadow: $shadow-md;
+    &:hover {
+      background-color: #FFFFFF;
+      color: #0D0D0D !important;
 
-        &:hover {
-            background: $primary-600;
-            box-shadow: $shadow-lg;
-        }
+      span[nz-icon] {
+        transform: translateX(4px);
+      }
     }
+  }
+}
 
-    &--outline {
-        border: $border-width-thin solid $neutral-0;
-        color: $neutral-0;
-        background: transparent;
-
-        &:hover {
-            background: rgba(255, 255, 255, 0.15);
-        }
-    }
+@keyframes slideUpFade {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }

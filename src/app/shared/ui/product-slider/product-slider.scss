@@ -275,20 +275,23 @@
     // ── TOP SALE → Top Left ──────────────────────────────
     &--sale {
       left: $spacing-2-5;
-      background: $error-500 !important;
+      background: #A62626 !important;
+      color: #FFFFFF !important;
     }
 
     // ── NEW → Top Right ──────────────────────────────────
     &--new {
       right: $spacing-2-5;
-      background: $success-500 !important;
+      background: #2E6F40 !important;
+      color: #FFFFFF !important;
     }
 
     // ── HOT → Top Left (stacks below SALE if both) ───────
     &--hot {
       left: $spacing-2-5;
       top: calc(#{$spacing-2-5} + 28px); // ✅ Stack below sale
-      background: $warning-600 !important;
+      background: #C97D18 !important;
+      color: #FFFFFF !important;
     }
   }
 
@@ -296,13 +299,15 @@
     position: absolute;
     top: $spacing-2-5;
     right: $spacing-2-5;
-    background: $warning-50;
-    color: $warning-700;
-    font-size: $font-size-xs;
-    font-weight: $font-weight-extrabold;
-    padding: $spacing-0-5 $spacing-2;
-    border-radius: $border-radius-base;
+    background: #D4AF37 !important;
+    color: #0D0D0D !important;
+    font-size: 9px;
+    font-weight: 700;
+    padding: 2px 6px;
+    border-radius: 0px;
     z-index: $z-index-float;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
   }
 
   // ── Wishlist ─────────────────────────────────────────────────────
@@ -418,7 +423,7 @@
     margin-bottom: $spacing-2-5;
 
     .ant-rate {
-      font-size: $font-size-xs !important;
+      font-size: 10px !important;
     }
   }
 
