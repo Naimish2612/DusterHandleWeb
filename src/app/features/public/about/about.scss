@@ -34,7 +34,7 @@
   }
 
   &__content {
-    max-width: 600px;
+    max-width: 800px;
   }
 
   &__title {
@@ -65,7 +65,7 @@
     line-height: 1.6;
     color: #A2A2A7;
     margin: 0;
-    max-width: 500px;
+    max-width: 800px;
 
     @include tablet-down {
       margin: 0 auto;

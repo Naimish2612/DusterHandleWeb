@@ -310,7 +310,7 @@
             <nz-divider nzOrientation="left" [nzText]="requiredTemplate1">
               <ng-template #requiredTemplate1>
                 <nz-form-label nzRequired></nz-form-label>
-                <span>Product Images (Min 3, Max 10)</span>
+                <span>Product Images (Min 1, Max 5)</span>
               </ng-template>
             </nz-divider>
 
@@ -321,7 +321,7 @@
                     <input type="file" accept="image/png, image/jpeg, image/webp" multiple #fileInput
                       (change)="onFilesSelected($event)" style="display: none" />
                     <button nz-button nzType="dashed" type="button" (click)="fileInput.click()"
-                      [disabled]="imageList.length >= 10">
+                      [disabled]="imageList.length >= 5">
                       <nz-icon nzType="upload"></nz-icon>
                       Select Image
                     </button>
@@ -329,10 +329,10 @@
                 </nz-form-item>
 
                 <span class="image-count-badge">
-                  <nz-tag [nzColor]="imageList.length >= 3 ? 'green' : 'red'">
-                    {{ imageList.length }} / 10 images
+                  <nz-tag [nzColor]="imageList.length >= 1 ? 'green' : 'red'">
+                    {{ imageList.length }} / 5 images
                   </nz-tag>
-                  @if (imageList.length < 3) { <nz-tag nzColor="orange">Minimum 3 required</nz-tag>
+                  @if (imageList.length < 1) { <nz-tag nzColor="orange">Minimum 1 required</nz-tag>
                     }
                 </span>
               </div>
@@ -393,7 +393,7 @@
           <div nz-col nzSpan="24" class="form-actions">
             @if (hasAddPermission) {
             <button nz-button nzType="primary" htmlType="submit"
-              [disabled]="!form.valid || listOfData.length === 0 || imageList.length < 3" (click)="submit()">
+              [disabled]="!form.valid || listOfData.length === 0 || imageList.length < 1" (click)="submit()">
               <nz-icon nzType="save"></nz-icon> Save
             </button>
             }

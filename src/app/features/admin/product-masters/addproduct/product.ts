@@ -125,9 +125,9 @@ export class Product implements OnInit {
     load: () => of(this.imageList),
   };
 
-  private readonly MAX_IMAGES = 10;
-  private readonly MIN_IMAGES = 3;
-  private readonly MAX_FILE_SIZE_MB = 1;
+  private readonly MAX_IMAGES = 5;
+  private readonly MIN_IMAGES = 1;
+  private readonly MAX_FILE_SIZE_MB = 3;
 
   categoryList: DropdownOption[] = [];
   subCategoryList: DropdownOption[] = [];
