@@ -66,7 +66,7 @@
 
         <!-- Center Navigation Toolbar -->
         <div class="catalogue-bottom-bar__center">
-          <button class="bottom-bar-btn" [disabled]="currentPage() <= 0" nz-tooltip nzTooltipTitle="First Page" (click)="firstPage()">
+          <button class="bottom-bar-btn hide-on-mobile" [disabled]="currentPage() <= 0" nz-tooltip nzTooltipTitle="First Page" (click)="firstPage()">
             <span nz-icon nzType="step-backward"></span>
           </button>
 
@@ -80,7 +80,7 @@
             <span nz-icon nzType="right"></span>
           </button>
 
-          <button class="bottom-bar-btn" [disabled]="currentPage() >= totalPages() - 1" nz-tooltip nzTooltipTitle="Last Page" (click)="lastPage()">
+          <button class="bottom-bar-btn hide-on-mobile" [disabled]="currentPage() >= totalPages() - 1" nz-tooltip nzTooltipTitle="Last Page" (click)="lastPage()">
             <span nz-icon nzType="step-forward"></span>
           </button>
         </div>

@@ -1,4 +1,13 @@
  
+@if (showIntroLoader()) {
+<div class="Duster-intro-loader" [class.Duster-intro-loader--animating]="isAnimatingOut()" [class.Duster-intro-loader--done]="isDone()">
+  <div class="Duster-intro-loader__backdrop"></div>
+  <div class="Duster-intro-loader__logo-box">
+    <img src="assets/images/brand-logo/duster-logo.png" alt="Duster Logo" class="Duster-intro-loader__logo" />
+  </div>
+</div>
+}
+
 <div class="pub-layout">
   <app-public-header />
   <main class="pub-layout__main">

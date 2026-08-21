@@ -92,4 +92,14 @@ export class Home implements OnInit {
 
   retryTopSelling () : void { this.loadTopSelling();  }
   retryNewArrivals() : void { this.loadNewArrivals(); }
+
+  // ── Testimonial Slider Nav ───────────────────────────────────────────────
+  scrollTestimonial(track: HTMLElement, direction: 'left' | 'right'): void {
+    if (!track) return;
+    const scrollAmount = track.clientWidth * 0.8;
+    track.scrollBy({
+      left: direction === 'left' ? -scrollAmount : scrollAmount,
+      behavior: 'smooth'
+    });
+  }
 }

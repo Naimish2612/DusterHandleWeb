@@ -125,7 +125,7 @@
     font-family: $font-heading;
     font-size: $font-size-4xl;
     font-weight: $font-weight-bold;
-    color: $neutral-800;
+    color: #0f172a !important;
     line-height: $line-height-heading;
     margin: 0 0 $spacing-3;
     letter-spacing: $letter-spacing-tight;
@@ -142,7 +142,7 @@
 
   .section-sub {
     font-size: $font-size-base;
-    color: $neutral-600;
+    color: #475569 !important;
     max-width: 520px;
     line-height: $line-height-relaxed;
     margin: 0;
@@ -300,7 +300,7 @@
     top: $spacing-2-5;
     right: $spacing-2-5;
     background: #D4AF37 !important;
-    color: #0D0D0D !important;
+    color: #ffffff !important;
     font-size: 9px;
     font-weight: 700;
     padding: 2px 6px;
@@ -409,8 +409,8 @@
 
   &__name {
     font-size: $font-size-sm;
-    font-weight: $font-weight-semibold;
-    color: $neutral-800;
+    font-weight: $font-weight-bold;
+    color: #0f172a !important;
     margin: 0 0 $spacing-2;
     @include line-clamp(2);
     line-height: $line-height-snug;
@@ -429,7 +429,7 @@
 
   &__review-count {
     font-size: $font-size-xs;
-    color: $neutral-400;
+    color: #64748b !important;
     font-weight: $font-weight-medium;
   }
 
@@ -453,13 +453,13 @@
   &__price {
     font-size: $font-size-lg;
     font-weight: $font-weight-extrabold;
-    color: $neutral-800;
+    color: #0f172a !important;
     font-family: $font-heading;
   }
 
   &__original {
     font-size: $font-size-xs;
-    color: $neutral-400;
+    color: #64748b !important;
     text-decoration: line-through;
     font-weight: $font-weight-medium;
   }

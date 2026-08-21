@@ -975,32 +975,32 @@
   }
 }
 
-// ── Storefront Catalog Dark Luxury Gold Theme Overrides ──────────────────
+// ── Storefront Catalog Light Theme Overrides ──────────────────
 .pd-page {
-  background: #0D0D0D !important;
-  color: #FFFFFF !important;
+  background: #f8fafc !important;
+  color: #0f172a !important;
 }
 
 .pd-breadcrumb-bar {
-  background: #141414 !important;
-  border-bottom: 1px solid #2C2C2E !important;
+  background: #ffffff !important;
+  border-bottom: 1px solid #e2e8f0 !important;
 
   ::ng-deep {
     .ant-breadcrumb-link, .ant-breadcrumb-separator {
-      color: #A2A2A7 !important;
+      color: #64748b !important;
 
       a {
-        color: #A2A2A7 !important;
+        color: #64748b !important;
         transition: color 0.2s;
 
         &:hover {
-          color: #D4AF37 !important;
+          color: #B89028 !important;
         }
       }
     }
 
     .ant-breadcrumb-item:last-child {
-      color: #FFFFFF !important;
+      color: #0f172a !important;
       font-weight: 500;
     }
   }
@@ -1008,13 +1008,13 @@
 
 .pd-gallery {
   &__main {
-    background: #141414 !important;
-    border: 1px solid #2C2C2E !important;
+    background: #ffffff !important;
+    border: 1px solid #e2e8f0 !important;
   }
 
   &__thumb {
-    background: #141414 !important;
-    border-color: transparent !important;
+    background: #ffffff !important;
+    border-color: #e2e8f0 !important;
 
     &--active {
       border-color: #D4AF37 !important;
@@ -1027,77 +1027,77 @@
   }
 
   &__stock-strip {
-    background: #141414 !important;
-    border: 1px solid #2C2C2E !important;
+    background: #f8fafc !important;
+    border: 1px solid #e2e8f0 !important;
   }
 }
 
 .pd-info {
   &__name {
-    color: #FFFFFF !important;
+    color: #0f172a !important;
   }
 
   &__rating-value {
-    color: #D4AF37 !important;
+    color: #B89028 !important;
   }
 
   &__review-count {
-    color: #A2A2A7 !important;
+    color: #64748b !important;
   }
 
   &__price-block {
     .pd-info__price {
-      color: #D4AF37 !important;
+      color: #B89028 !important;
     }
   }
 
   &__gst-tag {
     background: rgba(212, 175, 55, 0.1) !important;
     border: 1px solid rgba(212, 175, 55, 0.3) !important;
-    color: #D4AF37 !important;
+    color: #B89028 !important;
   }
 
   &__description {
-    color: #D1D1D6 !important;
+    color: #475569 !important;
   }
 
   &__sku {
-    color: #A2A2A7 !important;
+    color: #64748b !important;
 
     strong {
-      color: #FFFFFF !important;
+      color: #0f172a !important;
     }
   }
 }
 
 // Override generic dividers
 ::ng-deep .ant-divider-horizontal, ::ng-deep .ant-divider-vertical {
-  background-color: #2C2C2E !important;
-  border-top-color: #2C2C2E !important;
+  background-color: #e2e8f0 !important;
+  border-top-color: #e2e8f0 !important;
 }
 
 // Tabs overrides
 .pd-tabs-section {
-  background: #0D0D0D !important;
-  border-top: 1px solid #2C2C2E !important;
+  background: #ffffff !important;
+  border-top: 1px solid #e2e8f0 !important;
 }
 
 .pd-tabs {
   ::ng-deep {
     .ant-tabs-nav::before {
-      border-bottom-color: #2C2C2E !important;
+      border-bottom-color: #e2e8f0 !important;
     }
 
     .ant-tabs-tab {
-      color: #8E8E93 !important;
+      color: #64748b !important;
 
       &:hover {
-        color: #D4AF37 !important;
+        color: #B89028 !important;
       }
     }
 
     .ant-tabs-tab-active .ant-tabs-tab-btn {
-      color: #D4AF37 !important;
+      color: #B89028 !important;
     }
 
     .ant-tabs-ink-bar {
@@ -1109,111 +1109,111 @@
 // Attributes & Specifications
 .pd-specs {
   &__title {
-    color: #FFFFFF !important;
+    color: #0f172a !important;
   }
 }
 
 .pd-attr-table-wrap {
-  background: #141414 !important;
-  border: 1px solid #2C2C2E !important;
+  background: #ffffff !important;
+  border: 1px solid #e2e8f0 !important;
 }
 
 .pd-attr-table {
   &__th {
-    background: #1C1C1E !important;
-    color: #FFFFFF !important;
+    background: #f8fafc !important;
+    color: #0f172a !important;
     border-bottom: 2px solid #D4AF37 !important;
   }
 
   &__row {
-    border-bottom: 1px solid #2C2C2E !important;
+    border-bottom: 1px solid #e2e8f0 !important;
 
     &:hover {
-      background: rgba(255, 255, 255, 0.02) !important;
+      background: rgba(0, 0, 0, 0.02) !important;
     }
   }
 
   &__label {
-    background: #1A1A1C !important;
-    color: #D1D1D6 !important;
-    border-right: 1px solid #2C2C2E !important;
+    background: #f8fafc !important;
+    color: #475569 !important;
+    border-right: 1px solid #e2e8f0 !important;
   }
 
   &__value {
-    color: #FFFFFF !important;
+    color: #0f172a !important;
   }
 }
 
 // Angular Material & NG-ZORRO Tags Overrides
 ::ng-deep .ant-tag {
-  background: #1C1C1E !important;
-  border: 1px solid #2C2C2E !important;
-  color: #D1D1D6 !important;
+  background: #f1f5f9 !important;
+  border: 1px solid #e2e8f0 !important;
+  color: #475569 !important;
 
   &-blue {
     background: rgba(212, 175, 55, 0.1) !important;
     border-color: #D4AF37 !important;
-    color: #D4AF37 !important;
+    color: #B89028 !important;
   }
 
   &-green {
     background: rgba(82, 196, 26, 0.1) !important;
     border-color: #52c41a !important;
-    color: #52c41a !important;
+    color: #389e0d !important;
   }
 
   &-red {
     background: rgba(255, 77, 79, 0.1) !important;
     border-color: #ff4d4f !important;
-    color: #ff4d4f !important;
+    color: #cf1322 !important;
   }
 }
 
 // Review Summary Card
 .pd-review-summary {
-  background: #141414 !important;
-  border: 1px solid #2C2C2E !important;
+  background: #ffffff !important;
+  border: 1px solid #e2e8f0 !important;
 
   &__avg {
-    color: #FFFFFF !important;
+    color: #0f172a !important;
   }
 
   &__count {
-    color: #8E8E93 !important;
+    color: #64748b !important;
   }
 
   .pd-rating-bar {
     &__label {
-      color: #D1D1D6 !important;
+      color: #475569 !important;
     }
 
     &__count {
-      color: #A2A2A7 !important;
+      color: #64748b !important;
     }
   }
 }
 
 // Review List Card
 .pd-review-card {
-  border-bottom: 1px solid #2C2C2E !important;
+  border-bottom: 1px solid #e2e8f0 !important;
 
   &__user {
-    color: #FFFFFF !important;
+    color: #0f172a !important;
   }
 
   &__date {
-    color: #8E8E93 !important;
+    color: #64748b !important;
   }
 
   &__text {
-    color: #D1D1D6 !important;
+    color: #475569 !important;
   }
 
   &__helpful {
-    color: #8E8E93 !important;
+    color: #64748b !important;
 
     &:hover {
-      color: #D4AF37 !important;
+      color: #B89028 !important;
     }
   }
 }
@@ -1221,15 +1221,15 @@
 // Description Tab text
 .pd-description-tab {
   p {
-    color: #D1D1D6 !important;
+    color: #475569 !important;
   }
 }
 
 // Wishlist button
 .pd-wishlist-btn {
-  background: #141414 !important;
-  border: 1px solid #2C2C2E !important;
-  color: #A2A2A7 !important;
+  background: #ffffff !important;
+  border: 1px solid #e2e8f0 !important;
+  color: #64748b !important;
 
   &:hover:not(&--active) {
     border-color: #ff4d4f !important;
@@ -1240,13 +1240,13 @@
 
 // Trust badges
 .pd-trust {
-  border-top: 1px solid #2C2C2E !important;
+  border-top: 1px solid #e2e8f0 !important;
 
   &__item {
-    color: #A2A2A7 !important;
+    color: #64748b !important;
 
     span[nz-icon] {
-      color: #D4AF37 !important;
+      color: #B89028 !important;
     }
   }
 }
@@ -1254,27 +1254,27 @@
 // Variant selection chips
 .pd-variant {
   &__label {
-    color: #A2A2A7 !important;
+    color: #64748b !important;
 
     strong {
-      color: #FFFFFF !important;
+      color: #0f172a !important;
     }
   }
 
   &__chip {
-    background: #141414 !important;
-    border: 1px solid #2C2C2E !important;
-    color: #D1D1D6 !important;
+    background: #ffffff !important;
+    border: 1px solid #e2e8f0 !important;
+    color: #0f172a !important;
 
     &:hover {
       border-color: #D4AF37 !important;
-      color: #D4AF37 !important;
+      color: #B89028 !important;
     }
 
     &--active {
       background: rgba(212, 175, 55, 0.1) !important;
       border-color: #D4AF37 !important;
-      color: #D4AF37 !important;
+      color: #B89028 !important;
     }
   }
 }

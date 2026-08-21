@@ -3,7 +3,8 @@
   <nz-spin nzSimple></nz-spin>
 </div>
 } @else if (banners.length > 0) {
-<section class="Duster-hero">
+<!-- Desktop Hero Section -->
+<section class="Duster-hero Duster-hero--desktop">
 
   <!-- Hero Gallery Accordion as the Background -->
   <div class="Duster-hero__gallery">
@@ -42,6 +43,7 @@
         <p class="Duster-hero__active-desc">
           {{ banners[currentIndex].description }}
         </p>
+
         <a [routerLink]="[banners[currentIndex].redirect_url || '/products']" class="Duster-hero__active-btn"
           (click)="$event.stopPropagation()">
           Explore Collection
@@ -52,5 +54,34 @@
     </div>
   </div>
 
+</section>
+
+<!-- Mobile Touch Swipe Carousel Section -->
+<section class="Duster-hero-mobile">
+  <div class="Duster-hero-mobile__track" #mobileTrack (scroll)="onMobileScroll(mobileTrack)">
+    @for (banner of banners; track $index; let i = $index) {
+    <div class="Duster-hero-mobile__slide" [style.background-image]="'url(\'' + banner.image_url + '\')'">
+      <div class="Duster-hero-mobile__overlay">
+        <div class="Duster-hero-mobile__caption">
+          <span class="Duster-hero-mobile__tag">0{{ i + 1 }} / COLLECTION</span>
+          <h2 class="Duster-hero-mobile__title">{{ banner.banner_title }}</h2>
+          <div class="Duster-hero-mobile__actions">
+            <a [routerLink]="[banner.redirect_url || '/products']" class="Duster-hero-mobile__btn">
+              Explore Collection
+              <span nz-icon nzType="arrow-right" nzTheme="outline"></span>
+            </a>
+
+            <div class="Duster-hero-mobile__dots">
+              @for (b of banners; track $index; let dotIndex = $index) {
+              <span class="Duster-hero-mobile__dot"
+                [class.Duster-hero-mobile__dot--active]="currentIndex === dotIndex"></span>
+              }
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    }
+  </div>
 </section>
 }

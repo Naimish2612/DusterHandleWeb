@@ -44,15 +44,203 @@ Where Function Meets Design</span>
   </div>
 </section>
 
-<!-- Top Selling Section -->
-<section id="top-selling" style="background-color: #0D0D0D; padding: 40px 0; border-bottom: 1px solid #2C2C2E;">
-  <app-product-slider sectionTag="Best Sellers" sectionTitle="Top Selling Products"
-    sectionSub="Handpicked favourites loved by thousands of happy customers." [products]="topSellingProducts()"
-    [Sliderloading]="loadingTop" [hasError]="!!errorTop" (retryClicked)="retryTopSelling()" />
+<!-- Testimonials Section -->
+<section class="home-testimonials">
+  <div class="home-testimonials__container">
+    <div class="home-testimonials__header-wrap">
+      <div class="home-testimonials__header">
+        <span class="home-testimonials__tag">CLIENT ENDORSEMENTS</span>
+        <h2 class="home-testimonials__title">Trusted by Leading Architects & Designers</h2>
+        <p class="home-testimonials__desc">
+          Discover why premier interior designers, architects, and luxury homeowners choose Duster Hardware Fittings for exceptional craftsmanship, finish consistency, and lasting durability.
+        </p>
+      </div>
+
+      <div class="home-testimonials__nav">
+        <button class="testimonials-nav-btn" (click)="scrollTestimonial(testimonialTrack, 'left')" aria-label="Previous testimonials">
+          <span nz-icon nzType="left" nzTheme="outline"></span>
+        </button>
+        <button class="testimonials-nav-btn" (click)="scrollTestimonial(testimonialTrack, 'right')" aria-label="Next testimonials">
+          <span nz-icon nzType="right" nzTheme="outline"></span>
+        </button>
+      </div>
+    </div>
+
+    <div class="home-testimonials__grid" #testimonialTrack>
+      <!-- Testimonial 1 -->
+      <div class="testimonial-card">
+        <div class="testimonial-card__stars">
+          <span nz-icon nzType="star" nzTheme="fill"></span>
+          <span nz-icon nzType="star" nzTheme="fill"></span>
+          <span nz-icon nzType="star" nzTheme="fill"></span>
+          <span nz-icon nzType="star" nzTheme="fill"></span>
+          <span nz-icon nzType="star" nzTheme="fill"></span>
+        </div>
+        <blockquote class="testimonial-card__quote">
+          "Duster's knurled brass handles brought a sophisticated tactile luxury to our penthouse project in Mumbai. The finish consistency across 150+ handles was absolute perfection."
+        </blockquote>
+        <div class="testimonial-card__author">
+          <div class="testimonial-card__avatar">RS</div>
+          <div class="testimonial-card__meta">
+            <h4 class="testimonial-card__name">Rajesh Shah</h4>
+            <span class="testimonial-card__role">Principal Architect • Studio Archline</span>
+            <span class="testimonial-card__verified">
+              <span nz-icon nzType="check-circle" nzTheme="fill"></span> Verified Architectural Partner
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Testimonial 2 -->
+      <div class="testimonial-card testimonial-card--featured">
+        <div class="testimonial-card__badge">FEATURED REVIEW</div>
+        <div class="testimonial-card__stars">
+          <span nz-icon nzType="star" nzTheme="fill"></span>
+          <span nz-icon nzType="star" nzTheme="fill"></span>
+          <span nz-icon nzType="star" nzTheme="fill"></span>
+          <span nz-icon nzType="star" nzTheme="fill"></span>
+          <span nz-icon nzType="star" nzTheme="fill"></span>
+        </div>
+        <blockquote class="testimonial-card__quote">
+          "Finding heavy-duty mortise handles with such refined elegance is rare. Duster handles elevate every wardrobe and main door we design. Highly recommended for premium homes."
+        </blockquote>
+        <div class="testimonial-card__author">
+          <div class="testimonial-card__avatar testimonial-card__avatar--gold">PM</div>
+          <div class="testimonial-card__meta">
+            <h4 class="testimonial-card__name">Priya Mehta</h4>
+            <span class="testimonial-card__role">Lead Interior Designer • Atelier Living</span>
+            <span class="testimonial-card__verified">
+              <span nz-icon nzType="check-circle" nzTheme="fill"></span> Verified Design Partner
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Testimonial 3 -->
+      <div class="testimonial-card">
+        <div class="testimonial-card__stars">
+          <span nz-icon nzType="star" nzTheme="fill"></span>
+          <span nz-icon nzType="star" nzTheme="fill"></span>
+          <span nz-icon nzType="star" nzTheme="fill"></span>
+          <span nz-icon nzType="star" nzTheme="fill"></span>
+          <span nz-icon nzType="star" nzTheme="fill"></span>
+        </div>
+        <blockquote class="testimonial-card__quote">
+          "The weight, solid brass feel, and smooth operation of Duster's concealed sliding tracks are unmatched. It transformed our living room wardrobes into 5-star hotel grade suites."
+        </blockquote>
+        <div class="testimonial-card__author">
+          <div class="testimonial-card__avatar">VM</div>
+          <div class="testimonial-card__meta">
+            <h4 class="testimonial-card__name">Vikram Malhotra</h4>
+            <span class="testimonial-card__role">Luxury Homeowner • New Delhi</span>
+            <span class="testimonial-card__verified">
+              <span nz-icon nzType="check-circle" nzTheme="fill"></span> Verified Homeowner
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Testimonial 4 -->
+      <div class="testimonial-card">
+        <div class="testimonial-card__stars">
+          <span nz-icon nzType="star" nzTheme="fill"></span>
+          <span nz-icon nzType="star" nzTheme="fill"></span>
+          <span nz-icon nzType="star" nzTheme="fill"></span>
+          <span nz-icon nzType="star" nzTheme="fill"></span>
+          <span nz-icon nzType="star" nzTheme="fill"></span>
+        </div>
+        <blockquote class="testimonial-card__quote">
+          "The antique brass finish on Duster's profile handles exceeded our client's expectations. The machining precision is world-class and elevates custom cabinetry instantly."
+        </blockquote>
+        <div class="testimonial-card__author">
+          <div class="testimonial-card__avatar testimonial-card__avatar--gold">AR</div>
+          <div class="testimonial-card__meta">
+            <h4 class="testimonial-card__name">Ananya Roy</h4>
+            <span class="testimonial-card__role">Senior Architect • Spacecraft Designs</span>
+            <span class="testimonial-card__verified">
+              <span nz-icon nzType="check-circle" nzTheme="fill"></span> Verified Architectural Partner
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Testimonial 5 -->
+      <div class="testimonial-card">
+        <div class="testimonial-card__stars">
+          <span nz-icon nzType="star" nzTheme="fill"></span>
+          <span nz-icon nzType="star" nzTheme="fill"></span>
+          <span nz-icon nzType="star" nzTheme="fill"></span>
+          <span nz-icon nzType="star" nzTheme="fill"></span>
+          <span nz-icon nzType="star" nzTheme="fill"></span>
+        </div>
+        <blockquote class="testimonial-card__quote">
+          "Installed Duster mortise locks across 80 boutique hotel suites. Zero defects, heavy tactile feel, and effortless mechanism. Exceptional commercial durability."
+        </blockquote>
+        <div class="testimonial-card__author">
+          <div class="testimonial-card__avatar">KV</div>
+          <div class="testimonial-card__meta">
+            <h4 class="testimonial-card__name">Karan Verma</h4>
+            <span class="testimonial-card__role">Interior Contractor • KV Hospitality</span>
+            <span class="testimonial-card__verified">
+              <span nz-icon nzType="check-circle" nzTheme="fill"></span> Verified Commercial Client
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Testimonial 6 -->
+      <div class="testimonial-card">
+        <div class="testimonial-card__stars">
+          <span nz-icon nzType="star" nzTheme="fill"></span>
+          <span nz-icon nzType="star" nzTheme="fill"></span>
+          <span nz-icon nzType="star" nzTheme="fill"></span>
+          <span nz-icon nzType="star" nzTheme="fill"></span>
+          <span nz-icon nzType="star" nzTheme="fill"></span>
+        </div>
+        <blockquote class="testimonial-card__quote">
+          "Duster's rose gold Gola handles transformed our modular kitchen designs. Their coating durability and scratch resistance under daily use are truly impressive."
+        </blockquote>
+        <div class="testimonial-card__author">
+          <div class="testimonial-card__avatar testimonial-card__avatar--gold">SK</div>
+          <div class="testimonial-card__meta">
+            <h4 class="testimonial-card__name">Sneha Kapoor</h4>
+            <span class="testimonial-card__role">Design Director • Studio Form</span>
+            <span class="testimonial-card__verified">
+              <span nz-icon nzType="check-circle" nzTheme="fill"></span> Verified Design Partner
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Testimonial 7 -->
+      <div class="testimonial-card">
+        <div class="testimonial-card__stars">
+          <span nz-icon nzType="star" nzTheme="fill"></span>
+          <span nz-icon nzType="star" nzTheme="fill"></span>
+          <span nz-icon nzType="star" nzTheme="fill"></span>
+          <span nz-icon nzType="star" nzTheme="fill"></span>
+          <span nz-icon nzType="star" nzTheme="fill"></span>
+        </div>
+        <blockquote class="testimonial-card__quote">
+          "We specified Duster handles for a 12,000 sq.ft villa in Hyderabad. The tactile luxury and heavy brass feel were praised by both the client and installation team."
+        </blockquote>
+        <div class="testimonial-card__author">
+          <div class="testimonial-card__avatar">AR</div>
+          <div class="testimonial-card__meta">
+            <h4 class="testimonial-card__name">Amitabh Roy</h4>
+            <span class="testimonial-card__role">Chief Design Officer • Royale Interiors</span>
+            <span class="testimonial-card__verified">
+              <span nz-icon nzType="check-circle" nzTheme="fill"></span> Verified Architectural Partner
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </section>
 
 <!-- New Arrivals Section -->
-<section id="new-arrivals" style="background-color: #0D0D0D; padding: 40px 0; border-bottom: 1px solid #2C2C2E;">
+<section id="new-arrivals" style="background-color: #f8fafc; padding: 40px 0; border-bottom: 1px solid #e2e8f0;">
   <app-product-slider sectionTag="Just Launched" sectionTitle="New Arrivals"
     sectionSub="Fresh drops — be the first to shop our latest collection." [products]="newArrivals()"
     [Sliderloading]="loadingNew" [hasError]="!!errorNew" [isDark]="false" (retryClicked)="retryNewArrivals()" />

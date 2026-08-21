@@ -9,16 +9,16 @@
    ===================================================================== */
 
 // Primary Colors Based on luxury accent (Duster Champagne Gold & Brass)
-$primary-50:  #221d10;   // Deep gold/brown tint for hover backdrops in dark mode
-$primary-100: #3b321c;   // Very deep gold tint
-$primary-200: #594c27;   // Dark gold border
-$primary-300: #8c773a;   // Muted gold border / icons
-$primary-400: #bda14d;   // Gold highlight
+$primary-50:  #fefcf3;   // Soft light gold background tint
+$primary-100: #fcf4d9;   // Light gold badge/highlight backdrop
+$primary-200: #f8e5aa;   // Light gold border
+$primary-300: #eecf70;   // Muted gold border / icons
+$primary-400: #e2b83d;   // Gold highlight
 $primary-500: #D4AF37;   // ★ BASE LUXURY ACCENT — Champagne Gold
-$primary-600: #E5C158;   // Muted Brass highlight
-$primary-700: #a88825;   // Active gold state
-$primary-800: #8c611f;   // Muted gold accent
-$primary-900: #614013;   // Deep gold footer highlight
+$primary-600: #B89028;   // Deep Brass highlight for contrast on light bg
+$primary-700: #96721B;   // Active gold state
+$primary-800: #775614;   // Muted gold accent
+$primary-900: #593E0D;   // Deep gold highlight
 
 // Secondary Colors (Purple Accent)
 $secondary-50: #f3e5f5;
@@ -80,33 +80,33 @@ $info-700: #0050b3;
 $info-800: #0277bd;
 $info-900: #01579b;
 
-// Neutral Colors (Gray Scale) - Overhauled to Duster Luxury Dark Theme
-$neutral-0:    #141414;   // Elevated Card / Surface Background (originally white)
-$neutral-50:   #0D0D0D;   // Base Canvas Background (originally light gray)
-$neutral-100:  #101010;   // Section alternates / intermediate dark layout bg
-$neutral-200:  #2C2C2E;   // Razor-thin, low-contrast structural border
-$neutral-300:  #2C2C2E;   // Input border
-$neutral-400:  #4a4a4f;   // Subtle grays / placeholders
-$neutral-500:  #8E8E93;   // Slate Gray secondary text
-$neutral-600:  #F2F2F7;   // Primary text off-white
-$neutral-700:  #e2e8f0;   // Headings
-$neutral-800:  #f1f2f3;   // Main title highlights
-$neutral-900:  #ffffff;   // Extra bright highlights
-$neutral-1000: #050505;   // Pitch black matte base
+// Neutral Colors (Gray Scale) - Muted Warm Grey & Sand Beige Palette
+$neutral-0:    #ffffff;   // Crisp White Surface Background
+$neutral-50:   #faf8f5;   // Base Canvas / Muted Sand Beige Background
+$neutral-100:  #f4f0ea;   // Light Warm Beige Section Background
+$neutral-200:  #e6dfd5;   // Clean Structural Beige Border
+$neutral-300:  #d8d0c4;   // Input Border / Warm Stone
+$neutral-400:  #a39b8f;   // Subtle Grays / Placeholders
+$neutral-500:  #6b645c;   // Secondary Muted Warm Text
+$neutral-600:  #4e4841;   // Body Text
+$neutral-700:  #36322e;   // Subheadings
+$neutral-800:  #24211e;   // Main Headings / Warm Slate
+$neutral-900:  #181716;   // Deep Title / Architectural Warm Charcoal
+$neutral-1000: #0f0e0d;   // Deepest Warm Black Accent
 
 // Semantic Aliases
 $color-bg-body: $neutral-50;
 $color-bg-base: $neutral-0;
 $color-bg-component: $neutral-100;
-$color-bg-hover: rgba(255, 255, 255, 0.04);
-$color-bg-active: rgba(255, 255, 255, 0.06);
-$color-bg-mask: rgba(0, 0, 0, 0.75);
+$color-bg-hover: rgba(0, 0, 0, 0.04);
+$color-bg-active: rgba(0, 0, 0, 0.06);
+$color-bg-mask: rgba(0, 0, 0, 0.5);
 
-$color-text-primary: $neutral-600;
+$color-text-primary: $neutral-900;
 $color-text-secondary: $neutral-500;
 $color-text-tertiary: $neutral-400;
-$color-text-disabled: rgba(255, 255, 255, 0.3);
-$color-text-placeholder: rgba(255, 255, 255, 0.25);
+$color-text-disabled: rgba(0, 0, 0, 0.35);
+$color-text-placeholder: rgba(0, 0, 0, 0.4);
 $color-text-inverse: $neutral-0;
 
 $color-border-base: $neutral-300;
@@ -346,8 +346,8 @@ $content-padding-mobile: $spacing-4;
 $content-padding-tablet: $spacing-5;
 
 // Layout Theme Colors
-$public-footer-bg: #0D0D0D;
-$public-footer-text: rgba(255, 255, 255, 0.65);
+$public-footer-bg: #181716;
+$public-footer-text: rgba(255, 255, 255, 0.75);
 
 /* =====================================================================
    12. OPACITY SCALE
@@ -582,21 +582,44 @@ a {
   }
 }
 
-/* ─── NG-ZORRO Dark Theme & Component Overrides ─── */
+/* ─── NG-ZORRO Light Theme & Component Overrides ─── */
 
 /* Inputs & Form Fields */
-.ant-input,
-.ant-input-affix-wrapper,
+.ant-input-affix-wrapper {
+  background-color: #ffffff !important;
+  color: #0f172a !important;
+  border-color: #cbd5e1 !important;
+  border-radius: $border-radius-base !important;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out !important;
+
+  .ant-input {
+    background-color: transparent !important;
+    border: none !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    outline: none !important;
+    color: #0f172a !important;
+  }
+}
+
+.ant-input:not(.ant-input-affix-wrapper .ant-input),
 .ant-input-group-addon,
 .ant-input-number,
 .ant-picker,
 .ant-select-selector,
-.ant-input-group>.ant-input {
-  background-color: #141414 !important;
-  color: #F2F2F7 !important;
-  border-color: #2C2C2E !important;
-  border-radius: 0px !important;
+.ant-input-group > .ant-input {
+  background-color: #ffffff !important;
+  color: #0f172a !important;
+  border-color: #cbd5e1 !important;
+  border-radius: $border-radius-base !important;
   transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out !important;
+}
+
+.ant-input-affix-wrapper .ant-input {
+  background-color: transparent !important;
+  border: none !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
 }
 
 .ant-input:hover,
@@ -604,7 +627,7 @@ a {
 .ant-input-number:hover,
 .ant-picker:hover,
 .ant-select-selector:hover {
-  border-color: #D4AF37 !important;
+  border-color: #B89028 !important;
 }
 
 .ant-input:focus,
@@ -613,14 +636,14 @@ a {
 .ant-picker-focused,
 .ant-select-focused .ant-select-selector,
 .ant-select-selector:focus {
-  border-color: #D4AF37 !important;
-  box-shadow: 0 0 0 2px rgba(212, 175, 55, 0.15) !important;
+  border-color: #B89028 !important;
+  box-shadow: 0 0 0 2px rgba(184, 144, 40, 0.15) !important;
 }
 
 .ant-input-placeholder,
 ::-webkit-input-placeholder,
 ::placeholder {
-  color: #8E8E93 !important;
+  color: #94a3b8 !important;
 }
 
 /* Select options dropdown */
@@ -828,9 +851,9 @@ a {
   color: #8E8E93 !important;
 }
 
-/* ─── Pagination Component Customization ─── */
+/* ─── Pagination Component Customization (Light Theme) ─── */
 .ant-pagination {
-  color: #8E8E93 !important;
+  color: #475569 !important;
 }
 
 .ant-pagination-item,
@@ -838,90 +861,95 @@ a {
 .ant-pagination-next,
 .ant-pagination-jump-prev,
 .ant-pagination-jump-next {
-  background-color: #141414 !important;
-  border: 1px solid #2C2C2E !important;
-  border-radius: 0px !important;
+  background-color: #ffffff !important;
+  border: 1px solid #e6dfd5 !important;
+  border-radius: 6px !important;
   transition: all 0.2s ease-in-out !important;
 
   a,
   .ant-pagination-item-link {
-    color: #F2F2F7 !important;
+    color: #0f172a !important;
     transition: color 0.15s ease-in-out !important;
   }
 
   button.ant-pagination-item-link {
     background: transparent !important;
     border: none !important;
-    color: #F2F2F7 !important;
+    color: #0f172a !important;
 
     .anticon {
-      color: #F2F2F7 !important;
+      color: #475569 !important;
     }
   }
 
   &:hover {
-    border-color: #D4AF37 !important;
+    border-color: #B89028 !important;
 
     a,
     .ant-pagination-item-link,
     button.ant-pagination-item-link,
     button.ant-pagination-item-link .anticon {
-      color: #D4AF37 !important;
+      color: #B89028 !important;
     }
   }
 }
 
 .ant-pagination-item-active {
-  background-color: rgba(212, 175, 55, 0.1) !important;
-  border-color: #D4AF37 !important;
+  background-color: #FAF8F5 !important;
+  border-color: #B89028 !important;
 
   a {
-    color: #D4AF37 !important;
-    font-weight: 700 !important;
+    color: #B89028 !important;
+    font-weight: 800 !important;
   }
 
   &:hover a {
-    color: #E5C158 !important;
+    color: #9A7720 !important;
   }
 }
 
 .ant-pagination-disabled {
-  opacity: 0.4 !important;
+  opacity: 0.5 !important;
+  background-color: #f8fafc !important;
   cursor: not-allowed !important;
 
   .ant-pagination-item-link,
   a {
-    color: #8E8E93 !important;
+    color: #94a3b8 !important;
+  }
+
+  button.ant-pagination-item-link .anticon {
+    color: #94a3b8 !important;
   }
 
   &:hover {
-    border-color: #2C2C2E !important;
+    border-color: #e2e8f0 !important;
 
     a {
-      color: #8E8E93 !important;
+      color: #94a3b8 !important;
     }
   }
 }
 
 .ant-pagination-options-quick-jumper {
-  color: #8E8E93 !important;
+  color: #475569 !important;
 
   input {
-    background-color: #141414 !important;
-    color: #F2F2F7 !important;
-    border: 1px solid #2C2C2E !important;
-    border-radius: 0px !important;
+    background-color: #ffffff !important;
+    color: #0f172a !important;
+    border: 1px solid #cbd5e1 !important;
+    border-radius: 6px !important;
     padding: 4px 8px !important;
     height: 32px !important;
     transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out !important;
 
     &:hover {
-      border-color: #D4AF37 !important;
+      border-color: #B89028 !important;
     }
 
     &:focus {
-      border-color: #D4AF37 !important;
-      box-shadow: 0 0 0 2px rgba(212, 175, 55, 0.15) !important;
+      border-color: #B89028 !important;
+      box-shadow: 0 0 0 2px rgba(184, 144, 40, 0.15) !important;
       outline: none !important;
     }
   }

@@ -1,4 +1,5 @@
 @use '../../../../../assets/styles/common' as *;
+@use '../../../../../assets/styles/responsive' as *;
 
 // =========================================================================
 // PUBLIC LAYOUT SHELL
@@ -15,9 +16,68 @@
   &__main {
     flex: 1;
     padding-top: $header-height;
+  }
+}
 
-    // @include mobile {
-    //   padding-top: $header-height-mobile;
-    // }
+// ── Fullscreen Logo Intro Loader & Header Transition ───────────────────────
+.Duster-intro-loader {
+  position: fixed;
+  inset: 0;
+  z-index: 999999;
+  pointer-events: auto;
+  overflow: hidden;
+
+  &__backdrop {
+    position: absolute;
+    inset: 0;
+    background: #ffffff;
+    z-index: 1;
+    opacity: 1;
+    transition: opacity 0.8s cubic-bezier(0.77, 0, 0.175, 1);
+  }
+
+  &__logo-box {
+    position: absolute;
+    z-index: 2;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(1.3);
+    transform-origin: center center;
+    transition: transform 0.8s cubic-bezier(0.77, 0, 0.175, 1), opacity 0.8s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    will-change: transform;
+  }
+
+  &__logo {
+    height: 48px;
+    width: auto;
+    object-fit: contain;
+    animation: loaderLogoPulse 1.2s cubic-bezier(0.4, 0, 0.2, 1) infinite alternate;
+  }
+
+  // ── Transition State (Triggered after 1s) ──
+  &--animating {
+    pointer-events: none;
+
+    .Duster-intro-loader__backdrop {
+      opacity: 0;
+    }
+  }
+
+  &--done {
+    display: none !important;
+  }
+}
+
+@keyframes loaderLogoPulse {
+  0% {
+    transform: scale(0.98);
+    filter: drop-shadow(0 4px 12px rgba(212, 175, 55, 0.2));
+  }
+  100% {
+    transform: scale(1.06);
+    filter: drop-shadow(0 12px 28px rgba(212, 175, 55, 0.45));
   }
 }

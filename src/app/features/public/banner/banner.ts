@@ -78,4 +78,13 @@ export class Banner implements OnInit, OnDestroy {
     goTo(index: number): void {
         this.currentIndex = index;
     }
+
+    onMobileScroll(track: HTMLElement): void {
+        if (!track || !track.clientWidth) return;
+        const index = Math.round(track.scrollLeft / track.clientWidth);
+        if (index !== this.currentIndex && index >= 0 && index < this.banners.length) {
+            this.currentIndex = index;
+            this.cdr.detectChanges();
+        }
+    }
 }

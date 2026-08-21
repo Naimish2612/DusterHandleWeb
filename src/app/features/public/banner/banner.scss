@@ -1,7 +1,7 @@
 @use '../../../../assets/styles/common' as *;
 @use '../../../../assets/styles/responsive' as *;
 
-/* ── Hero Section ── */
+/* ── Desktop Hero Section ── */
 .Duster-hero {
   position: relative;
   background-color: #0D0D0D;
@@ -9,6 +9,10 @@
   min-height: 520px;
   overflow: hidden;
   border-bottom: 1px solid #2C2C2E;
+
+  @media (max-width: 991px) {
+    display: none !important;
+  }
 
   &--loading {
     display: flex;
@@ -31,12 +35,6 @@
     gap: 16px;
     padding: 24px;
     z-index: 1;
-
-    @include tablet-down {
-      flex-direction: column;
-      gap: 12px;
-      padding: 16px;
-    }
   }
 
   &__card {
@@ -51,10 +49,6 @@
     border-radius: 20px;
     transition: flex 1.5s cubic-bezier(0.25, 1, 0.25, 1), border-radius 1.5s cubic-bezier(0.25, 1, 0.25, 1);
 
-    @include tablet-down {
-      width: 100%;
-    }
-
     &:hover:not(&--active) {
       .Duster-hero__card-overlay {
         background: rgba(13, 13, 13, 0.55);
@@ -67,10 +61,6 @@
       border-color: #D4AF37;
       border-radius: 24px;
       cursor: default;
-
-      @include tablet-down {
-        background-position: center;
-      }
     }
   }
 
@@ -86,14 +76,6 @@
 
     .Duster-hero__card--active & {
       background: linear-gradient(to right, rgba(10, 10, 10, 0.75) 0%, rgba(10, 10, 10, 0.25) 35%, rgba(10, 10, 10, 0) 100%);
-
-      @include tablet-down {
-        background: linear-gradient(to top, rgba(10, 10, 10, 0.8) 0%, rgba(10, 10, 10, 0.3) 50%, rgba(10, 10, 10, 0) 100%);
-      }
-    }
-
-    @include mobile {
-      padding: 20px;
     }
   }
 
@@ -106,32 +88,19 @@
     display: flex;
     align-items: center;
     padding-left: 5%;
-
-    @include tablet-down {
-      padding-left: 0;
-      justify-content: center;
-      align-items: flex-start;
-      padding-top: 48px;
-    }
   }
 
   &__content {
     pointer-events: auto;
     max-width: 440px;
-    background: rgba(10, 10, 10, 0.88);
+    background: rgba(255, 255, 255, 0.94);
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
-    padding: 36px;
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 32px;
+    border: 1px solid rgba(0, 0, 0, 0.08);
     border-left: 3px solid #D4AF37;
     border-radius: 16px;
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
-
-    @include tablet-down {
-      max-width: 90%;
-      text-align: center;
-      margin: 0 auto;
-    }
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
   }
 
   &__title {
@@ -139,21 +108,16 @@
     font-size: 2.3rem;
     font-weight: 300;
     line-height: 1.15;
-    color: #FFFFFF !important;
+    color: #0f172a !important;
     text-transform: uppercase;
     letter-spacing: 0.16em;
     margin: 0;
-
-    @include mobile {
-      font-size: 1.6rem;
-      letter-spacing: 0.12em;
-    }
 
     span {
       display: block;
       font-weight: 700;
       letter-spacing: 0.14em;
-      color: #D4AF37 !important;
+      color: #B89028 !important;
     }
   }
 
@@ -162,7 +126,7 @@
     font-size: 0.85rem;
     font-weight: 500;
     letter-spacing: 0.25em;
-    color: #D4AF37 !important;
+    color: #B89028 !important;
     margin-top: 14px;
     text-transform: uppercase;
   }
@@ -170,8 +134,8 @@
   // ── Divider ──
   &__divider {
     height: 1px;
-    background: rgba(255, 255, 255, 0.08);
-    margin: 24px 0;
+    background: rgba(0, 0, 0, 0.12);
+    margin: 20px 0;
   }
 
   // ── Dynamic Slide Details inside the box ──
@@ -180,16 +144,12 @@
     flex-direction: column;
     align-items: flex-start;
     animation: slideUpFade 0.4s cubic-bezier(0.25, 1, 0.5, 1) forwards;
-
-    @include tablet-down {
-      align-items: center;
-    }
   }
 
   &__active-number {
     font-size: 10px;
     font-weight: 700;
-    color: #D4AF37;
+    color: #B89028;
     text-transform: uppercase;
     letter-spacing: 0.12em;
     display: block;
@@ -198,8 +158,8 @@
 
   &__active-title {
     font-size: 18px;
-    font-weight: 700;
-    color: #FFFFFF;
+    font-weight: 800;
+    color: #0f172a !important;
     margin: 0 0 8px;
     text-transform: uppercase;
     letter-spacing: 0.03em;
@@ -207,14 +167,11 @@
 
   &__active-desc {
     font-size: 13px;
-    color: #D1D1D6;
+    color: #334155 !important;
     line-height: 1.5;
-    margin: 0 0 20px;
+    margin: 0 0 16px;
     text-align: left;
-
-    @include tablet-down {
-      text-align: center;
-    }
+    font-weight: 500;
   }
 
   &__active-btn {
@@ -223,7 +180,7 @@
     gap: 8px;
     font-size: 11px;
     font-weight: 700;
-    color: #0D0D0D !important;
+    color: #ffffff !important;
     background-color: #D4AF37;
     padding: 10px 20px;
     border-radius: 0px;
@@ -238,12 +195,143 @@
     }
 
     &:hover {
-      background-color: #FFFFFF;
-      color: #0D0D0D !important;
+      background-color: #B89028;
+      color: #ffffff !important;
 
       span[nz-icon] {
         transform: translateX(4px);
       }
+    }
+  }
+}
+
+// ── Mobile Touch Swipe Carousel (Full-Bleed Image + Bottom Title Only) ─────
+.Duster-hero-mobile {
+  display: none !important;
+
+  @media (max-width: 991px) {
+    display: block !important;
+    position: relative;
+    width: 100%;
+    height: 72vh;
+    min-height: 480px;
+    max-height: 580px;
+    background: #0D0D0D;
+    overflow: hidden;
+  }
+
+  &__track {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    touch-action: pan-x;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+
+  &__slide {
+    flex: 0 0 100%;
+    width: 100%;
+    height: 100%;
+    scroll-snap-align: start;
+    background-size: cover;
+    background-position: center;
+    position: relative;
+  }
+
+  &__overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(24, 23, 22, 0.96) 0%, rgba(24, 23, 22, 0.55) 55%, rgba(24, 23, 22, 0.05) 100%);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 28px 20px;
+  }
+
+  &__caption {
+    width: 100%;
+  }
+
+  &__tag {
+    font-size: 11px;
+    font-weight: 800;
+    color: #D4AF37;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+    display: block;
+  }
+
+  &__title {
+    font-family: $font-heading;
+    font-size: 1.75rem;
+    font-weight: 800;
+    color: #ffffff !important;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin: 0 0 18px;
+    line-height: 1.2;
+    text-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
+  }
+
+  &__actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    width: 100%;
+  }
+
+  &__btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    font-weight: 800;
+    color: #ffffff !important;
+    background: #D4AF37;
+    padding: 12px 20px;
+    border-radius: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    text-decoration: none;
+    box-shadow: 0 4px 16px rgba(212, 175, 55, 0.4);
+    transition: background 0.2s ease;
+
+    &:active, &:hover {
+      background: #B89028;
+    }
+
+    span[nz-icon] {
+      font-size: 10px;
+    }
+  }
+
+  &__dots {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  &__dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.4);
+    transition: all 0.25s ease;
+
+    &--active {
+      width: 22px;
+      border-radius: 10px;
+      background: #D4AF37;
     }
   }
 }
