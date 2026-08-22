@@ -54,12 +54,12 @@ export class Contact {
   isLoading = signal(false);
 
   contactForm: FormGroup = this.fb.group({
-    firstName: [null, [Validators.required, Validators.minLength(2)]],
-    lastName: [null, [Validators.required, Validators.minLength(2)]],
-    email: [null, [Validators.required, Validators.pattern(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)]],
-    phone: [null, [Validators.pattern(/^\d{10}$/)]],
-    subject: [null, [Validators.required]],
-    message: [null, [Validators.required, Validators.minLength(20)]],
+    firstName: ['', [Validators.required, Validators.minLength(2)]],
+    lastName: ['', [Validators.required, Validators.minLength(2)]],
+    email: ['', [Validators.required, Validators.email]],
+    phone: ['', [Validators.pattern(/^[0-9]{10}$/)]],
+    subject: ['order', [Validators.required]],
+    message: ['', [Validators.required, Validators.minLength(5)]],
   });
 
   subjects = [
@@ -134,10 +134,13 @@ export class Contact {
         this.message.success(
           'Your message has been sent! We\'ll get back to you within 24 hours. 🎉'
         );
-        this.contactForm.reset();
-      }, 1600);
+        this.contactForm.reset({
+          subject: 'order'
+        });
+      }, 1400);
     } else {
       Object.values(this.contactForm.controls).forEach((ctrl) => {
+        ctrl.markAsTouched();
         ctrl.markAsDirty();
         ctrl.updateValueAndValidity({ onlySelf: true });
       });

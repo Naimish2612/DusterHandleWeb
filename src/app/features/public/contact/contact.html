@@ -157,7 +157,7 @@
                   @if (contactForm.get('email')?.hasError('required')) {
                   Email is required
                   } @else {
-                  Please enter a valid email
+                  Please enter a valid email address
                   }
                 </ng-template>
               </nz-form-control>
@@ -165,13 +165,17 @@
 
             <nz-form-item>
               <nz-form-label nzFor="phone">Phone (optional)</nz-form-label>
-              <nz-form-control [nzErrorTip]="'Enter a valid 10-digit number'">
-                <nz-input-group [nzPrefix]="pfxPhone" nzAddOnBefore="+91">
+              <nz-form-control [nzErrorTip]="phoneErr">
+                <nz-input-group [nzPrefix]="pfxPhone">
                   <input nz-input type="tel" id="phone" formControlName="phone" placeholder="98765 43210"
                     autocomplete="tel" />
                 </nz-input-group>
                 <ng-template #pfxPhone>
-                  <span nz-icon nzType="phone" nzTheme="outline"></span>
+                  <span nz-icon nzType="phone" nzTheme="outline" style="margin-right: 4px;"></span>
+                  <span style="font-size: 12px; font-weight: 600; color: #475569;">+91</span>
+                </ng-template>
+                <ng-template #phoneErr>
+                  Please enter a valid 10-digit phone number
                 </ng-template>
               </nz-form-control>
             </nz-form-item>
@@ -192,15 +196,15 @@
           <!-- Message -->
           <nz-form-item>
             <nz-form-label nzRequired nzFor="message">Your Message</nz-form-label>
-            <nz-form-control nzHasFeedback [nzErrorTip]="msgErr">
+            <nz-form-control [nzErrorTip]="msgErr">
               <textarea nz-input id="message" formControlName="message"
-                placeholder="Tell us how we can help you... Please provide as much detail as possible."
+                placeholder="Tell us how we can help you... Please provide details on your requirements."
                 [nzAutosize]="{ minRows: 5, maxRows: 12 }"></textarea>
               <ng-template #msgErr>
                 @if (contactForm.get('message')?.hasError('required')) {
                 Message is required
                 } @else {
-                Minimum 20 characters required
+                Minimum 5 characters required
                 }
               </ng-template>
             </nz-form-control>
