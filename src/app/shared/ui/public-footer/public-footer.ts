@@ -24,14 +24,14 @@ export class PublicFooter {
     { label: 'Privacy Policy', route: '/help/privacy-policy' },
     { label: 'Terms & Conditions', route: '/help/terms-and-conditions' },
     { label: 'Cookie Policy', route: '/help/cookie-policy' },
-    { label: 'Return Policy', route: '/help/return-policy' },
-    { label: 'Refund Policy', route: '/help/refund-policy' },
-    { label: 'Replacement Policy', route: '/help/replacement-policy' },
-    { label: 'Grievance Redressal Policy', route: '/help/grievance-redressal-policy' },
+    // { label: 'Return Policy', route: '/help/return-policy' },
+    // { label: 'Refund Policy', route: '/help/refund-policy' },
+    // { label: 'Replacement Policy', route: '/help/replacement-policy' },
+    // { label: 'Grievance Redressal Policy', route: '/help/grievance-redressal-policy' },
   ];
 
   socialLinks = [
-    { icon: 'twitter', label: 'Twitter', url: '#' },
+    { icon: 'x', label: 'Twitter', url: '#' },
     { icon: 'instagram', label: 'Instagram', url: '#' },
     { icon: 'facebook', label: 'Facebook', url: '#' },
     { icon: 'youtube', label: 'YouTube', url: '#' },
