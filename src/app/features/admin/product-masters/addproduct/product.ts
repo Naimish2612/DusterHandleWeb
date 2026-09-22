@@ -126,7 +126,6 @@ export class Product implements OnInit {
   };
 
   private readonly MAX_IMAGES = 5;
-  private readonly MIN_IMAGES = 1;
   private readonly MAX_FILE_SIZE_MB = 3;
 
   categoryList: DropdownOption[] = [];
@@ -602,7 +601,7 @@ export class Product implements OnInit {
     this.imageReload$.next();
   }
 
-  onFilesSelected(event: Event): void {
+  async onFilesSelected(event: Event): Promise<void> {
     const input = event.target as HTMLInputElement;
     if (!input.files || input.files.length === 0) return;
 
@@ -618,66 +617,123 @@ export class Product implements OnInit {
     const filesToAdd = files.slice(0, remaining);
 
     this.isImageUploading = true;
-    this.loader.showGlobal('Uploading images...');
+    this.loader.showGlobal('Compressing and uploading images...');
 
-    let processedCount = 0;
-    const totalFiles = filesToAdd.length;
+    try {
+      for (const file of filesToAdd) {
+        if (!['image/png', 'image/jpeg', 'image/jpg', 'image/webp'].includes(file.type)) {
+          console.warn(`Invalid file type: ${file.name}`);
+          continue;
+        }
 
-    filesToAdd.forEach((file) => {
-      if (!['image/png', 'image/jpeg', 'image/jpg'].includes(file.type)) {
-        console.warn(`Invalid file type: ${file.name}`);
-        processedCount++;
-        this.checkLoadingComplete(processedCount, totalFiles);
-        return;
+        if (file.size > this.MAX_FILE_SIZE_MB * 1024 * 1024) {
+          console.warn(`File too large: ${file.name} (max ${this.MAX_FILE_SIZE_MB}MB)`);
+          continue;
+        }
+
+        if (this.imageList.some((img) => img.name === file.name)) {
+          console.warn(`Duplicate file: ${file.name}`);
+          continue;
+        }
+
+        try {
+          const { file: compressedFile, preview } = await this.compressImage(file);
+          const imageItem: ImageItem = {
+            id: this.imageList.length + 1,
+            uid: this.generateUid(),
+            name: compressedFile.name,
+            size: this.formatFileSize(compressedFile.size).toString(),
+            file: compressedFile,
+            preview: preview,
+          };
+
+          this.imageList = [...this.imageList, imageItem];
+          this.imageReload$.next();
+        } catch (err) {
+          console.error(`Failed to compress image: ${file.name}`, err);
+        }
       }
-
-      if (file.size > this.MAX_FILE_SIZE_MB * 1024 * 1024) {
-        console.warn(`File too large: ${file.name} (max ${this.MAX_FILE_SIZE_MB}MB)`);
-        processedCount++;
-        this.checkLoadingComplete(processedCount, totalFiles);
-        return;
-      }
-
-      if (this.imageList.some((img) => img.name === file.name)) {
-        console.warn(`Duplicate file: ${file.name}`);
-        processedCount++;
-        this.checkLoadingComplete(processedCount, totalFiles);
-        return;
-      }
-
-      const reader = new FileReader();
-
-      reader.onload = (e: ProgressEvent<FileReader>) => {
-        const imageItem: ImageItem = {
-          id: this.imageList.length + 1,
-          uid: this.generateUid(),
-          name: file.name,
-          size: this.formatFileSize(file.size).toString(),
-          file: file,
-          preview: e.target?.result as string,
-        };
-
-        this.imageList = [...this.imageList, imageItem];
-        this.imageReload$.next();
-      };
-
-      reader.onerror = () => {
-        console.error(`Failed to read file: ${file.name}`);
-        processedCount++;
-        this.checkLoadingComplete(processedCount, totalFiles);
-      };
-
-      reader.readAsDataURL(file);
-    });
-    input.value = '';
-    this.loader.hideGlobal();
-  }
-
-  private checkLoadingComplete(processed: number, total: number): void {
-    if (processed >= total) {
+    } finally {
+      input.value = '';
       this.isImageUploading = false;
       this.loader.hideGlobal();
+      this.cdr.detectChanges();
     }
+  }
+
+  private compressImage(
+    file: File,
+    maxWidth: number = 1920,
+    maxHeight: number = 1080,
+    quality: number = 0.75
+  ): Promise<{ file: File; preview: string }> {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+
+      reader.onload = (readerEvent: ProgressEvent<FileReader>) => {
+        const img = new Image();
+
+        img.onload = () => {
+          let width = img.width;
+          let height = img.height;
+
+          if (width > maxWidth || height > maxHeight) {
+            const ratio = Math.min(maxWidth / width, maxHeight / height);
+            width = Math.round(width * ratio);
+            height = Math.round(height * ratio);
+          }
+
+          const canvas = document.createElement('canvas');
+          canvas.width = width;
+          canvas.height = height;
+
+          const ctx = canvas.getContext('2d');
+          if (!ctx) {
+            resolve({
+              file,
+              preview: readerEvent.target?.result as string,
+            });
+            return;
+          }
+
+          ctx.drawImage(img, 0, 0, width, height);
+
+          const mimeType = file.type === 'image/png' ? 'image/jpeg' : (file.type || 'image/jpeg');
+
+          canvas.toBlob(
+            (blob) => {
+              if (!blob || blob.size >= file.size) {
+                // If compression resulted in larger file or failed, keep original
+                resolve({
+                  file,
+                  preview: readerEvent.target?.result as string,
+                });
+                return;
+              }
+
+              const compressedFile = new File([blob], file.name, {
+                type: blob.type || mimeType,
+                lastModified: Date.now(),
+              });
+
+              const previewUrl = canvas.toDataURL(mimeType, quality);
+              resolve({
+                file: compressedFile,
+                preview: previewUrl,
+              });
+            },
+            mimeType,
+            quality
+          );
+        };
+
+        img.onerror = (err) => reject(err);
+        img.src = readerEvent.target?.result as string;
+      };
+
+      reader.onerror = (err) => reject(err);
+      reader.readAsDataURL(file);
+    });
   }
 
   deleteImage(uid: string): void {
