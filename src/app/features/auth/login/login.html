@@ -5,7 +5,7 @@
   <div class="auth-form__panel" [class.auth-form__panel--hidden]="showForgotPassword">
     <!-- Header -->
     <div class="auth-form__header">
-      <h1 class="auth-form__title">Welcome Back</h1>
+      <h1 style="color: darkgrey !important;">Welcome Back</h1>
       <p class="auth-form__subtitle">Sign in to access your account.</p>
     </div>
 
@@ -70,19 +70,14 @@
         <nz-form-control nzHasFeedback [nzErrorTip]="emailError">
           <nz-input-wrapper>
             <span nz-icon nzType="mail" nzInputPrefix></span>
-            <input
-              nz-input
-              id="loginEmail"
-              formControlName="user_name"
-              placeholder="you@email.com"
-              autocomplete="email"
-            />
+            <input nz-input id="loginEmail" formControlName="user_name" placeholder="you@email.com"
+              autocomplete="email" />
           </nz-input-wrapper>
           <ng-template #emailError let-control>
             @if (control.hasError('required')) {
-              Email is required
+            Email is required
             } @else if (control.hasError('pattern')) {
-              Please enter a valid email
+            Please enter a valid email
             }
           </ng-template>
         </nz-form-control>
@@ -94,29 +89,18 @@
         <nz-form-control nzHasFeedback [nzErrorTip]="passwordError">
           <nz-input-wrapper>
             <span nz-icon nzType="lock" nzInputPrefix nzSize="small"></span>
-            <input
-              #passwordInput 
-              nz-input
-              id="loginPassword"
-              formControlName="password"
-              [type]="passwordVisible ? 'text' : 'password'"
-              placeholder="Enter your password"
-              autocomplete="current-password"
-            />
-            <span
-              nz-icon
-              nzInputSuffix
-              [nzType]="passwordVisible ? 'eye' : 'eye-invisible'"
-              class="auth-form__password-toggle"
-              (click)="passwordVisible = !passwordVisible"
-              style="cursor: pointer"
-            ></span>
+            <input #passwordInput nz-input id="loginPassword" formControlName="password"
+              [type]="passwordVisible ? 'text' : 'password'" placeholder="Enter your password"
+              autocomplete="current-password" />
+            <span nz-icon nzInputSuffix [nzType]="passwordVisible ? 'eye' : 'eye-invisible'"
+              class="auth-form__password-toggle" (click)="passwordVisible = !passwordVisible"
+              style="cursor: pointer"></span>
           </nz-input-wrapper>
           <ng-template #passwordError let-control>
             @if (control.hasError('required')) {
-              Password is required
+            Password is required
             } @else if (control.hasError('minlength')) {
-              Minimum 6 characters
+            Minimum 6 characters
             }
           </ng-template>
         </nz-form-control>
@@ -133,15 +117,8 @@
       </div>
 
       <!-- Submit -->
-      <button
-        nz-button
-        nzType="primary"
-        nzBlock
-        nzSize="large"
-        nzShape="round"
-        [nzLoading]="isLoading"
-        class="auth-form__submit"
-      >
+      <button nz-button nzType="primary" nzBlock nzSize="large" nzShape="round" [nzLoading]="isLoading"
+        class="auth-form__submit">
         {{ isLoading ? 'Signing in...' : 'Sign In' }}
       </button>
     </form>
@@ -167,84 +144,54 @@
     </button>
 
     @if (!forgotSent) {
-      <!-- Header -->
-      <div class="auth-form__header">
-        <div class="auth-form__header-icon auth-form__header-icon--warning">
-          <span nz-icon nzType="lock" nzTheme="outline"></span>
-        </div>
-        <h1 class="auth-form__title">Forgot Password?</h1>
-        <p class="auth-form__subtitle">
-          No worries! Enter your email and we'll send you a link to reset your password.
-        </p>
+    <!-- Header -->
+    <div class="auth-form__header">
+      <div class="auth-form__header-icon auth-form__header-icon--warning">
+        <span nz-icon nzType="lock" nzTheme="outline"></span>
       </div>
+      <h1 class="auth-form__title">Forgot Password?</h1>
+      <p class="auth-form__subtitle">
+        No worries! Enter your email and we'll send you a link to reset your password.
+      </p>
+    </div>
 
-      <!-- Forgot Form -->
-      <div class="auth-form__forgot-form">
-        <nz-form-item>
-          <nz-form-label nzRequired>Email Address</nz-form-label>
-          <nz-form-control>
-            <nz-input-wrapper>
-              <span nz-icon nzType="mail" nzInputPrefix nzSize="small"></span>
-              <input
-                nz-input
-                (ngModel)="(forgotEmail)"
-                placeholder="you@company.com"
-                autocomplete="email"
-              />
-            </nz-input-wrapper>
-          </nz-form-control>
-        </nz-form-item>
+    <!-- Forgot Form -->
+    <div class="auth-form__forgot-form">
+      <nz-form-item>
+        <nz-form-label nzRequired>Email Address</nz-form-label>
+        <nz-form-control>
+          <nz-input-wrapper>
+            <span nz-icon nzType="mail" nzInputPrefix nzSize="small"></span>
+            <input nz-input (ngModel)="(forgotEmail)" placeholder="you@company.com" autocomplete="email" />
+          </nz-input-wrapper>
+        </nz-form-control>
+      </nz-form-item>
 
-        <button
-          nz-button
-          nzType="primary"
-          nzBlock
-          nzSize="large"
-          nzShape="round"
-          [nzLoading]="isForgotLoading"
-          [disabled]="!forgotEmail"
-          (click)="onForgotSubmit()"
-          class="auth-form__submit"
-        >
-          Send Reset Link
-        </button>
-      </div>
+      <button nz-button nzType="primary" nzBlock nzSize="large" nzShape="round" [nzLoading]="isForgotLoading"
+        [disabled]="!forgotEmail" (click)="onForgotSubmit()" class="auth-form__submit">
+        Send Reset Link
+      </button>
+    </div>
     } @else {
-      <!-- Success State -->
-      <div class="auth-form__success">
-        <div class="auth-form__success-icon">
-          <span nz-icon nzType="check-circle" nzTheme="fill"></span>
-        </div>
-        <h2 class="auth-form__success-title">Check Your Email</h2>
-        <p class="auth-form__success-desc">
-          We've sent a password reset link to
-          <strong>{{ forgotEmail }}</strong
-          >. The link will expire in 30 minutes.
-        </p>
-        <button
-          nz-button
-          nzType="default"
-          nzBlock
-          nzSize="large"
-          nzShape="round"
-          (click)="onForgotSubmit()"
-          class="mb-3"
-        >
-          <span nz-icon nzType="reload" nzTheme="outline"></span>
-          Resend Email
-        </button>
-        <button
-          nz-button
-          nzType="primary"
-          nzBlock
-          nzSize="large"
-          nzShape="round"
-          (click)="toggleForgotPassword()"
-        >
-          <span nz-icon nzType="arrow-left" nzTheme="outline"></span>
-          Back to Sign In
-        </button>
+    <!-- Success State -->
+    <div class="auth-form__success">
+      <div class="auth-form__success-icon">
+        <span nz-icon nzType="check-circle" nzTheme="fill"></span>
       </div>
+      <h2 class="auth-form__success-title">Check Your Email</h2>
+      <p class="auth-form__success-desc">
+        We've sent a password reset link to
+        <strong>{{ forgotEmail }}</strong>. The link will expire in 30 minutes.
+      </p>
+      <button nz-button nzType="default" nzBlock nzSize="large" nzShape="round" (click)="onForgotSubmit()" class="mb-3">
+        <span nz-icon nzType="reload" nzTheme="outline"></span>
+        Resend Email
+      </button>
+      <button nz-button nzType="primary" nzBlock nzSize="large" nzShape="round" (click)="toggleForgotPassword()">
+        <span nz-icon nzType="arrow-left" nzTheme="outline"></span>
+        Back to Sign In
+      </button>
+    </div>
     }
   </div>
 </div>
