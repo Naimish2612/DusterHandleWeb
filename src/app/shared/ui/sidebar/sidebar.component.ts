@@ -29,17 +29,8 @@ import { NzLayoutModule } from 'ng-zorro-antd/layout';
 import { NzMenuModule } from 'ng-zorro-antd/menu';
 import { ClientUserService } from '../../../core/infrastructure/client-user.service';
 import { ChangePassword } from '../change-password/change-password';
-
-export interface MenuItem {
-  title: string;
-  icon?: string;
-  route?: string;
-  children?: MenuItem[];
-  visible?: boolean;
-  permissions?: string[]; // For future role-based access
-  badge?: number; // For notification badges
-  divider?: boolean; // To add divider after this item
-}
+import { MenuItem } from '../../models/menu-item';
+export type { MenuItem } from '../../models/menu-item';
 
 export interface UserProfile {
   id: string;
@@ -134,6 +125,17 @@ export class SidebarComponent {
     });
 
     this.bindClientUserProfile();
+  }
+
+  // Accordion toggle: closes other items at the same level
+  onOpenChange(item: any, siblings: any[], isOpen: boolean): void {
+    if (this.menuSearchValue().trim()) return;
+    if (isOpen && siblings) {
+      siblings.forEach((s) => {
+        if (s !== item) s.open = false;
+      });
+    }
+    item.open = isOpen;
   }
 
   toggleCollapsed(): void {

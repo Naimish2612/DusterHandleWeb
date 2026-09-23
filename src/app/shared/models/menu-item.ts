@@ -1,7 +1,13 @@
 export interface MenuItem {
-  actionCode: number;
+  actionCode?: number;
   title: string;
   route?: string;
   icon?: string;
   children?: MenuItem[];
+  open?: boolean;
+  visible?: boolean;
+  permissions?: string[];
+  badge?: number;
+  divider?: boolean;
 }
+

@@ -62,26 +62,44 @@ nz-form-item {
     display: inline-block;
   }
 
-  .filter-trigger-btn {
+  .header-actions {
     position: absolute;
-    right: 10px; 
+    right: 10px;
     top: 50%;
     transform: translateY(-50%);
-    background: white;
-    border-color: #1890ff;
-    color: #1890ff;
+    display: flex;
+    align-items: center;
+    gap: 8px;
     z-index: 2;
 
-    &:hover {
-      background-color: #1890ff;
-      color: #fff;
+    .import-btn {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      background: white;
+      border-color: #d9d9d9;
+
+      &:hover {
+        border-color: #1890ff;
+        color: #1890ff;
+      }
+    }
+
+    .filter-trigger-btn {
+      background: white;
+      border-color: #1890ff;
+      color: #1890ff;
+
+      &:hover {
+        background-color: #1890ff;
+        color: #fff;
+      }
     }
   }
-}
-.divider-with-action {
+
   ::ng-deep {
     .ant-divider-horizontal.ant-divider-with-text-left::after {
-      width: 82% !important;
+      width: 72% !important;
     }
   }
 }

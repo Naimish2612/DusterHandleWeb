@@ -337,4 +337,36 @@ export class ProductList implements OnInit {
     this.payload.PageSize = event.pageSize;
     this.productGridReload$.next();
   }
+
+  goToImport() {
+    this.router.navigate(['/admin/import'], {
+      state: {
+        process_name: 'PRODUCT',
+        dummyData: [
+          {
+            category_name: 'Handle',
+            sub_category_name: 'Cabinet Handle',
+            manufacturer_name: 'DUSTER',
+            product_name: 'Zinc Alloy Handle',
+            sku: 'DH-101',
+            slug: 'zinc-alloy-handle',
+            description: 'Premium zinc alloy cabinet handle',
+            base_price: 150.00,
+            actual_price: 250.00,
+            stock_quantity: 100,
+            in_stock: true,
+            is_active: true,
+            is_top_selling: true,
+            is_new_arrival: false,
+            estimated_delivery_days: 5,
+            attributes: '{"size": ["96mm", "128mm"], "material": "Zinc"}',
+            tax_class_name: 'Corporate Tax(50.85%)',
+            sap_sku_code: 'SAP-DH101',
+          },
+        ],
+        returnUrl: '/admin/product/list',
+        returnText: 'Back to Product List',
+      },
+    });
+  }
 }

@@ -496,12 +496,12 @@ export class ImportComponent implements OnInit {
 
   getBadgeColor(status: string): string {
     switch (status) {
-      case 'Queued': return '#bfbfbf';
-      case 'Processing': return '#1890ff';
-      case 'Completed': return '#52c41a';
-      case 'CompletedWithErrors': return '#fa8c16';
-      case 'Failed': return '#f5222d';
-      default: return '#bfbfbf';
+      case 'Queued': return '#faad14'; // Yellow
+      case 'Processing': return '#fa8c16'; // Orange
+      case 'Completed': return '#52c41a'; // Green
+      case 'CompletedWithErrors': return '#1890ff'; // Blue
+      case 'Failed': return '#ff4d4f'; // Red
+      default: return '#8c8c8c';
     }
   }
 

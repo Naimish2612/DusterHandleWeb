@@ -33,7 +33,8 @@
 
         <!-- Menu item with children (submenu) -->
         <li *ngIf="item.children && item.children.length > 0" nz-submenu [nzTitle]="item.title"
-          [nzIcon]="item.icon || 'folder'" [nzOpen]="menuSearchValue() !== ''">
+          [nzIcon]="item.icon || 'folder'" [nzOpen]="item.open || menuSearchValue() !== ''"
+          (nzOpenChange)="onOpenChange(item, filteredMenuItems(), $event)">
           <ul>
             <ng-container *ngFor="let child of item.children">
               <!-- Level 2: No children -->
@@ -45,7 +46,8 @@
 
               <!-- Level 2: With children -->
               <li *ngIf="child.children && child.children.length > 0" nz-submenu [nzTitle]="child.title"
-                [nzIcon]="child.icon || 'folder'" [nzOpen]="menuSearchValue() !== ''">
+                [nzIcon]="child.icon || 'folder'" [nzOpen]="child.open || menuSearchValue() !== ''"
+                (nzOpenChange)="onOpenChange(child, item.children, $event)">
                 <ul>
                   <ng-container *ngFor="let grandChild of child.children">
                     <!-- Level 3 -->
@@ -59,7 +61,8 @@
                     <!-- Level 3: With children -->
                     <li *ngIf="grandChild.children && grandChild.children.length > 0" nz-submenu
                       [nzTitle]="grandChild.title" [nzIcon]="grandChild.icon || 'folder'"
-                      [nzOpen]="menuSearchValue() !== ''">
+                      [nzOpen]="grandChild.open || menuSearchValue() !== ''"
+                      (nzOpenChange)="onOpenChange(grandChild, child.children, $event)">
                       <ul>
                         <ng-container *ngFor="let deepChild of grandChild.children">
                           <li nz-menu-item [routerLink]="deepChild.route" routerLinkActive="active-item"

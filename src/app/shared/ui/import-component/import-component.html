@@ -228,13 +228,14 @@
       nzPlacement="right"
       nzTitle="Import History & Job Status"
       [nzWidth]="650"
+      nzWrapClassName="import-history-drawer"
       (nzOnClose)="closeStatusDrawer()"
     >
       <ng-container *nzDrawerContent>
         <div class="drawer-header-row">
           <span class="drawer-subtitle">Track your uploaded file queues and status.</span>
-          <button nz-button nzType="default" nzShape="circle" (click)="fetchJobs()" [nzLoading]="loadingJobs" nz-tooltip nzTooltipTitle="Refresh job status list">
-            <i nz-icon nzType="reload"></i>
+          <button nz-button nzType="default" (click)="fetchJobs()" [nzLoading]="loadingJobs" nz-tooltip nzTooltipTitle="Refresh job status list" class="reload-jobs-btn">
+            <nz-icon nzType="reload"></nz-icon>
           </button>
         </div>
 
@@ -248,7 +249,11 @@
                 <ng-template #panelHeader>
                   <div class="panel-header-wrapper">
                     <span class="panel-header-title">{{ formatStatusLabel(status) }}</span>
-                    <nz-badge [nzCount]="getJobsByStatus(status).length" [nzStyle]="{ backgroundColor: getBadgeColor(status) }"></nz-badge>
+                    <nz-badge
+                      [nzCount]="getJobsByStatus(status).length"
+                      [class]="'status-badge-' + status.toLowerCase()"
+                      [nzStyle]="{ backgroundColor: getBadgeColor(status), color: '#ffffff' }"
+                    ></nz-badge>
                   </div>
                 </ng-template>
                 @if (getJobsByStatus(status).length > 0) {
@@ -261,14 +266,16 @@
                             <span class="job-process-name">{{ job.entity_type || job.process_name }}</span>
                           </div>
                           <div>
-                            @if (job.status === 'CompletedWithErrors') {
-                              <nz-tag nzColor="warning" class="status-tag">Completed With Errors</nz-tag>
+                            @if (job.status === 'Queued') {
+                              <nz-tag [nzColor]="'#faad14'" class="status-tag">Queued</nz-tag>
+                            } @else if (job.status === 'Processing') {
+                              <nz-tag [nzColor]="'#fa8c16'" class="status-tag">Processing</nz-tag>
                             } @else if (job.status === 'Completed') {
                               <nz-tag nzColor="success" class="status-tag">Completed</nz-tag>
+                            } @else if (job.status === 'CompletedWithErrors') {
+                              <nz-tag [nzColor]="'#1890ff'" class="status-tag">Completed With Errors</nz-tag>
                             } @else if (job.status === 'Failed') {
                               <nz-tag nzColor="error" class="status-tag">Failed</nz-tag>
-                            } @else if (job.status === 'Processing') {
-                              <nz-tag nzColor="processing" class="status-tag">Processing</nz-tag>
                             } @else {
                               <nz-tag nzColor="default" class="status-tag">{{ job.status }}</nz-tag>
                             }
