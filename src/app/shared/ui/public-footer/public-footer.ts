@@ -31,10 +31,10 @@ export class PublicFooter {
   ];
 
   socialLinks = [
-    { icon: 'x', label: 'Twitter', url: '#' },
-    { icon: 'instagram', label: 'Instagram', url: '#' },
-    { icon: 'facebook', label: 'Facebook', url: '#' },
-    { icon: 'youtube', label: 'YouTube', url: '#' },
-    { icon: 'linkedin', label: 'LinkedIn', url: '#' },
+    // { icon: 'x', label: 'Twitter', url: '#' },
+    { icon: 'instagram', label: 'Instagram', url: 'https://www.instagram.com/dusterhardware' },
+    { icon: 'facebook', label: 'Facebook', url: 'https://www.facebook.com/share/1c1idqbFAC/' },
+    // { icon: 'youtube', label: 'YouTube', url: '#' },
+    { icon: 'linkedin', label: 'LinkedIn', url: 'https://www.linkedin.com/company/duster-international/' },
   ];
 }
