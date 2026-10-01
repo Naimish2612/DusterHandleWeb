@@ -14,6 +14,7 @@ import {
     CatalogState,
     ApiDropdownOption,
     ProductBadge,
+    PriceVariant,
 } from '../models/catalog.model';
 
 @Injectable({ providedIn: 'root' })
@@ -300,6 +301,8 @@ export class CatalogService {
         );
         const image = primaryImg?.image_url || images[0] || '';
 
+        const parsedAttr = this.parseAttributes(api.attribute ?? api.attributes);
+
         return {
             id: api.product_code,
             name: api.name,
@@ -322,6 +325,8 @@ export class CatalogService {
             isNewArrival: api.is_new_arrival,
             tax_class_id: api.tax_class_id,
             estimated_delivery_days: api.estimated_delivery_days,
+            attribute: parsedAttr,
+            attributes: parsedAttr,
         };
     }
 
@@ -370,4 +375,298 @@ export class CatalogService {
             })
         );
     }
-}
+
+    // ══════════════════════════════════════════════════════════════════════════
+    // ATTRIBUTE & PRICE PARSING ENGINE
+    // ══════════════════════════════════════════════════════════════════════════
+
+    /**
+     * Safely parse attributes from object, JSON string, or nested JSON string
+     */
+    parseAttributes(raw: any): Record<string, any> | null {
+        if (!raw) return null;
+        let data = raw;
+        while (typeof data === 'string') {
+            try {
+                data = JSON.parse(data);
+            } catch {
+                break;
+            }
+        }
+        return (typeof data === 'object' && data !== null && !Array.isArray(data)) ? data : null;
+    }
+
+    /**
+     * Find price key in attributes using 'price' (or 'rate'/'mrp') keyword matching.
+     * Matches: 'price', 'prices', 'price_(pcs.)', 'price_(box)', 'price_per_pc', etc.
+     */
+    findPriceKey(attrs: Record<string, any>): string | undefined {
+        if (!attrs || typeof attrs !== 'object') return undefined;
+        const keys = Object.keys(attrs);
+
+        // 1. Exact match / standard keys
+        const exact = keys.find(k => {
+            const clean = k.trim().toLowerCase();
+            return clean === 'price' || clean === 'prices' || clean === 'price_(pcs.)' || clean === 'price_(box)';
+        });
+        if (exact && attrs[exact] != null) return exact;
+
+        // 2. Starts with 'price' (e.g. price_(pcs.), price_box, etc.)
+        const startsWith = keys.find(k => {
+            const clean = k.trim().toLowerCase();
+            return clean.startsWith('price') && attrs[k] != null;
+        });
+        if (startsWith) return startsWith;
+
+        // 3. Contains 'price' (e.g. unit_price, selling_price)
+        const contains = keys.find(k => {
+            const clean = k.trim().toLowerCase();
+            return clean.includes('price') && attrs[k] != null;
+        });
+        if (contains) return contains;
+
+        // 4. Fallback: rate or mrp
+        return keys.find(k => {
+            const clean = k.trim().toLowerCase();
+            return (clean.includes('rate') || clean.includes('mrp')) && attrs[k] != null;
+        });
+    }
+
+    /**
+     * Extracts size-wise price variants (with packing if available) from attribute
+     */
+    extractPriceVariants(raw: any): PriceVariant[] {
+        const attrs = this.parseAttributes(raw);
+        if (!attrs) return [];
+
+        const priceKey = this.findPriceKey(attrs);
+        if (!priceKey || attrs[priceKey] == null) return [];
+
+        const priceData = attrs[priceKey];
+
+        // Find size key (case-insensitive)
+        const sizeKey = Object.keys(attrs).find(k => {
+            const lower = k.trim().toLowerCase();
+            return lower.includes('size') || lower.includes('dimension') || lower.includes('length');
+        });
+
+        let sizeData = sizeKey ? attrs[sizeKey] : null;
+        let sizes: string[] = [];
+        if (Array.isArray(sizeData)) {
+            sizes = sizeData.map(s => String(s).trim());
+        } else if (typeof sizeData === 'string' && sizeData.trim()) {
+            sizes = sizeData.split(',').map(s => s.trim()).filter(Boolean);
+        }
+
+        // Find packing info if available (e.g. 'packing_(box)', 'packing', 'pack')
+        const packKey = Object.keys(attrs).find(k => {
+            const clean = k.trim().toLowerCase();
+            return clean.includes('pack') || clean.includes('box');
+        });
+
+        const packMapByName = new Map<string, string>();
+        const packMapByIndex = new Map<number, string>();
+
+        if (packKey && attrs[packKey]) {
+            const packData = attrs[packKey];
+            const isBoxKey = packKey.toLowerCase().includes('box');
+
+            const parsePackVal = (v: any): string => {
+                if (v == null) return '';
+                const s = String(v).trim();
+                if (/^\d+$/.test(s)) {
+                    return isBoxKey ? `${s} / Box` : `${s} Pcs`;
+                }
+                return s;
+            };
+
+            if (Array.isArray(packData)) {
+                packData.forEach((item, idx) => {
+                    const str = String(item).trim();
+                    const lastSlash = str.lastIndexOf('/');
+                    if (lastSlash > 0) {
+                        const sPart = str.substring(0, lastSlash).trim();
+                        const pPart = str.substring(lastSlash + 1).trim();
+                        packMapByName.set(sPart.toLowerCase(), parsePackVal(pPart));
+                    } else {
+                        packMapByIndex.set(idx, parsePackVal(str));
+                    }
+                });
+            } else if (typeof packData === 'object' && packData !== null) {
+                Object.entries(packData).forEach(([k, v]) => {
+                    packMapByName.set(k.trim().toLowerCase(), parsePackVal(v));
+                });
+            } else if (typeof packData === 'string' || typeof packData === 'number') {
+                packMapByIndex.set(0, parsePackVal(packData));
+            }
+        }
+
+        const variants: PriceVariant[] = [];
+
+        // Scenario 1: Array of objects [{ size: ..., price: ... }]
+        if (Array.isArray(priceData) && priceData.length > 0 && typeof priceData[0] === 'object' && priceData[0] !== null) {
+            priceData.forEach((item, index) => {
+                const s = item.size ?? item.name ?? sizes[index] ?? `Size ${index + 1}`;
+                const p = item.price ?? item.rate ?? item.value ?? item.base_price;
+                if (p != null) {
+                    const sizeStr = String(s);
+                    const packing = packMapByName.get(sizeStr.toLowerCase()) ?? packMapByIndex.get(index);
+                    variants.push({
+                        size: sizeStr,
+                        price: this.formatPrice(p),
+                        ...(packing ? { packing } : {})
+                    });
+                }
+            });
+        }
+        // Scenario 2: Object with key-value pairs { "100mm": 150, "150mm": 200 }
+        else if (typeof priceData === 'object' && priceData !== null && !Array.isArray(priceData)) {
+            let idx = 0;
+            Object.entries(priceData).forEach(([s, p]) => {
+                if (p != null) {
+                    const packing = packMapByName.get(s.toLowerCase()) ?? packMapByIndex.get(idx);
+                    variants.push({
+                        size: s,
+                        price: this.formatPrice(p as number | string),
+                        ...(packing ? { packing } : {})
+                    });
+                    idx++;
+                }
+            });
+        }
+        // Scenario 3: Array of values (strings like "Aldrop 8\"/864" or numbers)
+        else if (Array.isArray(priceData)) {
+            priceData.forEach((val, index) => {
+                if (val == null || val === '') return;
+                const fallback = sizes[index] ?? (sizes.length === 1 && index === 0 ? sizes[0] : (priceData.length > 1 ? `Size ${index + 1}` : 'Base Price'));
+                const parsed = this.parseSizePriceItem(val, fallback);
+                if (parsed.price) {
+                    const packing = packMapByName.get(parsed.size.toLowerCase()) ?? packMapByIndex.get(index);
+                    variants.push({
+                        ...parsed,
+                        ...(packing ? { packing } : {})
+                    });
+                }
+            });
+        }
+        // Scenario 4: String value e.g. "150, 200, 250" or "Aldrop 8\"/864, Aldrop 10\"/918"
+        else if (typeof priceData === 'string' && priceData.trim()) {
+            const rawParts = priceData.split(',').map(s => s.trim()).filter(Boolean);
+            rawParts.forEach((part, index) => {
+                const fallback = sizes[index] ?? (sizes.length === 1 && index === 0 ? sizes[0] : (rawParts.length > 1 ? `Size ${index + 1}` : 'Base Price'));
+                const parsed = this.parseSizePriceItem(part, fallback);
+                if (parsed.price) {
+                    const packing = packMapByName.get(parsed.size.toLowerCase()) ?? packMapByIndex.get(index);
+                    variants.push({
+                        ...parsed,
+                        ...(packing ? { packing } : {})
+                    });
+                }
+            });
+        }
+        // Scenario 5: Single numeric value e.g. price: 150
+        else if (typeof priceData === 'number') {
+            const fallback = sizes[0] ?? 'Base Price';
+            const packing = packMapByIndex.get(0);
+            variants.push({
+                size: fallback,
+                price: this.formatPrice(priceData),
+                ...(packing ? { packing } : {})
+            });
+        }
+
+        return variants;
+    }
+
+    /**
+     * Determines tooltip header title based on price key unit
+     */
+    getPriceTooltipTitle(raw: any): string {
+        const attrs = this.parseAttributes(raw);
+        if (!attrs) return 'Size-Wise Pricing';
+
+        const priceKey = this.findPriceKey(attrs);
+        if (!priceKey) return 'Size-Wise Pricing';
+
+        const lower = priceKey.toLowerCase();
+        if (lower.includes('pcs') || lower.includes('pc')) {
+            return 'Size-Wise Pricing (Per Pc)';
+        }
+        if (lower.includes('box')) {
+            return 'Size-Wise Pricing (Per Box)';
+        }
+        if (lower.includes('set')) {
+            return 'Size-Wise Pricing (Per Set)';
+        }
+        if (lower.includes('pair')) {
+            return 'Size-Wise Pricing (Per Pair)';
+        }
+        if (lower.includes('meter') || lower.includes('mtr')) {
+            return 'Size-Wise Pricing (Per Meter)';
+        }
+        if (lower.includes('kg') || lower.includes('kilo')) {
+            return 'Size-Wise Pricing (Per Kg)';
+        }
+
+        return 'Size-Wise Pricing';
+    }
+
+    formatPrice(price: number | string | null | undefined): string {
+        if (price == null || price === '') return '';
+        const num = typeof price === 'number' ? price : parseFloat(String(price).replace(/[^0-9.]/g, ''));
+        if (isNaN(num)) return String(price);
+        return '₹' + num.toLocaleString('en-IN');
+    }
+
+    private parseSizePriceItem(val: any, fallbackSize: string): { size: string; price: string } {
+        if (val == null) {
+            return { size: fallbackSize, price: '' };
+        }
+
+        const str = String(val).trim();
+
+        // 1. Slash delimiter e.g. "Aldrop 8\"/864"
+        const lastSlash = str.lastIndexOf('/');
+        if (lastSlash > 0 && lastSlash < str.length - 1) {
+            const pricePart = str.substring(lastSlash + 1).trim();
+            if (/\d/.test(pricePart)) {
+                const sizePart = str.substring(0, lastSlash).trim();
+                return {
+                    size: sizePart || fallbackSize,
+                    price: this.formatPrice(pricePart)
+                };
+            }
+        }
+
+        // 2. Colon delimiter e.g. "Aldrop 8\": 864"
+        const lastColon = str.lastIndexOf(':');
+        if (lastColon > 0 && lastColon < str.length - 1) {
+            const pricePart = str.substring(lastColon + 1).trim();
+            if (/\d/.test(pricePart)) {
+                const sizePart = str.substring(0, lastColon).trim();
+                return {
+                    size: sizePart || fallbackSize,
+                    price: this.formatPrice(pricePart)
+                };
+            }
+        }
+
+        // 3. Hyphen delimiter e.g. "Aldrop 8\" - 864"
+        const lastDash = str.lastIndexOf(' - ');
+        if (lastDash > 0 && lastDash < str.length - 3) {
+            const pricePart = str.substring(lastDash + 3).trim();
+            if (/\d/.test(pricePart)) {
+                const sizePart = str.substring(0, lastDash).trim();
+                return {
+                    size: sizePart || fallbackSize,
+                    price: this.formatPrice(pricePart)
+                };
+            }
+        }
+
+        return {
+            size: fallbackSize,
+            price: this.formatPrice(str)
+        };
+    }
+}

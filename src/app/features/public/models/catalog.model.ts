@@ -89,6 +89,15 @@ export interface Product {
     tax_class_id?: number;
     estimated_delivery_days?: number;
     badges?: ProductBadge[];
+    attribute?: Record<string, any> | null;
+    attributes?: any | null;
+}
+
+// ── Size-wise Price Variant with Packing ───────────────────────────
+export interface PriceVariant {
+    size: string;
+    price: string;
+    packing?: string;
 }
 
 // ── Generic Dropdown Option from API ───────────────────────────────

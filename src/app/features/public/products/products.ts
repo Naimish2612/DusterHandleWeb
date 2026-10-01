@@ -18,9 +18,10 @@ import { NzSpinModule } from 'ng-zorro-antd/spin';
 import { NzEmptyModule } from 'ng-zorro-antd/empty';
 import { NzSkeletonModule } from 'ng-zorro-antd/skeleton';
 import { NzMessageService } from 'ng-zorro-antd/message';
+import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
 
 import { CatalogService } from '../services/catalog.service';
-import { FilterSection, Product } from '../models/catalog.model';
+import { FilterSection, Product, PriceVariant } from '../models/catalog.model';
 import { WishlistService } from '../../customer/services/wishlist.service';
 import { CartService } from '../services/cart.service';
 import { SessionService } from '../../../core/infrastructure/session.service';
@@ -36,7 +37,7 @@ import { SessionService } from '../../../core/infrastructure/session.service';
         NzCheckboxModule, NzRateModule, NzPaginationModule,
         NzSliderModule, NzTagModule, NzDrawerModule,
         NzBadgeModule, NzSpinModule, NzEmptyModule,
-        NzSkeletonModule,
+        NzSkeletonModule, NzToolTipModule,
     ],
     templateUrl: './products.html',
     styleUrl: './products.scss',
@@ -76,7 +77,7 @@ export class Products implements OnInit {
     selectedBrands: string[] = [];
     selectedCategories: string[] = [];
     selectedSubCategories: string[] = [];
-    priceRange: [number, number] = [0, 1500000];
+    priceRange: [number, number] = [0, 7000];
     currentPage = 1;
     pageSize = 12;
 
@@ -488,7 +489,30 @@ export class Products implements OnInit {
         return percent > 0 ? Math.max(1, Math.round(percent)) : 0;
     }
 
-    formatPrice(price: number): string { return '₹' + price.toLocaleString('en-IN'); }
+    formatPrice(price: number | string | null | undefined): string {
+        if (price == null || price === '') return '';
+        const num = typeof price === 'number' ? price : parseFloat(String(price).replace(/[^0-9.]/g, ''));
+        if (isNaN(num)) return String(price);
+        return '₹' + num.toLocaleString('en-IN');
+    }
+
+    // ── Get size-wise price variants from product attribute (Cached) ───────
+    private priceVariantsCache = new WeakMap<Product, PriceVariant[]>();
+
+    getPriceVariants(product: Product): PriceVariant[] {
+        if (!product) return [];
+        let variants = this.priceVariantsCache.get(product);
+        if (!variants) {
+            variants = this.catalog.extractPriceVariants(product.attribute ?? product.attributes);
+            this.priceVariantsCache.set(product, variants);
+        }
+        return variants;
+    }
+
+    getPriceTooltipTitle(product: Product): string {
+        return this.catalog.getPriceTooltipTitle(product.attribute ?? product.attributes);
+    }
+
 
     onAddToCart(product: Product): void {
         if (!product.in_stock) {

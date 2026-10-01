@@ -39,6 +39,16 @@
                 <nz-breadcrumb-item>
                     <a routerLink="/products">Products</a>
                 </nz-breadcrumb-item>
+                @if (p.category_name) {
+                <nz-breadcrumb-item>
+                    <a routerLink="/products" [state]="{ category: p.category_name }">{{ p.category_name }}</a>
+                </nz-breadcrumb-item>
+                }
+                @if (p.sub_category_name && p.sub_category_name.trim().toLowerCase() !== (p.category_name || '').trim().toLowerCase()) {
+                <nz-breadcrumb-item>
+                    <a routerLink="/products" [state]="{ subCategory: p.sub_category_name }">{{ p.sub_category_name }}</a>
+                </nz-breadcrumb-item>
+                }
                 <nz-breadcrumb-item>{{ p.name }}</nz-breadcrumb-item>
             </nz-breadcrumb>
         </div>
@@ -121,13 +131,46 @@
                ════════════════════════════════════════════════════════ -->
                 <div class="pd-info">
 
+                    <!-- ── Category, Subcategory & Stock Tags Bar ───────── -->
+                    <div class="pd-tags-bar">
+                        @if (p.category_name) {
+                        <a routerLink="/products" [state]="{ category: p.category_name }"
+                            class="pd-tag pd-tag--category" nz-tooltip [nzTooltipTitle]="'View all ' + p.category_name + ' products'">
+                            <span nz-icon nzType="appstore" nzTheme="outline" class="pd-tag__icon"></span>
+                            <span class="pd-tag__text">{{ p.category_name }}</span>
+                        </a>
+                        }
+
+                        @if (p.sub_category_name && p.sub_category_name.trim().toLowerCase() !== (p.category_name || '').trim().toLowerCase()) {
+                        <a routerLink="/products" [state]="{ subCategory: p.sub_category_name }"
+                            class="pd-tag pd-tag--subcategory" nz-tooltip [nzTooltipTitle]="'Explore ' + p.sub_category_name">
+                            <span nz-icon nzType="tag" nzTheme="outline" class="pd-tag__icon"></span>
+                            <span class="pd-tag__text">{{ p.sub_category_name }}</span>
+                        </a>
+                        }
+
+                        @if (p.manufacturer_name) {
+                        <span class="pd-tag pd-tag--brand" nz-tooltip [nzTooltipTitle]="'Brand'">
+                            <span nz-icon nzType="safety-certificate" nzTheme="outline" class="pd-tag__icon"></span>
+                            <span class="pd-tag__text">{{ p.manufacturer_name }}</span>
+                        </span>
+                        }
+
+                        <span class="pd-tag pd-tag--stock" [class.pd-tag--stock-in]="p.in_stock" [class.pd-tag--stock-out]="!p.in_stock">
+                            <span class="pd-tag__pulse-dot" [class.pd-tag__pulse-dot--out]="!p.in_stock"></span>
+                            <span class="pd-tag__text">{{ p.in_stock ? 'In Stock' : 'Out of Stock' }}</span>
+                        </span>
+                    </div>
+
                     <!-- Product name -->
                     <h1 class="pd-info__name">{{ p.name }}</h1>
 
                     <!-- Ratings row -->
                     <div class="pd-info__rating-row">
-                        <nz-rate [ngModel]="averageRating()" nzDisabled nzAllowHalf [nzCount]="5"></nz-rate>
-                        <span class="pd-info__rating-value">{{ averageRating() }}</span>
+                        <div class="pd-info__rating-badge">
+                            <nz-rate [ngModel]="averageRating()" nzDisabled nzAllowHalf [nzCount]="5"></nz-rate>
+                            <span class="pd-info__rating-value">{{ averageRating() }}</span>
+                        </div>
                         <span class="pd-info__review-count">
                             ({{ parsedReviews().length }} reviews)
                         </span>
@@ -137,16 +180,68 @@
 
                     <!-- Price -->
                     <div class="pd-info__price-block">
-                        <span class="pd-info__price">{{ formatPrice(p.base_price) }}</span>
-                        <nz-tag nzColor="green" class="pd-info__gst-tag">Incl. GST</nz-tag>
+                        <div class="pd-info__price-wrap">
+                            <span class="pd-info__price">{{ formatPrice(p.base_price) }}</span>
+                            @if (priceVariants().length > 0) {
+                            <button type="button"
+                                class="pd-info__price-info-btn"
+                                nz-tooltip
+                                [nzTooltipTitle]="detailPriceTooltipTpl"
+                                nzTooltipPlacement="bottom"
+                                nzTooltipOverlayClassName="pg-price-tooltip-overlay"
+                                aria-label="View size-wise prices">
+                                <span nz-icon nzType="info-circle" nzTheme="outline"></span>
+                                <span class="pd-info__price-info-label">Size-wise Rates</span>
+                            </button>
+
+                            <ng-template #detailPriceTooltipTpl>
+                                <div class="pg-price-tooltip">
+                                    <div class="pg-price-tooltip__header">
+                                        <span nz-icon nzType="tags" nzTheme="outline" class="pg-price-tooltip__icon"></span>
+                                        <span class="pg-price-tooltip__title">{{ priceTooltipTitle() }}</span>
+                                    </div>
+                                    <div class="pg-price-tooltip__divider"></div>
+                                    <div class="pg-price-tooltip__list">
+                                        @for (variant of priceVariants(); track $index) {
+                                        <div class="pg-price-tooltip__item">
+                                            <div class="pg-price-tooltip__item-info">
+                                                <span class="pg-price-tooltip__size">
+                                                    <span class="pg-price-tooltip__bullet"></span>
+                                                    {{ variant.size }}
+                                                </span>
+                                                @if (variant.packing) {
+                                                <span class="pg-price-tooltip__pack">
+                                                    <span nz-icon nzType="inbox" nzTheme="outline"></span>
+                                                    {{ variant.packing }}
+                                                </span>
+                                                }
+                                            </div>
+                                            <span class="pg-price-tooltip__price">{{ variant.price }}</span>
+                                        </div>
+                                        }
+                                    </div>
+                                </div>
+                            </ng-template>
+                            }
+                        </div>
+                        <nz-tag nzColor="green" class="pd-info__gst-tag">
+                            <span nz-icon nzType="check-circle" nzTheme="outline"></span>
+                            Incl. GST
+                        </nz-tag>
                     </div>
 
-                    <nz-divider></nz-divider>
+                    <!-- Description Card -->
+                    @if (p.description) {
+                    <div class="pd-info__description-card">
+                        <span class="pd-info__description-title">
+                            <span nz-icon nzType="file-text" nzTheme="outline"></span>
+                            Overview
+                        </span>
+                        <p class="pd-info__description">{{ p.description }}</p>
+                    </div>
+                    }
 
-                    <!-- Description -->
-                    <p class="pd-info__description">{{ p.description }}</p>
-
-                    <nz-divider></nz-divider>
+                    <!-- <nz-divider></nz-divider> -->
 
                     <!-- ── Quantity + Actions ──────────────────────────────── -->
                     <div class="pd-actions">
@@ -189,14 +284,14 @@
                         -->
 
                         <!-- Wishlist -->
-                        @if (isLoggedIn()) {
+                        <!-- @if (isLoggedIn()) {
                         <button nz-button [nzType]="isWishlisted() ? 'primary' : 'default'" nzSize="large"
                             (click)="toggleWishlist()" class="pd-wishlist-btn"
                             [class.pd-wishlist-btn--active]="isWishlisted()" nz-tooltip
                             [nzTooltipTitle]="isWishlisted() ? 'Remove from wishlist' : 'Add to wishlist'">
                             <span nz-icon nzType="heart" [nzTheme]="isWishlisted() ? 'fill' : 'outline'"></span>
                         </button>
-                        }
+                        } -->
 
                     </div>
 

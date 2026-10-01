@@ -224,7 +224,8 @@ import {
   FullscreenOutline,
   StepBackwardOutline,
   StepForwardOutline,
-  XOutline
+  XOutline,
+  TagsOutline
   // Add more as needed
 
 } from '@ant-design/icons-angular/icons';
@@ -463,7 +464,8 @@ const icons: IconDefinition[] = [
   SafetyCertificateOutline,
   StepBackwardOutline,
   StepForwardOutline,
-  XOutline
+  XOutline,
+  TagsOutline
 ];
 
 export function provideNzIcons(): EnvironmentProviders {
