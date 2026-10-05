@@ -22,6 +22,7 @@ import { NzProgressModule } from 'ng-zorro-antd/progress';
 import { NzBreadCrumbModule } from 'ng-zorro-antd/breadcrumb';
 
 import { CatalogService } from '../services/catalog.service';
+import { PriceVariant } from '../models/catalog.model';
 import { CartService } from '../services/cart.service';
 
 import {
@@ -115,14 +116,29 @@ export class ProductDetail implements OnInit {
     // ── Computed: parsed attribute rows ──────────────────────────────
     attributeRows = computed<AttributeRow[]>(() => {
         const p = this.product();
-        if (!p?.attribute) return [];
-        return Object.entries(p.attribute).map(([key, value]) => ({
+        if (!p) return [];
+        const attrs = this.catalog.parseAttributes(p.attribute ?? p.attributes);
+        if (!attrs) return [];
+        return Object.entries(attrs).map(([key, value]) => ({
             key,
             label: this.formatLabel(key),
             value: this.formatValue(value),
             type: this.resolveType(value),
             rawValue: value,
         }));
+    });
+
+    // ── Computed: size-wise price variants from attribute ────────────
+    priceVariants = computed<PriceVariant[]>(() => {
+        const p = this.product();
+        if (!p) return [];
+        return this.catalog.extractPriceVariants(p.attribute ?? p.attributes);
+    });
+
+    priceTooltipTitle = computed<string>(() => {
+        const p = this.product();
+        if (!p) return 'Size-Wise Pricing';
+        return this.catalog.getPriceTooltipTitle(p.attribute ?? p.attributes);
     });
 
     // ── Computed: reviews with parsed ratings ────────────────────────
@@ -216,9 +232,11 @@ export class ProductDetail implements OnInit {
     // ── Variant selection ────────────────────────────────────────────
     private initVariantSelections(): void {
         const p = this.product();
-        if (!p?.attribute) return;
+        if (!p) return;
+        const attrs = this.catalog.parseAttributes(p.attribute ?? p.attributes);
+        if (!attrs) return;
         const initial: Record<string, string | number> = {};
-        Object.entries(p.attribute).forEach(([key, val]) => {
+        Object.entries(attrs).forEach(([key, val]) => {
             if (Array.isArray(val) && val.length) {
                 initial[key] = val[0];
             }

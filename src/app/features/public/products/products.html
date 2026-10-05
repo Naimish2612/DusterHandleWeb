@@ -58,7 +58,7 @@
           </span>
           Price Range
         </h4>
-        <nz-slider [(ngModel)]="priceRange" nzRange [nzMin]="0" [nzMax]="1500000" [nzStep]="100"></nz-slider>
+        <nz-slider [(ngModel)]="priceRange" nzRange [nzMin]="0" [nzMax]="7000" [nzStep]="100"></nz-slider>
         <div class="filter-price-range">
           <span>₹{{ priceRange[0].toLocaleString('en-IN') }}</span>
           <span>₹{{ priceRange[1].toLocaleString('en-IN') }}</span>
@@ -313,16 +313,28 @@
 
           </div>
 
-          <!-- Card Body -->
           <div class="pg-card__body">
+            <!-- Category Badges -->
+            <div class="pg-card__category-row">
+              <span class="pg-card__category" [title]="product.category || product.subCategory || 'General'">
+                {{ product.category || product.subCategory || 'General' }}
+              </span>
+              @if (product.subCategory && product.category && product.subCategory.trim().toLowerCase() !== product.category.trim().toLowerCase()) {
+              <span class="pg-card__subcategory" [title]="product.subCategory">
+                {{ product.subCategory }}
+              </span>
+              }
+            </div>
 
-            <!-- <span class="pg-card__category">
-              {{ product.category || product.subCategory || 'General' }}
-            </span> -->
+            <h3 class="pg-card__name">
+              <a [routerLink]="['/product-detail', product.slug || product.id]"
+                class="pg-card__name-link"
+                [title]="product.name">
+                {{ product.name | uppercase }}
+              </a>
+            </h3>
 
-            <h3 class="pg-card__name">SPEC: {{ product.name | uppercase }}</h3>
-
-            <span class="pg-card__finish">FINISH: {{ (product.brand || 'BRUSHED GOLD') | uppercase }}</span>
+            <!-- <span class="pg-card__finish">FINISH: {{ (product.brand || 'BRUSHED GOLD') | uppercase }}</span> -->
 
             <!-- <div class="pg-card__rating">
               <nz-rate [ngModel]="product.rating" nzDisabled nzAllowHalf></nz-rate>
@@ -333,14 +345,58 @@
 
             <!-- Pricing Row -->
             <div class="pg-card__pricing-row">
-              <span class="pg-card__price">
-                {{ formatPrice(product.price) }}
-              </span>
-              @if (product.actual_price) {
-              <span class="pg-card__original">
-                {{ formatPrice(product.actual_price) }}
-              </span>
-              }
+              <div class="pg-card__price-group">
+                <span class="pg-card__price">
+                  {{ formatPrice(product.price) }}
+                </span>
+                @if (product.actual_price) {
+                <span class="pg-card__original">
+                  {{ formatPrice(product.actual_price) }}
+                </span>
+                }
+
+                @if (getPriceVariants(product).length > 0) {
+                <button type="button"
+                  class="pg-card__price-info-btn"
+                  nz-tooltip
+                  [nzTooltipTitle]="priceTooltipTpl"
+                  nzTooltipPlacement="top"
+                  nzTooltipOverlayClassName="pg-price-tooltip-overlay"
+                  (click)="$event.stopPropagation(); $event.preventDefault()"
+                  aria-label="View size-wise prices">
+                  <span nz-icon nzType="info-circle" nzTheme="outline"></span>
+                </button>
+
+                <ng-template #priceTooltipTpl>
+                  <div class="pg-price-tooltip">
+                    <div class="pg-price-tooltip__header">
+                      <span nz-icon nzType="tags" nzTheme="outline" class="pg-price-tooltip__icon"></span>
+                      <span class="pg-price-tooltip__title">{{ getPriceTooltipTitle(product) }}</span>
+                    </div>
+                    <div class="pg-price-tooltip__divider"></div>
+                    <div class="pg-price-tooltip__list">
+                      @for (variant of getPriceVariants(product); track $index) {
+                      <div class="pg-price-tooltip__item">
+                        <div class="pg-price-tooltip__item-info">
+                          <span class="pg-price-tooltip__size">
+                            <span class="pg-price-tooltip__bullet"></span>
+                            {{ variant.size }}
+                          </span>
+                          @if (variant.packing) {
+                          <span class="pg-price-tooltip__pack">
+                            <span nz-icon nzType="inbox" nzTheme="outline"></span>
+                            {{ variant.packing }}
+                          </span>
+                          }
+                        </div>
+                        <span class="pg-price-tooltip__price">{{ variant.price }}</span>
+                      </div>
+                      }
+                    </div>
+                  </div>
+                </ng-template>
+                }
+              </div>
               
               <!-- Commented out add to cart option to keep it hidden -->
               <!--

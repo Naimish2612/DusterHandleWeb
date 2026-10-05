@@ -245,3 +245,10 @@ Where Function Meets Design</span>
     sectionSub="Fresh drops be the first to shop our latest collection." [products]="newArrivals()"
     [Sliderloading]="loadingNew" [hasError]="!!errorNew" [isDark]="false" (retryClicked)="retryNewArrivals()" />
 </section>
+
+<section id="top-selling"  style="background-color: #f8fafc; padding: 40px 0; border-bottom: 1px solid #e2e8f0;">
+<app-product-slider sectionTag="Best Sellers" sectionTitle="Top <em>Selling</em> Products"
+  sectionSub="Handpicked favourites loved by thousands of happy customers." [products]="topSellingProducts()"
+  [Sliderloading]="loadingTop" [hasError]="!!errorTop" (retryClicked)="retryTopSelling()" />
+  </section>
+  
