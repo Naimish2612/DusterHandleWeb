@@ -285,6 +285,8 @@ export class ImportComponent implements OnInit {
 
         if (this.maxRecordsAllowed > 0 && jsonData.length > this.maxRecordsAllowed) {
           this.message.error(`Upload limit exceeded. Maximum allowed records is ${this.maxRecordsAllowed}, but this file has ${jsonData.length} records.`);
+        this.loader.hideGlobal()
+
           this.resetUploader();
           return;
         }
@@ -373,6 +375,52 @@ export class ImportComponent implements OnInit {
       }
     }
     return null;
+  }
+
+  formatCellValue(val: any): string {
+    if (val === undefined || val === null || val === '') return '—';
+    if (typeof val === 'object') {
+      try {
+        return JSON.stringify(val);
+      } catch {
+        return String(val);
+      }
+    }
+    const strVal = String(val).trim();
+    if (strVal.startsWith('{') || strVal.startsWith('[')) {
+      try {
+        return JSON.stringify(JSON.parse(strVal));
+      } catch {
+        return strVal.replace(/\s+/g, ' ');
+      }
+    }
+    return strVal;
+  }
+
+  isLongOrJsonCell(val: any): boolean {
+    if (val === undefined || val === null) return false;
+    const strVal = typeof val === 'object' ? JSON.stringify(val) : String(val).trim();
+    return strVal.length > 25 || strVal.startsWith('{') || strVal.startsWith('[');
+  }
+
+  formatTooltipContent(val: any): string {
+    if (val === undefined || val === null) return '';
+    if (typeof val === 'object') {
+      try {
+        return JSON.stringify(val, null, 2);
+      } catch {
+        return String(val);
+      }
+    }
+    const strVal = String(val).trim();
+    if (strVal.startsWith('{') || strVal.startsWith('[')) {
+      try {
+        return JSON.stringify(JSON.parse(strVal), null, 2);
+      } catch {
+        return strVal;
+      }
+    }
+    return strVal;
   }
 
   get previewColumns(): { key: string; title: string; isRequired: boolean }[] {
