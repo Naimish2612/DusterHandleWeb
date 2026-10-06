@@ -15,6 +15,8 @@ import {
     ApiDropdownOption,
     ProductBadge,
     PriceVariant,
+    CatalogFilterParams,
+    PaginationMetadata,
 } from '../models/catalog.model';
 
 @Injectable({ providedIn: 'root' })
@@ -32,6 +34,8 @@ export class CatalogService {
         allProducts: [],
         selected: null,
         filterSections: [],
+        totalCount: 0,
+        paginationMetadata: null,
     });
 
     private _filterState = signal<FilterState>({
@@ -53,6 +57,8 @@ export class CatalogService {
     readonly manufacturers = computed(() => this._filterState().manufacturers);
     readonly categories = computed(() => this._filterState().categories);
     readonly subCategories = computed(() => this._filterState().subCategories);
+    readonly totalCount = computed(() => this._state().totalCount || this._state().allProducts.length);
+    readonly paginationMetadata = computed(() => this._state().paginationMetadata ?? null);
 
     // ══════════════════════════════════════════════════════════════════════════
     // CATALOG APIs
@@ -84,16 +90,85 @@ export class CatalogService {
             );
     }
 
-    // ── All Products ─────────────────────────────────────────────────────────
-    getAllProducts(): Observable<ResponseEntity<ApiProduct[]>> {
+    // ── All Products (Paginated) ──────────────────────────────────────────────
+    getAllProducts(params: CatalogFilterParams = { PageNumber: 1, PageSize: 9 }): Observable<ResponseEntity<any>> {
+        const payload: CatalogFilterParams = {
+            PageNumber: params?.PageNumber ?? 1,
+            PageSize: params?.PageSize ?? 9,
+            ...(params?.category_id ? { category_id: params.category_id } : {}),
+            ...(params?.sub_category_id ? { sub_category_id: params.sub_category_id } : {}),
+            ...(params?.manufacturer_id ? { manufacturer_id: params.manufacturer_id } : {}),
+            ...(params?.name ? { name: params.name } : {}),
+            ...(params?.sku ? { sku: params.sku } : {}),
+            ...(params?.in_stock != null ? { in_stock: params.in_stock } : {}),
+        };
+
         return this.apiCall
-            .post<ApiProduct[]>('common', API_ENDPOINTS.CUSTOMER.CATALOG.ALL_PRODUCTS, {})
+            .post<any>('common', API_ENDPOINTS.CUSTOMER.CATALOG.ALL_PRODUCTS, payload)
             .pipe(
-                tap((res) =>
+                tap((res) => {
+                    const rawData = res?.data;
+                    const isArray = Array.isArray(rawData);
+                    const rawList: ApiProduct[] = isArray
+                        ? rawData
+                        : (rawData?.data ?? rawData?.Data ?? rawData?.items ?? rawData?.products ?? []);
+
+                    const rawMeta = isArray
+                        ? null
+                        : (rawData?.metadata ?? rawData?.Metadata ?? (res as any)?.metadata ?? (res as any)?.Metadata ?? null);
+
+                    let totalCount = 0;
+                    if (rawMeta) {
+                        totalCount = Number(
+                            rawMeta.totalCount ??
+                            rawMeta.TotalCount ??
+                            rawMeta.total_count ??
+                            rawMeta.totalRecords ??
+                            rawMeta.TotalRecords ??
+                            rawMeta.total ??
+                            rawMeta.Total ??
+                            0
+                        );
+                    }
+                    if (!totalCount && !isArray) {
+                        totalCount = Number(
+                            rawData?.totalCount ??
+                            rawData?.TotalCount ??
+                            rawData?.total_count ??
+                            rawData?.totalRecords ??
+                            rawData?.TotalRecords ??
+                            rawData?.total ??
+                            rawData?.Total ??
+                            (res as any)?.totalCount ??
+                            (res as any)?.TotalCount ??
+                            0
+                        );
+                    }
+                    if (!totalCount && rawList.length > 0) {
+                        totalCount = rawList.length;
+                    }
+
+                    const pageSize = Number(rawMeta?.pageSize ?? rawMeta?.PageSize ?? payload.PageSize ?? 9) || 9;
+                    const currentPage = Number(rawMeta?.currentPage ?? rawMeta?.CurrentPage ?? payload.PageNumber ?? 1) || 1;
+                    const totalPages = Number(rawMeta?.totalPages ?? rawMeta?.TotalPages ?? Math.max(1, Math.ceil(totalCount / pageSize))) || Math.max(1, Math.ceil(totalCount / pageSize));
+
+                    const parsedMetadata: PaginationMetadata = {
+                        currentPage,
+                        totalPages,
+                        pageSize,
+                        totalCount,
+                        hasPrevious: rawMeta?.hasPrevious ?? rawMeta?.HasPrevious ?? (currentPage > 1),
+                        hasNext: rawMeta?.hasNext ?? rawMeta?.HasNext ?? (currentPage < totalPages),
+                    };
+
+                    const products = rawList.map((p) => this.mapToProduct(p));
+
                     this.patchState({
-                        allProducts: (res.data ?? []).map((p) => this.mapToProduct(p)),
-                    })
-                )
+                        allProducts: products,
+                        totalCount: totalCount,
+                        paginationMetadata: parsedMetadata,
+                    });
+                })
             );
     }
 
@@ -258,6 +333,8 @@ export class CatalogService {
             allProducts: [],
             selected: null,
             filterSections: [],
+            totalCount: 0,
+            paginationMetadata: null,
         });
     }
 
@@ -669,4 +746,4 @@ export class CatalogService {
             price: this.formatPrice(str)
         };
     }
-}
+}

@@ -21,7 +21,7 @@ import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
 
 import { CatalogService } from '../services/catalog.service';
-import { FilterSection, Product, PriceVariant } from '../models/catalog.model';
+import { FilterSection, Product, PriceVariant, CatalogFilterParams } from '../models/catalog.model';
 import { WishlistService } from '../../customer/services/wishlist.service';
 import { CartService } from '../services/cart.service';
 import { SessionService } from '../../../core/infrastructure/session.service';
@@ -70,6 +70,7 @@ export class Products implements OnInit {
 
     // ── Data ──────────────────────────────────────────────────────────────────
     allProducts: Product[] = [];
+    totalProducts = 0;
     filterSections: FilterSection[] = [];
     currentImageIndex: Record<number, number | undefined> = {};
 
@@ -79,7 +80,7 @@ export class Products implements OnInit {
     selectedSubCategories: string[] = [];
     priceRange: [number, number] = [0, 7000];
     currentPage = 1;
-    pageSize = 12;
+    pageSize = 9;
 
     // ── Sort ──────────────────────────────────────────────────────────────────
     selectedSort = 'az';
@@ -112,36 +113,14 @@ export class Products implements OnInit {
     get displayProducts(): Product[] {
         let products = [...this.allProducts];
 
-        // ── Step 1: Filter by Brand ────────────────────────────────────────────
-        if (this.selectedBrands.length > 0) {
-            products = products.filter(p => {
-                const brandId = this.getBrandId(p.brand ?? '');
-                return brandId > 0 && this.selectedBrands.includes(String(brandId));
-            });
+        // ── Price Range ───────────────────────────────────────────────────────
+        if (this.priceRange[0] > 0 || this.priceRange[1] < 7000) {
+            products = products.filter(p =>
+                p.price >= this.priceRange[0] && p.price <= this.priceRange[1]
+            );
         }
 
-        // ── Step 2: Filter by Category ────────────────────────────────────────
-        if (this.selectedCategories.length > 0) {
-            products = products.filter(p => {
-                const catId = this.getCategoryId(p.category ?? '');
-                return catId > 0 && this.selectedCategories.includes(String(catId));
-            });
-        }
-
-        // ── Step 3: Filter by Sub-Category ────────────────────────────────────
-        if (this.selectedSubCategories.length > 0) {
-            products = products.filter(p => {
-                const subId = this.getSubCategoryId(p.subCategory ?? '');
-                return subId > 0 && this.selectedSubCategories.includes(String(subId));
-            });
-        }
-
-        // ── Step 4: Filter by Price Range ─────────────────────────────────────
-        products = products.filter(p =>
-            p.price >= this.priceRange[0] && p.price <= this.priceRange[1]
-        );
-
-        // ── Step 5: Apply Sort ────────────────────────────────────────────────
+        // ── Apply Sort ────────────────────────────────────────────────────────
         switch (this.selectedSort) {
             case 'az': products.sort((a, b) => (a.name ?? '').trim().toLowerCase().localeCompare((b.name ?? '').trim().toLowerCase(), 'en', { sensitivity: 'base', numeric: true })); break;
             case 'za': products.sort((a, b) => (b.name ?? '').trim().toLowerCase().localeCompare((a.name ?? '').trim().toLowerCase(), 'en', { sensitivity: 'base', numeric: true })); break;
@@ -154,11 +133,9 @@ export class Products implements OnInit {
         return products;
     }
 
-    // ── Paginated Products ────────────────────────────────────────────────────
+    // ── Paginated Products (Current page items returned from server) ───────────
     get paginatedProducts(): Product[] {
-        const start = (this.currentPage - 1) * this.pageSize;
-        const end = start + this.pageSize;
-        return this.displayProducts.slice(start, end);
+        return this.displayProducts;
     }
 
     // ── Reverse Lookup Helpers (name → id) ───────────────────────────────────
@@ -180,7 +157,7 @@ export class Products implements OnInit {
 
     ngOnInit(): void {
 
-        this.loadProducts();
+        this.loadProducts(1);
         this.loadFilters();
 
         const token = localStorage.getItem('ATOKEN');
@@ -201,24 +178,39 @@ export class Products implements OnInit {
                     if (cat) {
                         this.selectedCategories = [String(cat.id)];
                         this.loadSubCategoriesForAll(this.selectedCategories);
-                        this.currentPage = 1;
-                        this.cdr.markForCheck();
+                        this.loadProducts(1);
                     }
                 }
             });
     }
 
     // ── Load Products ─────────────────────────────────────────────────────────
-    loadProducts(): void {
+    loadProducts(page: number = this.currentPage): void {
         this.loadingProducts = true;
         this.errorProducts = null;
-        this.allProducts = [];
+        this.currentPage = page;
 
-        this.catalog.getAllProducts()
+        const params: CatalogFilterParams = {
+            PageNumber: page,
+            PageSize: this.pageSize,
+        };
+
+        if (this.selectedCategories.length > 0) {
+            params.category_id = Number(this.selectedCategories[0]);
+        }
+        if (this.selectedSubCategories.length > 0) {
+            params.sub_category_id = Number(this.selectedSubCategories[0]);
+        }
+        if (this.selectedBrands.length > 0) {
+            params.manufacturer_id = Number(this.selectedBrands[0]);
+        }
+
+        this.catalog.getAllProducts(params)
             .pipe(takeUntilDestroyed(this.destroyRef))
             .subscribe({
                 next: () => {
                     this.allProducts = this.catalog.allProducts();
+                    this.totalProducts = this.catalog.totalCount();
                     this.loadingProducts = false;
                     this.cdr.markForCheck();
                 },
@@ -344,7 +336,7 @@ export class Products implements OnInit {
         }
 
         this.currentPage = 1;
-        this.cdr.markForCheck();
+        this.loadProducts(1);
     }
 
     private loadSubCategoriesForAll(categoryIds: string[]): void {
@@ -407,22 +399,27 @@ export class Products implements OnInit {
         return arr.includes(value) ? arr.filter(x => x !== value) : [...arr, value];
     }
 
+    onPriceRangeChange(): void {
+        this.currentPage = 1;
+        this.cdr.markForCheck();
+    }
+
     clearFilters(): void {
         this.selectedBrands = [];
         this.selectedCategories = [];
         this.selectedSubCategories = [];
-        this.priceRange = [0, 1500000];
+        this.priceRange = [0, 7000];
         this.currentPage = 1;
         this.filterSections = this.filterSections.filter(
             s => s.key !== 'subCategory'
         );
-        this.cdr.markForCheck();
+        this.loadProducts(1);
     }
 
     removeBrand(b: string): void {
         this.selectedBrands = this.selectedBrands.filter(x => x !== b);
         this.currentPage = 1;
-        this.cdr.markForCheck();
+        this.loadProducts(1);
     }
 
     removeCategory(c: string): void {
@@ -434,13 +431,13 @@ export class Products implements OnInit {
             this.cleanupOrphanedSubCategories();
         }
         this.currentPage = 1;
-        this.cdr.markForCheck();
+        this.loadProducts(1);
     }
 
     removeSubCategory(s: string): void {
         this.selectedSubCategories = this.selectedSubCategories.filter(x => x !== s);
         this.currentPage = 1;
-        this.cdr.markForCheck();
+        this.loadProducts(1);
     }
 
     getFilterLabel(key: string, value: string): string {
@@ -561,9 +558,8 @@ export class Products implements OnInit {
     // ══════════════════════════════════════════════════════════════════════════
 
     onPageChange(page: number): void {
-        this.currentPage = page;
-        this.cdr.markForCheck();
-        window.scrollTo({ top: 0, behavior: 'smooth' });   // scroll to top on page change
+        this.loadProducts(page);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
     toggleWishlist(product: Product, event: Event): void {

@@ -44,9 +44,11 @@
                     <a routerLink="/products" [state]="{ category: p.category_name }">{{ p.category_name }}</a>
                 </nz-breadcrumb-item>
                 }
-                @if (p.sub_category_name && p.sub_category_name.trim().toLowerCase() !== (p.category_name || '').trim().toLowerCase()) {
+                @if (p.sub_category_name && p.sub_category_name.trim().toLowerCase() !== (p.category_name ||
+                '').trim().toLowerCase()) {
                 <nz-breadcrumb-item>
-                    <a routerLink="/products" [state]="{ subCategory: p.sub_category_name }">{{ p.sub_category_name }}</a>
+                    <a routerLink="/products" [state]="{ subCategory: p.sub_category_name }">{{ p.sub_category_name
+                        }}</a>
                 </nz-breadcrumb-item>
                 }
                 <nz-breadcrumb-item>{{ p.name }}</nz-breadcrumb-item>
@@ -135,15 +137,18 @@
                     <div class="pd-tags-bar">
                         @if (p.category_name) {
                         <a routerLink="/products" [state]="{ category: p.category_name }"
-                            class="pd-tag pd-tag--category" nz-tooltip [nzTooltipTitle]="'View all ' + p.category_name + ' products'">
+                            class="pd-tag pd-tag--category" nz-tooltip
+                            [nzTooltipTitle]="'View all ' + p.category_name + ' products'">
                             <span nz-icon nzType="appstore" nzTheme="outline" class="pd-tag__icon"></span>
                             <span class="pd-tag__text">{{ p.category_name }}</span>
                         </a>
                         }
 
-                        @if (p.sub_category_name && p.sub_category_name.trim().toLowerCase() !== (p.category_name || '').trim().toLowerCase()) {
+                        @if (p.sub_category_name && p.sub_category_name.trim().toLowerCase() !== (p.category_name ||
+                        '').trim().toLowerCase()) {
                         <a routerLink="/products" [state]="{ subCategory: p.sub_category_name }"
-                            class="pd-tag pd-tag--subcategory" nz-tooltip [nzTooltipTitle]="'Explore ' + p.sub_category_name">
+                            class="pd-tag pd-tag--subcategory" nz-tooltip
+                            [nzTooltipTitle]="'Explore ' + p.sub_category_name">
                             <span nz-icon nzType="tag" nzTheme="outline" class="pd-tag__icon"></span>
                             <span class="pd-tag__text">{{ p.sub_category_name }}</span>
                         </a>
@@ -156,7 +161,8 @@
                         </span>
                         }
 
-                        <span class="pd-tag pd-tag--stock" [class.pd-tag--stock-in]="p.in_stock" [class.pd-tag--stock-out]="!p.in_stock">
+                        <span class="pd-tag pd-tag--stock" [class.pd-tag--stock-in]="p.in_stock"
+                            [class.pd-tag--stock-out]="!p.in_stock">
                             <span class="pd-tag__pulse-dot" [class.pd-tag__pulse-dot--out]="!p.in_stock"></span>
                             <span class="pd-tag__text">{{ p.in_stock ? 'In Stock' : 'Out of Stock' }}</span>
                         </span>
@@ -183,13 +189,9 @@
                         <div class="pd-info__price-wrap">
                             <span class="pd-info__price">{{ formatPrice(p.base_price) }}</span>
                             @if (priceVariants().length > 0) {
-                            <button type="button"
-                                class="pd-info__price-info-btn"
-                                nz-tooltip
-                                [nzTooltipTitle]="detailPriceTooltipTpl"
-                                nzTooltipPlacement="bottom"
-                                nzTooltipOverlayClassName="pg-price-tooltip-overlay"
-                                aria-label="View size-wise prices">
+                            <button type="button" class="pd-info__price-info-btn" nz-tooltip
+                                [nzTooltipTitle]="detailPriceTooltipTpl" nzTooltipPlacement="bottom"
+                                nzTooltipOverlayClassName="pg-price-tooltip-overlay" aria-label="View size-wise prices">
                                 <span nz-icon nzType="info-circle" nzTheme="outline"></span>
                                 <span class="pd-info__price-info-label">Size-wise Rates</span>
                             </button>
@@ -197,7 +199,8 @@
                             <ng-template #detailPriceTooltipTpl>
                                 <div class="pg-price-tooltip">
                                     <div class="pg-price-tooltip__header">
-                                        <span nz-icon nzType="tags" nzTheme="outline" class="pg-price-tooltip__icon"></span>
+                                        <span nz-icon nzType="tags" nzTheme="outline"
+                                            class="pg-price-tooltip__icon"></span>
                                         <span class="pg-price-tooltip__title">{{ priceTooltipTitle() }}</span>
                                     </div>
                                     <div class="pg-price-tooltip__divider"></div>
@@ -229,17 +232,6 @@
                             Incl. GST
                         </nz-tag>
                     </div>
-
-                    <!-- Description Card -->
-                    @if (p.description) {
-                    <div class="pd-info__description-card">
-                        <span class="pd-info__description-title">
-                            <span nz-icon nzType="file-text" nzTheme="outline"></span>
-                            Overview
-                        </span>
-                        <p class="pd-info__description">{{ p.description }}</p>
-                    </div>
-                    }
 
                     <!-- <nz-divider></nz-divider> -->
 
@@ -321,6 +313,17 @@
     <section class="pd-tabs-section">
         <div class="pd-tabs-section__container">
             <nz-tabs nzSize="large" class="pd-tabs">
+
+                <!-- ── Tab 3: Description ──────────────────────────────── -->
+                <nz-tab [nzTitle]="descTabTitle">
+                    <ng-template #descTabTitle>
+                        <span nz-icon nzType="file-text" nzTheme="outline"></span>
+                        Description
+                    </ng-template>
+                    <div class="pd-description-tab">
+                        <p>{{ p.description }}</p>
+                    </div>
+                </nz-tab>
 
                 <!-- ── Tab 1: Specifications ──────────────────────────── -->
                 <nz-tab [nzTitle]="specTabTitle">
@@ -500,16 +503,6 @@
                     </div>
                 </nz-tab>
 
-                <!-- ── Tab 3: Description ──────────────────────────────── -->
-                <nz-tab [nzTitle]="descTabTitle">
-                    <ng-template #descTabTitle>
-                        <span nz-icon nzType="file-text" nzTheme="outline"></span>
-                        Description
-                    </ng-template>
-                    <div class="pd-description-tab">
-                        <p>{{ p.description }}</p>
-                    </div>
-                </nz-tab>
 
             </nz-tabs>
         </div>

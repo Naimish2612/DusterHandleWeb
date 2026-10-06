@@ -292,11 +292,42 @@
       gap: $spacing-2;
       align-items: flex-start;
     }
+
+    ::ng-deep {
+      .ant-checkbox-wrapper {
+        color: #475569 !important;
+        font-size: $font-size-sm;
+        display: inline-flex;
+        align-items: center;
+        user-select: none;
+
+        &:hover .ant-checkbox-inner {
+          border-color: $primary-500 !important;
+        }
+
+        .ant-checkbox-inner {
+          background-color: #ffffff !important;
+          border: 1.5px solid #cbd5e1 !important;
+          border-radius: 4px !important;
+        }
+
+        .ant-checkbox-checked .ant-checkbox-inner {
+          background-color: $primary-500 !important;
+          border-color: $primary-500 !important;
+        }
+      }
+    }
   }
 
   &__remember-text {
     font-size: $font-size-sm;
-    color: $color-text-secondary;
+    color: #475569;
+    margin-left: 2px;
+    transition: color $transition-fast;
+
+    .ant-checkbox-wrapper:hover & {
+      color: #0f172a;
+    }
   }
 
   &__forgot-link {

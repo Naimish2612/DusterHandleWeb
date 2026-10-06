@@ -7,12 +7,18 @@
   <div class="products-page__banner">
     <!-- Collage Grid Background -->
     <div class="products-page__collage">
-      <div class="products-page__collage-item" style="background-image: url('/assets/images/product/cabinet2.png')"></div>
-      <div class="products-page__collage-item" style="background-image: url('/assets/images/product/glass-knob.png')"></div>
-      <div class="products-page__collage-item" style="background-image: url('/assets/images/product/kitchen-profile.png')"></div>
-      <div class="products-page__collage-item" style="background-image: url('/assets/images/product/mortise.png')"></div>
-      <div class="products-page__collage-item" style="background-image: url('/assets/images/product/sofa-leg.png')"></div>
-      <div class="products-page__collage-item" style="background-image: url('/assets/images/product/mainn-door.png')"></div>
+      <div class="products-page__collage-item" style="background-image: url('/assets/images/product/cabinet2.png')">
+      </div>
+      <div class="products-page__collage-item" style="background-image: url('/assets/images/product/glass-knob.png')">
+      </div>
+      <div class="products-page__collage-item"
+        style="background-image: url('/assets/images/product/kitchen-profile.png')"></div>
+      <div class="products-page__collage-item" style="background-image: url('/assets/images/product/mortise.png')">
+      </div>
+      <div class="products-page__collage-item" style="background-image: url('/assets/images/product/sofa-leg.png')">
+      </div>
+      <div class="products-page__collage-item" style="background-image: url('/assets/images/product/mainn-door.png')">
+      </div>
     </div>
 
     <!-- Gradient overlay for text legibility -->
@@ -25,7 +31,7 @@
         </span>
         <h1 class="products-page__title">Architectural Precision</h1>
         <p class="products-page__desc">
-          Browse our collection of {{ displayProducts.length }} premium architectural hardware pieces
+          Browse our collection of {{ totalProducts }} premium architectural hardware pieces
         </p>
       </div>
     </div>
@@ -58,7 +64,8 @@
           </span>
           Price Range
         </h4>
-        <nz-slider [(ngModel)]="priceRange" nzRange [nzMin]="0" [nzMax]="7000" [nzStep]="100"></nz-slider>
+        <nz-slider [(ngModel)]="priceRange" (ngModelChange)="onPriceRangeChange()" nzRange [nzMin]="0" [nzMax]="7000"
+          [nzStep]="50"></nz-slider>
         <div class="filter-price-range">
           <span>₹{{ priceRange[0].toLocaleString('en-IN') }}</span>
           <span>₹{{ priceRange[1].toLocaleString('en-IN') }}</span>
@@ -159,7 +166,7 @@
         </button>
 
         <span class="products-toolbar__count">
-          {{ displayProducts.length }} of {{ allProducts.length }} products
+          Showing {{ allProducts.length }} of {{ totalProducts }} products
         </span>
 
         <div class="products-toolbar__sort">
@@ -203,10 +210,16 @@
       <!-- ── Loading State ─────────────────────────────────────────── -->
       @if (loadingProducts) {
       <div class="products-grid">
-        @for (s of [1,2,3,4,5,6,7,8,9,10,11,12]; track s) {
+        @for (s of [1,2,3,4,5,6,7,8,9]; track s) {
         <div class="pg-card pg-card--skeleton">
-          <nz-skeleton [nzActive]="true" [nzAvatar]="{ size: 'large', shape: 'square' }" [nzTitle]="false"
-            [nzParagraph]="{ rows: 3 }"></nz-skeleton>
+          <div class="pg-card__image-wrap pg-card__image-wrap--skeleton">
+            <nz-skeleton-element nzType="image" [nzActive]="true" class="pg-card__skeleton-image"></nz-skeleton-element>
+          </div>
+          <div class="pg-card__body pg-card__body--skeleton">
+            <div class="pg-card__skeleton-tag"></div>
+            <div class="pg-card__skeleton-title"></div>
+            <div class="pg-card__skeleton-price"></div>
+          </div>
         </div>
         }
       </div>
@@ -319,7 +332,8 @@
               <span class="pg-card__category" [title]="product.category || product.subCategory || 'General'">
                 {{ product.category || product.subCategory || 'General' }}
               </span>
-              @if (product.subCategory && product.category && product.subCategory.trim().toLowerCase() !== product.category.trim().toLowerCase()) {
+              @if (product.subCategory && product.category && product.subCategory.trim().toLowerCase() !==
+              product.category.trim().toLowerCase()) {
               <span class="pg-card__subcategory" [title]="product.subCategory">
                 {{ product.subCategory }}
               </span>
@@ -327,8 +341,7 @@
             </div>
 
             <h3 class="pg-card__name">
-              <a [routerLink]="['/product-detail', product.slug || product.id]"
-                class="pg-card__name-link"
+              <a [routerLink]="['/product-detail', product.slug || product.id]" class="pg-card__name-link"
                 [title]="product.name">
                 {{ product.name | uppercase }}
               </a>
@@ -356,14 +369,9 @@
                 }
 
                 @if (getPriceVariants(product).length > 0) {
-                <button type="button"
-                  class="pg-card__price-info-btn"
-                  nz-tooltip
-                  [nzTooltipTitle]="priceTooltipTpl"
-                  nzTooltipPlacement="top"
-                  nzTooltipOverlayClassName="pg-price-tooltip-overlay"
-                  (click)="$event.stopPropagation(); $event.preventDefault()"
-                  aria-label="View size-wise prices">
+                <button type="button" class="pg-card__price-info-btn" nz-tooltip [nzTooltipTitle]="priceTooltipTpl"
+                  nzTooltipPlacement="top" nzTooltipOverlayClassName="pg-price-tooltip-overlay"
+                  (click)="$event.stopPropagation(); $event.preventDefault()" aria-label="View size-wise prices">
                   <span nz-icon nzType="info-circle" nzTheme="outline"></span>
                 </button>
 
@@ -397,7 +405,7 @@
                 </ng-template>
                 }
               </div>
-              
+
               <!-- Commented out add to cart option to keep it hidden -->
               <!--
               <button class="pg-card__add-btn" [disabled]="!product.in_stock"
@@ -423,8 +431,8 @@
 
       <!-- Pagination -->
       <div class="products-pagination">
-        <nz-pagination [(nzPageIndex)]="currentPage" [nzTotal]="displayProducts.length" [nzPageSize]="pageSize"
-          nzShowQuickJumper (nzPageIndexChange)="onPageChange($event)"></nz-pagination>
+        <nz-pagination [(nzPageIndex)]="currentPage" [nzTotal]="totalProducts" [nzPageSize]="pageSize" nzShowQuickJumper
+          (nzPageIndexChange)="onPageChange($event)"></nz-pagination>
       </div>
       }
 
@@ -450,7 +458,8 @@
           </span>
           Price Range
         </h4>
-        <nz-slider [(ngModel)]="priceRange" nzRange [nzMin]="0" [nzMax]="1500000" [nzStep]="100"></nz-slider>
+        <nz-slider [(ngModel)]="priceRange" (ngModelChange)="onPriceRangeChange()" nzRange [nzMin]="0" [nzMax]="7000"
+          [nzStep]="100"></nz-slider>
         <div class="filter-price-range">
           <span>₹{{ priceRange[0].toLocaleString('en-IN') }}</span>
           <span>₹{{ priceRange[1].toLocaleString('en-IN') }}</span>

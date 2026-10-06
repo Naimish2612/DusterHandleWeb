@@ -446,12 +446,95 @@
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
   }
 
+  // ── Skeleton Card Variant ──
+  &--skeleton {
+    cursor: default;
+    pointer-events: none;
+    border: 1px solid #e2e8f0;
+    background: #ffffff;
+    box-shadow: none;
+
+    &:hover {
+      border-color: #e2e8f0;
+      box-shadow: none;
+    }
+  }
+
   // ── Image Wrap ──
   &__image-wrap {
     position: relative;
     aspect-ratio: 1 / 1;
     overflow: hidden;
     background: #f1f5f9;
+
+    &--skeleton {
+      background: #f1f5f9;
+      position: relative;
+      aspect-ratio: 1 / 1;
+      width: 100%;
+      overflow: hidden;
+
+      ::ng-deep nz-skeleton-element,
+      ::ng-deep .ant-skeleton-element {
+        width: 100%;
+        height: 100%;
+        display: block;
+      }
+
+      ::ng-deep .ant-skeleton-image {
+        width: 100% !important;
+        height: 100% !important;
+        border-radius: 0 !important;
+        background: linear-gradient(90deg, #f1f5f9 25%, #e2e8f0 37%, #f1f5f9 63%);
+        background-size: 400% 100%;
+        animation: pgSkeletonWave 1.4s ease infinite;
+      }
+
+      ::ng-deep .ant-skeleton-image-svg {
+        display: none;
+      }
+    }
+  }
+
+  &__skeleton-image {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+
+  &__body--skeleton {
+    padding: $spacing-3-5 $spacing-4 $spacing-4;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  &__skeleton-tag {
+    width: 70px;
+    height: 16px;
+    border-radius: 3px;
+    background: linear-gradient(90deg, #f1f5f9 25%, #e2e8f0 37%, #f1f5f9 63%);
+    background-size: 400% 100%;
+    animation: pgSkeletonWave 1.4s ease infinite;
+  }
+
+  &__skeleton-title {
+    width: 85%;
+    height: 18px;
+    border-radius: 4px;
+    background: linear-gradient(90deg, #f1f5f9 25%, #e2e8f0 37%, #f1f5f9 63%);
+    background-size: 400% 100%;
+    animation: pgSkeletonWave 1.4s ease infinite;
+  }
+
+  &__skeleton-price {
+    width: 45%;
+    height: 20px;
+    border-radius: 4px;
+    margin-top: 4px;
+    background: linear-gradient(90deg, #f1f5f9 25%, #e2e8f0 37%, #f1f5f9 63%);
+    background-size: 400% 100%;
+    animation: pgSkeletonWave 1.4s ease infinite;
   }
 
   &__image {
@@ -1002,5 +1085,23 @@
     letter-spacing: 0.02em;
     font-variant-numeric: tabular-nums;
     white-space: nowrap;
+  }
+}
+
+.products-pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 36px;
+  padding-top: 24px;
+  border-top: 1px solid #f1f5f9;
+}
+
+@keyframes pgSkeletonWave {
+  0% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0 50%;
   }
 }

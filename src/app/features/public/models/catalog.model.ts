@@ -130,6 +130,32 @@ export interface FilterState {
 }
 
 
+export interface PaginationMetadata {
+    currentPage: number;
+    totalPages: number;
+    pageSize: number;
+    totalCount: number;
+    hasPrevious?: boolean;
+    hasNext?: boolean;
+}
+
+export interface PaginatedResult<T> {
+    data: T[];
+    metadata: PaginationMetadata;
+}
+
+export interface CatalogFilterParams {
+    PageNumber?: number;
+    PageSize?: number;
+    name?: string;
+    sku?: string;
+    category_id?: number;
+    sub_category_id?: number;
+    manufacturer_id?: number;
+    is_active?: boolean;
+    in_stock?: boolean;
+}
+
 // ── Catalog State ──────────────────────────────────────────────────────────
 export interface CatalogState {
     topSelling: Product[];
@@ -137,4 +163,6 @@ export interface CatalogState {
     allProducts: Product[];
     selected: Product | null;
     filterSections: FilterSection[];
+    totalCount?: number;
+    paginationMetadata?: PaginationMetadata | null;
 } 

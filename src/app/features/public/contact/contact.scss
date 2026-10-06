@@ -476,6 +476,13 @@
   &__submit-item {
     margin-top: $spacing-2;
     margin-bottom: 0;
+
+    ::ng-deep .ant-form-item-control-input-content {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: $spacing-4;
+    }
   }
 
   &__submit-btn {
@@ -501,13 +508,12 @@
   }
 
   &__note {
-    display: flex;
+    display: inline-flex;
     align-items: center;
     gap: $spacing-1-5;
     font-size: $font-size-xs;
-    color: #ffffff;
-    margin: $spacing-1-5 0 0;
-    margin-left: $spacing-12 !important;
+    color: #64748b;
+    margin: 0;
 
     span[nz-icon] {
       color: $success-500;
