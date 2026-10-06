@@ -156,8 +156,6 @@ export class Products implements OnInit {
     // ══════════════════════════════════════════════════════════════════════════
 
     ngOnInit(): void {
-
-        this.loadProducts(1);
         this.loadFilters();
 
         const token = localStorage.getItem('ATOKEN');
@@ -169,19 +167,51 @@ export class Products implements OnInit {
         // Listen for query params change dynamically
         this.route.queryParams
             .pipe(takeUntilDestroyed(this.destroyRef))
-            .subscribe(params => {
-                const queryCategory = params['category'] || history.state?.category;
-                if (queryCategory && this.catalog.categories().length > 0) {
-                    const cat = this.catalog.categories().find(
-                        c => c.value.toLowerCase() === queryCategory.toLowerCase()
-                    );
-                    if (cat) {
-                        this.selectedCategories = [String(cat.id)];
-                        this.loadSubCategoriesForAll(this.selectedCategories);
-                        this.loadProducts(1);
-                    }
+            .subscribe(() => {
+                if (this.catalog.categories().length > 0) {
+                    this.applyInitialFilters();
                 }
             });
+    }
+
+    // ── Apply filters from Route State or Query Params ───────────────────────
+    private applyInitialFilters(): void {
+        const state = history.state || {};
+        const queryParams = this.route.snapshot.queryParams || {};
+
+        const queryCategory = queryParams['category'] || state['category'];
+        const querySubCategory = queryParams['subCategory'] || queryParams['sub-category'] || queryParams['sub_category'] || state['subCategory'] || state['sub-category'] || state['sub_category'];
+
+        if (queryCategory) {
+            const cat = this.catalog.categories().find(
+                c => c.value?.trim().toLowerCase() === String(queryCategory).trim().toLowerCase() ||
+                     String(c.id) === String(queryCategory).trim()
+            );
+
+            if (cat) {
+                this.selectedCategories = [String(cat.id)];
+                this.loadSubCategoriesForAll(this.selectedCategories, () => {
+                    if (querySubCategory) {
+                        const targetSub = String(querySubCategory).trim().toLowerCase();
+                        const subCat = this.catalog.subCategories().find(s => {
+                            const val = (s.value ?? '').trim().toLowerCase();
+                            return val === targetSub ||
+                                   String(s.id) === targetSub ||
+                                   val.includes(targetSub) ||
+                                   targetSub.includes(val);
+                        });
+
+                        if (subCat) {
+                            this.selectedSubCategories = [String(subCat.id)];
+                        }
+                    }
+                    this.loadProducts(1);
+                });
+                return;
+            }
+        }
+
+        this.loadProducts(1);
     }
 
     // ── Load Products ─────────────────────────────────────────────────────────
@@ -234,24 +264,14 @@ export class Products implements OnInit {
                 next: () => {
                     this.filterSections = this.catalog.filterSections();
                     this.loadingFilters = false;
-
-                    const queryCategory = this.route.snapshot.queryParams['category'] || history.state?.category;
-                    if (queryCategory) {
-                        const cat = this.catalog.categories().find(
-                            c => c.value.toLowerCase() === queryCategory.toLowerCase()
-                        );
-                        if (cat) {
-                            this.selectedCategories = [String(cat.id)];
-                            this.loadSubCategoriesForAll(this.selectedCategories);
-                        }
-                    }
-
+                    this.applyInitialFilters();
                     this.cdr.markForCheck();
                 },
                 error: (err) => {
                     this.loadingFilters = false;
                     this.errorFilters = err?.message ?? 'Failed to load filters';
                     console.error('Filter load error:', err);
+                    this.loadProducts(1);
                     this.cdr.markForCheck();
                 },
             });
@@ -339,9 +359,10 @@ export class Products implements OnInit {
         this.loadProducts(1);
     }
 
-    private loadSubCategoriesForAll(categoryIds: string[]): void {
+    private loadSubCategoriesForAll(categoryIds: string[], callback?: () => void): void {
         if (categoryIds.length === 0) {
             this.clearSubCategories();
+            callback?.();
             return;
         }
 
@@ -368,10 +389,12 @@ export class Products implements OnInit {
                     this.filterSections = this.catalog.filterSections();
                     // ✅ After refresh, also clean orphaned sub-cats
                     this.cleanupOrphanedSubCategories();
+                    callback?.();
                     this.cdr.markForCheck();
                 },
                 error: () => {
                     this.filterSections = this.filterSections.map(s => s.key === 'subCategory' ? { ...s, loading: false, options: [] } : s);
+                    callback?.();
                     this.cdr.markForCheck();
                 },
             });

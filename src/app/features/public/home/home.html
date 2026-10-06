@@ -12,7 +12,10 @@
       <!-- Category 01 -->
       <div class="Duster-media__item Duster-media__item--tall"
         style="background-image: url('/assets/images/product/cabinet2.png')">
-        <a routerLink="/products" [state]="{ category: 'Cabinet Profiles' }" class="Duster-media__overlay">
+        <a (click)="navigateToProducts('Handle', 'Cabinet Handle')"
+          routerLink="/products"
+          [state]="{ category: 'Handle', 'sub-category': 'Cabinet Handle', subCategory: 'Cabinet Handle' }"
+          class="Duster-media__overlay">
           <span class="Duster-media__number">01 / Profile</span>
           <h3 class="Duster-media__cat-title">Cabinet Profiles</h3>
           <span class="Duster-media__cat-sub">Designed to Complete Your Furniture <br>
@@ -24,7 +27,10 @@ Where Function Meets Design</span>
       <!-- Category 02 -->
       <div class="Duster-media__item Duster-media__item--tall"
         style="background-image: url('/assets/images/product/kitchen-profile.png')">
-        <a routerLink="/products" [state]="{ category: 'Gola Handles' }" class="Duster-media__overlay">
+        <a (click)="navigateToProducts('Handle', 'Kitchen Profile')"
+          routerLink="/products"
+          [state]="{ category: 'Handle', 'sub-category': 'Kitchen Profile', subCategory: 'Kitchen Profile' }"
+          class="Duster-media__overlay">
           <span class="Duster-media__number">02 / Integrated</span>
           <h3 class="Duster-media__cat-title">Gola Handles</h3>
           <span class="Duster-media__cat-sub">Stylish rose gold coated drawer handles designed to enhance the look of cabinets, drawers, wardrobes, and modern furniture.</span>
@@ -34,7 +40,10 @@ Where Function Meets Design</span>
       <!-- Category 03 -->
       <div class="Duster-media__item Duster-media__item--full"
         style="background-image: url('/assets/images/product/concealed-new-theme.png')">
-        <a routerLink="/products" [state]="{ category: 'Sliding Tracks' }" class="Duster-media__overlay">
+        <a (click)="navigateToProducts('Handle', 'Sliding Handle')"
+          routerLink="/products"
+          [state]="{ category: 'Handle', 'sub-category': 'Sliding Handle', subCategory: 'Sliding Handle' }"
+          class="Duster-media__overlay">
           <span class="Duster-media__number">03 / Motion</span>
           <h3 class="Duster-media__cat-title">Sliding Tracks</h3>
           <span class="Duster-media__cat-sub">Modern wardrobe slider handles designed for smooth operation, comfortable grip, and a stylish finish for sliding wardrobe doors.</span>

@@ -1,6 +1,6 @@
 import { Component, OnInit, inject, DestroyRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { NzIconModule } from 'ng-zorro-antd/icon'; 
 
@@ -35,6 +35,7 @@ export class Home implements OnInit {
   private catalog    = inject(CatalogService);
   private message    = inject(NzMessageService);
   private destroyRef = inject(DestroyRef);
+  private router     = inject(Router);
 
   // ── Loading / Error state ─────────────────────────────────────────────────
   loadingTop = true;
@@ -100,6 +101,17 @@ export class Home implements OnInit {
     track.scrollBy({
       left: direction === 'left' ? -scrollAmount : scrollAmount,
       behavior: 'smooth'
+    });
+  }
+
+  // ── Navigate to Products with Category & Sub-Category State ────────────────
+  navigateToProducts(category: string, subCategory?: string): void {
+    this.router.navigate(['/products'], {
+      state: {
+        category,
+        'sub-category': subCategory,
+        subCategory,
+      }
     });
   }
 }

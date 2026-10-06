@@ -219,7 +219,30 @@
 
   &__options {
     @include flex-column;
-    gap: $spacing-2;
+    gap: 6px;
+    max-height: 144px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding-right: 6px;
+    scroll-behavior: smooth;
+
+    /* Custom elegant scrollbar */
+    &::-webkit-scrollbar {
+      width: 5px;
+    }
+    &::-webkit-scrollbar-track {
+      background: #f1f5f9;
+      border-radius: 4px;
+    }
+    &::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 4px;
+      &:hover {
+        background: #D4AF37;
+      }
+    }
+    scrollbar-width: thin;
+    scrollbar-color: #cbd5e1 #f1f5f9;
   }
 }
 
@@ -229,7 +252,8 @@
   align-items: center;
   gap: $spacing-3;
   cursor: pointer;
-  padding: $spacing-1 0;
+  padding: 3px 0;
+  min-height: 24px;
 
   &__check {
     appearance: none;

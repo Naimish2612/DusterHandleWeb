@@ -368,8 +368,7 @@
                                             @else if (row.type === 'array') {
                                             <div class="pd-spec-chips">
                                                 @for (val of $any(row.rawValue); track val) {
-                                                <nz-tag
-                                                    [nzColor]="isVariantSelected(row.key, val) ? 'blue' : 'default'">
+                                                <nz-tag>
                                                     {{ val }}
                                                 </nz-tag>
                                                 }
