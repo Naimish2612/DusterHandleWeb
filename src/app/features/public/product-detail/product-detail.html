@@ -187,7 +187,13 @@
                     <!-- Price -->
                     <div class="pd-info__price-block">
                         <div class="pd-info__price-wrap">
-                            <span class="pd-info__price">{{ formatPrice(p.base_price) }}</span>
+                            <span class="pd-info__price">{{ formatPrice(displaySellingPrice()) }}</span>
+                            @if (displayActualPrice() && displayActualPrice()! > displaySellingPrice()) {
+                            <span class="pd-info__original-price">{{ formatPrice(displayActualPrice()!) }}</span>
+                            }
+                            @if (displayDiscount() > 0) {
+                            <nz-tag nzColor="orange" class="pd-info__discount-tag">{{ displayDiscount() }}% OFF</nz-tag>
+                            }
                             @if (priceVariants().length > 0) {
                             <button type="button" class="pd-info__price-info-btn" nz-tooltip
                                 [nzTooltipTitle]="detailPriceTooltipTpl" nzTooltipPlacement="bottom"

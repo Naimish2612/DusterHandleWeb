@@ -388,6 +388,7 @@ export class CatalogService {
             description: api.description ?? '',
             price: api.base_price,
             actual_price: api.actual_price,
+            discount_percentage: api.discount_percentage,
             rating: api.rating,
             total_review: api.total_review,
             images,
@@ -653,6 +654,54 @@ export class CatalogService {
         }
 
         return variants;
+    }
+
+    /**
+     * Extracts first numeric attribute price from raw attributes for default variant
+     */
+    extractFirstAttributePrice(raw: any): number | null {
+        const variants = this.extractPriceVariants(raw);
+        if (variants && variants.length > 0 && variants[0].price) {
+            const num = parseFloat(String(variants[0].price).replace(/[^0-9.]/g, ''));
+            if (!isNaN(num) && num > 0) return num;
+        }
+        return null;
+    }
+
+    /**
+     * Extracts first variant (size, price, packing) from raw attributes
+     */
+    extractFirstPriceVariant(raw: any): PriceVariant | null {
+        const variants = this.extractPriceVariants(raw);
+        return variants && variants.length > 0 ? variants[0] : null;
+    }
+
+    /**
+     * Extracts the first variant size (or default size) from raw attributes
+     */
+    extractFirstVariantSize(raw: any): string | null {
+        const variants = this.extractPriceVariants(raw);
+        if (variants && variants.length > 0 && variants[0].size && variants[0].size !== 'Base Price') {
+            return variants[0].size;
+        }
+
+        const attrs = this.parseAttributes(raw);
+        if (attrs) {
+            const sizeKey = Object.keys(attrs).find(k => {
+                const lower = k.trim().toLowerCase();
+                return lower.includes('size') || lower.includes('dimension') || lower.includes('length');
+            });
+            if (sizeKey && attrs[sizeKey] != null) {
+                const val = attrs[sizeKey];
+                if (Array.isArray(val) && val.length > 0 && val[0]) {
+                    return String(val[0]).trim();
+                } else if (typeof val === 'string' && val.trim()) {
+                    const first = val.split(',')[0].trim();
+                    if (first) return first;
+                }
+            }
+        }
+        return null;
     }
 
     /**

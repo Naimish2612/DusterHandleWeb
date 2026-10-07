@@ -51,6 +51,8 @@ export interface ProductDetailModel {
   slug              : string;
   description       : string;
   base_price        : number;
+  actual_price?     : number;
+  discount_percentage?: number;
   category_id       : number;
   category_name     : string | null;
   sub_category_id   : number;

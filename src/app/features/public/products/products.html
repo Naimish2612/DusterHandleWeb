@@ -347,24 +347,40 @@
               </a>
             </h3>
 
-            <!-- <span class="pg-card__finish">FINISH: {{ (product.brand || 'BRUSHED GOLD') | uppercase }}</span> -->
-
-            <!-- <div class="pg-card__rating">
-              <nz-rate [ngModel]="product.rating" nzDisabled nzAllowHalf></nz-rate>
-              <span class="pg-card__review-count">
-                {{ product.total_review }}
-              </span>
-            </div> -->
+            <!-- Size / Variant Tag (corresponding to the displayed price) -->
+            @if (getFirstPriceVariant(product); as firstVar) {
+              @if (firstVar.size && firstVar.size !== 'Base Price') {
+              <div class="pg-card__variant-row">
+                <span class="pg-card__size-pill" [title]="'Size: ' + firstVar.size">
+                  <span class="pg-card__size-bullet"></span>
+                  <span class="pg-card__size-text">{{ firstVar.size }}</span>
+                </span>
+                @if (firstVar.packing) {
+                <span class="pg-card__packing-pill" [title]="'Packing: ' + firstVar.packing">
+                  <span nz-icon nzType="inbox" nzTheme="outline"></span>
+                  {{ firstVar.packing }}
+                </span>
+                }
+              </div>
+              }
+            } @else if (getFirstVariantSize(product); as size) {
+              <div class="pg-card__variant-row">
+                <span class="pg-card__size-pill" [title]="'Size: ' + size">
+                  <span class="pg-card__size-bullet"></span>
+                  <span class="pg-card__size-text">{{ size }}</span>
+                </span>
+              </div>
+            }
 
             <!-- Pricing Row -->
             <div class="pg-card__pricing-row">
               <div class="pg-card__price-group">
                 <span class="pg-card__price">
-                  {{ formatPrice(product.price) }}
+                  {{ formatPrice(getDisplaySellingPrice(product)) }}
                 </span>
-                @if (product.actual_price) {
+                @if (getDisplayActualPrice(product) && getDisplayActualPrice(product)! > getDisplaySellingPrice(product)) {
                 <span class="pg-card__original">
-                  {{ formatPrice(product.actual_price) }}
+                  {{ formatPrice(getDisplayActualPrice(product)!) }}
                 </span>
                 }
 

@@ -141,6 +141,45 @@ export class ProductDetail implements OnInit {
         return this.catalog.getPriceTooltipTitle(p.attribute ?? p.attributes);
     });
 
+    displayActualPrice = computed<number | null>(() => {
+        const p = this.product();
+        if (!p) return null;
+        const hasDiscount = p.discount_percentage != null && p.discount_percentage > 0;
+        const attrPrice = this.catalog.extractFirstAttributePrice(p.attribute ?? p.attributes);
+        if (hasDiscount && attrPrice != null && attrPrice > 0) {
+            return attrPrice;
+        }
+        return p.actual_price ?? null;
+    });
+
+    displayDiscount = computed<number>(() => {
+        const p = this.product();
+        if (!p) return 0;
+        if (p.discount_percentage != null && p.discount_percentage > 0) {
+            return Math.round(p.discount_percentage);
+        }
+        const actual = p.actual_price;
+        const base = p.base_price;
+        if (actual && base && actual > base) {
+            return Math.round(((actual - base) / actual) * 100);
+        }
+        return 0;
+    });
+
+    displaySellingPrice = computed<number>(() => {
+        const p = this.product();
+        if (!p) return 0;
+        const hasDiscount = p.discount_percentage != null && p.discount_percentage > 0;
+        const attrPrice = this.catalog.extractFirstAttributePrice(p.attribute ?? p.attributes);
+
+        if (hasDiscount && attrPrice != null && attrPrice > 0) {
+            const discount = Math.round(p.discount_percentage!);
+            return Math.round((attrPrice * (1 - discount / 100)) * 100) / 100;
+        }
+
+        return p.base_price ?? 0;
+    });
+
     // ── Computed: reviews with parsed ratings ────────────────────────
     parsedReviews = computed<ParsedReview[]>(() => {
         const p = this.product();
@@ -396,7 +435,8 @@ export class ProductDetail implements OnInit {
             .join('');
     }
 
-    formatPrice(price: number): string {
+    formatPrice(price: number | null | undefined): string {
+        if (price == null) return '';
         return '₹' + price.toLocaleString('en-IN', { minimumFractionDigits: 2 });
     }
 

@@ -42,6 +42,7 @@ interface ProductPayload {
   description: string;
   base_price: number;
   actual_price: number;
+  discount_percentage?: number;
   tax_class_id: number;
   category_id: number;
   sub_category_id: number;
@@ -138,6 +139,8 @@ export class Product implements OnInit {
   attributeReload$ = new Subject<void>();
   router = inject(Router);
 
+  private currentCategoryId: number | null = null;
+
   // Tax Simulator
   simulatorForm!: FormGroup;
   showSimulatorModal: boolean = false;
@@ -169,6 +172,7 @@ export class Product implements OnInit {
       sap_sku_code: [''],                // <-- Added sap_sku_code form control
       slug: [''],
       description: [''],
+      discount_percentage: [50, [Validators.required, Validators.min(0), Validators.max(99)]],
       base_price: [null, [Validators.required, Validators.min(0)]],
       actual_price: [null, [Validators.required, Validators.min(0)]],
       tax_class_id: [null, [Validators.required]],
@@ -188,12 +192,19 @@ export class Product implements OnInit {
 
   fillFormForEdit(data: any): void {
     console.log(data)
+    const initialDiscount = data.discount_percentage ?? (
+      data.actual_price && data.base_price && data.actual_price > data.base_price
+        ? Math.round(((data.actual_price - data.base_price) / data.actual_price) * 100)
+        : 50
+    );
+
     this.form.patchValue({
       name: data.name,
       sku: data.sku,
       sap_sku_code: data.sap_sku_code,   // <-- Patch sap_sku_code on edit
       slug: data.slug,
       description: data.description,
+      discount_percentage: initialDiscount,
       base_price: data.base_price,
       actual_price: data.actual_price,
       tax_class_id: data.tax_class_id,
@@ -207,8 +218,10 @@ export class Product implements OnInit {
       estimated_delivery_days: data.estimated_delivery_days,
     });
 
-    this.onCategoryChange(data.category_id);
-    this.form.get('sub_category_id')?.setValue(data.sub_category_id);
+    this.currentCategoryId = data.category_id;
+    if (data.category_id) {
+      this.loadSubCategoryDropdown(data.category_id, data.sub_category_id);
+    }
 
     const attrs = data.attribute || data.attributes;
     if (attrs) {
@@ -317,6 +330,10 @@ export class Product implements OnInit {
     this.listOfData = this.listOfData.filter((d) => d.key !== key);
   }
 
+  setDiscountPreset(percent: number): void {
+    this.form.get('discount_percentage')?.setValue(percent);
+  }
+
   private listenToNameChanges(): void {
     this.form.get('name')?.valueChanges.subscribe((name: string) => {
       if (name) {
@@ -355,13 +372,15 @@ export class Product implements OnInit {
       .get<any>('common', API_ENDPOINTS.PRODUCT_SUBCATEGORY.DROPDOWN_PRODUCT_CATEGORY_LIST)
       .pipe(map((res) => res.data ?? []))
       .subscribe({
-        next: (data: DropdownOption[]) => (this.categoryList = data),
+        next: (data: DropdownOption[]) => {
+          this.categoryList = data;
+          this.cdr.markForCheck();
+        },
         error: (err) => console.error('Failed to load category dropdown', err),
       });
-    this.cdr.detectChanges();
   }
 
-  loadSubCategoryDropdown(categoryId: number): void {
+  loadSubCategoryDropdown(categoryId: number, selectedSubCategoryId?: number): void {
     this.api
       .get<any>(
         'common',
@@ -376,7 +395,13 @@ export class Product implements OnInit {
         ),
       )
       .subscribe({
-        next: (data: DropdownOption[]) => (this.subCategoryList = data),
+        next: (data: DropdownOption[]) => {
+          this.subCategoryList = data;
+          if (selectedSubCategoryId != null) {
+            this.form.get('sub_category_id')?.setValue(selectedSubCategoryId, { emitEvent: false });
+          }
+          this.cdr.markForCheck();
+        },
         error: (err) => console.error('Failed to load sub category dropdown', err),
       });
   }
@@ -393,7 +418,10 @@ export class Product implements OnInit {
         ),
       )
       .subscribe({
-        next: (data: DropdownOption[]) => (this.manufacturerList = data),
+        next: (data: DropdownOption[]) => {
+          this.manufacturerList = data;
+          this.cdr.markForCheck();
+        },
         error: (err) => console.error('Failed to load manufacturer dropdown', err),
       });
   }
@@ -407,6 +435,11 @@ export class Product implements OnInit {
   }
 
   onCategoryChange(categoryId: number): void {
+    if (this.currentCategoryId === categoryId) {
+      return;
+    }
+    this.currentCategoryId = categoryId;
+
     // Reset sub category when category changes
     this.form.get('sub_category_id')?.setValue(null);
     this.subCategoryList = [];
@@ -461,6 +494,7 @@ export class Product implements OnInit {
       description: this.form.value.description,
       base_price: this.form.value.base_price,
       actual_price: this.form.value.actual_price,
+      discount_percentage: this.form.value.discount_percentage,
       tax_class_id: this.form.value.tax_class_id,
       category_id: this.form.value.category_id,
       sub_category_id: this.form.value.sub_category_id,
@@ -520,7 +554,9 @@ export class Product implements OnInit {
       sap_sku_code: '',             // <-- Reset sap_sku_code
       slug: '',
       description: '',
+      discount_percentage: 50,
       base_price: null,
+      actual_price: null,
       tax_class_id: null,
       category_id: null,
       sub_category_id: null,
@@ -548,6 +584,7 @@ export class Product implements OnInit {
       description: this.form.value.description,
       base_price: this.form.value.base_price,
       actual_price: this.form.value.actual_price,
+      discount_percentage: this.form.value.discount_percentage,
       tax_class_id: this.form.value.tax_class_id,
       category_id: this.form.value.category_id,
       sub_category_id: this.form.value.sub_category_id,
@@ -771,7 +808,7 @@ export class Product implements OnInit {
     this.api.get<any>('common', API_ENDPOINTS.TAX_MASTER.TAX_CLASS.DROPDOWN_TAX_CLASS).subscribe({
       next: (res) => {
         this.classDropdownList = res.data ?? [];
-        this.cdr.detectChanges();
+        this.cdr.markForCheck();
       },
       error: (err) => {
         console.error('Failed to load tax class dropdown', err);

@@ -20,6 +20,7 @@ export interface ApiProduct {
     description: string;
     base_price: number;
     actual_price: number;
+    discount_percentage?: number;
     rating: number;
     total_review: number;
     category_id: number;
@@ -73,6 +74,7 @@ export interface Product {
     description: string;
     price: number;
     actual_price?: number;
+    discount_percentage?: number;
     rating: number;
     total_review: number;
     images: string[];

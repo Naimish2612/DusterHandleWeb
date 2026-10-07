@@ -504,9 +504,39 @@ export class Products implements OnInit {
     // PRICE + CART HELPERS
     // ══════════════════════════════════════════════════════════════════════════
     discount(product: any): number {
-        if (!product.actual_price || !product.price) return 0;
-        const percent = ((product.actual_price - product.price) / product.actual_price) * 100;
-        return percent > 0 ? Math.max(1, Math.round(percent)) : 0;
+        if (product.discount_percentage != null && product.discount_percentage > 0) {
+            return Math.round(product.discount_percentage);
+        }
+        const actual = product.actual_price;
+        const base = product.price ?? product.base_price;
+        if (actual && base && actual > base) {
+            const percent = ((actual - base) / actual) * 100;
+            return percent > 0 ? Math.max(1, Math.round(percent)) : 0;
+        }
+        return 0;
+    }
+
+    getDisplayActualPrice(product: Product): number | null {
+        if (!product) return null;
+        const hasDiscount = product.discount_percentage != null && product.discount_percentage > 0;
+        const attrPrice = this.catalog.extractFirstAttributePrice(product.attribute ?? product.attributes);
+        if (hasDiscount && attrPrice != null && attrPrice > 0) {
+            return attrPrice;
+        }
+        return product.actual_price ?? null;
+    }
+
+    getDisplaySellingPrice(product: Product): number {
+        if (!product) return 0;
+        const hasDiscount = product.discount_percentage != null && product.discount_percentage > 0;
+        const attrPrice = this.catalog.extractFirstAttributePrice(product.attribute ?? product.attributes);
+
+        if (hasDiscount && attrPrice != null && attrPrice > 0) {
+            const discountPct = Math.round(product.discount_percentage!);
+            return Math.round((attrPrice * (1 - discountPct / 100)) * 100) / 100;
+        }
+
+        return product.price ?? 0;
     }
 
     formatPrice(price: number | string | null | undefined): string {
@@ -531,6 +561,17 @@ export class Products implements OnInit {
 
     getPriceTooltipTitle(product: Product): string {
         return this.catalog.getPriceTooltipTitle(product.attribute ?? product.attributes);
+    }
+
+    getFirstPriceVariant(product: Product): PriceVariant | null {
+        if (!product) return null;
+        const variants = this.getPriceVariants(product);
+        return variants.length > 0 ? variants[0] : null;
+    }
+
+    getFirstVariantSize(product: Product): string | null {
+        if (!product) return null;
+        return this.catalog.extractFirstVariantSize(product.attribute ?? product.attributes);
     }
 
 

@@ -61,6 +61,27 @@ nz-form-item {
   width: 100%;
 }
 
+.discount-input-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+
+  .preset-buttons {
+    display: flex;
+    gap: 6px;
+
+    button {
+      font-size: 12px;
+      padding: 0 8px;
+      height: 24px;
+      line-height: 22px;
+      border-radius: 4px;
+      font-weight: 500;
+    }
+  }
+}
+
+
 .price-input-wrapper {
   display: flex;
   align-items: center;

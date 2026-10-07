@@ -510,6 +510,26 @@
     }
   }
 
+  &__original-price {
+    font-size: 20px;
+    font-weight: 500;
+    color: #94a3b8 !important;
+    text-decoration: line-through;
+    margin-left: 2px;
+
+    @include mobile {
+      font-size: 16px;
+    }
+  }
+
+  &__discount-tag {
+    font-weight: 700;
+    font-size: 12px;
+    border-radius: 4px;
+    padding: 2px 8px;
+    margin-left: 4px;
+  }
+
   &__price-info-btn {
     display: inline-flex;
     align-items: center;

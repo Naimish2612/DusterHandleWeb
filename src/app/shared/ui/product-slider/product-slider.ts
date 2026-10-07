@@ -269,7 +269,10 @@ export class ProductSlider implements OnInit, OnChanges, AfterViewInit, OnDestro
   // =============================
 
   discount(product: any): number {
-    if (!product.actual_price || !product.price) return 0;
+    if (product.discount_percentage != null && product.discount_percentage > 0) {
+      return Math.round(product.discount_percentage);
+    }
+    if (!product.actual_price || !product.price || product.actual_price <= product.price) return 0;
     const percent = ((product.actual_price - product.price) / product.actual_price) * 100;
     return percent > 0 ? Math.max(1, Math.round(percent)) : 0;
   }

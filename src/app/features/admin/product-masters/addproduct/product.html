@@ -112,13 +112,34 @@
             <span>Pricing & Tax</span>
           </div>
 
-          <div nz-row [nzGutter]="[16, 8]">
-            <!-- Base Price -->
+          <div nz-row [nzGutter]="[16, 16]">
+            <!-- Discount Percentage -->
             <div nz-col [nzXs]="24" [nzSm]="12" [nzMd]="8" [nzLg]="6">
               <nz-form-item>
                 <nz-form-label nzRequired
-                  nzTooltipTitle="Base price of the product excluding taxes. Use the simulator to preview tax calculations.">Base
-                  Price</nz-form-label>
+                  nzTooltipTitle="Enter trade discount % (usually 50% - 55%). This is applied to attribute MRP to calculate customer selling price.">
+                  Discount (%)
+                </nz-form-label>
+                <nz-form-control nzErrorTip="Please enter a valid discount percentage (0-99%)">
+                  <div class="discount-input-wrapper">
+                    <nz-input-number formControlName="discount_percentage" [nzMin]="0" [nzMax]="99" [nzStep]="1"
+                      [nzPrecision]="0" nzPlaceHolder="e.g. 50 or 55" class="full-width-input"></nz-input-number>
+                    <div class="preset-buttons">
+                      <button nz-button nzType="dashed" nzSize="small" type="button" (click)="setDiscountPreset(50)">50%</button>
+                      <button nz-button nzType="dashed" nzSize="small" type="button" (click)="setDiscountPreset(55)">55%</button>
+                    </div>
+                  </div>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+
+            <!-- Base Price (Selling Price) -->
+            <div nz-col [nzXs]="24" [nzSm]="12" [nzMd]="8" [nzLg]="6">
+              <nz-form-item>
+                <nz-form-label nzRequired
+                  nzTooltipTitle="Fallback selling price when product attributes do not have size-wise rates.">
+                  Base Price (Selling)
+                </nz-form-label>
                 <nz-form-control nzErrorTip="Please enter a valid base price">
                   <div class="price-input-wrapper">
                     <nz-input-number formControlName="base_price" [nzMin]="1" [nzStep]="1" [nzPrecision]="2"
@@ -132,10 +153,13 @@
               </nz-form-item>
             </div>
 
-            <!-- Actual Price -->
+            <!-- Actual Price (MRP) -->
             <div nz-col [nzXs]="24" [nzSm]="12" [nzMd]="8" [nzLg]="6">
               <nz-form-item>
-                <nz-form-label nzRequired>Actual Price</nz-form-label>
+                <nz-form-label nzRequired
+                  nzTooltipTitle="Fallback MRP price when product attributes do not have size-wise rates.">
+                  Actual Price (MRP)
+                </nz-form-label>
                 <nz-form-control nzErrorTip="Please enter a valid actual price">
                   <nz-input-number formControlName="actual_price" [nzMin]="1" [nzStep]="1" [nzPrecision]="2"
                     nzPlaceHolder="Enter Actual Price" class="full-width-input"></nz-input-number>
