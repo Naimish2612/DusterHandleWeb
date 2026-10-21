@@ -87,14 +87,16 @@
 
       <!-- Filter Error State -->
       <div class="filter-section filter-section--error">
-        <p class="filter-error-msg">
-          <span nz-icon nzType="warning" nzTheme="outline"></span>
-          Failed to load filters.
-        </p>
-        <button nz-button nzSize="small" nzType="link" (click)="retryFilters()">
-          <span nz-icon nzType="reload" nzTheme="outline"></span>
-          Retry
-        </button>
+        <div class="filter-error-card">
+          <div class="filter-error-icon-wrap">
+            <span nz-icon nzType="warning" nzTheme="outline" class="filter-error-icon"></span>
+          </div>
+          <p class="filter-error-msg">Failed to load filters.</p>
+          <button type="button" class="filter-error-retry-btn" (click)="retryFilters()">
+            <span nz-icon nzType="reload" nzTheme="outline" class="filter-error-retry-icon"></span>
+            Retry
+          </button>
+        </div>
       </div>
 
       } @else if (filterSections.length === 0) {
@@ -472,15 +474,17 @@
       @if (loadingFilters) {
       <nz-skeleton [nzActive]="true" [nzParagraph]="{ rows: 8 }"></nz-skeleton>
       } @else if (errorFilters) {
-      <div style="text-align:center; padding:16px 0;">
-        <p style="color:#EF4444; margin-bottom:8px;">
-          <span nz-icon nzType="warning" nzTheme="outline"></span>
-          Failed to load filters
-        </p>
-        <button nz-button nzSize="small" (click)="retryFilters()">
-          <span nz-icon nzType="reload" nzTheme="outline"></span>
-          Retry
-        </button>
+      <div class="filter-section filter-section--error filter-section--error-mobile">
+        <div class="filter-error-card">
+          <div class="filter-error-icon-wrap">
+            <span nz-icon nzType="warning" nzTheme="outline" class="filter-error-icon"></span>
+          </div>
+          <p class="filter-error-msg">Failed to load filters.</p>
+          <button type="button" class="filter-error-retry-btn" (click)="retryFilters()">
+            <span nz-icon nzType="reload" nzTheme="outline" class="filter-error-retry-icon"></span>
+            Retry
+          </button>
+        </div>
       </div>
       } @else {
 

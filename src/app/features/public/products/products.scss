@@ -237,9 +237,150 @@
     margin: 0 0 $spacing-3-5;
     flex-shrink: 0;
 
-    span[nz-icon] {
+    span[nz-icon],
+    .anticon,
+    .filter-section__arrow {
       color: #B89028 !important;
       font-size: 10px;
+      transition: color 0.15s ease, transform 0.2s ease;
+
+      svg {
+        fill: currentColor !important;
+        color: #B89028 !important;
+      }
+    }
+  }
+
+  .filter-section__arrow {
+    color: #B89028 !important;
+    font-size: 10px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    svg {
+      fill: currentColor !important;
+      color: #B89028 !important;
+    }
+
+    &:hover {
+      color: #96721B !important;
+    }
+  }
+
+  // ── Filter Error State ──
+  &--error {
+    padding: $spacing-4 0;
+    border-bottom: 1px solid #e2e8f0;
+    display: flex;
+    justify-content: center;
+
+    &.filter-section--error-mobile {
+      padding: $spacing-2 0;
+      border-bottom: none;
+    }
+
+    .filter-error-card {
+      width: 100%;
+      padding: 16px 14px;
+      background: #fdfbf7;
+      border: 1px solid rgba(212, 175, 55, 0.35);
+      border-radius: 8px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+    }
+
+    .filter-error-icon-wrap {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: rgba(212, 175, 55, 0.12);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 8px;
+    }
+
+    .filter-error-icon {
+      font-size: 16px;
+      color: #B89028 !important;
+    }
+
+    .filter-error-msg {
+      font-size: 13px !important;
+      font-weight: 600 !important;
+      color: #334155 !important;
+      margin: 0 0 12px 0 !important;
+      line-height: 1.4 !important;
+    }
+
+    .filter-error-retry-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 6px 18px;
+      background: #ffffff;
+      border: 1.5px solid #B89028;
+      border-radius: 4px;
+      color: #B89028 !important;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+      cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      outline: none;
+
+      .filter-error-retry-icon,
+      span[nz-icon] {
+        font-size: 12px;
+        color: #B89028 !important;
+        transition: transform 0.35s ease, color 0.2s ease;
+      }
+
+      &:hover {
+        background: #B89028;
+        color: #ffffff !important;
+        border-color: #B89028;
+        box-shadow: 0 2px 10px rgba(184, 144, 40, 0.28);
+
+        .filter-error-retry-icon,
+        span[nz-icon] {
+          color: #ffffff !important;
+          transform: rotate(180deg);
+        }
+      }
+
+      &:active {
+        transform: scale(0.98);
+      }
+    }
+
+    // Safety fallback overrides for ant-btn
+    button[nz-button],
+    .ant-btn {
+      color: #B89028 !important;
+      border-color: #B89028 !important;
+      background: #ffffff !important;
+      font-weight: 700 !important;
+
+      .anticon,
+      span[nz-icon] {
+        color: #B89028 !important;
+      }
+
+      &:hover {
+        background: #B89028 !important;
+        color: #ffffff !important;
+
+        .anticon,
+        span[nz-icon] {
+          color: #ffffff !important;
+        }
+      }
     }
   }
 
@@ -271,6 +412,69 @@
     }
     scrollbar-width: thin;
     scrollbar-color: #cbd5e1 #f1f5f9;
+  }
+}
+
+// ── Slider Luxury Theme Overrides ──
+::ng-deep .products-sidebar,
+::ng-deep .mobile-filter-drawer {
+  .ant-slider {
+    margin: 14px 6px 10px !important;
+
+    &:hover {
+      .ant-slider-track {
+        background-color: #B89028 !important;
+      }
+      .ant-slider-handle:not(.ant-tooltip-open) {
+        border-color: #B89028 !important;
+      }
+    }
+  }
+
+  .ant-slider-rail {
+    background-color: #e2e8f0 !important;
+    height: 4px !important;
+    border-radius: 2px !important;
+  }
+
+  .ant-slider-track {
+    background-color: #D4AF37 !important;
+    height: 4px !important;
+    border-radius: 2px !important;
+  }
+
+  .ant-slider-handle {
+    width: 15px !important;
+    height: 15px !important;
+    margin-top: -5.5px !important;
+    background-color: #ffffff !important;
+    border: 2.5px solid #D4AF37 !important;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15) !important;
+    transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s !important;
+
+    &:focus,
+    &:hover,
+    &.ant-tooltip-open {
+      border-color: #B89028 !important;
+      transform: scale(1.15);
+      box-shadow: 0 0 0 4px rgba(212, 175, 55, 0.25) !important;
+    }
+  }
+}
+
+::ng-deep .ant-slider-tooltip {
+  .ant-tooltip-inner {
+    background: #181716 !important;
+    color: #D4AF37 !important;
+    border: 1px solid rgba(212, 175, 55, 0.4) !important;
+    font-weight: 600 !important;
+    font-size: 11px !important;
+  }
+
+  .ant-tooltip-arrow::before,
+  .ant-tooltip-arrow-content {
+    background: #181716 !important;
+    border-color: rgba(212, 175, 55, 0.4) !important;
   }
 }
 
@@ -397,6 +601,25 @@
     align-items: center;
     gap: 6px;
     margin-left: auto;
+
+    ::ng-deep {
+      .ant-select-arrow {
+        color: #B89028 !important;
+        transition: color 0.2s ease, transform 0.2s ease;
+      }
+
+      .ant-select:hover .ant-select-arrow,
+      .ant-select-open .ant-select-arrow,
+      .ant-select-focused .ant-select-arrow {
+        color: #96721B !important;
+      }
+
+      .ant-select-selector {
+        color: #0f172a !important;
+        font-weight: 600 !important;
+        font-size: 12.5px !important;
+      }
+    }
   }
 
   &__sort-label {
@@ -1095,6 +1318,115 @@
   margin-top: $spacing-10;
   padding-top: $spacing-8;
   border-top: 1px solid #e2e8f0;
+
+  ::ng-deep {
+    .ant-pagination-item {
+      border-radius: 4px !important;
+      border-color: #e2e8f0 !important;
+      background: #ffffff !important;
+
+      a {
+        color: #475569 !important;
+        font-weight: 600 !important;
+      }
+
+      &:hover {
+        border-color: #B89028 !important;
+        a {
+          color: #B89028 !important;
+        }
+      }
+
+      &-active {
+        background: #FAF8F5 !important;
+        border-color: #B89028 !important;
+        a {
+          color: #B89028 !important;
+          font-weight: 700 !important;
+        }
+      }
+    }
+
+    .ant-pagination-prev,
+    .ant-pagination-next,
+    .ant-pagination-jump-prev,
+    .ant-pagination-jump-next {
+      border-radius: 4px !important;
+
+      .ant-pagination-item-link {
+        border-color: #e2e8f0 !important;
+        color: #64748b !important;
+
+        .anticon {
+          color: #64748b !important;
+        }
+      }
+
+      &:hover:not(.ant-pagination-disabled) {
+        .ant-pagination-item-link {
+          border-color: #B89028 !important;
+          color: #B89028 !important;
+
+          .anticon {
+            color: #B89028 !important;
+          }
+        }
+      }
+    }
+
+    .ant-pagination-options-quick-jumper input {
+      border-color: #cbd5e1 !important;
+      border-radius: 4px !important;
+
+      &:hover,
+      &:focus {
+        border-color: #B89028 !important;
+        box-shadow: 0 0 0 2px rgba(212, 175, 55, 0.2) !important;
+      }
+    }
+  }
+}
+
+// ── Products Empty & Error States ─────────────────────────────────────
+.products-error {
+  padding: 48px 0;
+  display: flex;
+  justify-content: center;
+
+  ::ng-deep {
+    .ant-empty-description {
+      color: #475569 !important;
+      font-size: 14px !important;
+      font-weight: 500 !important;
+      margin-top: 12px !important;
+    }
+
+    .ant-btn-primary {
+      background-color: #D4AF37 !important;
+      border-color: #D4AF37 !important;
+      color: #0F172A !important;
+      font-weight: 700 !important;
+      border-radius: 4px !important;
+      box-shadow: none !important;
+
+      &:hover {
+        background-color: #B89028 !important;
+        border-color: #B89028 !important;
+        color: #ffffff !important;
+      }
+    }
+
+    .ant-btn-default {
+      border-color: #cbd5e1 !important;
+      color: #0f172a !important;
+      border-radius: 4px !important;
+
+      &:hover {
+        border-color: #B89028 !important;
+        color: #B89028 !important;
+      }
+    }
+  }
 }
 
 // ── Mobile filter drawer ──────────────────────────────────────────────
@@ -1223,14 +1555,6 @@
   }
 }
 
-.products-pagination {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-top: 36px;
-  padding-top: 24px;
-  border-top: 1px solid #f1f5f9;
-}
 
 @keyframes pgSkeletonWave {
   0% {
@@ -1239,4 +1563,4 @@
   100% {
     background-position: 0 50%;
   }
-}
+}
