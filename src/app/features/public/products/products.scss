@@ -144,9 +144,17 @@
 .products-sidebar {
   background: #ffffff;
   border: 1px solid #e2e8f0;
-  border-radius: 0px;
+  border-radius: 4px;
   padding: $spacing-6;
   @include sticky-top($header-height + $spacing-4);
+  height: calc(100vh - #{$header-height} - #{$spacing-8});
+  max-height: calc(100vh - #{$header-height} - #{$spacing-8});
+  min-height: 480px;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
 
   @include tablet-down {
     display: none;
@@ -162,6 +170,7 @@
     margin-bottom: $spacing-5;
     padding-bottom: $spacing-4;
     border-bottom: 1px solid #e2e8f0;
+    flex-shrink: 0;
 
     h3 {
       font-size: 13px;
@@ -190,14 +199,30 @@
 }
 
 .filter-section {
-  margin-bottom: $spacing-6;
-  padding-bottom: $spacing-6;
+  margin-bottom: $spacing-5;
+  padding-bottom: $spacing-5;
   border-bottom: 1px solid #e2e8f0;
 
+  &--price {
+    flex-shrink: 0;
+  }
+
+  &--dynamic,
   &:last-child {
     margin-bottom: 0;
     padding-bottom: 0;
     border-bottom: none;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+
+    .filter-section__options {
+      flex: 1;
+      min-height: 0;
+      max-height: none;
+      overflow-y: auto;
+    }
   }
 
   &__title {
@@ -209,7 +234,8 @@
     letter-spacing: 0.05em;
     text-transform: uppercase;
     color: #0f172a !important;
-    margin: 0 0 $spacing-4;
+    margin: 0 0 $spacing-3-5;
+    flex-shrink: 0;
 
     span[nz-icon] {
       color: #B89028 !important;
@@ -220,7 +246,9 @@
   &__options {
     @include flex-column;
     gap: 6px;
-    max-height: 144px;
+    flex: 1;
+    min-height: 0;
+    max-height: none;
     overflow-y: auto;
     overflow-x: hidden;
     padding-right: 6px;

@@ -55,7 +55,7 @@
       </div>
 
       <!-- Price Range -->
-      <div class="filter-section">
+      <div class="filter-section filter-section--price">
         <h4 class="filter-section__title">
           <!-- <span nz-icon nzType="dollar-circle" nzTheme="outline"></span> -->
           <span
@@ -110,7 +110,7 @@
 
       <!-- Filter Sections -->
       @for (section of filterSections; track section.key) {
-      <div class="filter-section">
+      <div class="filter-section filter-section--dynamic">
 
         <h4 class="filter-section__title">
           {{ section.label }}
