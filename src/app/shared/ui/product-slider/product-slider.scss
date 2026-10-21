@@ -156,16 +156,24 @@
 .product-card {
   display: flex;
   flex-direction: column;
-  flex: 0 0 260px;
-  width: 260px;
+  flex: 0 0 250px;
+  width: 250px;
   scroll-snap-align: start;
-  border-radius: $border-radius-xl;
-  background: $card-bg;
-  border: $border-width-thin solid $neutral-200;
+  border-radius: 4px;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
   overflow: hidden;
   cursor: pointer;
-  @include card-base;
-  @include card-hover;
+  white-space: normal;
+  padding: 0 !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+
+  &:hover {
+    border-color: #B89028;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+    transform: translateY(-2px);
+  }
 
   @include mobile {
     flex: 0 0 210px;
@@ -176,27 +184,28 @@
   &--skeleton {
     cursor: default;
     pointer-events: none;
-    border: $border-width-thin solid $neutral-100;
-    background: $neutral-0;
+    border: 1px solid #e2e8f0;
+    background: #ffffff;
     box-shadow: none;
 
     // Keep hover transforms disabled
     &:hover {
       transform: none;
       box-shadow: none;
+      border-color: #e2e8f0;
     }
   }
 
   // ── Image ────────────────────────────────────────────────────────
   &__image-wrap {
     position: relative;
-    aspect-ratio: 4 / 3;
+    aspect-ratio: 1 / 1;
     overflow: hidden;
-    background: $neutral-100;
+    background: #f8fafc;
 
     // ── Skeleton image wrap ──────────────────────────────────────
     &--skeleton {
-      background: $neutral-100;
+      background: #neutral-100;
       @include flex-center;
 
       // nz-skeleton-element fills the wrap
@@ -380,10 +389,15 @@
 
   // ── Info ─────────────────────────────────────────────────────────
   &__info {
-    padding: $spacing-3-5 $spacing-4 $spacing-4;
+    padding: 12px 14px 14px;
     display: flex;  
     flex-direction: column;  
     flex: 1;  
+    box-sizing: border-box;
+
+    @include mobile {
+      padding: 10px 12px 12px;
+    }
 
     // ── nz-skeleton inside info ──────────────────────────────────
     ::ng-deep .ant-skeleton-title {
@@ -407,20 +421,11 @@
     }
   }
 
-  &__name {
-    font-size: $font-size-sm;
-    font-weight: $font-weight-bold;
-    color: #0f172a !important;
-    margin: 0 0 $spacing-2;
-    @include line-clamp(2);
-    line-height: $line-height-snug;
-  }
-
   &__rating {
     display: flex;
     align-items: center;
-    gap: $spacing-1;
-    margin-bottom: $spacing-2-5;
+    gap: 4px;
+    margin-bottom: 6px;
 
     .ant-rate {
       font-size: 10px !important;
@@ -519,5 +524,377 @@
 
   100% {
     background-position: 0% 50%;
+  }
+}
+
+// =========================================================================
+// PRODUCT CARD BODY, BADGES, VARIANT PILLS & PRICE ROW
+// =========================================================================
+
+.pg-card {
+  // ── Category Badges Row ──
+  &__category-row {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    flex-wrap: wrap;
+    margin-bottom: 7px;
+    min-height: 20px;
+  }
+
+  &__category {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: #96721B !important;
+    background: #fdfaf2;
+    border: 1px solid rgba(184, 144, 40, 0.35);
+    padding: 2px 7px;
+    border-radius: 2px;
+    line-height: 1.25;
+    white-space: nowrap;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    box-shadow: 0 1px 2px rgba(184, 144, 40, 0.06);
+
+    &::before {
+      content: '';
+      display: inline-block;
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: #D4AF37;
+      flex-shrink: 0;
+    }
+  }
+
+  &__subcategory {
+    display: inline-flex;
+    align-items: center;
+    font-size: 9.5px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #334155 !important;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    padding: 2px 6px;
+    border-radius: 2px;
+    line-height: 1.25;
+    white-space: nowrap;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  // ── Product Name (2-line clamped with uniform height) ──
+  &__name {
+    font-size: 13.5px;
+    font-weight: 700;
+    line-height: 1.4;
+    margin: 0 0 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.025em;
+    min-height: 2.8em;
+    display: flex;
+    align-items: flex-start;
+
+    @include mobile {
+      font-size: 11.5px;
+      min-height: 2.8em;
+      margin-bottom: 5px;
+    }
+  }
+
+  &__name-link {
+    color: #0f172a !important;
+    text-decoration: none;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+    transition: color 0.22s ease;
+    width: 100%;
+
+    &:hover {
+      color: #B89028 !important;
+      text-decoration: none;
+    }
+
+    .product-card:hover & {
+      color: #B89028 !important;
+    }
+  }
+
+  // ── Size & Variant Pills ──
+  &__variant-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-top: auto;
+    margin-bottom: 8px;
+    min-height: 22px;
+  }
+
+  &__size-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 4.5px;
+    font-size: 10px;
+    font-weight: 600;
+    color: #475569;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    padding: 1.5px 6.5px;
+    border-radius: 2px;
+    line-height: 1.35;
+    max-width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    transition: all 0.2s ease;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+
+    .product-card:hover & {
+      border-color: rgba(184, 144, 40, 0.45);
+      background: #fdfaf2;
+      color: #96721B;
+    }
+
+    @include mobile {
+      font-size: 9px;
+      padding: 1px 5px;
+      gap: 3.5px;
+    }
+  }
+
+  &__size-bullet {
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: #B89028;
+    flex-shrink: 0;
+    box-shadow: 0 0 3px rgba(184, 144, 40, 0.4);
+  }
+
+  &__size-text {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &__packing-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 3.5px;
+    font-size: 9.5px;
+    font-weight: 600;
+    color: #64748b;
+    background: #f1f5f9;
+    border: 1px solid #e2e8f0;
+    padding: 1.5px 5.5px;
+    border-radius: 2px;
+    line-height: 1.35;
+    white-space: nowrap;
+
+    span[nz-icon] {
+      font-size: 9.5px;
+      color: #B89028;
+    }
+
+    @include mobile {
+      font-size: 8.5px;
+      padding: 1px 4.5px;
+    }
+  }
+
+  // ── Pricing Row ──
+  &__pricing-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 0;
+    padding-top: 2px;
+  }
+
+  &__price-group {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+
+  &__price {
+    font-size: 15px;
+    font-weight: 700;
+    color: #B89028 !important;
+    line-height: 1;
+    letter-spacing: -0.01em;
+  }
+
+  &__original {
+    font-size: 11.5px;
+    color: #64748b !important;
+    font-weight: 600;
+    text-decoration: line-through;
+  }
+
+  &__price-info-btn {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: #fdf8ec;
+    border: 1px solid rgba(184, 144, 40, 0.4);
+    color: #B89028;
+    cursor: pointer;
+    padding: 0;
+    margin-left: 2px;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    outline: none;
+
+    span[nz-icon] {
+      font-size: 11px;
+      line-height: 1;
+      display: flex;
+    }
+
+    &:hover {
+      background: #B89028;
+      color: #ffffff;
+      border-color: #B89028;
+      transform: scale(1.12);
+      box-shadow: 0 2px 6px rgba(184, 144, 40, 0.35);
+    }
+  }
+}
+
+// ── Size-wise Price Tooltip Styling ──────────────────────────────────────
+::ng-deep .pg-price-tooltip-overlay {
+  .ant-tooltip-inner {
+    background: #181716 !important;
+    color: #ffffff !important;
+    border: 1px solid rgba(212, 175, 55, 0.4) !important;
+    border-radius: 6px !important;
+    padding: 10px 14px !important;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5), 0 0 15px rgba(212, 175, 55, 0.15) !important;
+    min-width: 175px;
+    max-width: 250px;
+  }
+
+  .ant-tooltip-arrow::before {
+    background: #181716 !important;
+    border: 1px solid rgba(212, 175, 55, 0.4) !important;
+  }
+}
+
+.pg-price-tooltip {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  white-space: normal;
+
+  &__header {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding-bottom: 6px;
+  }
+
+  &__icon {
+    font-size: 12px;
+    color: #D4AF37 !important;
+  }
+
+  &__title {
+    font-size: 10.5px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #D4AF37 !important;
+  }
+
+  &__divider {
+    height: 1px;
+    background: rgba(255, 255, 255, 0.1);
+    margin-bottom: 7px;
+  }
+
+  &__list {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  &__item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 3px 0;
+    font-size: 11.5px;
+    border-bottom: 1px dashed rgba(255, 255, 255, 0.05);
+
+    &:last-child {
+      border-bottom: none;
+    }
+  }
+
+  &__item-info {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    flex-wrap: wrap;
+  }
+
+  &__size {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    color: #cbd5e1 !important;
+    font-weight: 500;
+  }
+
+  &__pack {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    font-size: 9.5px;
+    font-weight: 600;
+    color: #cbd5e1 !important;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    padding: 0 5px;
+    border-radius: 2px;
+    line-height: 1.4;
+
+    span[nz-icon] {
+      font-size: 9.5px;
+      color: #D4AF37 !important;
+    }
+  }
+
+  &__bullet {
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: #B89028;
+    flex-shrink: 0;
+  }
+
+  &__price {
+    font-weight: 700;
+    color: #ffffff !important;
+    letter-spacing: 0.02em;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
   }
 }

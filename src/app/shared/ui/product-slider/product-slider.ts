@@ -6,17 +6,19 @@ import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzRateModule } from 'ng-zorro-antd/rate';
 import { NzMessageService } from 'ng-zorro-antd/message';
-import { Product } from '../../../features/public/models/catalog.model';
+import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
+import { Product, PriceVariant } from '../../../features/public/models/catalog.model';
 import { WishlistService } from '../../../features/customer/services/wishlist.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CartService } from '../../../features/public/services/cart.service';
 import { SessionService } from '../../../core/infrastructure/session.service';
 import { NzSkeletonModule } from 'ng-zorro-antd/skeleton';
+import { CatalogService } from '../../../features/public/services/catalog.service';
 
 @Component({
   selector: 'app-product-slider',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink, NzIconModule, NzButtonModule, NzRateModule, NzSkeletonModule],
+  imports: [CommonModule, FormsModule, RouterLink, NzIconModule, NzButtonModule, NzRateModule, NzSkeletonModule, NzToolTipModule],
   templateUrl: './product-slider.html',
   styleUrl: './product-slider.scss',
 })
@@ -49,6 +51,7 @@ export class ProductSlider implements OnInit, OnChanges, AfterViewInit, OnDestro
   private destroyRef = inject(DestroyRef);
   private sessionService = inject(SessionService);
   private router = inject(Router);
+  private catalog = inject(CatalogService);
 
   constructor(private ngZone: NgZone, private message: NzMessageService) { }
 
@@ -265,8 +268,58 @@ export class ProductSlider implements OnInit, OnChanges, AfterViewInit, OnDestro
   }
 
   // =============================
-  // ✅ HELPERS
+  // ✅ PRICE & VARIANT HELPERS
   // =============================
+
+  private priceVariantsCache = new WeakMap<Product, PriceVariant[]>();
+
+  getPriceVariants(product: Product): PriceVariant[] {
+    if (!product) return [];
+    let variants = this.priceVariantsCache.get(product);
+    if (!variants) {
+      variants = this.catalog.extractPriceVariants(product.attribute ?? product.attributes);
+      this.priceVariantsCache.set(product, variants);
+    }
+    return variants;
+  }
+
+  getPriceTooltipTitle(product: Product): string {
+    return this.catalog.getPriceTooltipTitle(product.attribute ?? product.attributes);
+  }
+
+  getFirstPriceVariant(product: Product): PriceVariant | null {
+    if (!product) return null;
+    const variants = this.getPriceVariants(product);
+    return variants.length > 0 ? variants[0] : null;
+  }
+
+  getFirstVariantSize(product: Product): string | null {
+    if (!product) return null;
+    return this.catalog.extractFirstVariantSize(product.attribute ?? product.attributes);
+  }
+
+  getDisplayActualPrice(product: Product): number | null {
+    if (!product) return null;
+    const hasDiscount = product.discount_percentage != null && product.discount_percentage > 0;
+    const attrPrice = this.catalog.extractFirstAttributePrice(product.attribute ?? product.attributes);
+    if (hasDiscount && attrPrice != null && attrPrice > 0) {
+      return attrPrice;
+    }
+    return product.actual_price ?? null;
+  }
+
+  getDisplaySellingPrice(product: Product): number {
+    if (!product) return 0;
+    const hasDiscount = product.discount_percentage != null && product.discount_percentage > 0;
+    const attrPrice = this.catalog.extractFirstAttributePrice(product.attribute ?? product.attributes);
+
+    if (hasDiscount && attrPrice != null && attrPrice > 0) {
+      const discountPct = Math.round(product.discount_percentage!);
+      return Math.round((attrPrice * (1 - discountPct / 100)) * 100) / 100;
+    }
+
+    return product.price ?? 0;
+  }
 
   discount(product: any): number {
     if (product.discount_percentage != null && product.discount_percentage > 0) {
@@ -277,7 +330,10 @@ export class ProductSlider implements OnInit, OnChanges, AfterViewInit, OnDestro
     return percent > 0 ? Math.max(1, Math.round(percent)) : 0;
   }
 
-  formatPrice(price: number): string {
-    return '₹' + price.toLocaleString('en-IN');
+  formatPrice(price: number | string | null | undefined): string {
+    if (price == null || price === '') return '';
+    const num = typeof price === 'number' ? price : parseFloat(String(price).replace(/[^0-9.]/g, ''));
+    if (isNaN(num)) return String(price);
+    return '₹' + num.toLocaleString('en-IN');
   }
 }

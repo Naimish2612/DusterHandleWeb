@@ -7,8 +7,8 @@ export interface ApiProductImage {
 }
 
 export interface ProductBadge {
-  label: string;
-  type: 'sale' | 'new' | 'hot';
+    label: string;
+    type: 'sale' | 'new' | 'hot';
 }
 
 // ── API Product ───────────────────────────────────────────────────────────
@@ -125,8 +125,6 @@ export interface FilterSection {
 
 // ── Filter State ─────────────────────────────────────────────────────
 export interface FilterState {
-    manufacturers: ApiDropdownOption[];
-    categories: ApiDropdownOption[];
     subCategories: ApiDropdownOption[];
     filterSections: FilterSection[];
 }
@@ -152,7 +150,7 @@ export interface CatalogFilterParams {
     name?: string;
     sku?: string;
     category_id?: number;
-    sub_category_id?: number;
+    sub_category_id?: number[] | number;
     manufacturer_id?: number;
     is_active?: boolean;
     in_stock?: boolean;

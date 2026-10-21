@@ -39,8 +39,6 @@ export class CatalogService {
     });
 
     private _filterState = signal<FilterState>({
-        manufacturers: [],
-        categories: [],
         subCategories: [],
         filterSections: [],
     });
@@ -54,8 +52,6 @@ export class CatalogService {
     readonly allProducts = computed(() => this._state().allProducts);
     readonly selected = computed(() => this._state().selected);
     readonly filterSections = computed(() => this._filterState().filterSections);
-    readonly manufacturers = computed(() => this._filterState().manufacturers);
-    readonly categories = computed(() => this._filterState().categories);
     readonly subCategories = computed(() => this._filterState().subCategories);
     readonly totalCount = computed(() => this._state().totalCount || this._state().allProducts.length);
     readonly paginationMetadata = computed(() => this._state().paginationMetadata ?? null);
@@ -96,7 +92,7 @@ export class CatalogService {
             PageNumber: params?.PageNumber ?? 1,
             PageSize: params?.PageSize ?? 9,
             ...(params?.category_id ? { category_id: params.category_id } : {}),
-            ...(params?.sub_category_id ? { sub_category_id: params.sub_category_id } : {}),
+            ...(params?.sub_category_id ? { sub_category_id: Array.isArray(params.sub_category_id) ? params.sub_category_id : [params.sub_category_id] } : {}),
             ...(params?.manufacturer_id ? { manufacturer_id: params.manufacturer_id } : {}),
             ...(params?.name ? { name: params.name } : {}),
             ...(params?.sku ? { sku: params.sku } : {}),
@@ -192,30 +188,30 @@ export class CatalogService {
     // ─────────────────────────────────────────────────────────────
     // GET MANUFACTURERS
     // ─────────────────────────────────────────────────────────────
-    getManufacturers(): Observable<ResponseEntity<ApiDropdownOption[]>> {
-        return this.apiCall
-            .get<ApiDropdownOption[]>('common', API_ENDPOINTS.CUSTOMER.DROPDOWN.MANUFACTURER)
-            .pipe(
-                tap((res) => {
-                    this.patchFilterState({ manufacturers: res.data ?? [] });
-                    this.rebuildFilterSections();
-                })
-            );
-    }
+    // getManufacturers(): Observable<ResponseEntity<ApiDropdownOption[]>> {
+    //     return this.apiCall
+    //         .get<ApiDropdownOption[]>('common', API_ENDPOINTS.CUSTOMER.DROPDOWN.MANUFACTURER)
+    //         .pipe(
+    //             tap((res) => {
+    //                 this.patchFilterState({ manufacturers: res.data ?? [] });
+    //                 this.rebuildFilterSections();
+    //             })
+    //         );
+    // }
 
     // ─────────────────────────────────────────────────────────────
     // GET CATEGORIES
     // ─────────────────────────────────────────────────────────────
-    getCategories(): Observable<ResponseEntity<ApiDropdownOption[]>> {
-        return this.apiCall
-            .get<ApiDropdownOption[]>('common', API_ENDPOINTS.CUSTOMER.DROPDOWN.CATEGORY)
-            .pipe(
-                tap((res) => {
-                    this.patchFilterState({ categories: res.data ?? [] });
-                    this.rebuildFilterSections();
-                })
-            );
-    }
+    // getCategories(): Observable<ResponseEntity<ApiDropdownOption[]>> {
+    //     return this.apiCall
+    //         .get<ApiDropdownOption[]>('common', API_ENDPOINTS.CUSTOMER.DROPDOWN.CATEGORY)
+    //         .pipe(
+    //             tap((res) => {
+    //                 this.patchFilterState({ categories: res.data ?? [] });
+    //                 this.rebuildFilterSections();
+    //             })
+    //         );
+    // }
 
     // ─────────────────────────────────────────────────────────────
     // GET SUBCATEGORIES (Requires categoryId)
@@ -240,22 +236,26 @@ export class CatalogService {
     }
 
     // ─────────────────────────────────────────────────────────────
-    // LOAD ALL FILTERS (WITHOUT SUBCATEGORY)
+    // LOAD ALL FILTERS (SUBCATEGORY ONLY)
     // ─────────────────────────────────────────────────────────────
     loadAllFilters(): Observable<any> {
-        return forkJoin([
-            this.apiCall.get<ApiDropdownOption[]>('common', API_ENDPOINTS.CUSTOMER.DROPDOWN.MANUFACTURER),
-            this.apiCall.get<ApiDropdownOption[]>('common', API_ENDPOINTS.CUSTOMER.DROPDOWN.CATEGORY),
-        ]).pipe(
-            tap(([mfr, cat]) => {
-                this.patchFilterState({
-                    manufacturers: mfr.data ?? [],
-                    categories: cat.data ?? [],
-                    subCategories: [],
-                });
-                this.rebuildFilterSections();
-            })
-        );
+        return this.apiCall
+            .get<any[]>('common', API_ENDPOINTS.CUSTOMER.DROPDOWN.ALL_SUB_CATEGORIES)
+            .pipe(
+                tap((res) => {
+                    const rawList = res?.data ?? [];
+                    const subCats: ApiDropdownOption[] = (Array.isArray(rawList) ? rawList : []).map((s: any) => ({
+                        id: Number(s.sub_category_id ?? s.id ?? s.subCategoryId),
+                        value: s.name ?? s.value ?? '',
+                        product_count: Number(s.product_count ?? 0),
+                    }));
+
+                    this.patchFilterState({
+                        subCategories: subCats,
+                    });
+                    this.rebuildFilterSections();
+                })
+            );
     }
 
     // ── Reload Sub-Categories when a Category is selected ────────────────────
@@ -269,37 +269,11 @@ export class CatalogService {
 
     // ── Rebuild FilterSections[] from current FilterState ────────────────────
     private rebuildFilterSections(): void {
-        const { manufacturers, categories, subCategories } = this._filterState();
+        const { subCategories } = this._filterState();
 
         const sections: FilterSection[] = [];
 
-        // ── Manufacturer Section ───────────────────────────
-        if (manufacturers.length > 0) {
-            sections.push({
-                label: 'Manufacturer',
-                key: 'brand',
-                options: manufacturers.map((m) => ({
-                    label: m.value,           // ← USE value
-                    value: String(m.id),      // ← USE id
-                    count: 0,
-                })),
-            });
-        }
-
-        // ── Category Section ───────────────────────────────
-        if (categories.length > 0) {
-            sections.push({
-                label: 'Category',
-                key: 'category',
-                options: categories.map((c) => ({
-                    label: c.value,
-                    value: String(c.id),
-                    count: 0,
-                })),
-            });
-        }
-
-        // ── SubCategory Section (only if exists) ───────────
+        // ── SubCategory Section ───────────────────────────
         if (subCategories.length > 0) {
             sections.push({
                 label: 'Sub-Category',
@@ -307,7 +281,7 @@ export class CatalogService {
                 options: subCategories.map((s) => ({
                     label: s.value,
                     value: String(s.id),
-                    count: 0,
+                    count: s.product_count ?? 0,
                 })),
             });
         }
@@ -340,8 +314,6 @@ export class CatalogService {
 
     resetFilters(): void {
         this._filterState.set({
-            manufacturers: [],
-            categories: [],
             subCategories: [],
             filterSections: [],
         });

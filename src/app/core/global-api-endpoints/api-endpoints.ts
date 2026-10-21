@@ -111,6 +111,7 @@ export const API_ENDPOINTS = {
       MANUFACTURER: 'api/master/cache/manufacturer',
       CATEGORY: 'api/master/cache/product/category',
       SUB_CATEGORY: 'api/master/cache/product/subcategory', // + /{categoryId}
+      ALL_SUB_CATEGORIES: 'api/master/cache/product/sub/category/list',
     },
 
     CATALOG: {

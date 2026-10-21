@@ -75,8 +75,6 @@ export class Products implements OnInit {
     currentImageIndex: Record<number, number | undefined> = {};
 
     // ── Filter State ──────────────────────────────────────────────────────────
-    selectedBrands: string[] = [];
-    selectedCategories: string[] = [];
     selectedSubCategories: string[] = [];
     priceRange: [number, number] = [0, 7000];
     currentPage = 1;
@@ -138,14 +136,6 @@ export class Products implements OnInit {
         return this.displayProducts;
     }
 
-    // ── Reverse Lookup Helpers (name → id) ───────────────────────────────────
-    private getBrandId(brandName: string): number {
-        return this.catalog.manufacturers().find(m => m.value === brandName)?.id ?? 0;
-    }
-
-    private getCategoryId(categoryName: string): number {
-        return this.catalog.categories().find(c => c.value === categoryName)?.id ?? 0;
-    }
 
     private getSubCategoryId(subCategoryName: string): number {
         return this.catalog.subCategories().find(s => s.value === subCategoryName)?.id ?? 0;
@@ -168,7 +158,7 @@ export class Products implements OnInit {
         this.route.queryParams
             .pipe(takeUntilDestroyed(this.destroyRef))
             .subscribe(() => {
-                if (this.catalog.categories().length > 0) {
+                if (this.catalog.subCategories().length > 0) {
                     this.applyInitialFilters();
                 }
             });
@@ -179,35 +169,20 @@ export class Products implements OnInit {
         const state = history.state || {};
         const queryParams = this.route.snapshot.queryParams || {};
 
-        const queryCategory = queryParams['category'] || state['category'];
-        const querySubCategory = queryParams['subCategory'] || queryParams['sub-category'] || queryParams['sub_category'] || state['subCategory'] || state['sub-category'] || state['sub_category'];
+        const querySubCategory = queryParams['subCategory'] || queryParams['sub-category'] || queryParams['sub_category'] || queryParams['subCategoryId'] || queryParams['sub_category_id'] || state['subCategory'] || state['sub-category'] || state['sub_category'] || state['subCategoryId'] || state['sub_category_id'];
 
-        if (queryCategory) {
-            const cat = this.catalog.categories().find(
-                c => c.value?.trim().toLowerCase() === String(queryCategory).trim().toLowerCase() ||
-                     String(c.id) === String(queryCategory).trim()
-            );
+        if (querySubCategory) {
+            const targetSub = String(querySubCategory).trim().toLowerCase();
+            const subCat = this.catalog.subCategories().find(s => {
+                const val = (s.value ?? '').trim().toLowerCase();
+                return val === targetSub ||
+                    String(s.id) === targetSub ||
+                    val.includes(targetSub) ||
+                    targetSub.includes(val);
+            });
 
-            if (cat) {
-                this.selectedCategories = [String(cat.id)];
-                this.loadSubCategoriesForAll(this.selectedCategories, () => {
-                    if (querySubCategory) {
-                        const targetSub = String(querySubCategory).trim().toLowerCase();
-                        const subCat = this.catalog.subCategories().find(s => {
-                            const val = (s.value ?? '').trim().toLowerCase();
-                            return val === targetSub ||
-                                   String(s.id) === targetSub ||
-                                   val.includes(targetSub) ||
-                                   targetSub.includes(val);
-                        });
-
-                        if (subCat) {
-                            this.selectedSubCategories = [String(subCat.id)];
-                        }
-                    }
-                    this.loadProducts(1);
-                });
-                return;
+            if (subCat) {
+                this.selectedSubCategories = [String(subCat.id)];
             }
         }
 
@@ -225,14 +200,8 @@ export class Products implements OnInit {
             PageSize: this.pageSize,
         };
 
-        if (this.selectedCategories.length > 0) {
-            params.category_id = Number(this.selectedCategories[0]);
-        }
         if (this.selectedSubCategories.length > 0) {
-            params.sub_category_id = Number(this.selectedSubCategories[0]);
-        }
-        if (this.selectedBrands.length > 0) {
-            params.manufacturer_id = Number(this.selectedBrands[0]);
+            params.sub_category_id = this.selectedSubCategories.map(Number);
         }
 
         this.catalog.getAllProducts(params)
@@ -312,13 +281,11 @@ export class Products implements OnInit {
     // ══════════════════════════════════════════════════════════════════════════
 
     get activeFilterCount(): number {
-        return this.selectedBrands.length + this.selectedCategories.length + this.selectedSubCategories.length;
+        return this.selectedSubCategories.length;
     }
 
     isSelected(key: string, value: string): boolean {
         switch (key) {
-            case 'brand': return this.selectedBrands.includes(value);
-            case 'category': return this.selectedCategories.includes(value);
             case 'subCategory': return this.selectedSubCategories.includes(value);
             default: return false;
         }
@@ -326,96 +293,12 @@ export class Products implements OnInit {
 
     // ── Toggle filter (single select per section) ─────────────────────────────
     toggleFilter(key: string, value: string): void {
-        switch (key) {
-
-            case 'brand':
-                this.selectedBrands = this.toggle(this.selectedBrands, value);
-                break;
-
-            case 'category':
-                const wasSelected = this.selectedCategories.includes(value);
-                this.selectedCategories = this.toggle(this.selectedCategories, value);
-
-                if (this.selectedCategories.length === 0) {
-                    // ✅ All categories deselected → clear subcategories
-                    this.clearSubCategories();
-                } else {
-                    // ✅ Load sub-categories for ALL currently selected categories
-                    this.loadSubCategoriesForAll(this.selectedCategories);
-
-                    // ✅ If a category was REMOVED, also remove its subcategories from selection
-                    if (wasSelected) {
-                        this.cleanupOrphanedSubCategories();
-                    }
-                }
-                break;
-
-            case 'subCategory':
-                this.selectedSubCategories = this.toggle(this.selectedSubCategories, value);
-                break;
+        if (key === 'subCategory') {
+            this.selectedSubCategories = this.toggle(this.selectedSubCategories, value);
         }
 
         this.currentPage = 1;
         this.loadProducts(1);
-    }
-
-    private loadSubCategoriesForAll(categoryIds: string[], callback?: () => void): void {
-        if (categoryIds.length === 0) {
-            this.clearSubCategories();
-            callback?.();
-            return;
-        }
-
-        // Mark sub-category section as loading
-        this.filterSections = this.filterSections.map(s =>
-            s.key === 'subCategory'
-                ? { ...s, loading: true, options: [] }
-                : s
-        );
-
-        // If no subCategory section exists yet, add one
-        if (!this.filterSections.some(s => s.key === 'subCategory')) {
-            this.filterSections = [
-                ...this.filterSections,
-                { key: 'subCategory', label: 'Sub-Category', loading: true, options: [] } as FilterSection
-            ];
-        }
-        this.cdr.markForCheck();
-
-        this.catalog.getSubCategoriesForMultiple(categoryIds.map(Number))
-            .pipe(takeUntilDestroyed(this.destroyRef))
-            .subscribe({
-                next: () => {
-                    this.filterSections = this.catalog.filterSections();
-                    // ✅ After refresh, also clean orphaned sub-cats
-                    this.cleanupOrphanedSubCategories();
-                    callback?.();
-                    this.cdr.markForCheck();
-                },
-                error: () => {
-                    this.filterSections = this.filterSections.map(s => s.key === 'subCategory' ? { ...s, loading: false, options: [] } : s);
-                    callback?.();
-                    this.cdr.markForCheck();
-                },
-            });
-    }
-
-    private cleanupOrphanedSubCategories(): void {
-        const subCatSection = this.filterSections.find(s => s.key === 'subCategory');
-        if (!subCatSection) {
-            this.selectedSubCategories = [];
-            return;
-        }
-        const availableIds = subCatSection.options.map(o => o.value);
-        this.selectedSubCategories = this.selectedSubCategories.filter(s =>
-            availableIds.includes(s)
-        );
-    }
-
-    private clearSubCategories(): void {
-        this.selectedSubCategories = [];
-        this.filterSections = this.filterSections.filter(s => s.key !== 'subCategory');
-        this.cdr.markForCheck();
     }
 
     private toggle(arr: string[], value: string): string[] {
@@ -428,31 +311,8 @@ export class Products implements OnInit {
     }
 
     clearFilters(): void {
-        this.selectedBrands = [];
-        this.selectedCategories = [];
         this.selectedSubCategories = [];
         this.priceRange = [0, 7000];
-        this.currentPage = 1;
-        this.filterSections = this.filterSections.filter(
-            s => s.key !== 'subCategory'
-        );
-        this.loadProducts(1);
-    }
-
-    removeBrand(b: string): void {
-        this.selectedBrands = this.selectedBrands.filter(x => x !== b);
-        this.currentPage = 1;
-        this.loadProducts(1);
-    }
-
-    removeCategory(c: string): void {
-        this.selectedCategories = this.selectedCategories.filter(x => x !== c);
-        if (this.selectedCategories.length === 0) {
-            this.clearSubCategories();
-        } else {
-            this.loadSubCategoriesForAll(this.selectedCategories);
-            this.cleanupOrphanedSubCategories();
-        }
         this.currentPage = 1;
         this.loadProducts(1);
     }

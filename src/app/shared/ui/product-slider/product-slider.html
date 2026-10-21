@@ -99,29 +99,113 @@
 
                 <!-- Info -->
                 <div class="product-card__info">
-                    <h3 class="product-card__name">{{ product.name }}</h3>
+                    <!-- Category Badges -->
+                    <div class="pg-card__category-row">
+                      <span class="pg-card__category" [title]="product.category || product.subCategory || 'General'">
+                        {{ product.category || product.subCategory || 'General' }}
+                      </span>
+                      @if (product.subCategory && product.category && product.subCategory.trim().toLowerCase() !== product.category.trim().toLowerCase()) {
+                      <span class="pg-card__subcategory" [title]="product.subCategory">
+                        {{ product.subCategory }}
+                      </span>
+                      }
+                    </div>
 
+                    <h3 class="pg-card__name">
+                      <a [routerLink]="['/product-detail', product.slug || product.id]" class="pg-card__name-link"
+                        [title]="product.name">
+                        {{ product.name | uppercase }}
+                      </a>
+                    </h3>
+
+                    @if (product.total_review && product.total_review > 0) {
                     <div class="product-card__rating">
                         <nz-rate [ngModel]="product.rating" nzDisabled nzAllowHalf [nzCount]="5"></nz-rate>
                         <span class="product-card__review-count">({{ product.total_review }})</span>
                     </div>
+                    }
 
-                    <div class="product-card__pricing">
-                        <span class="product-card__price">
-                            {{ formatPrice(product.price) }}
+                    <!-- Size / Variant Tag (corresponding to the displayed price) -->
+                    @if (getFirstPriceVariant(product); as firstVar) {
+                      @if (firstVar.size && firstVar.size !== 'Base Price') {
+                      <div class="pg-card__variant-row">
+                        <span class="pg-card__size-pill" [title]="'Size: ' + firstVar.size">
+                          <span class="pg-card__size-bullet"></span>
+                          <span class="pg-card__size-text">{{ firstVar.size }}</span>
                         </span>
-
-                        @if (product.actual_price) {
-                        <span class="product-card__original">
-                            {{ formatPrice(product.actual_price) }}
-                        </span>
-
-                        @if (discount(product) > 0) {
-                        <span class="product-card__discount-inline">
-                            {{ discount(product) }}% OFF
+                        @if (firstVar.packing) {
+                        <span class="pg-card__packing-pill" [title]="'Packing: ' + firstVar.packing">
+                          <span nz-icon nzType="inbox" nzTheme="outline"></span>
+                          {{ firstVar.packing }}
                         </span>
                         }
+                      </div>
+                      } @else if (getFirstVariantSize(product); as fallbackSize) {
+                      <div class="pg-card__variant-row">
+                        <span class="pg-card__size-pill" [title]="'Size: ' + fallbackSize">
+                          <span class="pg-card__size-bullet"></span>
+                          <span class="pg-card__size-text">{{ fallbackSize }}</span>
+                        </span>
+                      </div>
+                      }
+                    } @else if (getFirstVariantSize(product); as size) {
+                      <div class="pg-card__variant-row">
+                        <span class="pg-card__size-pill" [title]="'Size: ' + size">
+                          <span class="pg-card__size-bullet"></span>
+                          <span class="pg-card__size-text">{{ size }}</span>
+                        </span>
+                      </div>
+                    }
+
+                    <!-- Pricing Row -->
+                    <div class="pg-card__pricing-row">
+                      <div class="pg-card__price-group">
+                        <span class="pg-card__price">
+                          {{ formatPrice(getDisplaySellingPrice(product)) }}
+                        </span>
+                        @if (getDisplayActualPrice(product) && getDisplayActualPrice(product)! > getDisplaySellingPrice(product)) {
+                        <span class="pg-card__original">
+                          {{ formatPrice(getDisplayActualPrice(product)!) }}
+                        </span>
                         }
+
+                        @if (getPriceVariants(product).length > 0) {
+                        <button type="button" class="pg-card__price-info-btn" nz-tooltip [nzTooltipTitle]="priceTooltipTpl"
+                          nzTooltipPlacement="top" nzTooltipOverlayClassName="pg-price-tooltip-overlay"
+                          (click)="$event.stopPropagation(); $event.preventDefault()" aria-label="View size-wise prices">
+                          <span nz-icon nzType="info-circle" nzTheme="outline"></span>
+                        </button>
+
+                        <ng-template #priceTooltipTpl>
+                          <div class="pg-price-tooltip">
+                            <div class="pg-price-tooltip__header">
+                              <span nz-icon nzType="tags" nzTheme="outline" class="pg-price-tooltip__icon"></span>
+                              <span class="pg-price-tooltip__title">{{ getPriceTooltipTitle(product) }}</span>
+                            </div>
+                            <div class="pg-price-tooltip__divider"></div>
+                            <div class="pg-price-tooltip__list">
+                              @for (variant of getPriceVariants(product); track $index) {
+                              <div class="pg-price-tooltip__item">
+                                <div class="pg-price-tooltip__item-info">
+                                  <span class="pg-price-tooltip__size">
+                                    <span class="pg-price-tooltip__bullet"></span>
+                                    {{ variant.size }}
+                                  </span>
+                                  @if (variant.packing) {
+                                  <span class="pg-price-tooltip__pack">
+                                    <span nz-icon nzType="inbox" nzTheme="outline"></span>
+                                    {{ variant.packing }}
+                                  </span>
+                                  }
+                                </div>
+                                <span class="pg-price-tooltip__price">{{ variant.price }}</span>
+                              </div>
+                              }
+                            </div>
+                          </div>
+                        </ng-template>
+                        }
+                      </div>
                     </div>
 
                     <!-- <button class="product-card__cart-btn" (click)="addToCart(product, $event)">

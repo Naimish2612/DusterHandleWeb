@@ -76,7 +76,7 @@
       @if (loadingFilters) {
 
       <!-- Skeleton while loading -->
-      @for (s of [1, 2, 3]; track s) {
+      @for (s of [1]; track s) {
       <div class="filter-section">
         <nz-skeleton [nzActive]="true" [nzTitle]="{ width: '60%' }"
           [nzParagraph]="{ rows: 4, width: ['80%','70%','90%','65%'] }"></nz-skeleton>
@@ -182,20 +182,6 @@
       <!-- Active Filter Tags -->
       @if (activeFilterCount > 0) {
       <div class="active-filters">
-
-        @for (brand of selectedBrands; track brand) {
-        <nz-tag nzMode="closeable" (nzOnClose)="removeBrand(brand)">
-          <span nz-icon nzType="shop" nzTheme="outline"></span>
-          {{ getFilterLabel('brand', brand) }}
-        </nz-tag>
-        }
-
-        @for (category of selectedCategories; track category) {
-        <nz-tag nzMode="closeable" (nzOnClose)="removeCategory(category)">
-          <span nz-icon nzType="appstore" nzTheme="outline"></span>
-          {{ getFilterLabel('category', category) }}
-        </nz-tag>
-        }
 
         @for (subcategory of selectedSubCategories; track subcategory) {
         <nz-tag nzMode="closeable" (nzOnClose)="removeSubCategory(subcategory)">
