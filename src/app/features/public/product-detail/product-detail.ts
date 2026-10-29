@@ -1,4 +1,4 @@
-import { Component, OnInit, signal, computed, inject, ChangeDetectionStrategy, DestroyRef, } from '@angular/core';
+import { Component, OnInit, signal, computed, inject, ChangeDetectionStrategy, DestroyRef, ViewChild, ElementRef, } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
@@ -91,6 +91,26 @@ export class ProductDetail implements OnInit {
 
     // ── Image state ──────────────────────────────────────────────────
     activeImageIndex = signal(0);
+
+    @ViewChild('imageWrap') imageWrapRef?: ElementRef<HTMLDivElement>;
+
+    // ── Magnifier state ──────────────────────────────────────────────
+    isMagnifierEnabled = signal(true);
+    isLensVisible = signal(false);
+    lensPosition = signal<{ x: number; y: number }>({ x: 0, y: 0 });
+    zoomLevel = signal(2.5);
+    bgSize = signal('0px 0px');
+    bgPosition = signal('0px 0px');
+    readonly lensWidth = 180;
+    readonly lensHeight = 135;
+
+    currentImageUrl = computed(() => {
+        const prod = this.product();
+        const index = this.activeImageIndex();
+        return prod?.product_images?.[index]?.image_url || this.placeholderImage;
+    });
+
+    zoomBackgroundImage = computed(() => `url("${this.currentImageUrl()}")`);
 
     // ── Cart state ───────────────────────────────────────────────────
     quantity = signal(1);
@@ -306,6 +326,108 @@ export class ProductDetail implements OnInit {
     // ── Image navigation ─────────────────────────────────────────────
     selectImage(index: number): void {
         this.activeImageIndex.set(index);
+        if (this.isLensVisible() && this.imageWrapRef?.nativeElement) {
+            const pos = this.lensPosition();
+            this.updateMagnifier(pos.x + this.lensWidth / 2, pos.y + this.lensHeight / 2);
+        }
+    }
+
+    // ── Magnifier Controls ───────────────────────────────────────────
+    onButtonMouseEnter(event?: MouseEvent): void {
+        if (event) {
+            event.stopPropagation();
+        }
+        this.isLensVisible.set(false);
+    }
+
+    onButtonMouseLeave(): void {
+        // Handled when cursor moves back over the image wrap
+    }
+
+    toggleMagnifier(event?: MouseEvent): void {
+        if (event) {
+            event.stopPropagation();
+        }
+        const nextState = !this.isMagnifierEnabled();
+        this.isMagnifierEnabled.set(nextState);
+
+        if (!nextState) {
+            this.isLensVisible.set(false);
+        } else if (this.imageWrapRef?.nativeElement) {
+            const rect = this.imageWrapRef.nativeElement.getBoundingClientRect();
+            this.updateMagnifier(rect.left + rect.width / 2, rect.top + rect.height / 2);
+            this.isLensVisible.set(true);
+        }
+    }
+
+    onMouseMove(event: MouseEvent): void {
+        if (!this.isMagnifierEnabled()) return;
+        this.isLensVisible.set(true);
+        this.updateMagnifier(event.clientX, event.clientY);
+    }
+
+    onMouseEnter(event: MouseEvent): void {
+        if (!this.isMagnifierEnabled()) return;
+        this.isLensVisible.set(true);
+        this.updateMagnifier(event.clientX, event.clientY);
+    }
+
+    onMouseLeave(): void {
+        this.isLensVisible.set(false);
+    }
+
+    onWheel(event: WheelEvent): void {
+        if (!this.isMagnifierEnabled() || !this.isLensVisible()) return;
+        event.preventDefault();
+        const delta = event.deltaY < 0 ? 0.25 : -0.25;
+        const newZoom = Math.min(4, Math.max(1.5, Math.round((this.zoomLevel() + delta) * 100) / 100));
+        this.zoomLevel.set(newZoom);
+        this.updateMagnifier(event.clientX, event.clientY);
+    }
+
+    onTouchMove(event: TouchEvent): void {
+        if (!this.isMagnifierEnabled() || event.touches.length === 0) return;
+        const touch = event.touches[0];
+        this.isLensVisible.set(true);
+        this.updateMagnifier(touch.clientX, touch.clientY);
+    }
+
+    onTouchEnd(): void {
+        this.isLensVisible.set(false);
+    }
+
+    private updateMagnifier(clientX: number, clientY: number): void {
+        const container = this.imageWrapRef?.nativeElement;
+        if (!container) return;
+
+        const rect = container.getBoundingClientRect();
+        if (rect.width === 0 || rect.height === 0) return;
+
+        const mouseX = clientX - rect.left;
+        const mouseY = clientY - rect.top;
+
+        const maxX = Math.max(0, rect.width - this.lensWidth);
+        const maxY = Math.max(0, rect.height - this.lensHeight);
+
+        let lensX = mouseX - this.lensWidth / 2;
+        let lensY = mouseY - this.lensHeight / 2;
+
+        lensX = Math.max(0, Math.min(lensX, maxX));
+        lensY = Math.max(0, Math.min(lensY, maxY));
+
+        this.lensPosition.set({ x: Math.round(lensX), y: Math.round(lensY) });
+
+        const xRatio = maxX > 0 ? lensX / maxX : 0;
+        const yRatio = maxY > 0 ? lensY / maxY : 0;
+
+        const bgW = rect.width * this.zoomLevel();
+        const bgH = rect.height * this.zoomLevel();
+
+        const bgX = -xRatio * (bgW - this.lensWidth);
+        const bgY = -yRatio * (bgH - this.lensHeight);
+
+        this.bgSize.set(`${Math.round(bgW)}px ${Math.round(bgH)}px`);
+        this.bgPosition.set(`${Math.round(bgX)}px ${Math.round(bgY)}px`);
     }
 
     // ── Cart action commented out ──

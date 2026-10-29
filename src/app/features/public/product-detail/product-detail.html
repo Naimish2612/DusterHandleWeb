@@ -68,9 +68,50 @@
 
                     <!-- Main image carousel -->
                     <div class="pd-gallery__main">
-                        <div class="pd-gallery__main-img-wrap">
-                            <img [src]="p.product_images[activeImageIndex()]?.image_url || placeholderImage"
-                                [alt]="p.name" class="pd-gallery__main-img" />
+                        <div class="pd-gallery__main-img-wrap"
+                            #imageWrap
+                            [class.pd-gallery__main-img-wrap--magnifier-active]="isMagnifierEnabled()"
+                            (mousemove)="onMouseMove($event)"
+                            (mouseenter)="onMouseEnter($event)"
+                            (mouseleave)="onMouseLeave()"
+                            (wheel)="onWheel($event)"
+                            (touchmove)="onTouchMove($event)"
+                            (touchend)="onTouchEnd()">
+                            <img [src]="currentImageUrl()"
+                                [alt]="p.name"
+                                class="pd-gallery__main-img"
+                                [class.pd-gallery__main-img--zooming]="isLensVisible() && isMagnifierEnabled()" />
+
+                            <!-- Rectangular Magnifier Lens -->
+                            @if (isMagnifierEnabled() && isLensVisible()) {
+                            <div class="pd-gallery__magnifier-lens"
+                                [style.left.px]="lensPosition().x"
+                                [style.top.px]="lensPosition().y"
+                                [style.width.px]="lensWidth"
+                                [style.height.px]="lensHeight"
+                                [style.background-image]="zoomBackgroundImage()"
+                                [style.background-size]="bgSize()"
+                                [style.background-position]="bgPosition()">
+                            </div>
+                            }
+
+                            <!-- Magnifier toggle icon button -->
+                            <button type="button"
+                                class="pd-gallery__magnifier-btn"
+                                [class.pd-gallery__magnifier-btn--active]="isMagnifierEnabled()"
+                                (mouseenter)="onButtonMouseEnter($event)"
+                                (mousemove)="$event.stopPropagation()"
+                                (mouseleave)="onButtonMouseLeave()"
+                                (click)="toggleMagnifier($event)"
+                                nz-tooltip
+                                [nzTooltipTitle]="isMagnifierEnabled() ? 'Magnifier active (Click to disable)' : 'Click to enable magnifier'"
+                                aria-label="Toggle magnifier">
+                                @if (isMagnifierEnabled()) {
+                                <span nz-icon nzType="close" nzTheme="outline"></span>
+                                } @else {
+                                <span nz-icon nzType="search" nzTheme="outline"></span>
+                                }
+                            </button>
 
                             <!-- Stock badge overlay -->
                             @if (!p.in_stock) {
